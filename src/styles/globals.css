@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+@import url('./normalize.css');
+
+@tailwind base;
+@layer base {
+  * {
+    font-family: 'Nunito', 'Lato', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  body {
+    @apply min-h-screen;
+  }
+}
+
+@tailwind components;
+@tailwind utilities;
