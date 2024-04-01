@@ -9,6 +9,7 @@ type Navigation = {
 
 export const MenuItem: React.FC<Navigation> = ({ title, href, icon }) => {
   return (
+    // Test
     <Link to={href}>
       <div className="cursor-pointer flex flex-col items-center justify-center">
         <img src={icon} alt="" width={30} loading="eager" />

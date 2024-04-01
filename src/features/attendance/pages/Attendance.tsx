@@ -5,6 +5,7 @@ import { IconArrowBarRight, IconArrowBarToRight, IconChevronLeft } from '@tabler
 export const Attendance: React.FC = () => {
   return (
     <main>
+      {/* Testing */}
       <header className="px-4 sticky top-0 z-10 bg-white py-3.5 shadow-lg">
         <Link to="/" className="flex items-center">
           <ActionIcon variant="transparent">
