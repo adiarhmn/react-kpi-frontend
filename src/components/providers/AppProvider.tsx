@@ -5,7 +5,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter as Router, useLocation, useNavigate } from 'react-router-dom';
 
 import { AuthProvider } from '@/features/auth';
-import { OutletProvider } from '@/features/outlet';
 import { queryClient } from '@/lib/react-query';
 
 import { ErrorProvider } from './ErrorProvider';
@@ -33,7 +32,7 @@ const LocationProvider = ({ children }: { children: React.ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <>{children}</>;
+  return <>{children}</>;  
 };
 
 export const AppProvider: React.FC<Props> = ({ children }) => {
@@ -43,11 +42,11 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
         <StyleProvider>
           <Router>
             <AuthProvider>
-              <OutletProvider>
+              {/* <OutletProvider> */}
                 <HelmetProvider>
                   <LocationProvider>{children}</LocationProvider>
                 </HelmetProvider>
-              </OutletProvider>
+              {/* </OutletProvider> */}
             </AuthProvider>
           </Router>
         </StyleProvider>

@@ -1,32 +1,42 @@
-import { Anchor, Button, PasswordInput, TextInput } from '@mantine/core';
+import { Anchor, Button, Divider, PasswordInput, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconAt, IconLock } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useLogin } from '../api';
 
 export const LoginForm: React.FC = () => {
-  const form = useForm({ initialValues: { username: '', password: '' } });
+  const form = useForm({
+    validateInputOnChange: true,
+    initialValues: { username: '', password: '' },
+    validate: {
+      username: (value) => (value.length < 2 ? 'Name must have at least 2 letters' : null),
+    },
+  });
   const loginMutation = useLogin();
+  const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    await loginMutation.mutateAsync(
-      { data: form.values },
-      {
-        onError: ({ response, message }) => {
-          if (response?.data.errors) {
-            form.setErrors(response.data.errors);
-          } else {
-            notifications.show({
-              message,
-              color: 'red',
-            });
-          }
-        },
-      }
-    );
+
+    // await loginMutation.mutateAsync(
+    //   { data: form.values },
+    //   {
+    //     onError: ({ response, message }) => {
+    //       if (response?.data.errors) {
+    //         form.setErrors(response.data.errors);
+    //       } else {
+    //         notifications.show({
+    //           message,
+    //           color: 'red',
+    //         });
+    //       }
+    //     },
+    //   }
+    // );
+
+    navigate('/');
   }
 
   return (
@@ -34,7 +44,7 @@ export const LoginForm: React.FC = () => {
       <div className="mb-4">
         <TextInput
           name="username"
-          placeholder="Username"
+          placeholder="username"
           leftSection={<IconAt size={14} />}
           {...form.getInputProps('username')}
         />
@@ -42,20 +52,20 @@ export const LoginForm: React.FC = () => {
       <div className="mb-2">
         <PasswordInput
           name="password"
-          placeholder="Password"
+          placeholder="**********"
           leftSection={<IconLock size={14} />}
           {...form.getInputProps('password')}
         />
       </div>
 
-      <div className="mb-4 flex justify-end text-sm">
-        <Anchor component={Link} to="/">
-          Lupa Password?
+      <div className="mb-6 flex justify-end text-xs">
+        <Anchor size="xs" component={Link} to="/">
+          Forget Password?
         </Anchor>
       </div>
 
       <Button type="submit" fullWidth loading={loginMutation.isPending}>
-        Masuk
+        Login
       </Button>
     </form>
   );

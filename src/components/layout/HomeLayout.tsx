@@ -1,4 +1,4 @@
-import { IconClock, IconHome, IconBox, IconUser } from '@tabler/icons-react';
+import { IconHome, IconUser, IconHandStop } from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -13,10 +13,9 @@ export const HomeLayout: React.FC = () => {
       </Suspense>
       <BottomNav
         navigations={[
-          { title: 'Beranda', href: '/', icon: IconHome },
-          { title: 'Riwayat', href: '/transaction', icon: IconClock },
-          { title: 'Inventaris', href: '/inventory', icon: IconBox },
-          { title: 'Pengguna', href: '/profile', icon: IconUser },
+          { title: 'Home', href: '/', icon: IconHome },
+          { title: 'Absensi', href: '/attendance', icon: IconHandStop },
+          { title: 'Profil', href: '/profile', icon: IconUser },
         ]}
       />
     </>
