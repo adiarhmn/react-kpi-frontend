@@ -1,4 +1,10 @@
-import { IconArticle, IconCalendarStats, IconListCheck, IconReportMoney } from '@tabler/icons-react';
+import {
+  IconArticle,
+  IconCalendarStats,
+  IconListCheck,
+  IconCalendar,
+  IconReportMoney,
+} from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
 import { MenuList } from '@/components/navigation';
@@ -9,7 +15,7 @@ export const Home: React.FC = () => {
 
   return (
     <main>
-      <section className="bg-blue-500 w-full rounded-b-xl px-5 pt-8 pb-20 relative">
+      <section className="bg-gradient-to-b from-blue-500 to-cyan-400 w-full rounded-b-xl px-5 pt-8 pb-20 relative">
         <div className="text-white font-black text-xl">Adi Aulia Rahman</div>
         <div className="text-sm font-semibold text-white">Pengguna</div>
 
@@ -19,7 +25,7 @@ export const Home: React.FC = () => {
       </section>
 
       <section className="bg-white mx-auto max-w-xs w-full -mt-14 shadow shadow-gray-200 rounded-xl z-50 relative p-2 px-2">
-        <div className="text-xs font-semibold ps-1 pb-2">Rekap absensi bulan ini</div>
+        <div className="text-xs ps-1 pb-2">Rekap absensi bulan ini</div>
         <div className="w-full grid grid-cols-3 divide-x divide-gray-300 pb-2">
           <Link to="/sale/add" className="px-4 flex flex-col items-center justify-center">
             <div className="p-2 bg-green-100 text-green-600 rounded-xl font-bold w-10 h-10 text-center">
@@ -35,9 +41,9 @@ export const Home: React.FC = () => {
           </Link>
           <Link to="/expense" className="px-4 flex flex-col items-center justify-center">
             <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
-              <IconListCheck className="w-7 h-7" />
+              <IconCalendar className="w-7 h-7" />
             </div>
-            <div className="text-xs mt-1">Laporan</div>
+            <div className="text-xs mt-1">Cuti</div>
           </Link>
         </div>
       </section>
@@ -51,12 +57,12 @@ export const Home: React.FC = () => {
               icon: IconArticle,
             },
             {
-              title: 'Shift',
+              title: 'Schedule',
               href: '/development',
-              icon: IconCalendarStats,
+              icon: IconCalendar,
             },
             {
-              title: 'Gaji',
+              title: 'Slip Gaji',
               href: '/development',
               icon: IconReportMoney,
             },

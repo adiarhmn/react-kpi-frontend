@@ -14,7 +14,7 @@ export const HomeLayout: React.FC = () => {
       <BottomNav
         navigations={[
           { title: 'Home', href: '/', icon: IconHome },
-          { title: 'Absensi', href: '/attendance', icon: IconHandStop },
+          { title: 'Presensi', href: '/attendance', icon: IconHandStop },
           { title: 'Profil', href: '/profile', icon: IconUser },
         ]}
       />

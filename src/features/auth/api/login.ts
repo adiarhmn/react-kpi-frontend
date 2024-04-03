@@ -21,7 +21,6 @@ type LoginResponse = {
 export async function login({ data }: LoginDTO) {
   const res = await axios.post<LoginResponse>('http://192.168.1.109:3000/api/login', data);
 
-  console.log(res.data);
   return res.data;
 }
 
@@ -33,6 +32,7 @@ export function useLogin({ config }: UseLoginOption = {}) {
   return useMutation({
     mutationFn: login,
     onSuccess: ({ creds, token }) => {
+      console.log(creds, token);
       queryClient.setQueryData(['creds'], creds);
       storage.setToken(token);
     },

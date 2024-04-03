@@ -6,10 +6,11 @@ import { useAuth } from '@/features/auth';
 import { LoadingScreen } from '../elements';
 
 export const AppLayout: React.FC = () => {
-  // const { creds } = useAuth();
+  const { creds } = useAuth();
 
-  // if (!creds) return <Navigate to="/login" replace />;
+  if (!creds) return <Navigate to="/login" replace />;
 
+  console.log('test');
   return (
     <Suspense fallback={<LoadingScreen />}>
       <Outlet />
