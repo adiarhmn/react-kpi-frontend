@@ -1,4 +1,4 @@
-import { IconArrowBarToDown, IconArrowBarUp, IconBasket, IconListCheck } from '@tabler/icons-react';
+import { IconArticle, IconCalendarStats, IconListCheck, IconReportMoney } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
 import { MenuList } from '@/components/navigation';
@@ -37,7 +37,7 @@ export const Home: React.FC = () => {
             <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
               <IconListCheck className="w-7 h-7" />
             </div>
-            <div className="text-xs mt-1">Pengeluaran</div>
+            <div className="text-xs mt-1">Laporan</div>
           </Link>
         </div>
       </section>
@@ -48,7 +48,17 @@ export const Home: React.FC = () => {
             {
               title: 'Kehadiran',
               href: '/development',
-              icon: '/images/attendance.svg',
+              icon: IconArticle,
+            },
+            {
+              title: 'Shift',
+              href: '/development',
+              icon: IconCalendarStats,
+            },
+            {
+              title: 'Gaji',
+              href: '/development',
+              icon: IconReportMoney,
             },
           ]}
         />

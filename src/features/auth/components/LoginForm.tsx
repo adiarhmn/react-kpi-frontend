@@ -11,7 +11,8 @@ export const LoginForm: React.FC = () => {
     validateInputOnChange: true,
     initialValues: { username: '', password: '' },
     validate: {
-      username: (value) => (value.length < 2 ? 'Name must have at least 2 letters' : null),
+      username: (value) => (value.length < 5 ? 'Name must have at least 5 letters' : null),
+      password: (value) => (value.length < 2 ? 'Name must have at least 2 letters' : null),
     },
   });
   const loginMutation = useLogin();
@@ -20,23 +21,23 @@ export const LoginForm: React.FC = () => {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    // await loginMutation.mutateAsync(
-    //   { data: form.values },
-    //   {
-    //     onError: ({ response, message }) => {
-    //       if (response?.data.errors) {
-    //         form.setErrors(response.data.errors);
-    //       } else {
-    //         notifications.show({
-    //           message,
-    //           color: 'red',
-    //         });
-    //       }
-    //     },
-    //   }
-    // );
+    await loginMutation.mutateAsync(
+      { data: form.values },
+      {
+        onError: ({ response, message }) => {
+          if (response?.data.errors) {
+            form.setErrors(response.data.errors);
+          } else {
+            notifications.show({
+              message,
+              color: 'red',
+            });
+          }
+        },
+      }
+    );
 
-    navigate('/');
+    // navigate('/');
   }
 
   return (
@@ -60,7 +61,7 @@ export const LoginForm: React.FC = () => {
 
       <div className="mb-6 flex justify-end text-xs">
         <Anchor size="xs" component={Link} to="/">
-          Forget Password?
+          Forgot Password?
         </Anchor>
       </div>
 

@@ -4,18 +4,18 @@ import { IconArrowBarRight, IconArrowBarToRight, IconChevronLeft } from '@tabler
 
 export const Attendance: React.FC = () => {
   return (
-    <main>
+    <main className="min-h-screen relative">
       {/* Testing */}
       <header className="px-4 sticky top-0 z-10 bg-white py-3.5 shadow-lg">
         <Link to="/" className="flex items-center">
           <ActionIcon variant="transparent">
             <IconChevronLeft className="text-gray-800" />
           </ActionIcon>
-          <div className="font-bold ml-4">Kehadiran</div>
+          <div className="font-bold ml-4">Back</div>
         </Link>
       </header>
 
-      <div className="mx-auto w-80 bg-white shadow-xl p-5 rounded-xl mt-5">
+      <div className="mx-auto w-80 bg-white shadow-xl p-5 rounded-xl mt-5 absolute bottom-20 right-1/2 translate-x-1/2">
         <p className="text-center text-sm text-gray-600">Monday, 12 Mar 2024 </p>
         <h1 className="text-center font-bold">Morning Shift</h1>
         <h1 className="text-center mb-5">08.00 - 12.00</h1>

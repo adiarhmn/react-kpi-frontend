@@ -19,8 +19,9 @@ type LoginResponse = {
 };
 
 export async function login({ data }: LoginDTO) {
-  const res = await axios.post<LoginResponse>('/auth/login', data);
+  const res = await axios.post<LoginResponse>('http://192.168.1.109:3000/api/login', data);
 
+  console.log(res.data);
   return res.data;
 }
 
