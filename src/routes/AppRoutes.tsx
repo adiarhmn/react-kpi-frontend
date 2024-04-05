@@ -17,7 +17,7 @@ export const AppRoutes: React.FC = () => {
         <Route element={<HomeLayout />}>
           <Route index element={<Home />} />
           <Route path="attendance" element={<Attendance />} />
-          <Route path="attendances" element={<Attendances />} />
+          <Route path="history" element={<Attendances />} />
           <Route path="profile" element={<Profile />} />
         </Route>
       </Route>
@@ -25,6 +25,7 @@ export const AppRoutes: React.FC = () => {
       <Route path="/" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
       </Route>
+      <Route path="development" element={<Development />}></Route>
     </Routes>
   );
 };

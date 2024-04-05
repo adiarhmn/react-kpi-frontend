@@ -1,4 +1,4 @@
-import { IconHome, IconUser, IconHandStop } from '@tabler/icons-react';
+import { IconHome, IconUser, IconHandStop, IconChecklist } from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ export const HomeLayout: React.FC = () => {
         navigations={[
           { title: 'Home', href: '/', icon: IconHome },
           { title: 'Presensi', href: '/attendance', icon: IconHandStop },
+          { title: 'Riwayat', href: '/history', icon: IconChecklist },
           { title: 'Profil', href: '/profile', icon: IconUser },
         ]}
       />

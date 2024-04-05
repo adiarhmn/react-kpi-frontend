@@ -1,14 +1,14 @@
 import {
-  IconArticle,
-  IconCalendarStats,
-  IconListCheck,
+  IconHandStop,
   IconCalendar,
   IconReportMoney,
+  IconFileTime,
+  IconNews,
+  IconFingerprint,
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
-
 import { MenuList } from '@/components/navigation';
-import { Authorization, useAuth } from '@/features/auth';
+import { Indicator } from '@mantine/core';
 
 export const Home: React.FC = () => {
   // const { creds, getRoleText } = useAuth();
@@ -17,7 +17,7 @@ export const Home: React.FC = () => {
     <main>
       <section className="bg-gradient-to-b from-blue-500 to-cyan-400 w-full rounded-b-xl px-5 pt-8 pb-20 relative">
         <div className="text-white font-black text-xl">Adi Aulia Rahman</div>
-        <div className="text-sm font-semibold text-white">Pengguna</div>
+        <div className="text-sm font-semibold text-white">Karyawan</div>
 
         <div className="absolute right-5 top-5">
           <img src="/images/kpi-logo.png" alt="" className="w-14" />
@@ -28,9 +28,11 @@ export const Home: React.FC = () => {
         <div className="text-xs ps-1 pb-2">Rekap absensi bulan ini</div>
         <div className="w-full grid grid-cols-3 divide-x divide-gray-300 pb-2">
           <Link to="/sale/add" className="px-4 flex flex-col items-center justify-center">
-            <div className="p-2 bg-green-100 text-green-600 rounded-xl font-bold w-10 h-10 text-center">
-              23
-            </div>
+            <Indicator inline size={16} label={23} color='green'>
+              <div className="p-2 bg-green-100 text-green-600 rounded-xl font-bold w-10 h-10 text-center">
+                <IconHandStop></IconHandStop>
+              </div>
+            </Indicator>
             <div className="text-xs mt-1">Hadir</div>
           </Link>
           <Link to="/purchase/add" className="px-4 flex flex-col items-center justify-center">
@@ -54,7 +56,12 @@ export const Home: React.FC = () => {
             {
               title: 'Kehadiran',
               href: '/development',
-              icon: IconArticle,
+              icon: IconFingerprint,
+            },
+            {
+              title: 'Izin',
+              href: '/development',
+              icon: IconFileTime,
             },
             {
               title: 'Schedule',
@@ -65,6 +72,11 @@ export const Home: React.FC = () => {
               title: 'Slip Gaji',
               href: '/development',
               icon: IconReportMoney,
+            },
+            {
+              title: 'Berita',
+              href: '/development',
+              icon: IconNews,
             },
           ]}
         />
