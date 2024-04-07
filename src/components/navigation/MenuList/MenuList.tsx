@@ -6,18 +6,26 @@ type Navigation = {
   title: string;
   href: string;
   icon: Icon;
+  color?: string;
 };
 
-export const MenuItem: React.FC<Navigation> = ({ title, href, icon }) => {
+export const MenuItem: React.FC<Navigation> = ({
+  title,
+  href,
+  icon,
+  color = 'bg-gradient-to-r from-blue-700 to-blue-400',
+}) => {
   const Icon = icon;
   return (
     // Test
     <Link to={href}>
       <div className="cursor-pointer flex flex-col items-center justify-center">
-        <div className="bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg w-14 h-14 text-white shadow-md flex justify-center items-center">
-          <Icon size={40} />
+        <div
+          className={` ${color} rounded-xl w-14 h-14 text-white shadow-md flex justify-center items-center`}
+        >
+          <Icon size={37} />
         </div>
-        <h3 className="text-xs text-gray-700 mt-2 text-center px-1">{title}</h3>
+        <h3 className="text-xs text-gray-700 font-semibold mt-1 text-center px-1">{title}</h3>
       </div>
     </Link>
   );

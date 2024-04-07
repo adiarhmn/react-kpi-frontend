@@ -5,48 +5,61 @@ import {
   IconFileTime,
   IconNews,
   IconFingerprint,
+  IconChevronRight,
+  IconClockHour8,
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import { MenuList } from '@/components/navigation';
-import { Indicator } from '@mantine/core';
 
 export const Home: React.FC = () => {
   // const { creds, getRoleText } = useAuth();
 
   return (
     <main>
-      <section className="bg-gradient-to-b from-blue-500 to-cyan-400 w-full rounded-b-xl px-5 pt-8 pb-20 relative">
-        <div className="text-white font-black text-xl">Adi Aulia Rahman</div>
+      <section className="bg-blue-700 w-full rounded-b-3xl px-5 pt-8 pb-20 relative">
+        <img src="/images/predictive-analytics.svg" className='absolute w-40 lg:w-40 right-14 -top-3 opacity-85' alt="" />
+        <div className="text-white font-bold text-lg relative z-10">Adi Aulia Rahman</div>
         <div className="text-sm font-semibold text-white">Karyawan</div>
 
         <div className="absolute right-5 top-5">
-          <img src="/images/kpi-logo.png" alt="" className="w-14" />
+          <img src="/images/white-logo.png" alt="" className="w-14" />
         </div>
       </section>
 
-      <section className="bg-white mx-auto max-w-xs w-full -mt-14 shadow shadow-gray-200 rounded-xl z-50 relative p-2 px-2">
-        <div className="text-xs ps-1 pb-2">Rekap absensi bulan ini</div>
-        <div className="w-full grid grid-cols-3 divide-x divide-gray-300 pb-2">
-          <Link to="/sale/add" className="px-4 flex flex-col items-center justify-center">
-            <Indicator inline size={16} label={23} color='green'>
-              <div className="p-2 bg-green-100 text-green-600 rounded-xl font-bold w-10 h-10 text-center">
-                <IconHandStop></IconHandStop>
+      <section className="bg-white mx-auto max-w-xs w-full -mt-14 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
+        <div className="divide-y divide-gray-300">
+          <div className="flex justify-between text-xs items-center p-2">
+            <span className='font-bold text-blue-700'>Rekap Absensi Bulan ini </span>
+            <IconChevronRight className='opacity-80' size={20} />
+          </div>
+          <div className="w-full grid grid-cols-3 divide-x divide-gray-300 pb-2 pt-2">
+            <Link to="/sale/add" className="px-4 flex flex-col items-center justify-center">
+              <div className="p-2 bg-green-500 text-white rounded-xl font-bold w-10 h-10 text-center shadow">
+                23
+              </div>  
+              <div className="text-xs mt-1">Hadir</div>
+            </Link>
+            <Link to="/purchase/add" className="px-4 flex flex-col items-center justify-center">
+              <div className="p-2 bg-yellow-500 text-white rounded-xl font-bold w-10 h-10 text-center shadow">
+                7
               </div>
-            </Indicator>
-            <div className="text-xs mt-1">Hadir</div>
-          </Link>
-          <Link to="/purchase/add" className="px-4 flex flex-col items-center justify-center">
-            <div className="p-2 bg-yellow-100 text-yellow-600 rounded-xl font-bold w-10 h-10 text-center">
-              7
+              <div className="text-xs mt-1">Izin</div>
+            </Link>
+            <Link to="/expense" className="px-4 flex flex-col items-center justify-center">
+              <div className="p-2 bg-sky-400 text-white rounded-xl font-bold w-10 h-10 text-center shadow">
+                7
+              </div>
+              <div className="text-xs mt-1 t">Sisa Cuti</div>
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 text-xs divide-x divide-gray-300 p-2">
+            <div className="flex gap-2">
+              <IconClockHour8 size={15} className="text-green-400" /> Masuk : 08.00
             </div>
-            <div className="text-xs mt-1">Izin</div>
-          </Link>
-          <Link to="/expense" className="px-4 flex flex-col items-center justify-center">
-            <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
-              <IconCalendar className="w-7 h-7" />
+            <div className="ps-3 flex gap-2">
+              <IconClockHour8 size={15} className="text-rose-400" /> Keluar : 00.00
             </div>
-            <div className="text-xs mt-1">Cuti</div>
-          </Link>
+          </div>
         </div>
       </section>
 
@@ -57,26 +70,36 @@ export const Home: React.FC = () => {
               title: 'Kehadiran',
               href: '/development',
               icon: IconFingerprint,
+              color: "bg-blue-600"
             },
             {
               title: 'Izin',
               href: '/development',
               icon: IconFileTime,
+              color: "bg-blue-600"
+
+
             },
             {
               title: 'Schedule',
               href: '/development',
               icon: IconCalendar,
+              color: "bg-blue-600"
+
             },
             {
               title: 'Slip Gaji',
               href: '/development',
               icon: IconReportMoney,
+              color: "bg-blue-600"
+
             },
             {
               title: 'Berita',
               href: '/development',
               icon: IconNews,
+              color: "bg-blue-600"
+
             },
           ]}
         />
