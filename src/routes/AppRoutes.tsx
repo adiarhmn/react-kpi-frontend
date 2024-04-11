@@ -18,15 +18,17 @@ export const AppRoutes: React.FC = () => {
         <Route element={<HomeLayout />}>
           <Route index element={<Home />} />
           <Route path="attendance" element={<Attendance />} />
-          <Route path="history" element={<History />} />
+          <Route path="history" element={<History />}>
+            <Route path="attendance" element={<Attendances />} />
+          </Route>
           <Route path="profile" element={<Profile />} />
         </Route>
+        <Route path="development" element={<Development />}></Route>
       </Route>
 
       <Route path="/" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
       </Route>
-      <Route path="development" element={<Development />}></Route>
     </Routes>
   );
 };

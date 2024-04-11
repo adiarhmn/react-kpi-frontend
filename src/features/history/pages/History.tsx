@@ -2,14 +2,14 @@ import { Badge, Progress, Tooltip } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { IconChartCandle, IconChartPie2, IconChevronRight, IconReport } from '@tabler/icons-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export const History: React.FC = () => {
   const [month, setMonth] = useState<Date | null>(new Date());
 
   return (
     <main className="">
-      <section className='w-full h-20 bg-blue-600 rounded-b-3xl'>
-      </section>
+      <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
 
       <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 divide-y divide-gray-300 -mt-10">
         <div className="flex items-center font-semibold justify-between text-sm">
@@ -54,11 +54,14 @@ export const History: React.FC = () => {
         </div>
       </section>
 
-
       <section className="p-2 flex flex-col gap-3 text-slate-600 mx-3 mt-4">
-        <h2 className='font-semibold text-sm text-blue-700'>Data Riwayat Lainnya:</h2>
+        <h2 className="font-semibold text-sm text-blue-700">Data Riwayat Lainnya:</h2>
         {/* Data Absensi */}
-        <div className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm">
+
+        <Link
+          to="/history/data-attendance"
+          className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm"
+        >
           <div className="flex gap-3 items-center">
             <IconChartCandle size={25} className="text-blue-700" />
             <div>
@@ -67,7 +70,7 @@ export const History: React.FC = () => {
             </div>
           </div>
           <IconChevronRight className="text-blue-700" size={25} />
-        </div>
+        </Link>
 
         {/* Data Izin */}
         <div className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm">
