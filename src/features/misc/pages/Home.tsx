@@ -33,19 +33,19 @@ export const Home: React.FC = () => {
             <IconChevronRight className='opacity-80' size={20} />
           </div>
           <div className="w-full grid grid-cols-3 divide-x divide-gray-300 pb-2 pt-2">
-            <Link to="/sale/add" className="px-4 flex flex-col items-center justify-center">
+            <Link to="#" className="px-4 flex flex-col items-center justify-center">
               <div className="p-2 bg-green-500 text-white rounded-xl font-bold w-10 h-10 text-center shadow">
                 23
               </div>  
               <div className="text-xs mt-1">Hadir</div>
             </Link>
-            <Link to="/purchase/add" className="px-4 flex flex-col items-center justify-center">
+            <Link to="#" className="px-4 flex flex-col items-center justify-center">
               <div className="p-2 bg-yellow-500 text-white rounded-xl font-bold w-10 h-10 text-center shadow">
                 7
               </div>
               <div className="text-xs mt-1">Izin</div>
             </Link>
-            <Link to="/expense" className="px-4 flex flex-col items-center justify-center">
+            <Link to="#" className="px-4 flex flex-col items-center justify-center">
               <div className="p-2 bg-sky-400 text-white rounded-xl font-bold w-10 h-10 text-center shadow">
                 7
               </div>
@@ -63,6 +63,7 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Menu List => Berisi daftar menu pada sistem */}
       <section className="px-5 mt-8 mb-6">
         <MenuList
           navigations={[
@@ -74,15 +75,15 @@ export const Home: React.FC = () => {
             },
             {
               title: 'Izin',
-              href: '/development',
+              href: '/leave',
               icon: IconFileTime,
               color: "bg-blue-600"
 
 
             },
             {
-              title: 'Schedule',
-              href: '/development',
+              title: 'Jadwal',
+              href: '/schedule',
               icon: IconCalendar,
               color: "bg-blue-600"
 

@@ -1,11 +1,12 @@
 import { Badge } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { IconCalendar, IconCalendarMonth, IconChevronLeft } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const DataAttendance: React.FC = () => {
   const [month, setMonth] = useState<Date | null>(new Date());
+
   const navigate = useNavigate();
   return (
     <main>
@@ -21,7 +22,7 @@ export const DataAttendance: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
-            <h2 className="font-semibold ">Data Absensi</h2>
+            <h2 className="font-semibold ">Data Absensi {month?.toLocaleString('default', { month: 'long' })} {month?.getFullYear()}</h2>
           </div>
         </div>
 
@@ -33,37 +34,37 @@ export const DataAttendance: React.FC = () => {
       </section>
 
       {/* List Attendance Data List */}
-      <section className="px-2 flex flex-col gap-3 text-slate-600 mx-3 mt-4">
-        <div className="grid grid-cols-3 gap-2 divide-x divide-slate-400 pt-2">
-          <div className="bg-green-600 text-white rounded-lg py-1 text-center">
+      <section className="px-2 flex flex-col gap-3 text-slate-600 mx-3 mt-4 divide-y divide-slate-300">
+        <div className="flex gap-1 divide-x divide-slate-400 pt-2">
+          <div className="text-center max-w-20">
             <span className="text-sm">Jum'at, 13</span>
-            <h3 className="text-sm font-bold">Hadir</h3>
           </div>
-
-          <div className="text-sm flex flex-col ps-2">
+          <div className="text-sm flex gap-1 items-center ps-2">
             <span>Masuk : 08.13</span>
-            <span className="text-xs bg-red-600 text-white text-center rounded-md">Terlambat</span>
+            <span className="text-xs bg-red-600 text-white text-center rounded-md w-5"></span>
           </div>
 
           <div className="text-sm flex flex-col ps-2">
             <span>Keluar : 17.13</span>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-2 divide-x divide-slate-400 pt-2">
-          <div className="bg-green-600 text-white rounded-lg py-1 text-center">
+        
+        <div className="flex gap-1 divide-x divide-slate-400 pt-2">
+          <div className="text-center max-w-20">
             <span className="text-sm">Jum'at, 13</span>
-            <h3 className="text-sm font-bold">Hadir</h3>
           </div>
-
-          <div className="text-sm flex flex-col ps-2">
+          <div className="text-sm flex gap-1 items-center ps-2">
             <span>Masuk : 08.13</span>
-            <span className="text-xs bg-red-600 text-white text-center rounded-md">Terlambat</span>
+            <span className="text-xs bg-red-600 text-white text-center rounded-md w-5">T</span>
           </div>
 
           <div className="text-sm flex flex-col ps-2">
             <span>Keluar : 17.13</span>
           </div>
         </div>
+
+        {/*  */}
+        
       </section>
     </main>
   );
