@@ -22,7 +22,10 @@ export const Biodata: React.FC = () => {
             <h2 className="font-semibold ">Data diri</h2>
           </div>
           <div>
-            <button className="bg-transparent pe-3 mt-">
+            <button
+              onClick={() => navigate('/profile/biodata/edit')}
+              className="bg-transparent pe-3"
+            >
               <IconPencil size={21} />
             </button>
           </div>
