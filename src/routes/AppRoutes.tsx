@@ -16,6 +16,7 @@ const { Schedule } = lazyImport(() => import('@/features/schedule'), 'Schedule')
 const { EduBackground } = lazyImport(() => import('@/features/employee'), 'EduBackground');
 const { Biodata } = lazyImport(() => import('@/features/employee'), 'Biodata');
 const { BiodataEdit } = lazyImport(() => import('@/features/employee'), 'BiodataEdit');
+const { FileProfile } = lazyImport(() => import('@/features/employee'), 'FileProfile');
 
 // Admin Pages
 const { DashboardAdmin } = lazyImport(() => import('@/admin_features/misc'), 'DashboardAdmin');
@@ -35,6 +36,7 @@ export const AppRoutes: React.FC = () => {
           <Route path="profile">
             <Route index element={<Profile />} />
             <Route path="biodata" element={<Biodata />} />
+            <Route path="file" element={<FileProfile />} />
             <Route path="biodata/edit" element={<BiodataEdit />} />
             <Route path="edu-background" element={<EduBackground />} />
           </Route>

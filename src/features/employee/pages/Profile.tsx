@@ -57,7 +57,10 @@ export const Profile: React.FC = () => {
         </button>
 
         {/* Data Berkas */}
-        <button className="bg-transparent text-left flex w-full items-center py-3 hover:bg-slate-100 ps-2">
+        <button
+          onClick={() => navigate('/profile/file')}
+          className="bg-transparent text-left flex w-full items-center py-3 hover:bg-slate-100 ps-2"
+        >
           <div className="bg-blue-600 text-white rounded-lg p-2">
             <IconFiles size={25} />
           </div>
