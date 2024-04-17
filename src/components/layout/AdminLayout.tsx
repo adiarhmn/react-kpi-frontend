@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { AppShell, Burger, Group, NavLink } from '@mantine/core';
+import { AppShell, Burger, Button, Group, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 // import { MantineLogo } from '@mantinex/mantine-logo';
 
@@ -10,7 +10,6 @@ import { SideNav } from '../navigation';
 
 export const AdminLayout: React.FC = () => {
   // const { creds } = useAuth();
-
   // if (!creds) return <Navigate to="/login" replace />;
   const [opened, { toggle }] = useDisclosure();
 
@@ -34,7 +33,7 @@ export const AdminLayout: React.FC = () => {
             { title: 'Jadwal', href: '/admin-jadwal', icon: IconCalendar },
             { title: 'Riwayat', href: '/admin/history', icon: IconHome2 },
             { title: 'Profil', href: '/profile', icon: IconHome2 },
-          
+            
           ]} />
         </AppShell.Navbar>
         <AppShell.Main>
