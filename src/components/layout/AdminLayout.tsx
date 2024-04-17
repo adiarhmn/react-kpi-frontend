@@ -1,11 +1,11 @@
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { AppShell, Burger, Group, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 // import { MantineLogo } from '@mantinex/mantine-logo';
 
 import { LoadingScreen } from '../elements';
-import { IconHome2, IconMagnetic } from '@tabler/icons-react';
+import { IconCalendar, IconChartDonut4, IconHome2, IconMagnetic } from '@tabler/icons-react';
 import { SideNav } from '../navigation';
 
 export const AdminLayout: React.FC = () => {
@@ -25,14 +25,14 @@ export const AdminLayout: React.FC = () => {
         <AppShell.Header>
           <Group h="100%" px="md">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <IconMagnetic size={30} />
+            <IconChartDonut4 className='text-blue-600' size={35} />
           </Group>
         </AppShell.Header>
-        <AppShell.Navbar p="sm">
+        <AppShell.Navbar>
           <SideNav SideNavProps={[
-            { title: 'Beranda', href: '/', icon: IconHome2 },
-            { title: 'Presensi', href: '/attendance', icon: IconHome2 },
-            { title: 'Riwayat', href: '/history', icon: IconHome2 },
+            { title: 'Beranda', href: '/admin', icon: IconHome2 },
+            { title: 'Jadwal', href: '/admin-jadwal', icon: IconCalendar },
+            { title: 'Riwayat', href: '/admin/history', icon: IconHome2 },
             { title: 'Profil', href: '/profile', icon: IconHome2 },
           
           ]} />
