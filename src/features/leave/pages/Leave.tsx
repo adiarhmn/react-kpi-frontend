@@ -1,6 +1,6 @@
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
-
+//
 export const Leave: React.FC = () => {
   const navigate = useNavigate();
   return (

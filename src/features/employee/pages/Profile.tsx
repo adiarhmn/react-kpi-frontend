@@ -43,7 +43,7 @@ export const Profile: React.FC = () => {
 
         {/* Data Pendidikan */}
         <button
-          onClick={() => navigate('/edu-background')}
+          onClick={() => navigate('/profile/edu-background')}
           className="bg-transparent text-left flex w-full items-center py-3 hover:bg-slate-100 ps-2"
         >
           <div className="bg-blue-600 text-white rounded-lg p-2">
