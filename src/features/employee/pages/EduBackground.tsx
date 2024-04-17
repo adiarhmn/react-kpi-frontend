@@ -9,11 +9,9 @@ import {
 } from '@tabler/icons-react';
 
 import { useAuth } from '@/features/auth';
-import { useNavigate } from 'react-router-dom';
 
-export const Profile: React.FC = () => {
-  const { creds, getRoleText, logout } = useAuth();
-  const navigate = useNavigate();
+export const EduBackground: React.FC = () => {
+  // const { creds, getRoleText, logout } = useAuth();
 
   return (
     <main className="py-12">
@@ -42,10 +40,7 @@ export const Profile: React.FC = () => {
         </button>
 
         {/* Data Pendidikan */}
-        <button
-          onClick={() => navigate('/edu-background')}
-          className="bg-transparent text-left flex w-full items-center py-3 hover:bg-slate-100 ps-2"
-        >
+        <button className="bg-transparent text-left flex w-full items-center py-3 hover:bg-slate-100 ps-2">
           <div className="bg-blue-600 text-white rounded-lg p-2">
             <IconSchool size={25} />
           </div>

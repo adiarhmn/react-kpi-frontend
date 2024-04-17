@@ -11,6 +11,7 @@ const { Attendances } = lazyImport(() => import('@/features/employee'), 'Attenda
 const { DataAttendance } = lazyImport(() => import('@/features/history'), 'DataAttendance');
 const { History } = lazyImport(() => import('@/features/history'), 'History');
 const { Profile } = lazyImport(() => import('@/features/employee'), 'Profile');
+const { EduBackground } = lazyImport(() => import('@/features/employee'), 'EduBackground');
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -23,7 +24,10 @@ export const AppRoutes: React.FC = () => {
             <Route index element={<History />} />
             <Route path="data-attendance" element={<DataAttendance />} />
           </Route>
-          <Route path="profile" element={<Profile />} />
+          <Route path="profile">
+            <Route index element={<Profile />} />
+            <Route path="edu-background" element={<EduBackground />} />
+          </Route>
         </Route>
         <Route path="development" element={<Development />}></Route>
       </Route>
