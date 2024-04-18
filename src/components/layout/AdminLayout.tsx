@@ -7,6 +7,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { LoadingScreen } from '../elements';
 import { IconCalendar, IconChartDonut4, IconHome2, IconMagnetic } from '@tabler/icons-react';
 import { SideNav } from '../navigation';
+import { UserRoute } from '@/auth_features/auth_filter';
 
 export const AdminLayout: React.FC = () => {
   // const { creds } = useAuth();
@@ -24,20 +25,23 @@ export const AdminLayout: React.FC = () => {
         <AppShell.Header>
           <Group h="100%" px="md">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <IconChartDonut4 className='text-blue-600' size={35} />
+            <IconChartDonut4 className="text-blue-600" size={35} />
           </Group>
         </AppShell.Header>
         <AppShell.Navbar>
-          <SideNav SideNavProps={[
-            { title: 'Beranda', href: '/admin', icon: IconHome2 },
-            { title: 'Jadwal', href: '/admin-jadwal', icon: IconCalendar },
-            { title: 'Riwayat', href: '/admin/history', icon: IconHome2 },
-            { title: 'Profil', href: '/profile', icon: IconHome2 },
-            
-          ]} />
+          <SideNav
+            SideNavProps={[
+              { title: 'Beranda', href: '/admin', icon: IconHome2 },
+              { title: 'Jadwal', href: '/admin-jadwal', icon: IconCalendar },
+              { title: 'Riwayat', href: '/admin/history', icon: IconHome2 },
+              { title: 'Profil', href: '/profile', icon: IconHome2 },
+            ]}
+          />
         </AppShell.Navbar>
         <AppShell.Main>
-          <Outlet />
+          <UserRoute roles={['admin']}>
+            <Outlet />
+          </UserRoute>
         </AppShell.Main>
       </AppShell>
     </Suspense>

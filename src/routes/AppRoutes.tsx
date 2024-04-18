@@ -18,6 +18,7 @@ const { Schedule } = lazyImport(() => import('@/features/schedule'), 'Schedule')
 // Admin Pages
 const { DashboardAdmin } = lazyImport(() => import('@/admin_features/misc'), 'DashboardAdmin');
 const { ScheduleAdmin } = lazyImport(() => import('@/admin_features/schedule'), 'ScheduleAdmin');
+const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'ShiftAdmin');
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -39,8 +40,9 @@ export const AppRoutes: React.FC = () => {
 
         {/* Routes for Admin with Desktop View ======================>*/}
         <Route element={<AdminLayout />}>
-          <Route path="admin" element={<DashboardAdmin />} />
+          <Route index element={<DashboardAdmin />} />
           <Route path="admin-jadwal" element={<ScheduleAdmin />} />
+          <Route path="admin-shift" element={<ShiftAdmin />} />
         </Route>
 
         {/* Route For Development */}
