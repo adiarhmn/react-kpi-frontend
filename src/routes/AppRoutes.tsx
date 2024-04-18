@@ -20,30 +20,46 @@ const { DashboardAdmin } = lazyImport(() => import('@/admin_features/misc'), 'Da
 const { ScheduleAdmin } = lazyImport(() => import('@/admin_features/schedule'), 'ScheduleAdmin');
 const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'ShiftAdmin');
 
+// Data Dummy Gambaran API Untuk Development
+const useAuth = () => {
+  return {
+    creds: {
+      role: 'admin',
+    },
+  };
+};
+
 export const AppRoutes: React.FC = () => {
+  const { creds } = useAuth();
+  
   return (
     <Routes>
       <Route path="/" element={<AppLayout />}>
+
         {/* Routes for Employee or Mobile APP ======================>*/}
-        <Route element={<HomeLayout />}>
-          <Route index element={<Home />} />
-          <Route path="attendance" element={<Attendance />} />
-          <Route path="history">
-            <Route index element={<History />} />
-            <Route path="data-attendance" element={<DataAttendance />} />
+        {creds?.role === 'employee' && (
+          <Route element={<HomeLayout />}>
+            <Route index element={<Home />} />
+            <Route path="attendance" element={<Attendance />} />
+            <Route path="history">
+              <Route index element={<History />} />
+              <Route path="data-attendance" element={<DataAttendance />} />
+            </Route>
+            <Route path="profile" element={<Profile />} />
+            <Route path="leave" element={<Leave />} />
+            <Route path="schedule" element={<Schedule />} />
+            <Route path="attendances" element={<Attendances />} />
           </Route>
-          <Route path="profile" element={<Profile />} />
-          <Route path="leave" element={<Leave />} />
-          <Route path="schedule" element={<Schedule />} />
-          <Route path="attendances" element={<Attendances />} />
-        </Route>
+        )}
 
         {/* Routes for Admin with Desktop View ======================>*/}
-        <Route element={<AdminLayout />}>
-          <Route index element={<DashboardAdmin />} />
-          <Route path="admin-jadwal" element={<ScheduleAdmin />} />
-          <Route path="admin-shift" element={<ShiftAdmin />} />
-        </Route>
+        {creds?.role === 'admin' && (
+          <Route element={<AdminLayout />}>
+            <Route index element={<DashboardAdmin />} />
+            <Route path="schedule" element={<ScheduleAdmin />} />
+            <Route path="shift" element={<ShiftAdmin />} />
+          </Route>
+        )}
 
         {/* Route For Development */}
         <Route path="development" element={<Development />} />
@@ -54,6 +70,7 @@ export const AppRoutes: React.FC = () => {
       <Route path="/" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
       </Route>
+
     </Routes>
   );
 };

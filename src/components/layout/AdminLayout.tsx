@@ -7,7 +7,6 @@ import { useDisclosure } from '@mantine/hooks';
 import { LoadingScreen } from '../elements';
 import { IconCalendar, IconChartDonut4, IconHome2, IconMagnetic } from '@tabler/icons-react';
 import { SideNav } from '../navigation';
-import { UserRoute } from '@/auth_features/auth_filter';
 
 export const AdminLayout: React.FC = () => {
   // const { creds } = useAuth();
@@ -39,9 +38,7 @@ export const AdminLayout: React.FC = () => {
           />
         </AppShell.Navbar>
         <AppShell.Main>
-          <UserRoute roles={['admin']}>
             <Outlet />
-          </UserRoute>
         </AppShell.Main>
       </AppShell>
     </Suspense>
