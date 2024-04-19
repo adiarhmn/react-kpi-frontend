@@ -1,7 +1,8 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, redirect, useNavigate } from 'react-router-dom';
 
 import { HomeLayout, AuthLayout, AppLayout, AdminLayout } from '@/components/layout';
 import { lazyImport } from '@/utils/lazyImport';
+import { useEffect } from 'react';
 
 const { Development } = lazyImport(() => import('@/features/misc'), 'Development');
 const { NotFoundLayout } = lazyImport(() => import('@/components/layout'), 'NotFoundLayout');
@@ -29,13 +30,22 @@ const useAuth = () => {
   };
 };
 
+const RedirectToBeranda: React.FC = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate('/beranda');
+  }, [navigate]);
+
+  return null;
+};
+
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
-  
+  const navigate = useNavigate();
+
   return (
     <Routes>
       <Route path="/" element={<AppLayout />}>
-
         {/* Routes for Employee or Mobile APP ======================>*/}
         {creds?.role === 'employee' && (
           <Route element={<HomeLayout />}>
@@ -55,7 +65,8 @@ export const AppRoutes: React.FC = () => {
         {/* Routes for Admin with Desktop View ======================>*/}
         {creds?.role === 'admin' && (
           <Route element={<AdminLayout />}>
-            <Route index element={<DashboardAdmin />} />
+            <Route index path="/" element={<RedirectToBeranda />} />
+            <Route path="beranda" element={<DashboardAdmin />} />
             <Route path="schedule" element={<ScheduleAdmin />} />
             <Route path="shift" element={<ShiftAdmin />} />
           </Route>
@@ -70,7 +81,6 @@ export const AppRoutes: React.FC = () => {
       <Route path="/" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
       </Route>
-
     </Routes>
   );
 };

@@ -22,8 +22,8 @@ export const SideNav: React.FC<Props> = ({ SideNavProps }) => {
   };
   const navigate = useNavigate();
   return (
-    <section className="relative overflow-hidden min-h-screen">
-      <div className="relative p-2 flex flex-col">
+    <section className="overflow-x-auto min-h-screen pt-1 bar-scroll-blue">
+      <div className="p-2 flex flex-col">
         {SideNavProps.map((SideNavProps, index) => (
           <NavLink
             className="rounded-xl mb-1"
