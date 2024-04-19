@@ -11,9 +11,11 @@ export type SideNavProps = {
 
 interface Props {
   SideNavProps: SideNavProps[];
+  ToggleButton: () => void;
+  TitleSetting: (title: string) => void;
 }
 
-export const SideNav: React.FC<Props> = ({ SideNavProps }) => {
+export const SideNav: React.FC<Props> = ({ SideNavProps, ToggleButton, TitleSetting }) => {
   const { pathname } = useLocation();
 
   const isActive = (path: string) => {
@@ -31,6 +33,8 @@ export const SideNav: React.FC<Props> = ({ SideNavProps }) => {
             label={SideNavProps.title}
             onClick={() => {
               navigate(SideNavProps.href);
+              ToggleButton();
+              TitleSetting(SideNavProps.title);
             }}
             leftSection={<SideNavProps.icon size={20} />}
             active={isActive(SideNavProps.href)}

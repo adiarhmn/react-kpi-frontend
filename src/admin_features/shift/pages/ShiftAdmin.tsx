@@ -1,7 +1,8 @@
 export const ShiftAdmin: React.FC = () => {
   return (
-    <div>
+    <main>
       <h1>Shift Admin</h1>
-    </div>
+      
+    </main>
   );
 };
