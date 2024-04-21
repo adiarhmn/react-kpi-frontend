@@ -73,7 +73,10 @@ export const History: React.FC = () => {
         </Link>
 
         {/* Data Izin */}
-        <div className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm">
+        <Link
+          to="/history/data-absence"
+          className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm"
+        >
           <div className="flex gap-3 items-center">
             <IconChartPie2 size={25} className="text-blue-700" />
             <div>
@@ -82,10 +85,13 @@ export const History: React.FC = () => {
             </div>
           </div>
           <IconChevronRight className="text-blue-700" size={25} />
-        </div>
+        </Link>
 
         {/* Data Lembur */}
-        <div className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm">
+        <Link
+          to="/history/data-overtime"
+          className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm"
+        >
           <div className="flex gap-3 items-center">
             <IconReport size={25} className="text-blue-700" />
             <div>
@@ -94,7 +100,7 @@ export const History: React.FC = () => {
             </div>
           </div>
           <IconChevronRight className="text-blue-700" size={25} />
-        </div>
+        </Link>
       </section>
     </main>
   );

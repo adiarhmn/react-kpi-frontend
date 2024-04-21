@@ -85,7 +85,7 @@ export const DataAttendance: React.FC = () => {
         </div>
       </section>
 
-      <section className="px-2">
+      {/* <section className="px-2">
         <Table>
           <Table.Thead>
             <Table.Tr>
@@ -104,7 +104,7 @@ export const DataAttendance: React.FC = () => {
             </Table.Tr>
           </Table.Tbody>
         </Table>
-      </section>
+      </section> */}
     </main>
   );
 };
