@@ -1,5 +1,4 @@
-import { Route, Routes, redirect, useNavigate } from 'react-router-dom';
-
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { HomeLayout, AuthLayout, AppLayout, AdminLayout } from '@/components/layout';
 import { lazyImport } from '@/utils/lazyImport';
 import { useEffect } from 'react';
@@ -7,6 +6,8 @@ import { useEffect } from 'react';
 const { Development } = lazyImport(() => import('@/features/misc'), 'Development');
 const { NotFoundLayout } = lazyImport(() => import('@/components/layout'), 'NotFoundLayout');
 const { Login } = lazyImport(() => import('@/features/auth'), 'Login');
+
+// Employee Pages
 const { Home } = lazyImport(() => import('@/features/misc'), 'Home');
 const { Attendance } = lazyImport(() => import('@/features/attendance'), 'Attendance');
 const { Attendances } = lazyImport(() => import('@/features/employee'), 'Attendances');
@@ -18,7 +19,11 @@ const { Schedule } = lazyImport(() => import('@/features/schedule'), 'Schedule')
 
 // Admin Pages
 const { DashboardAdmin } = lazyImport(() => import('@/admin_features/misc'), 'DashboardAdmin');
-const { ScheduleAdmin } = lazyImport(() => import('@/admin_features/schedule'), 'ScheduleAdmin');
+const { Schedule: AdminSchedule } = lazyImport(
+  () => import('@/admin_features/schedule'),
+  'Schedule'
+);
+const { CreateSchedule } = lazyImport(() => import('@/admin_features/schedule'), 'CreateSchedule');
 const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'ShiftAdmin');
 
 // Data Dummy Gambaran API Untuk Development
@@ -30,19 +35,8 @@ const useAuth = () => {
   };
 };
 
-const RedirectToBeranda: React.FC = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate('/beranda');
-  }, [navigate]);
-
-  return null;
-};
-
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
-  const navigate = useNavigate();
-
   return (
     <Routes>
       <Route path="/" element={<AppLayout />}>
@@ -67,7 +61,8 @@ export const AppRoutes: React.FC = () => {
           <Route element={<AdminLayout />}>
             <Route index path="/" element={<RedirectToBeranda />} />
             <Route path="beranda" element={<DashboardAdmin />} />
-            <Route path="schedule" element={<ScheduleAdmin />} />
+            <Route path="schedule" element={<AdminSchedule />} />
+            <Route path="schedule/create" element={<CreateSchedule />} />
             <Route path="shift" element={<ShiftAdmin />} />
           </Route>
         )}
@@ -83,4 +78,14 @@ export const AppRoutes: React.FC = () => {
       </Route>
     </Routes>
   );
+};
+
+// ========================= List Function =======================
+// Function For Redireact
+const RedirectToBeranda: React.FC = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate('/beranda');
+  }, [navigate]);
+  return null;
 };

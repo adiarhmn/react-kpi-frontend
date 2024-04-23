@@ -14,11 +14,8 @@ import {
   IconMessageCircle,
   IconTrash,
   IconArrowsLeftRight,
-  IconChevronRight,
   IconClockHour1,
   IconUsersGroup,
-  IconChevronDown,
-  IconBurger,
 } from '@tabler/icons-react';
 import { SideNav } from '../navigation';
 
@@ -27,7 +24,7 @@ const MenuLinks = [
   { title: 'Jadwal', href: '/schedule', icon: IconCalendar },
   { title: 'Shift', href: '/shift', icon: IconClockHour1 },
   { title: 'Karyawan', href: '/employee', icon: IconUsersGroup },
-  { title: 'Profil', href: '/profile', icon: IconHome2 },
+  { title: 'Setting', href: '/profile', icon: IconSettings },
 ];
 
 export const AdminLayout: React.FC = () => {
@@ -50,7 +47,7 @@ export const AdminLayout: React.FC = () => {
         padding="md"
         withBorder={false}
       >
-        <AppShell.Header>
+        <AppShell.Header className='shadow-md'>
           <Group h="100%" justify="space-between" gap={0}>
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <Group
@@ -66,7 +63,7 @@ export const AdminLayout: React.FC = () => {
             {/* Profile and Name Information */}
             {!isMobile && (
               <Group className="grow h-full" justify="space-between">
-                <h1 className="px-3 py-2 font-semibold text-blue-500 bg-blue-50 rounded-lg text-center">
+                <h1 className="px-3 py-2 font-semibold text-center">
                   {title}
                 </h1>
                 <Menu shadow="md" width={200}>

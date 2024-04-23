@@ -1,1 +1,1 @@
-export * from './ScheduleAdmin';
+export * from './pages';
