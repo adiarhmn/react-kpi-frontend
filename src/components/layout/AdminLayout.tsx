@@ -48,7 +48,7 @@ export const AdminLayout: React.FC = () => {
         withBorder={false}
       >
         <AppShell.Header className='shadow-md'>
-          <Group h="100%" justify="space-between" gap={0}>
+          <Group h="100%" justify="space-between" gap={0} className='px-3'>
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <Group
               gap={5}

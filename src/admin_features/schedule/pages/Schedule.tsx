@@ -45,8 +45,9 @@ export const Schedule: React.FC = () => {
   return (
     <main>
       {/* Header */}
-      <section className="bg-white p-2 px-4 rounded-lg shadow-lg mb-4">
-        <Button onClick={() => navigate("/schedule/create")} leftSection={<IconPlus size={15} />}>
+      <section className="bg-white p-2 px-4 rounded-lg shadow-lg mb-4 flex justify-between">
+        <h1 className="font-bold">Jadwal 2024</h1>
+        <Button onClick={() => navigate('/schedule/create')} leftSection={<IconPlus size={15} />}>
           Buat Jadwal
         </Button>
       </section>
@@ -58,7 +59,7 @@ export const Schedule: React.FC = () => {
             onClick={() => {
               setFreeDay(!FreeDays);
             }}
-            style={{ zIndex: 9999, position: 'relative' }}
+            style={{ zIndex: FreeDays ? 9999 : 1, position: 'relative' }}
             leftSection={<IconSettings size={15} />}
           >
             {FreeDays ? 'Done' : 'Atur Libur'}
@@ -66,9 +67,9 @@ export const Schedule: React.FC = () => {
         </div>
         <div
           className="absolute bg-black opacity-50 top-0 left-0 w-full h-screen"
-          style={{ zIndex: 999, display: FreeDays ? '' : 'none' }}
+          style={{ zIndex:  FreeDays ? 999 : 1, display: FreeDays ? '' : 'none' }}
         ></div>
-        <div className="relative bg-white" style={{ zIndex: 9999 }}>
+        <div className="relative bg-white" style={{ zIndex:  FreeDays ? 9999 : 1 }}>
           <Table withColumnBorders withTableBorder>
             <Table.Thead>
               <Table.Tr>
