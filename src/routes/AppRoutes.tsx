@@ -12,6 +12,7 @@ const { DataAttendance } = lazyImport(() => import('@/features/history'), 'DataA
 const { History } = lazyImport(() => import('@/features/history'), 'History');
 const { DataAbsence } = lazyImport(() => import('@/features/history'), 'DataAbsence');
 const { DataOvertime } = lazyImport(() => import('@/features/history'), 'DataOvertime');
+const { DetailOvertime } = lazyImport(() => import('@/features/history'), 'DetailOvertime');
 const { Profile } = lazyImport(() => import('@/features/employee'), 'Profile');
 const { Leave } = lazyImport(() => import('@/features/leave'), 'Leave');
 const { Schedule } = lazyImport(() => import('@/features/schedule'), 'Schedule');
@@ -35,7 +36,10 @@ export const AppRoutes: React.FC = () => {
             <Route index element={<History />} />
             <Route path="data-attendance" element={<DataAttendance />} />
             <Route path="data-absence" element={<DataAbsence />} />
-            <Route path="data-overtime" element={<DataOvertime />} />
+            <Route path="data-overtime">
+              <Route index element={<DataOvertime />} />
+              <Route path="detail" element={<DetailOvertime />} />
+            </Route>
           </Route>
           <Route path="profile">
             <Route index element={<Profile />} />
