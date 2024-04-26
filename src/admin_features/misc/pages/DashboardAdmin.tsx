@@ -62,28 +62,32 @@ export const DashboardAdmin: React.FC = () => {
                       <div className="bg-green-600 w-5 h-5"></div>
                     </td>
                     <td>Hadir</td>
-                    <td>: 40 Karyawan</td>
+                    <td>: 40 </td>
+                    <td>Orang</td>
                   </tr>
                   <tr>
                     <td>
                       <div className="bg-red-600 w-5 h-5"></div>
                     </td>
                     <td>Belum Absen</td>
-                    <td>: 20 Karyawan</td>
+                    <td>: 20 </td>
+                    <td>Orang</td>
                   </tr>
                   <tr>
                     <td>
                       <div className="bg-blue-600 w-5 h-5"></div>
                     </td>
                     <td>Izin</td>
-                    <td>: 10 Karyawan</td>
+                    <td>: 10 </td>
+                    <td>Orang</td>
                   </tr>
                   <tr>
                     <td>
                       <div className="bg-yellow-600 w-5 h-5"></div>
                     </td>
                     <td>Terlambat</td>
-                    <td>: 15 Karyawan</td>
+                    <td>: 15 </td>
+                    <td>Orang</td>
                   </tr>
                 </tbody>
               </table>

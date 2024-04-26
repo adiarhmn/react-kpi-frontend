@@ -7,7 +7,7 @@ const { Development } = lazyImport(() => import('@/features/misc'), 'Development
 const { NotFoundLayout } = lazyImport(() => import('@/components/layout'), 'NotFoundLayout');
 const { Login } = lazyImport(() => import('@/features/auth'), 'Login');
 
-// Employee Pages
+// Employee Role Pages
 const { Home } = lazyImport(() => import('@/features/misc'), 'Home');
 const { Attendance } = lazyImport(() => import('@/features/attendance'), 'Attendance');
 const { Attendances } = lazyImport(() => import('@/features/employee'), 'Attendances');
@@ -17,11 +17,15 @@ const { Profile } = lazyImport(() => import('@/features/employee'), 'Profile');
 const { Leave } = lazyImport(() => import('@/features/leave'), 'Leave');
 const { Schedule } = lazyImport(() => import('@/features/schedule'), 'Schedule');
 
-// Admin Pages
+// Admin Role Pages
 const { DashboardAdmin } = lazyImport(() => import('@/admin_features/misc'), 'DashboardAdmin');
 const { Schedule: AdminSchedule } = lazyImport(
   () => import('@/admin_features/schedule'),
   'Schedule'
+);
+const { Attendance: AdminAttendance } = lazyImport(
+  () => import('@/admin_features/attendance'),
+  'Attendance'
 );
 const { CreateSchedule } = lazyImport(() => import('@/admin_features/schedule'), 'CreateSchedule');
 const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'ShiftAdmin');
@@ -56,6 +60,7 @@ export const AppRoutes: React.FC = () => {
           </Route>
         )}
 
+
         {/* Routes for Admin with Desktop View ======================>*/}
         {creds?.role === 'admin' && (
           <Route element={<AdminLayout />}>
@@ -64,6 +69,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="schedule" element={<AdminSchedule />} />
             <Route path="schedule/create" element={<CreateSchedule />} />
             <Route path="shift" element={<ShiftAdmin />} />
+            <Route path="attendance" element={<AdminAttendance />} />
           </Route>
         )}
 

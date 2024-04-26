@@ -16,6 +16,7 @@ import {
   IconArrowsLeftRight,
   IconClockHour1,
   IconUsersGroup,
+  IconClipboardText,
 } from '@tabler/icons-react';
 import { SideNav } from '../navigation';
 
@@ -24,6 +25,7 @@ const MenuLinks = [
   { title: 'Jadwal', href: '/schedule', icon: IconCalendar },
   { title: 'Shift', href: '/shift', icon: IconClockHour1 },
   { title: 'Karyawan', href: '/employee', icon: IconUsersGroup },
+  { title: 'Presensi', href: '/attendance', icon: IconClipboardText},
   { title: 'Setting', href: '/profile', icon: IconSettings },
 ];
 
