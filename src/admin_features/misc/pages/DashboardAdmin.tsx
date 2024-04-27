@@ -1,5 +1,5 @@
 import { Button, RingProgress, Select, UnstyledButton } from '@mantine/core';
-import { IconChevronRight, IconEye } from '@tabler/icons-react';
+import { IconChevronRight, IconEye, IconUsers } from '@tabler/icons-react';
 import { useState } from 'react';
 
 export const DashboardAdmin: React.FC = () => {
@@ -7,23 +7,25 @@ export const DashboardAdmin: React.FC = () => {
   return (
     <main>
       {/* Rekap Absensi Hari ini */}
-      <div className="grid lg:grid-cols-2 gap-2">
+      <div className="grid lg:grid-cols-2 gap-4">
         <section className="bg-white shadow-lg p-3 rounded-lg">
-          <div className="flex justify-between">
-          <div>
-            <h2 className="font-bold">Rekap Absensi Karyawan</h2>
-            <div className="-mt-1 text-xs text-slate-400">Berikut rekap absensi pada hari ini</div>
-          </div>
-          <Select 
-          className='max-w-40'
-          placeholder="Pilih Divisi"
-          data={['Semua Divisi', 'Developer', 'Designer', 'Marketing', 'HRD', 'Finance']}
-          defaultValue="Semua Divisi"
-          />
+          <div className="grid lg:grid-cols-2">
+            <div>
+              <h2 className="font-bold">Rekap Absensi Karyawan</h2>
+              <div className="-mt-1 text-xs text-slate-400">
+                Berikut rekap absensi pada hari ini
+              </div>
+            </div>
+            <Select
+              className="mt-2 lg:mt-0 w-full"
+              placeholder="Pilih Divisi"
+              data={['Semua Divisi', 'Developer', 'Designer', 'Marketing', 'HRD', 'Finance']}
+              defaultValue="Semua Divisi"
+            />
           </div>
           <div className="grid lg:grid-cols-2">
             <RingProgress
-              className='mx-auto'
+              className="mx-auto"
               size={220}
               thickness={25}
               label={<div className="text-center font-semibold text-slate-500">{ringHovered}</div>}
@@ -91,16 +93,48 @@ export const DashboardAdmin: React.FC = () => {
                   </tr>
                 </tbody>
               </table>
-              <Button justify='space-between' fullWidth className='mt-2 border-2 shadow-lg' rightSection={<IconChevronRight size={14}/>}>Lihat Semua</Button>
+              <Button
+                justify="space-between"
+                fullWidth
+                className="mt-2 border-2 shadow-lg"
+                rightSection={<IconChevronRight size={14} />}
+              >
+                Lihat Semua
+              </Button>
             </div>
           </div>
         </section>
+
+        {/* Total Employees */}
         <section className="bg-white shadow-lg p-3 rounded-lg">
-          <h2 className="font-bold">Jumlah Karyawan</h2>
-          <div className="grid grid-cols-3">
-            <div>Total 299</div>
-            <div>Pria 299</div>
-            <div>Wanita 299</div>
+          <div className='mb-3'>
+            <h2 className="font-bold">Jumlah Karyawan</h2>
+            <div className="-mt-1 text-xs text-slate-400">
+              Berikut jumlah karyawan yang terdaftar
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 ">
+            <div className="bg-slate-500 rounded-lg p-2 px-4 text-white shadow-md">
+              <div className="text-sm mb-1">Total Karyawan</div>
+              <div className="flex justify-between">
+                <IconUsers size={25} className="" />
+                <div className="text-xl font-black">200</div>
+              </div>
+            </div>
+            <div className="bg-rose-500 rounded-lg p-2 px-4 text-white shadow-md">
+              <div className="text-sm mb-1">Total Perempuan</div>
+              <div className="flex justify-between">
+                <IconUsers size={25} className="" />
+                <div className="text-xl font-black">200</div>
+              </div>
+            </div>
+            <div className="bg-blue-500 rounded-lg p-2 px-4 text-white shadow-md">
+              <div className="text-sm mb-1">Total Pria</div>
+              <div className="flex justify-between">
+                <IconUsers size={25} className="" />
+                <div className="text-xl font-black">200</div>
+              </div>
+            </div>
           </div>
         </section>
       </div>

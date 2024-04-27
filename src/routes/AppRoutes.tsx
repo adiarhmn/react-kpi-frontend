@@ -29,6 +29,7 @@ const { Attendance: AdminAttendance } = lazyImport(
 );
 const { CreateSchedule } = lazyImport(() => import('@/admin_features/schedule'), 'CreateSchedule');
 const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'ShiftAdmin');
+const { Employees } = lazyImport(() => import('@/admin_features/employees'), 'Employees');
 
 // Data Dummy Gambaran API Untuk Development
 const useAuth = () => {
@@ -60,7 +61,6 @@ export const AppRoutes: React.FC = () => {
           </Route>
         )}
 
-
         {/* Routes for Admin with Desktop View ======================>*/}
         {creds?.role === 'admin' && (
           <Route element={<AdminLayout />}>
@@ -70,6 +70,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="schedule/create" element={<CreateSchedule />} />
             <Route path="shift" element={<ShiftAdmin />} />
             <Route path="attendance" element={<AdminAttendance />} />
+            <Route path="employees" element={<Employees />} />
           </Route>
         )}
 

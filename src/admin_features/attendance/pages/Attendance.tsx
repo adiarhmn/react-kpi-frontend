@@ -1,4 +1,5 @@
-import { Table } from '@mantine/core';
+import { Badge, Button, Table } from '@mantine/core';
+import { IconArrowUpRight, IconPlus } from '@tabler/icons-react';
 
 const AttendanceData = {
   data: [
@@ -85,8 +86,17 @@ export const Attendance: React.FC = () => {
   return (
     <main>
       <section className="bg-white rounded-lg shadow-lg p-5">
-        <h1 className="font-semibold">Presensi Karyawan</h1>
-        <div className="-mt-1 text-xs text-slate-400 mb-2">Berikut data presensi karyawan</div>
+        <div className="grid lg:grid-cols-2">
+          <div>
+            <h1 className="font-semibold">Presensi Karyawan</h1>
+            <div className="-mt-1 text-xs text-slate-400 mb-2">Berikut data presensi karyawan</div>
+          </div>
+          <div>
+            <Button className="border-2 shadow-lg lg:max-w-40 lg:float-end" rightSection={<IconArrowUpRight size={14} />}>
+              Download PDF
+            </Button>
+          </div>
+        </div>
         <div className="overflow-x-auto">
           <Table withColumnBorders withTableBorder>
             <Table.Thead>
@@ -96,7 +106,6 @@ export const Attendance: React.FC = () => {
                 <Table.Th className="font-semibold">Check Out</Table.Th>
                 <Table.Th className="font-semibold">Shift</Table.Th>
                 <Table.Th className="font-semibold">Status</Table.Th>
-                <Table.Th className="font-semibold">Employee</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -109,13 +118,20 @@ export const Attendance: React.FC = () => {
                       minute: '2-digit',
                     })}
                   </Table.Td>
-                  <Table.Td>{new Date(item?.check_out).toLocaleTimeString('id-ID', {
+                  <Table.Td>
+                    {new Date(item?.check_out).toLocaleTimeString('id-ID', {
                       hour: '2-digit',
                       minute: '2-digit',
-                    })}</Table.Td>
-                  <Table.Td>{item.shift_in +"-"+ item.shift_out}</Table.Td>
-                  <Table.Td>{item.status}</Table.Td>
-                  <Table.Td>{item.employee?.name}</Table.Td>
+                    })}
+                  </Table.Td>
+                  <Table.Td>{item.shift_in + '-' + item.shift_out}</Table.Td>
+                  <Table.Td>
+                    {item.status === 'late' ? (
+                      <Badge color="red">Terlambat</Badge>
+                    ) : (
+                      <Badge>Hadir</Badge>
+                    )}
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

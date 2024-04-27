@@ -24,7 +24,7 @@ const MenuLinks = [
   { title: 'Beranda', href: '/beranda', icon: IconHome2 },
   { title: 'Jadwal', href: '/schedule', icon: IconCalendar },
   { title: 'Shift', href: '/shift', icon: IconClockHour1 },
-  { title: 'Karyawan', href: '/employee', icon: IconUsersGroup },
+  { title: 'Karyawan', href: '/employees', icon: IconUsersGroup },
   { title: 'Presensi', href: '/attendance', icon: IconClipboardText},
   { title: 'Setting', href: '/profile', icon: IconSettings },
 ];
