@@ -1,9 +1,14 @@
 import { Badge, Divider, Text } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 export const AbsenceList: React.FC = () => {
+  const navigate = useNavigate();
   return (
-    <>
-      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700">
+    <div className="text-center">
+      <button
+        onClick={() => navigate('/history/data-absence/detail')}
+        className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
+      >
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
           {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
           <div className="col-span-2 text-center -ms-3">
@@ -52,7 +57,7 @@ export const AbsenceList: React.FC = () => {
             Tanggal pengajuan : Sabtu, 13 April 2024
           </Text>
         </div>
-      </section>
+      </button>
       <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700">
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
           {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
@@ -103,6 +108,6 @@ export const AbsenceList: React.FC = () => {
           </Text>
         </div>
       </section>
-    </>
+    </div>
   );
 };

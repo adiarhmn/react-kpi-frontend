@@ -36,9 +36,9 @@ export const DetailOvertime: React.FC = () => {
               marginLeft: '4px',
               borderRadius: '2px',
             }}
-            color="red"
+            color="green"
           >
-            Belum disetujui
+            Disetujui
           </Badge>
         </div>
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
@@ -70,9 +70,9 @@ export const DetailOvertime: React.FC = () => {
       </section>
 
       <Tabs color="#51CF66" variant="pills" defaultValue="mulai">
-        <section className="mx-5 p-1 py-3 -mb-2 my-2">
-          <Tabs.List className="-mt-2 w-full grid grid-cols-12 text-center">
-            <div className="col-span-6">
+        <section className="mx-5 p-1 py-3 -mb-2 my-2 rounded-lg">
+          <Tabs.List className="-my-2 w-full grid grid-cols-12 text-center">
+            <div className="col-span-6 bg-white shadow-md rounded-lg">
               <Tabs.Tab
                 style={{ width: '160px' }}
                 value="mulai"
@@ -81,7 +81,7 @@ export const DetailOvertime: React.FC = () => {
                 Mulai
               </Tabs.Tab>
             </div>
-            <div className="col-span-6">
+            <div className="col-span-6 bg-white shadow-md rounded-lg">
               <Tabs.Tab
                 style={{ width: '160px' }}
                 className="col-span-6"

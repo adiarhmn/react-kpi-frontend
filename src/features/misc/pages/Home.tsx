@@ -7,6 +7,8 @@ import {
   IconFingerprint,
   IconChevronRight,
   IconClockHour8,
+  IconClock,
+  IconClock24,
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
@@ -76,6 +78,12 @@ export const Home: React.FC = () => {
               title: 'Kehadiran',
               href: '/development',
               icon: IconFingerprint,
+              color: 'bg-blue-600',
+            },
+            {
+              title: 'Lembur',
+              href: '/overtime',
+              icon: IconClock24,
               color: 'bg-blue-600',
             },
             {

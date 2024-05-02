@@ -15,6 +15,8 @@ const { DataOvertime } = lazyImport(() => import('@/features/history'), 'DataOve
 const { DetailOvertime } = lazyImport(() => import('@/features/history'), 'DetailOvertime');
 const { Profile } = lazyImport(() => import('@/features/employee'), 'Profile');
 const { Leave } = lazyImport(() => import('@/features/leave'), 'Leave');
+const { Overtime } = lazyImport(() => import('@/features/overtime'), 'Overtime');
+const { AddOvertime } = lazyImport(() => import('@/features/overtime'), 'AddOvertime');
 const { Schedule } = lazyImport(() => import('@/features/schedule'), 'Schedule');
 const { EduBackground } = lazyImport(() => import('@/features/employee'), 'EduBackground');
 const { Biodata } = lazyImport(() => import('@/features/employee'), 'Biodata');
@@ -51,6 +53,11 @@ export const AppRoutes: React.FC = () => {
 
           {/* Route Menu List */}
           <Route path="leave" element={<Leave />} />
+          <Route path="overtime">
+            <Route index element={<Overtime />} />
+            <Route path="add" element={<AddOvertime />} />
+          </Route>
+
           <Route path="schedule" element={<Schedule />} />
           <Route path="attendances" element={<Attendances />} />
         </Route>

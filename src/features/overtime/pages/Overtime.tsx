@@ -1,8 +1,8 @@
-import { IconCalendarClock, IconChevronLeft, IconPencil, IconPlus } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
+import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
-import { OvertimeList } from '../component/OvertimeList';
 
-export const DataOvertime: React.FC = () => {
+export const Overtime: React.FC = () => {
   const navigate = useNavigate();
   return (
     <main>
@@ -20,13 +20,25 @@ export const DataOvertime: React.FC = () => {
             />
             <h2 className="font-semibold ">Data lembur</h2>
           </div>
-          <div>
-            <IconCalendarClock size={21} />
-          </div>
+          <button
+            className="bg-transparent me-2"
+            onClick={() => {
+              navigate('/overtime/add');
+            }}
+          >
+            <IconPlus size={21} className="font-bold rounded-md" />
+          </button>
         </div>
       </section>
 
-      <OvertimeList />
+      <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+        <img
+          className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+          src="/images/blank-canvas.svg"
+          alt=""
+        />
+        <span className="font-bold text-slate-400 text-xl">Belum ada data lembur</span>
+      </section>
     </main>
   );
 };
