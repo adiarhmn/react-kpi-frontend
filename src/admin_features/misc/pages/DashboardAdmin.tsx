@@ -1,4 +1,4 @@
-import { Button, RingProgress, Select, UnstyledButton } from '@mantine/core';
+import { Button, RingProgress, Select, Table, UnstyledButton } from '@mantine/core';
 import { IconChevronRight, IconEye, IconUsers } from '@tabler/icons-react';
 import { useState } from 'react';
 
@@ -107,7 +107,7 @@ export const DashboardAdmin: React.FC = () => {
 
         {/* Total Employees */}
         <section className="bg-white shadow-lg p-3 rounded-lg">
-          <div className='mb-3'>
+          <div className="mb-3">
             <h2 className="font-bold">Jumlah Karyawan</h2>
             <div className="-mt-1 text-xs text-slate-400">
               Berikut jumlah karyawan yang terdaftar
@@ -135,6 +135,47 @@ export const DashboardAdmin: React.FC = () => {
                 <div className="text-xl font-black">200</div>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="bg-white shadow-lg p-3 rounded-lg">
+        <div className="grid lg:grid-cols-2">
+            <div>
+              <h2 className="font-bold">Daftar Pengajuan</h2>
+              <div className="-mt-1 text-xs text-slate-400">
+                Berikut pengajuan yang perlu di proses
+              </div>
+            </div>
+            <Select
+              className="mt-2 lg:mt-0 w-full"
+              placeholder="Pilih Pengajuan"
+              data={['Semua Pengajuan', 'Izin', 'Cuti', 'Sakit', 'Lembur']}
+              defaultValue="Semua Pengajuan"
+            />
+          </div>
+          <div className='mt-3'>
+            <Table withColumnBorders withTableBorder>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Nama</Table.Th>
+                  <Table.Th>Tanggal</Table.Th>
+                  <Table.Th>Jenis</Table.Th>
+                  <Table.Th>Status</Table.Th>
+                  <Table.Th>Aksi</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>
+                <Table.Tr>
+                  <Table.Td>John Doe</Table.Td>
+                  <Table.Td>12-12-2021</Table.Td>
+                  <Table.Td>Cuti</Table.Td>
+                  <Table.Td>Menunggu Persetujuan</Table.Td>
+                  <Table.Td className='text-center'>
+                    <UnstyledButton><IconEye size={20} className='text-blue-600' /></UnstyledButton>
+                  </Table.Td>
+                </Table.Tr>
+              </Table.Tbody>
+            </Table>
           </div>
         </section>
       </div>
