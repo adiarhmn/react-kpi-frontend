@@ -1,5 +1,5 @@
 import { NavLink } from '@mantine/core';
-import { Icon } from '@tabler/icons-react';
+import { Icon, IconGauge } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ export const SideNav: React.FC<Props> = ({ SideNavProps, ToggleButton, TitleSett
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const currentNav = SideNavProps.find(nav => location.pathname.startsWith(nav.href));
+    const currentNav = SideNavProps.find((nav) => location.pathname.startsWith(nav.href));
     if (currentNav) {
       TitleSetting(currentNav.title);
     }
@@ -47,6 +47,29 @@ export const SideNav: React.FC<Props> = ({ SideNavProps, ToggleButton, TitleSett
             />
           );
         })}
+        <NavLink
+          href="#required-for-focus"
+          label="Approval"
+          leftSection={<IconGauge size="1rem" stroke={1.5} />}
+          childrenOffset={28}
+          className="rounded-xl mb-1"
+        >
+          <NavLink
+            className="rounded-xl"
+            href="#required-for-focus"
+            label={<span className="border-l-2 border-blue-600 pl-4">Cuti</span>}
+          />
+          <NavLink
+            className="rounded-xl"
+            href="#required-for-focus"
+            label={<span className="border-l-2 border-blue-600 pl-4">Lembur</span>}
+          />
+          <NavLink
+            className="rounded-xl"
+            href="#required-for-focus"
+            label={<span className="border-l-2 border-blue-600 pl-4">Izin</span>}
+          />
+        </NavLink>
       </div>
     </section>
   );

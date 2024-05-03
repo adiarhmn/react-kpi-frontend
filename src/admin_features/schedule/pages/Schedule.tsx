@@ -179,7 +179,7 @@ export const Schedule: React.FC = () => {
           </div>
         </div>
         <Button onClick={() => navigate('/schedule/create')} leftSection={<IconPlus size={15} />}>
-          Buat Jadwal
+          Tambah Data
         </Button>
       </section>
 
@@ -194,7 +194,6 @@ export const Schedule: React.FC = () => {
             ></MonthPickerInput>
           </div>
           <div className="flex gap-2">
-            <Button leftSection={<IconSettings size={15} />}> Atur Jadwal</Button>
             <Button
               onClick={() => {
                 setFreeDay(!FreeDays);
@@ -214,7 +213,7 @@ export const Schedule: React.FC = () => {
           <Table withColumnBorders withTableBorder>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>
+                <Table.Th className='sticky left-0 bg-white'>
                   {' '}
                   <sub>Nama</sub>\<sup>Tgl</sup>
                 </Table.Th>
@@ -226,7 +225,7 @@ export const Schedule: React.FC = () => {
             <Table.Tbody>
               {Employees.map((employee, rowIndex) => (
                 <Table.Tr key={rowIndex}>
-                  <Table.Td>{employee.name}</Table.Td>
+                  <Table.Td className='sticky left-0 bg-white'>{employee.name}</Table.Td>
                   {employee.schedule.map((schedule, colIndex) => (
                     <Table.Td
                       key={colIndex}
