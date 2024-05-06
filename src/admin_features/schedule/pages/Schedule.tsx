@@ -167,7 +167,7 @@ export const Schedule: React.FC = () => {
   const [FreeDays, setFreeDay] = useState(false);
   const navigate = useNavigate();
   const [month, setMonth] = useState<Date | null>(new Date('2022-01-01'));
-  
+
   return (
     <main>
       {/* Header */}
@@ -209,23 +209,22 @@ export const Schedule: React.FC = () => {
           className="absolute bg-black opacity-50 top-0 left-0 w-full h-screen"
           style={{ zIndex: FreeDays ? 999 : 1, display: FreeDays ? '' : 'none' }}
         ></div>
-        <div className="relative bg-white overflow-x-auto" style={{ zIndex: FreeDays ? 9999 : 1 }}>
-          <Table withColumnBorders withTableBorder>
+        <div className="relative bg-white overflow-x-auto border border-slate-300" style={{ zIndex: FreeDays ? 9999 : 1 }}>
+          <Table withColumnBorders>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th className='sticky left-0 bg-white'>
-                  {' '}
+                <Table.Th className="sticky left-0 bg-white">
                   <sub>Nama</sub>\<sup>Tgl</sup>
                 </Table.Th>
                 {Array.from({ length: 31 }).map((_, index) => (
-                  <Table.Th key={index}>{index + 1}</Table.Th>
+                  <Table.Th key={index}>Hari {index + 1}</Table.Th>
                 ))}
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
               {Employees.map((employee, rowIndex) => (
                 <Table.Tr key={rowIndex}>
-                  <Table.Td className='sticky left-0 bg-white'>{employee.name}</Table.Td>
+                  <Table.Td className="sticky left-0 bg-white">{employee.name}</Table.Td>
                   {employee.schedule.map((schedule, colIndex) => (
                     <Table.Td
                       key={colIndex}

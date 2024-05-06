@@ -17,17 +17,33 @@ import {
   IconClockHour1,
   IconUsersGroup,
   IconClipboardText,
+  IconGauge,
+  IconBuildingEstate,
 } from '@tabler/icons-react';
 import { SideNav } from '../navigation';
 
-const MenuLinks = [
+const MenuMain = [
   { title: 'Beranda', href: '/beranda', icon: IconHome2 },
-  { title: 'Jadwal', href: '/schedule', icon: IconCalendar },
+];
+
+const MenuDataMaster = [
+  { title: 'Divisi', href: '/division', icon: IconBuildingEstate},
   { title: 'Shift', href: '/shift', icon: IconClockHour1 },
   { title: 'Karyawan', href: '/employees', icon: IconUsersGroup },
-  { title: 'Presensi', href: '/attendance', icon: IconClipboardText},
-  { title: 'Setting', href: '/profile', icon: IconSettings },
 ];
+
+const MenuAbsensi = [
+  { title: 'Jadwal', href: '/schedule', icon: IconCalendar },
+  { title: 'Presensi', href: '/attendance', icon: IconClipboardText },
+  { title: 'Aktivitas', href: '/activity', icon: IconGauge },
+]
+
+const MenuPengajuan = [
+  { title: 'Cuti', href: '/leave', icon: IconTrash },
+  { title: 'Izin', href: '/permit', icon: IconTrash },
+  { title: 'Lembur', href: '/overtime', icon: IconTrash },
+]
+
 
 export const AdminLayout: React.FC = () => {
   // const { creds } = useAuth();
@@ -49,8 +65,8 @@ export const AdminLayout: React.FC = () => {
         padding="md"
         withBorder={false}
       >
-        <AppShell.Header className='shadow-md'>
-          <Group h="100%" justify="space-between" gap={0} className='px-3'>
+        <AppShell.Header className="shadow-md">
+          <Group h="100%" justify="space-between" gap={0} className="px-3">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <Group
               gap={5}
@@ -65,9 +81,7 @@ export const AdminLayout: React.FC = () => {
             {/* Profile and Name Information */}
             {!isMobile && (
               <Group className="grow h-full" justify="space-between">
-                <h1 className="px-3 py-2 font-semibold text-center">
-                  {title}
-                </h1>
+                <h1 className="px-3 py-2 font-semibold text-center">{title}</h1>
                 <Menu shadow="md" width={200}>
                   <Menu.Target>
                     <UnstyledButton>
@@ -116,7 +130,34 @@ export const AdminLayout: React.FC = () => {
           </Group>
         </AppShell.Header>
         <AppShell.Navbar style={{ transition: 'all 0.3s ease' }}>
-          <SideNav SideNavProps={MenuLinks} ToggleButton={() => toggle()} TitleSetting={setTitle} />
+          <section className="overflow-x-auto min-h-screen pt-1 bar-scroll-blue">
+            <div className="p-2 flex flex-col">
+              <SideNav
+                SideNavProps={MenuMain}
+                HeaderList={null}
+                ToggleButton={() => toggle()}
+                TitleSetting={setTitle}
+              />
+              <SideNav
+                SideNavProps={MenuDataMaster}
+                HeaderList={"Data Master"}
+                ToggleButton={() => toggle()}
+                TitleSetting={setTitle}
+              />
+              <SideNav
+                SideNavProps={MenuAbsensi}
+                HeaderList={"Absensi"}
+                ToggleButton={() => toggle()}
+                TitleSetting={setTitle}
+              />
+              <SideNav
+                SideNavProps={MenuPengajuan}
+                HeaderList={"Pengajuan"}
+                ToggleButton={() => toggle()}
+                TitleSetting={setTitle}
+              />
+            </div>
+          </section>
         </AppShell.Navbar>
         <AppShell.Main>
           <Outlet />

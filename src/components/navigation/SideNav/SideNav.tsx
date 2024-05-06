@@ -11,11 +11,12 @@ export type SideNavProps = {
 
 interface Props {
   SideNavProps: SideNavProps[];
+  HeaderList: string | null;
   ToggleButton: () => void;
   TitleSetting: (title: string) => void;
 }
 
-export const SideNav: React.FC<Props> = ({ SideNavProps, ToggleButton, TitleSetting }) => {
+export const SideNav: React.FC<Props> = ({ SideNavProps, HeaderList, ToggleButton, TitleSetting }) => {
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -30,47 +31,25 @@ export const SideNav: React.FC<Props> = ({ SideNavProps, ToggleButton, TitleSett
   };
   const navigate = useNavigate();
   return (
-    <section className="overflow-x-auto min-h-screen pt-1 bar-scroll-blue">
-      <div className="p-2 flex flex-col">
-        {SideNavProps.map((SideNavProps, index) => {
-          return (
-            <NavLink
-              className="rounded-xl mb-1"
-              key={index}
-              label={SideNavProps.title}
-              onClick={() => {
-                navigate(SideNavProps.href);
-                ToggleButton();
-              }}
-              leftSection={<SideNavProps.icon size={22} />}
-              active={isActive(SideNavProps.href)}
-            />
-          );
-        })}
-        <NavLink
-          href="#required-for-focus"
-          label="Approval"
-          leftSection={<IconGauge size="1rem" stroke={1.5} />}
-          childrenOffset={28}
-          className="rounded-xl mb-1"
-        >
+    <>
+      {HeaderList && (
+        <div className="text-xs text-slate-400 font-semibold uppercase mb-2 pt-3 px-3">{HeaderList}</div>
+      )}
+      {SideNavProps.map((SideNavProps, index) => {
+        return (
           <NavLink
-            className="rounded-xl"
-            href="#required-for-focus"
-            label={<span className="border-l-2 border-blue-600 pl-4">Cuti</span>}
+            className="rounded-xl mb-1"
+            key={index}
+            label={SideNavProps.title}
+            onClick={() => {
+              navigate(SideNavProps.href);
+              ToggleButton();
+            }}
+            leftSection={<SideNavProps.icon size={22} />}
+            active={isActive(SideNavProps.href)}
           />
-          <NavLink
-            className="rounded-xl"
-            href="#required-for-focus"
-            label={<span className="border-l-2 border-blue-600 pl-4">Lembur</span>}
-          />
-          <NavLink
-            className="rounded-xl"
-            href="#required-for-focus"
-            label={<span className="border-l-2 border-blue-600 pl-4">Izin</span>}
-          />
-        </NavLink>
-      </div>
-    </section>
+        );
+      })}
+    </>
   );
 };

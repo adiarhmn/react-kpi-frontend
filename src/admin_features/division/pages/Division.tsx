@@ -1,15 +1,15 @@
-import { ActionIcon, Input, Table, UnstyledButton } from '@mantine/core';
-import { IconInfoCircle, IconPencil, IconSearch, IconTrash } from '@tabler/icons-react';
+import { ActionIcon, Input, Table, UnstyledButton } from "@mantine/core";
+import { IconInfoCircle, IconPencil, IconSearch, IconTrash } from "@tabler/icons-react";
 
-export const Employees: React.FC = () => {
+export const Division: React.FC = () => {
   return (
     <main>
       <section className="bg-white p-3 rounded-lg shadow-lg">
         <div className='flex justify-between items-center'>
           <div>
-            <h2 className="font-bold">Daftar Karyawan</h2>
+            <h2 className="font-bold">Daftar Divisi</h2>
             <div className="-mt-1 text-xs text-slate-400">
-              Berikut daftar karyawan yang terdaftar pada sistem
+              Berikut daftar divisi yang terdaftar pada sistem
             </div>
           </div>
           <div className="flex gap-2">
@@ -20,19 +20,13 @@ export const Employees: React.FC = () => {
           <Table withColumnBorders withTableBorder>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>Nama</Table.Th>
-                <Table.Th>Email</Table.Th>
-                <Table.Th>Divisi</Table.Th>
-                <Table.Th>Role</Table.Th>
+                <Table.Th>Nama Divisi</Table.Th>
                 <Table.Th>Aksi</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
               <Table.Tr>
-                <Table.Td>John Doe</Table.Td>
-                <Table.Td>jhon@gmail.com</Table.Td>
                 <Table.Td>IT Support</Table.Td>
-                <Table.Td>Admin</Table.Td>
                 <Table.Td className="flex gap-2 items-center justify-center">
                   <ActionIcon color="yellow">
                     <IconPencil size={14} />
