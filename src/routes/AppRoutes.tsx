@@ -31,6 +31,7 @@ const { CreateSchedule } = lazyImport(() => import('@/admin_features/schedule'),
 const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'ShiftAdmin');
 const { Employees } = lazyImport(() => import('@/admin_features/employees'), 'Employees');
 const { Division } = lazyImport(() => import('@/admin_features/division'), 'Division');
+const { CreateDivision } = lazyImport(() => import('@/admin_features/division'), 'CreateDivision');
 
 // Data Dummy Gambaran API Untuk Development
 const useAuth = () => {
@@ -72,7 +73,8 @@ export const AppRoutes: React.FC = () => {
             <Route path="shift" element={<ShiftAdmin />} />
             <Route path="attendance" element={<AdminAttendance />} />
             <Route path="employees" element={<Employees />} />
-            <Route path="Division" element={<Division />} />
+            <Route path="division" element={<Division />} />
+            <Route path="division/create" element={<CreateDivision />} />
           </Route>
         )}
 
