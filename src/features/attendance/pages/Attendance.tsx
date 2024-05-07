@@ -1,4 +1,4 @@
-import { Button, ActionIcon, Text, Card, Image, Group, Badge, Modal } from '@mantine/core';
+import { Button, ActionIcon, Text, Card, Image, Group, Badge, Modal, Divider } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconDeviceTablet } from '@tabler/icons-react';
 import {
@@ -9,9 +9,13 @@ import {
   IconPlus,
 } from '@tabler/icons-react';
 import { IconChevronRight } from '@tabler/icons-react';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 export const Attendance: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const currentDate: Date = new Date();
+  const formattedDate = format(currentDate, 'EEEE, dd MMM yyyy', { locale: id });
 
   return (
     <main className="min-h-96 relative">
@@ -30,29 +34,73 @@ export const Attendance: React.FC = () => {
       {/* End card map */}
 
       {/* Absen card */}
-      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
         <div className="flex justify-between text-xs items-center p-2">
           <span className="font-bold text-blue-700">Absensi</span>
-          <IconDeviceTablet className="opacity-80" size={20} />
+          <Badge
+            size="xs"
+            style={{
+              marginLeft: '4px',
+              borderRadius: '2px',
+            }}
+            color="red"
+          >
+            belum check-in
+          </Badge>
         </div>
-        <div className="w-full pb-2">
-          <p className="text-center text-sm text-gray-600">Senin, 12 Mar 2024 </p>
-          <h1 className="text-center font-bold">Shift pagi</h1>
-          <h1 className="text-center">08.00 - 16.00</h1>
-          <div className="flex justify-between">
-            <Button variant="filled" rightSection={<IconArrowBarToRight />} fullWidth>
-              Check-in
-            </Button>
+        <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
+          <div className="col-span-2 text-center m-auto p-1">
+            <Text size="23px" fw={700}>
+              F2
+            </Text>
+            <Text style={{ marginTop: '-5px' }} size="sm">
+              Pagi
+            </Text>
           </div>
+          <div className="col-span-10 ms-2 text-left">
+            <div className="ms-2 -mb-2">
+              <Text size="xs">Tanggal</Text>
+              <Text size="sm" fw={700}>
+                {formattedDate}
+              </Text>
+            </div>
+            <Divider my="sm" />
+            <div className="-mt-2 w-full grid grid-cols-12 mb-1">
+              <div className="col-span-6 text-left mt-1 ms-2">
+                <Text size="xs">Jam kerja</Text>
+                <Text size="sm" fw={700}>
+                  08:00 - 16:00
+                </Text>
+              </div>
+              <div className="col-span-6 text-right -mt-1"></div>
+            </div>
+          </div>
+        </div>
+        <div className="p-2 mt-2">
+          <Button fullWidth rightSection={<IconArrowBarToRight />}>
+            Check-in
+          </Button>
         </div>
       </section>
       {/* End absen card */}
+
       {/* Tugas card */}
       <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="font-bold text-blue-700">Tugas</span>
-          <Button variant="filled" size="xs" onClick={open}>
-            <IconPlus className="opacity-80" size={20} />
+          <span className="font-bold text-blue-700">Kegiatan</span>
+          <Button
+            style={{
+              borderRadius: '40px',
+              height: '40px',
+              width: '40px',
+              padding: '0px',
+              backgroundColor: 'transparent',
+              color: 'blue',
+              fontSize: '20px',
+            }}
+            onClick={open}
+          >
+            +
           </Button>
         </div>
         <div className="w-full pb-2"></div>

@@ -1,16 +1,20 @@
 import { IconCalendarClock, IconChevronLeft, IconPencil, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { OvertimeList } from '../component/OvertimeList';
+import { MonthPickerInput } from '@mantine/dates';
+import { useState } from 'react';
 
 export const DataOvertime: React.FC = () => {
   const navigate = useNavigate();
+  const [month, setMonth] = useState<Date | null>(new Date());
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
 
       <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 -mt-10">
-        <div className="flex justify-between items-center mb-1">
-          <div className="flex items-center text-blue-700 gap-3">
+        <div className="flex justify-between items-center text-blue-700 mb-1">
+          <div className="flex items-center">
             <IconChevronLeft
               onClick={() => {
                 navigate(-1);
@@ -20,9 +24,15 @@ export const DataOvertime: React.FC = () => {
             />
             <h2 className="font-semibold ">Data lembur</h2>
           </div>
-          <div>
-            <IconCalendarClock size={21} />
-          </div>
+          <span className="font-semibold">
+            {month?.toLocaleString('default', { month: 'long' })} {month?.getFullYear()}
+          </span>
+        </div>
+
+        {/* Month Picker or Input Date */}
+        <div>
+          <p className="text-xs text-slate-400 mb-1">Pencarian berdasarkan bulan :</p>
+          <MonthPickerInput size="xs" placeholder="Pick date" value={month} onChange={setMonth} />
         </div>
       </section>
 

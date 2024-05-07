@@ -23,12 +23,12 @@ export const History: React.FC = () => {
         <div className="py-2">
           <Progress.Root size="xl">
             <Tooltip label="Hadir">
-              <Progress.Section value={10} color="green">
+              <Progress.Section value={50} color="green">
                 <Progress.Label>Hadir</Progress.Label>
               </Progress.Section>
             </Tooltip>
 
-            <Progress.Section value={28} color="pink">
+            <Progress.Section value={20} color="pink">
               <Progress.Label>Alpa</Progress.Label>
             </Progress.Section>
             <Progress.Section value={15} color="blue">

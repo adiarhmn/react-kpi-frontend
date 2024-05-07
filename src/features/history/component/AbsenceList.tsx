@@ -52,13 +52,16 @@ export const AbsenceList: React.FC = () => {
             </div>
           </div>
         </div>
-        <div>
-          <Text style={{ marginLeft: '4px', padding: '8px' }} size="11px" fw={500}>
+        <div className="text-left">
+          <Text style={{ marginLeft: '0px', padding: '8px' }} size="11px" fw={500}>
             Tanggal pengajuan : Sabtu, 13 April 2024
           </Text>
         </div>
       </button>
-      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700">
+      <button
+        onClick={() => navigate('/history/data-absence/detail')}
+        className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
+      >
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
           {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
           <div className="col-span-2 text-center -ms-3">
@@ -102,12 +105,12 @@ export const AbsenceList: React.FC = () => {
             </div>
           </div>
         </div>
-        <div>
+        <div className="text-left">
           <Text style={{ marginLeft: '4px', padding: '8px' }} size="11px" fw={500}>
             Tanggal pengajuan : Selasa, 8 April 2024
           </Text>
         </div>
-      </section>
+      </button>
     </div>
   );
 };
