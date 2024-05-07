@@ -1,8 +1,8 @@
-import { ActionIcon, Button, TextInput } from '@mantine/core';
+import { ActionIcon, Button, Select, TextInput } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
-export const CreateDivision: React.FC = () => {
+export const CreateEmployee: React.FC = () => {
   const navigate = useNavigate();
   const NavBack = () => {
     navigate(-1);
@@ -16,16 +16,27 @@ export const CreateDivision: React.FC = () => {
             <IconChevronLeft size={20} />
           </ActionIcon>
           <div>
-            <h2 className="font-bold">Tambah Divisi</h2>
+            <h2 className="font-bold">Tambah Karyawan</h2>
             <div className="-mt-1 text-xs text-slate-400">
-              Berikut form untuk menambahkan divisi
+              Berikut form untuk menambahkan karyawan
             </div>
           </div>
         </div>
         <div className="mt-5">
           <form action="">
-            <TextInput className="mb-3" label="Kode Divisi" placeholder="Kode Divisi" required />
-            <TextInput className="mb-3" label="Nama Divisi" placeholder="Nama Divisi" required />
+            <TextInput
+              className="mb-3"
+              label="Nama Karyawan"
+              placeholder="Nama Karyawan"
+              required
+            />
+            <TextInput className="mb-3" label="Tempat Lahir" placeholder="Tempat Lahir" required />
+            <TextInput className="mb-3" label="Nomor Telepon" placeholder="Nomor Telepon" required />
+            <Select
+              label="Jenis Kelamin"
+              placeholder="Pilih Jenis Kelamin"
+              data={['Laki-laki', 'Perempuan']}
+            />
             <div className="flex gap-3">
               <Button type="submit" color="blue" className="mt-5">
                 Simpan

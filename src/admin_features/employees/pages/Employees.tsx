@@ -31,11 +31,11 @@ export const Employees: React.FC = () => {
           <Table withColumnBorders withTableBorder>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>Nama</Table.Th>
-                <Table.Th>Email</Table.Th>
-                <Table.Th>Divisi</Table.Th>
-                <Table.Th>Role</Table.Th>
-                <Table.Th>Aksi</Table.Th>
+                <Table.Th className='font-bold'>Nama</Table.Th>
+                <Table.Th className='font-bold'>Email</Table.Th>
+                <Table.Th className='font-bold'>Divisi</Table.Th>
+                <Table.Th className='font-bold'>Role</Table.Th>
+                <Table.Th className='font-bold'>Aksi</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>

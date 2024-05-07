@@ -33,7 +33,7 @@ export const SideNav: React.FC<Props> = ({ SideNavProps, HeaderList, ToggleButto
   return (
     <>
       {HeaderList && (
-        <div className="text-xs text-slate-400 font-semibold uppercase mb-2 pt-3 px-3">{HeaderList}</div>
+        <div className="text-xs text-slate-400 font-semibold uppercase mb-2 pt-4 px-3">{HeaderList}</div>
       )}
       {SideNavProps.map((SideNavProps, index) => {
         return (
