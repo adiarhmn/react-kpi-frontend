@@ -1,3 +1,4 @@
+import { AbsenceList } from '@/features/history/component/AbsenceList';
 import { IconPlus } from '@tabler/icons-react';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
@@ -31,14 +32,7 @@ export const Absence: React.FC = () => {
         </div>
       </section>
 
-      <section className="min-h-96 flex flex-col items-center justify-center mt-10">
-        <img
-          className="w-40 mb-2 bg-slate-200 rounded-full p-2"
-          src="/images/blank-canvas.svg"
-          alt=""
-        />
-        <span className="font-bold text-slate-400 text-xl">Belum ada data izin</span>
-      </section>
+      <AbsenceList />
     </main>
   );
 };

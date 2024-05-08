@@ -9,6 +9,7 @@ import {
   IconClockHour8,
   IconClock,
   IconClock24,
+  IconLuggage,
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
@@ -81,9 +82,9 @@ export const Home: React.FC = () => {
               color: 'bg-blue-600',
             },
             {
-              title: 'Lembur',
-              href: '/overtime',
-              icon: IconClock24,
+              title: 'Jadwal',
+              href: '/schedule',
+              icon: IconCalendar,
               color: 'bg-blue-600',
             },
             {
@@ -93,9 +94,15 @@ export const Home: React.FC = () => {
               color: 'bg-blue-600',
             },
             {
-              title: 'Jadwal',
-              href: '/schedule',
-              icon: IconCalendar,
+              title: 'Cuti',
+              href: '/paid-leave',
+              icon: IconLuggage,
+              color: 'bg-blue-600',
+            },
+            {
+              title: 'Lembur',
+              href: '/overtime',
+              icon: IconClock24,
               color: 'bg-blue-600',
             },
             {

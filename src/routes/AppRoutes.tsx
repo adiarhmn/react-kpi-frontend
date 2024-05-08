@@ -20,6 +20,8 @@ const { DetailOvertime } = lazyImport(() => import('@/features/history'), 'Detai
 const { Profile } = lazyImport(() => import('@/features/employee'), 'Profile');
 const { Absence } = lazyImport(() => import('@/features/leave'), 'Absence');
 const { AddAbsence } = lazyImport(() => import('@/features/leave'), 'AddAbsence');
+const { PaidLeave } = lazyImport(() => import('@/features/paid-leave'), 'PaidLeave');
+const { AddPaidLeave } = lazyImport(() => import('@/features/paid-leave'), 'AddPaidLeave');
 const { Overtime } = lazyImport(() => import('@/features/overtime'), 'Overtime');
 const { AddOvertime } = lazyImport(() => import('@/features/overtime'), 'AddOvertime');
 const { Schedule } = lazyImport(() => import('@/features/schedule'), 'Schedule');
@@ -68,6 +70,10 @@ export const AppRoutes: React.FC = () => {
           <Route path="absence">
             <Route index element={<Absence />} />
             <Route path="add" element={<AddAbsence />} />
+          </Route>
+          <Route path="paid-leave">
+            <Route index element={<PaidLeave />} />
+            <Route path="add" element={<AddPaidLeave />} />
           </Route>
           <Route path="overtime">
             <Route index element={<Overtime />} />
