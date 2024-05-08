@@ -1,7 +1,8 @@
+import { IconPlus } from '@tabler/icons-react';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 //
-export const Leave: React.FC = () => {
+export const Absence: React.FC = () => {
   const navigate = useNavigate();
   return (
     <main>
@@ -19,6 +20,14 @@ export const Leave: React.FC = () => {
             />
             <h2 className="font-semibold ">Data Izin</h2>
           </div>
+          <button
+            className="bg-transparent me-2"
+            onClick={() => {
+              navigate('/absence/add');
+            }}
+          >
+            <IconPlus size={21} className="font-bold rounded-md" />
+          </button>
         </div>
       </section>
 

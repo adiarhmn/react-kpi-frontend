@@ -88,7 +88,7 @@ export const Home: React.FC = () => {
             },
             {
               title: 'Izin',
-              href: '/leave',
+              href: '/absence',
               icon: IconFileTime,
               color: 'bg-blue-600',
             },
