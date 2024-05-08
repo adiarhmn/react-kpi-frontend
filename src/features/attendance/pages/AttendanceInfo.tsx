@@ -52,7 +52,7 @@ export const AttendanceInfo: React.FC = () => {
             </Text>
           </div>
           <div className="col-span-10 ms-2 text-left">
-            <div className="ms-2 -mb-2">
+            <div className="ms-2">
               <Text size="xs">Tanggal</Text>
               <Text size="sm" fw={700}>
                 {formattedDate}
@@ -81,7 +81,45 @@ export const AttendanceInfo: React.FC = () => {
         <div className="flex justify-between text-xs items-center p-2">
           <span className="font-bold text-blue-700">Kegiatan</span>
         </div>
-        <div className="w-full pb-2"></div>
+        <div className="w-full pb-2">
+          <div className="mt-2 p-2">
+            <Text size="xs" fw={700}>
+              Judul kegiatan
+            </Text>
+            <Text style={{ textAlign: 'justify' }} size="sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            </Text>
+          </div>
+          <div className="mt-1 p-2">
+            <Text size="xs" fw={700}>
+              Deskripsi kegiatan
+            </Text>
+            <Text style={{ textAlign: 'justify' }} size="sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </Text>
+          </div>
+          <Divider my="md" />
+          <div className="p-2">
+            <Text size="xs" fw={700}>
+              Judul kegiatan
+            </Text>
+            <Text style={{ textAlign: 'justify' }} size="sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            </Text>
+          </div>
+          <div className="mt-1 p-2">
+            <Text size="xs" fw={700}>
+              Deskripsi kegiatan
+            </Text>
+            <Text style={{ textAlign: 'justify' }} size="sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </Text>
+          </div>
+        </div>
       </section>
     </main>
   );

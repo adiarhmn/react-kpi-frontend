@@ -1,4 +1,16 @@
-import { Button, ActionIcon, Text, Card, Image, Group, Badge, Modal, Divider } from '@mantine/core';
+import {
+  Button,
+  ActionIcon,
+  Text,
+  Card,
+  Image,
+  Group,
+  Badge,
+  Modal,
+  Divider,
+  Input,
+  JsonInput,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconDeviceTablet } from '@tabler/icons-react';
 import {
@@ -103,12 +115,49 @@ export const Attendance: React.FC = () => {
             +
           </Button>
         </div>
-        <div className="w-full pb-2"></div>
+        <div className="w-full pb-2">
+          <div className="-mt-2 p-2">
+            <Text size="xs" fw={700}>
+              Judul kegiatan
+            </Text>
+            <Text style={{ textAlign: 'justify' }} size="sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            </Text>
+          </div>
+          <div className="mt-1 p-2">
+            <Text size="xs" fw={700}>
+              Deskripsi kegiatan
+            </Text>
+            <Text style={{ textAlign: 'justify' }} size="sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </Text>
+          </div>
+        </div>
       </section>
       {/* End tugas card */}
 
-      <Modal opened={opened} onClose={close} title="Tambah tugas">
-        {/* Modal content */}
+      <Modal opened={opened} onClose={close} title="Tambah kegiatan">
+        <div className="mb-2">
+          <Input.Wrapper label="Judul kegiatan" description="" error="">
+            <Input placeholder="masukkan judul kegiatan" />
+          </Input.Wrapper>
+        </div>
+        <div className="mb-2">
+          <JsonInput
+            label="Deskripsi kegiatan"
+            placeholder="masukkan deskripsi kegiatan"
+            formatOnBlur
+            autosize
+            minRows={5}
+          />
+        </div>
+        <div className="mb-2 mt-3">
+          <Button fullWidth rightSection={<IconArrowBarToRight />}>
+            Simpan
+          </Button>
+        </div>
       </Modal>
     </main>
   );

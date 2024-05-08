@@ -86,7 +86,9 @@ export const DetailAbsence: React.FC = () => {
         <Divider my="sm" />
         <div className="w-full grid grid-cols-1 pb-2 pt-2 ms-4 -mt-2">
           <div className="gap-2 mt-0">
-            <Text size="xs">Lampiran :</Text>
+            <Text size="xs" fw={700}>
+              Lampiran :
+            </Text>
             <Image
               radius="md"
               h={200}
@@ -101,10 +103,10 @@ export const DetailAbsence: React.FC = () => {
             />
           </div>
           <div className="gap-2 -mt-2">
-            <Text size="xs">Keterangan : </Text>
             <Text size="xs" fw={700}>
-              Sakit demam
+              Keterangan :{' '}
             </Text>
+            <Text size="xs">Sakit demam</Text>
           </div>
         </div>
       </section>

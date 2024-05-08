@@ -1,5 +1,6 @@
 import { Badge, Progress, Tooltip } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
+import { IconLuggage } from '@tabler/icons-react';
 import { IconChartCandle, IconChartPie2, IconChevronRight, IconReport } from '@tabler/icons-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -81,7 +82,22 @@ export const History: React.FC = () => {
             <IconChartPie2 size={25} className="text-blue-700" />
             <div>
               <span className="font-semibold">Data Izin</span>
-              <p className="text-xs text-slate-400">Data izin atau cuti yang disetujui</p>
+              <p className="text-xs text-slate-400">Data izin yang disetujui</p>
+            </div>
+          </div>
+          <IconChevronRight className="text-blue-700" size={25} />
+        </Link>
+
+        {/* Data Cuti */}
+        <Link
+          to="/history/data-paid-leave"
+          className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm"
+        >
+          <div className="flex gap-3 items-center">
+            <IconLuggage size={25} className="text-blue-700" />
+            <div>
+              <span className="font-semibold">Data Cuti</span>
+              <p className="text-xs text-slate-400">Data cuti yang disetujui</p>
             </div>
           </div>
           <IconChevronRight className="text-blue-700" size={25} />

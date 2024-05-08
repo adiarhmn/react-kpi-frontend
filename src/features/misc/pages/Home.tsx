@@ -76,7 +76,7 @@ export const Home: React.FC = () => {
           navigations={[
             {
               title: 'Kehadiran',
-              href: '/attendance-info',
+              href: '/info-attendance',
               icon: IconFingerprint,
               color: 'bg-blue-600',
             },
