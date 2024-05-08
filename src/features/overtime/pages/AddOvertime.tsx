@@ -1,4 +1,5 @@
-import { Badge, Button, Divider, Image, Text } from '@mantine/core';
+import { Badge, Button, Divider, Image, JsonInput, Modal, Text } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
   IconArrowBarToRight,
   IconChevronLeft,
@@ -12,9 +13,11 @@ import { id } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
 
 export const AddOvertime: React.FC = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+
   const navigate = useNavigate();
   const currentDate: Date = new Date();
-  const formattedDate = format(currentDate, 'dd MMM yyyy', { locale: id });
+  const formattedDate = format(currentDate, 'EEEE, dd MMM yyyy', { locale: id });
   const date = format(currentDate, 'dd', { locale: id });
   const month = format(currentDate, 'MMM', { locale: id });
   const formattedTime = format(currentDate, 'HH:mm', { locale: id });
@@ -70,6 +73,7 @@ export const AddOvertime: React.FC = () => {
               </div>
               <div className=" col-span-6 text-right -mt-6">
                 <Button
+                  onClick={open}
                   className="shadow-lg"
                   style={{ borderRadius: '15px', width: '110px' }}
                   size="sm"
@@ -129,6 +133,24 @@ export const AddOvertime: React.FC = () => {
         </div>
       </section>
       {/* End absen card */}
+
+      {/* Modal tambah kegiatan lembur */}
+      <Modal opened={opened} onClose={close} title="Pengajuan lembur">
+        <div className="mb-2">
+          <JsonInput
+            label="Kegiatan"
+            placeholder="masukkan kegiatan yang akan dilakukan"
+            formatOnBlur
+            autosize
+            minRows={5}
+          />
+        </div>
+        <div className="mb-2 mt-3">
+          <Button fullWidth rightSection={<IconClock24 />}>
+            Mulai lembur
+          </Button>
+        </div>
+      </Modal>
     </main>
   );
 };

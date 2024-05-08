@@ -59,7 +59,7 @@ export const PaidLeaveList: React.FC = () => {
         </div>
       </button>
       <button
-        onClick={() => navigate('/history/data-absence/detail')}
+        onClick={() => navigate('/history/data-paid-leave/detail')}
         className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
       >
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
