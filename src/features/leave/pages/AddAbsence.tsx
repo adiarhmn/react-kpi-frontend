@@ -61,7 +61,7 @@ export const AddAbsence: React.FC = () => {
                   navigate(-1);
                 }}
                 fullWidth
-                color="green"
+                color="grey"
               >
                 Batal
               </Button>

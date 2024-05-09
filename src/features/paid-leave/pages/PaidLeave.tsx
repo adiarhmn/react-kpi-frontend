@@ -1,3 +1,4 @@
+import { PaidLeaveList } from '@/features/history/component/PaidLeaveList';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,13 +23,15 @@ export const PaidLeave: React.FC = () => {
           <button
             className="bg-transparent me-2"
             onClick={() => {
-              navigate('/overtime/add');
+              navigate('/paid-leave/add');
             }}
           >
             <IconPlus size={21} className="font-bold rounded-md" />
           </button>
         </div>
       </section>
+
+      <PaidLeaveList />
     </main>
   );
 };
