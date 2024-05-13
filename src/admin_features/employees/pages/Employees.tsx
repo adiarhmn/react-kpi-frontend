@@ -1,13 +1,30 @@
 import { ActionIcon, Button, Input, Select, Table, UnstyledButton } from '@mantine/core';
 import { IconInfoCircle, IconPencil, IconPlus, IconSearch, IconTrash } from '@tabler/icons-react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getEmployees } from '../api';
+
+const BaseURL = import.meta.env.VITE_API_URL;
 
 export const Employees: React.FC = () => {
+  const [employees, setEmployees] = useState<any[]>([]);
   const navigate = useNavigate();
+
+  // UseEffect for access API
+  useEffect(() => {
+    async function fetchEmployees() {
+      const res = await getEmployees();
+      setEmployees(res.data);
+    }
+    fetchEmployees();
+  }, []);
+
+  // Components
   return (
     <main>
       <section className="bg-white p-5 rounded-lg shadow-lg">
-      <div className="flex justify-between items-center mb-2">
+        <div className="flex justify-between items-center mb-2">
           <div>
             <h2 className="font-bold">Daftar Karyawan</h2>
             <div className="-mt-1 text-xs text-slate-400">
@@ -31,31 +48,35 @@ export const Employees: React.FC = () => {
           <Table withColumnBorders withTableBorder>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th className='font-bold'>Nama</Table.Th>
-                <Table.Th className='font-bold'>Email</Table.Th>
-                <Table.Th className='font-bold'>Divisi</Table.Th>
-                <Table.Th className='font-bold'>Role</Table.Th>
-                <Table.Th className='font-bold'>Aksi</Table.Th>
+                <Table.Th className="font-bold">Nama</Table.Th>
+                <Table.Th className="font-bold">Alamat</Table.Th>
+                <Table.Th className="font-bold">Divisi</Table.Th>
+                <Table.Th className="font-bold">Role</Table.Th>
+                <Table.Th className="font-bold">Aksi</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>John Doe</Table.Td>
-                <Table.Td>jhon@gmail.com</Table.Td>
-                <Table.Td>IT Support</Table.Td>
-                <Table.Td>Admin</Table.Td>
-                <Table.Td className="flex gap-2 items-center justify-center">
-                  <ActionIcon color="yellow">
-                    <IconPencil size={14} />
-                  </ActionIcon>
-                  <ActionIcon color="red">
-                    <IconTrash size={14} />
-                  </ActionIcon>
-                  <UnstyledButton>
-                    <IconInfoCircle className="text-blue-600" size={20} />
-                  </UnstyledButton>
-                </Table.Td>
-              </Table.Tr>
+              {employees.map((employee, index) => {
+                return (
+                  <Table.Tr key={index}>
+                    <Table.Td>{employee?.name}</Table.Td>
+                    <Table.Td>{employee?.address}</Table.Td>
+                    <Table.Td>{employee?.division.division_name}</Table.Td>
+                    <Table.Td>{employee?.user.role}</Table.Td>
+                    <Table.Td className="flex gap-2 items-center justify-center">
+                      <ActionIcon color="yellow">
+                        <IconPencil size={14} />
+                      </ActionIcon>
+                      <ActionIcon color="red">
+                        <IconTrash size={14} />
+                      </ActionIcon>
+                      <UnstyledButton>
+                        <IconInfoCircle className="text-blue-600" size={20} />
+                      </UnstyledButton>
+                    </Table.Td>
+                  </Table.Tr>
+                );
+              })}
             </Table.Tbody>
           </Table>
         </div>
