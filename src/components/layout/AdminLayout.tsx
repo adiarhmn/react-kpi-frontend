@@ -19,6 +19,7 @@ import {
   IconClipboardText,
   IconGauge,
   IconBuildingEstate,
+  IconBriefcase,
 } from '@tabler/icons-react';
 import { SideNav } from '../navigation';
 
@@ -29,7 +30,8 @@ const MenuMain = [
 const MenuDataMaster = [
   { title: 'Divisi', href: '/division', icon: IconBuildingEstate},
   { title: 'Shift', href: '/shift', icon: IconClockHour1 },
-  { title: 'Karyawan', href: '/employees', icon: IconUsersGroup },
+  { title: 'Karyawan', href: '/employees', icon: IconBriefcase },
+  { title: 'User', href: '/users', icon: IconUsersGroup },
 ];
 
 const MenuAbsensi = [
