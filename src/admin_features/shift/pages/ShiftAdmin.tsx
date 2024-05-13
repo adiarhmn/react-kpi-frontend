@@ -3,16 +3,18 @@ import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getShift } from '../api';
 
 export const ShiftAdmin: React.FC = () => {
-  const [shifts, setShifts] = useState([]);
+  const [shifts, setShifts] = useState<any[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
-    // Akses API
     async function fetchShifts() {
-      const res = await axios.get(`/shifts`);
+      const res = await getShift();
+      console.log(res);
       setShifts(res.data);
     }
+    fetchShifts();
   }, []);
 
   return (
@@ -40,19 +42,25 @@ export const ShiftAdmin: React.FC = () => {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Shift 1</Table.Td>
-                <Table.Td>08:00</Table.Td>
-                <Table.Td>16:00</Table.Td>
-                <Table.Td>
-                  <ActionIcon className="me-2" color="yellow">
-                    <IconPencil size={14} />
-                  </ActionIcon>
-                  <ActionIcon className="me-2" color="red">
-                    <IconTrash size={14} />
-                  </ActionIcon>
-                </Table.Td>
-              </Table.Tr>
+              {
+                shifts.map((shift, index) => {
+                  return(
+                    <Table.Tr key={index}>
+                      <Table.Td>{shift?.shift_name}</Table.Td>
+                      <Table.Td>{shift?.start_time}</Table.Td>
+                      <Table.Td>{shift?.end_time}</Table.Td>
+                      <Table.Td>
+                        <ActionIcon className="me-2" color="yellow">
+                          <IconPencil size={14} />
+                        </ActionIcon>
+                        <ActionIcon className="me-2" color="red">
+                          <IconTrash size={14} />
+                        </ActionIcon>
+                      </Table.Td>
+                    </Table.Tr>
+                  );
+                })
+              }
             </Table.Tbody>
           </Table>
         </div>
