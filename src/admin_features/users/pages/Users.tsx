@@ -1,10 +1,21 @@
 import { ActionIcon, Button, Input, Select, Table, UnstyledButton } from '@mantine/core';
 import { IconInfoCircle, IconPencil, IconPlus, IconSearch, IconTrash } from '@tabler/icons-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getUsers } from '../api';
 
 export const Users: React.FC = () => {
+  const [users, setUsers] = useState<any[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const res = await getUsers();
+      setUsers(res);
+    }
+    fetchUsers();
+  }, []);
+
   return (
     <main>
       <section className="bg-white p-5 rounded-lg shadow-lg">
@@ -38,21 +49,25 @@ export const Users: React.FC = () => {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Adi Aulia Rahman</Table.Td>
-                <Table.Td>Role</Table.Td>
-                <Table.Td className="flex gap-2 items-center justify-center">
-                  <ActionIcon color="yellow">
-                    <IconPencil size={14} />
-                  </ActionIcon>
-                  <ActionIcon color="red">
-                    <IconTrash size={14} />
-                  </ActionIcon>
-                  <UnstyledButton>
-                    <IconInfoCircle className="text-blue-600" size={20} />
-                  </UnstyledButton>
-                </Table.Td>
-              </Table.Tr>
+              {users.map((user, index) => {
+                return (
+                  <Table.Tr key={index}>
+                    <Table.Td>{user?.username}</Table.Td>
+                    <Table.Td>{user?.role}</Table.Td>
+                    <Table.Td className="flex gap-2 items-center justify-center">
+                      <ActionIcon color="yellow">
+                        <IconPencil size={14} />
+                      </ActionIcon>
+                      <ActionIcon color="red">
+                        <IconTrash size={14} />
+                      </ActionIcon>
+                      <UnstyledButton>
+                        <IconInfoCircle className="text-blue-600" size={20} />
+                      </UnstyledButton>
+                    </Table.Td>
+                  </Table.Tr>
+                );
+              })}
             </Table.Tbody>
           </Table>
         </div>
