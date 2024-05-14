@@ -3,10 +3,18 @@ import { IconInfoCircle, IconPencil, IconPlus, IconSearch, IconTrash } from '@ta
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUsers } from '../api';
+import axios from 'axios';
+const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export const Users: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
   const navigate = useNavigate();
+
+  const deleteUser = async (id: string) => {
+    await axios.delete(`${BaseURL}/user/${id}`);
+    console.log(id);
+    setUsers(users.filter((user) => user.id !== id));
+  };
 
   useEffect(() => {
     async function fetchUsers() {
@@ -58,7 +66,7 @@ export const Users: React.FC = () => {
                       <ActionIcon color="yellow">
                         <IconPencil size={14} />
                       </ActionIcon>
-                      <ActionIcon color="red">
+                      <ActionIcon onClick={() => deleteUser(user.id)} color="red">
                         <IconTrash size={14} />
                       </ActionIcon>
                       <UnstyledButton>

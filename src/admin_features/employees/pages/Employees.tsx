@@ -20,6 +20,7 @@ export const Employees: React.FC = () => {
     fetchEmployees();
   }, []);
 
+  console.log(employees);
   // Components
   return (
     <main>
@@ -51,6 +52,7 @@ export const Employees: React.FC = () => {
                 <Table.Th className="font-bold">Nama</Table.Th>
                 <Table.Th className="font-bold">Alamat</Table.Th>
                 <Table.Th className="font-bold">Divisi</Table.Th>
+                <Table.Th className="font-bold">Username</Table.Th>
                 <Table.Th className="font-bold">Role</Table.Th>
                 <Table.Th className="font-bold">Aksi</Table.Th>
               </Table.Tr>
@@ -62,6 +64,7 @@ export const Employees: React.FC = () => {
                     <Table.Td>{employee?.name}</Table.Td>
                     <Table.Td>{employee?.address}</Table.Td>
                     <Table.Td>{employee?.division.division_name}</Table.Td>
+                    <Table.Td>{employee?.user.username}</Table.Td>
                     <Table.Td>{employee?.user.role}</Table.Td>
                     <Table.Td className="flex gap-2 items-center justify-center">
                       <ActionIcon color="yellow">
