@@ -1,5 +1,6 @@
 import { Badge, Progress, Tooltip } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
+import { IconLuggage } from '@tabler/icons-react';
 import { IconChartCandle, IconChartPie2, IconChevronRight, IconReport } from '@tabler/icons-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -23,12 +24,12 @@ export const History: React.FC = () => {
         <div className="py-2">
           <Progress.Root size="xl">
             <Tooltip label="Hadir">
-              <Progress.Section value={10} color="green">
+              <Progress.Section value={50} color="green">
                 <Progress.Label>Hadir</Progress.Label>
               </Progress.Section>
             </Tooltip>
 
-            <Progress.Section value={28} color="pink">
+            <Progress.Section value={20} color="pink">
               <Progress.Label>Alpa</Progress.Label>
             </Progress.Section>
             <Progress.Section value={15} color="blue">
@@ -73,19 +74,40 @@ export const History: React.FC = () => {
         </Link>
 
         {/* Data Izin */}
-        <div className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm">
+        <Link
+          to="/history/data-absence"
+          className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm"
+        >
           <div className="flex gap-3 items-center">
             <IconChartPie2 size={25} className="text-blue-700" />
             <div>
               <span className="font-semibold">Data Izin</span>
-              <p className="text-xs text-slate-400">Data izin atau cuti yang disetujui</p>
+              <p className="text-xs text-slate-400">Data izin yang disetujui</p>
             </div>
           </div>
           <IconChevronRight className="text-blue-700" size={25} />
-        </div>
+        </Link>
+
+        {/* Data Cuti */}
+        <Link
+          to="/history/data-paid-leave"
+          className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm"
+        >
+          <div className="flex gap-3 items-center">
+            <IconLuggage size={25} className="text-blue-700" />
+            <div>
+              <span className="font-semibold">Data Cuti</span>
+              <p className="text-xs text-slate-400">Data cuti yang disetujui</p>
+            </div>
+          </div>
+          <IconChevronRight className="text-blue-700" size={25} />
+        </Link>
 
         {/* Data Lembur */}
-        <div className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm">
+        <Link
+          to="/history/data-overtime"
+          className="bg-white rounded-lg shadow-lg p-4 flex items-center justify-between text-sm"
+        >
           <div className="flex gap-3 items-center">
             <IconReport size={25} className="text-blue-700" />
             <div>
@@ -94,7 +116,7 @@ export const History: React.FC = () => {
             </div>
           </div>
           <IconChevronRight className="text-blue-700" size={25} />
-        </div>
+        </Link>
       </section>
     </main>
   );
