@@ -67,5 +67,5 @@ export const Navbar: React.FC<Props> = ({
       </div>
       <div className="min-w-[1.5rem] flex">{rightSection}</div>
     </header>
-  );
+  );1 
 };
