@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export const CreateUser: React.FC = () => {
@@ -17,9 +16,9 @@ export const CreateUser: React.FC = () => {
     navigate(-1);
   };
 
-  const handleSubmit = async (event: any) => {
+  // Fungsi Submit form data user
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const userData = {
       username,
       password,
@@ -27,14 +26,10 @@ export const CreateUser: React.FC = () => {
       status: true,
     };
 
-    console.log(userData);
-
     try {
       const response = await axios.post(`${BaseURL}/user`, userData);
-      console.log(response.data);
-      if(response.data.status == 201) return navigate('/users');
+      if (response.data.status == 201) return navigate('/users');
     } catch (error) {
-      console.error(error);
     }
   };
 

@@ -4,21 +4,27 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUsers } from '../api';
 import axios from 'axios';
+import { UserType } from '@/admin_features/types';
+
+// Base URL API
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export const Users: React.FC = () => {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<UserType[]>([]);
   const navigate = useNavigate();
 
-  const deleteUser = async (id: string) => {
+  // Fungsi Delete User
+  const deleteUser = async (id: number) => {
     await axios.delete(`${BaseURL}/user/${id}`);
     console.log(id);
     setUsers(users.filter((user) => user.id !== id));
   };
 
+  // Fungsi Fetch Data User
   useEffect(() => {
     async function fetchUsers() {
       const res = await getUsers();
+      console.log(res);
       setUsers(res);
     }
     fetchUsers();
