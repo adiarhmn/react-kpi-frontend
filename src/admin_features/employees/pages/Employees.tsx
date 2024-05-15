@@ -4,11 +4,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getEmployees } from '../api';
+import { EmployeeType } from '@/admin_features/types';
 
+// Base URL API
 const BaseURL = import.meta.env.VITE_API_URL;
 
 export const Employees: React.FC = () => {
-  const [employees, setEmployees] = useState<any[]>([]);
+  const [employees, setEmployees] = useState<EmployeeType[]>([]);
   const navigate = useNavigate();
 
   // UseEffect for access API
@@ -20,7 +22,6 @@ export const Employees: React.FC = () => {
     fetchEmployees();
   }, []);
 
-  console.log(employees);
   // Components
   return (
     <main>

@@ -3,10 +3,12 @@ import { IconInfoCircle, IconPencil, IconPlus, IconSearch, IconTrash } from '@ta
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getDivisions } from '../api';
-import { Division as DivisionType } from '../types';
+import { DivisionType } from '@/admin_features/types';
 
 export const Division: React.FC = () => {
   const [division, setDivision] = useState<DivisionType[]>([]);
+
+  // For Access API
   useEffect(() => {
     async function fetchDivision() {
       const res = await getDivisions();

@@ -33,7 +33,6 @@ export const AddOvertime: React.FC = () => {
               onClick={() => {
                 navigate(-1);
               }}
-              a
               size={21}
               className="font-bold rounded-md"
             />
