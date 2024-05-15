@@ -57,7 +57,7 @@ const { CreateUser } = lazyImport(() => import('@/admin_features/users'), 'Creat
 const useAuth = () => {
   return {
     creds: {
-      role: 'admin',
+      role: 'employee',
     },
   };
 };
@@ -70,50 +70,50 @@ export const AppRoutes: React.FC = () => {
         {/* Routes for Employee or Mobile APP ======================>*/}
         {creds?.role === 'employee' && (
           <Route element={<HomeLayout />}>
-          <Route index element={<Home />} />
-          <Route path="attendance" element={<Attendance />} />
-          <Route path="info-attendance" element={<AttendanceInfo />} />
-          <Route path="history">
-            <Route index element={<History />} />
-            <Route path="data-attendance" element={<DataAttendance />} />
-            <Route path="data-absence">
-              <Route index element={<DataAbsence />} />
-              <Route path="detail" element={<DetailAbsence />} />
+            <Route index element={<Home />} />
+            <Route path="attendance" element={<Attendance />} />
+            <Route path="info-attendance" element={<AttendanceInfo />} />
+            <Route path="history">
+              <Route index element={<History />} />
+              <Route path="data-attendance" element={<DataAttendance />} />
+              <Route path="data-absence">
+                <Route index element={<DataAbsence />} />
+                <Route path="detail" element={<DetailAbsence />} />
+              </Route>
+              <Route path="data-paid-leave">
+                <Route index element={<DataPaidLeave />} />
+                <Route path="detail" element={<DetailPaidLeave />} />
+              </Route>
+              <Route path="data-overtime">
+                <Route index element={<DataOvertime />} />
+                <Route path="detail" element={<DetailOvertime />} />
+              </Route>
             </Route>
-            <Route path="data-paid-leave">
-              <Route index element={<DataPaidLeave />} />
-              <Route path="detail" element={<DetailPaidLeave />} />
+            <Route path="profile">
+              <Route index element={<Profile />} />
+              <Route path="biodata" element={<Biodata />} />
+              <Route path="file" element={<FileProfile />} />
+              <Route path="biodata/edit" element={<BiodataEdit />} />
+              <Route path="edu-background" element={<EduBackground />} />
             </Route>
-            <Route path="data-overtime">
-              <Route index element={<DataOvertime />} />
-              <Route path="detail" element={<DetailOvertime />} />
-            </Route>
-          </Route>
-          <Route path="profile">
-            <Route index element={<Profile />} />
-            <Route path="biodata" element={<Biodata />} />
-            <Route path="file" element={<FileProfile />} />
-            <Route path="biodata/edit" element={<BiodataEdit />} />
-            <Route path="edu-background" element={<EduBackground />} />
-          </Route>
 
-          {/* Route Menu List */}
-          <Route path="absence">
-            <Route index element={<Absence />} />
-            <Route path="add" element={<AddAbsence />} />
-          </Route>
-          <Route path="paid-leave">
-            <Route index element={<PaidLeave />} />
-            <Route path="add" element={<AddPaidLeave />} />
-          </Route>
-          <Route path="overtime">
-            <Route index element={<Overtime />} />
-            <Route path="add" element={<AddOvertime />} />
-          </Route>
+            {/* Route Menu List */}
+            <Route path="absence">
+              <Route index element={<Absence />} />
+              <Route path="add" element={<AddAbsence />} />
+            </Route>
+            <Route path="paid-leave">
+              <Route index element={<PaidLeave />} />
+              <Route path="add" element={<AddPaidLeave />} />
+            </Route>
+            <Route path="overtime">
+              <Route index element={<Overtime />} />
+              <Route path="add" element={<AddOvertime />} />
+            </Route>
 
-          <Route path="schedule" element={<Schedule />} />
-          <Route path="attendances" element={<Attendances />} />
-        </Route>
+            <Route path="schedule" element={<Schedule />} />
+            <Route path="attendances" element={<Attendances />} />
+          </Route>
         )}
 
         {/* Routes for Admin with Desktop View ======================>*/}
