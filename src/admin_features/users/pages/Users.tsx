@@ -1,12 +1,20 @@
-import { ActionIcon, Button, Input, Modal, Select, Table, UnstyledButton } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Input,
+  Modal,
+  Notification,
+  Select,
+  Table,
+  UnstyledButton,
+} from '@mantine/core';
 import { IconInfoCircle, IconPencil, IconPlus, IconSearch, IconTrash } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUsers } from '../api';
+import { useGetUsers } from '../api';
 import axios from 'axios';
 import { UserType } from '@/admin_features/types';
 import { useDisclosure } from '@mantine/hooks';
-import { User } from '@/features/auth';
 
 // Base URL API
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
@@ -15,8 +23,9 @@ export const Users: React.FC = () => {
   const [users, setUsers] = useState<UserType[]>([]);
   const [userToDelete, setUserToDelete] = useState<UserType | null>(null);
   const [opened, { open, close }] = useDisclosure(false);
+  // Get Data User
   const navigate = useNavigate();
-
+  
   // Fungsi Delete User
   const deleteUserModal = (user: UserType) => {
     setUserToDelete(user);
@@ -33,20 +42,25 @@ export const Users: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
-  }
-
+  };
+  
+  
+  
   // Fungsi Fetch Data User
+  const { data, error, isLoading } = useGetUsers();
+
+  // console.log(data);
+  console.log(data);
   useEffect(() => {
-    async function fetchUsers() {
-      const res = await getUsers();
-      console.log(res);
-      setUsers(res);
+    if (data) {
+      setUsers(data);
     }
-    fetchUsers();
-  }, []);
-
-  console.log(users);
-
+  }, [data]);
+  
+  
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <main>
       <section className="bg-white p-5 rounded-lg shadow-lg">
@@ -113,11 +127,9 @@ export const Users: React.FC = () => {
       >
         Yakin hapus user atau akun{' '}
         <span className="font-semibold text-blue-600">{userToDelete?.username}</span>
-        <div className='pt-10 flex gap-2 justify-end'>
-          <Button onClick={confirmDeleteUser}>
-            Yakin
-          </Button>
-          <Button color='red' onClick={close}>
+        <div className="pt-10 flex gap-2 justify-end">
+          <Button onClick={confirmDeleteUser}>Yakin</Button>
+          <Button color="red" onClick={close}>
             Batal
           </Button>
         </div>
