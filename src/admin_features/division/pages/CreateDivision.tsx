@@ -1,11 +1,44 @@
 import { ActionIcon, Button, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { IconChevronLeft } from '@tabler/icons-react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+
 export const CreateDivision: React.FC = () => {
+  const form = useForm({
+    validateInputOnChange: true,
+    initialValues: { division_name: ''},
+    validate: {
+      division_name: (value) => (value.length < 10 ? 'Name must have at least 10 letters' : null),
+    },
+  });
+
   const navigate = useNavigate();
   const NavBack = () => {
     navigate(-1);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const divisionDataPost = {
+      division_name: form.values.division_name,
+    };
+
+    console.log(divisionDataPost);
+
+    try {
+      const response = await axios.post(`${BaseURL}/division`, divisionDataPost);
+      console.log(response);
+      if (response.data.status == 201) {
+        setTimeout(() => {
+          navigate(-1);
+        }, 3000);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -23,9 +56,8 @@ export const CreateDivision: React.FC = () => {
           </div>
         </div>
         <div className="mt-5">
-          <form action="">
-            <TextInput className="mb-3" label="Kode Divisi" placeholder="Kode Divisi" required />
-            <TextInput className="mb-3" label="Nama Divisi" placeholder="Nama Divisi" required />
+          <form onSubmit={handleSubmit}>
+            <TextInput className="mb-3" label="Nama Divisi" placeholder="Nama Divisi" required {...form.getInputProps('division_name')} />
             <div className="flex gap-3">
               <Button type="submit" color="blue" className="mt-5">
                 Simpan
