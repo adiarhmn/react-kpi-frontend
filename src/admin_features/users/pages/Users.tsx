@@ -1,24 +1,39 @@
-import { ActionIcon, Button, Input, Select, Table, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Button, Input, Modal, Select, Table, UnstyledButton } from '@mantine/core';
 import { IconInfoCircle, IconPencil, IconPlus, IconSearch, IconTrash } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUsers } from '../api';
 import axios from 'axios';
 import { UserType } from '@/admin_features/types';
+import { useDisclosure } from '@mantine/hooks';
+import { User } from '@/features/auth';
 
 // Base URL API
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export const Users: React.FC = () => {
   const [users, setUsers] = useState<UserType[]>([]);
+  const [userToDelete, setUserToDelete] = useState<UserType | null>(null);
+  const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
 
   // Fungsi Delete User
-  const deleteUser = async (id: number) => {
-    await axios.delete(`${BaseURL}/user/${id}`);
-    console.log(id);
-    setUsers(users.filter((user) => user.id !== id));
+  const deleteUserModal = (user: UserType) => {
+    setUserToDelete(user);
+    open();
   };
+  const confirmDeleteUser = async () => {
+    try {
+      const response = await axios.delete(`${BaseURL}/user/${userToDelete?.id}`);
+      if (response.data.status == 200) {
+        close();
+        const newUsers = users.filter((user) => user.id !== userToDelete?.id);
+        setUsers(newUsers);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   // Fungsi Fetch Data User
   useEffect(() => {
@@ -74,7 +89,7 @@ export const Users: React.FC = () => {
                       <ActionIcon color="yellow">
                         <IconPencil size={14} />
                       </ActionIcon>
-                      <ActionIcon onClick={() => deleteUser(user.id)} color="red">
+                      <ActionIcon onClick={() => deleteUserModal(user)} color="red">
                         <IconTrash size={14} />
                       </ActionIcon>
                       <UnstyledButton>
@@ -88,6 +103,25 @@ export const Users: React.FC = () => {
           </Table>
         </div>
       </section>
+
+      {/* Modal Confirm for Delete Data */}
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        title={<span className="font-bold">Konfirmasi Hapus ?</span>}
+      >
+        Yakin hapus user atau akun{' '}
+        <span className="font-semibold text-blue-600">{userToDelete?.username}</span>
+        <div className='pt-10 flex gap-2 justify-end'>
+          <Button onClick={confirmDeleteUser}>
+            Yakin
+          </Button>
+          <Button color='red' onClick={close}>
+            Batal
+          </Button>
+        </div>
+      </Modal>
     </main>
   );
 };

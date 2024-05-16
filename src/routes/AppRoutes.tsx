@@ -57,7 +57,7 @@ const { CreateUser } = lazyImport(() => import('@/admin_features/users'), 'Creat
 const useAuth = () => {
   return {
     creds: {
-      role: 'employee',
+      role: 'admin',
     },
   };
 };
