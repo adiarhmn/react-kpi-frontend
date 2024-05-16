@@ -1,4 +1,14 @@
-import { ActionIcon, Button, Select, TextInput } from '@mantine/core';
+import {
+  ActionIcon,
+  Alert,
+  Button,
+  CheckIcon,
+  Notification,
+  Select,
+  TextInput,
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { Notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
 import axios from 'axios';
 import { useState } from 'react';
@@ -7,9 +17,16 @@ import { useNavigate } from 'react-router-dom';
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export const CreateUser: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('Employee');
+  const [alert, setAlert] = useState(false);
+  const form = useForm({
+    validateInputOnChange: true,
+    initialValues: { username: '', password: '', role: 'Employee' },
+    validate: {
+      username: (value) => (value.length < 5 ? 'Name must have at least 5 letters' : null),
+      password: (value) => (value.length < 8 ? 'Name must have at least 8 letters' : null),
+      role: (value) => (value.length < 2 ? 'Name must have at least 2 letters' : null),
+    },
+  });
 
   const navigate = useNavigate();
   const NavBack = () => {
@@ -20,21 +37,41 @@ export const CreateUser: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const userData = {
-      username,
-      password,
-      role,
+      username: form.values.username,
+      password: form.values.password,
+      role: form.values.role,
       status: true,
     };
 
     try {
       const response = await axios.post(`${BaseURL}/user`, userData);
-      if (response.data.status == 201) return navigate('/users');
-    } catch (error) {
-    }
+      if (response.data.status == 201) {
+        setAlert(true);
+        setTimeout(() => {
+          navigate(-1);
+        }, 3000);
+      }
+    } catch (error) {}
   };
 
   return (
     <main>
+      {
+        // Alert Notification
+        alert && (
+          <Notification
+            className='mb-5'
+            title="Berhasil"
+            color="teal"
+            icon={<CheckIcon size={14} />}
+            onClose={() => setAlert(false)}
+            withCloseButton
+          >
+            User berhasil ditambahkan
+          </Notification>
+        )
+      }
+
       <section className="bg-white p-5 rounded-lg">
         <div className="flex gap-3 items-center">
           <ActionIcon onClick={NavBack} color="blue">
@@ -50,14 +87,14 @@ export const CreateUser: React.FC = () => {
         <div className="mt-5">
           <form onSubmit={handleSubmit}>
             <TextInput
-              onChange={(e) => setUsername(e.target.value)}
+              {...form.getInputProps('username')}
               className="mb-3"
               label="Username"
               placeholder="Username"
               required
             />
             <TextInput
-              onChange={(e) => setPassword(e.target.value)}
+              {...form.getInputProps('password')}
               className="mb-3"
               label="Password"
               placeholder="Password"
@@ -70,8 +107,7 @@ export const CreateUser: React.FC = () => {
               data={['Supervisor', 'Admin', 'Superadmin', 'Employee']}
               defaultValue="Employee"
               allowDeselect={false}
-              value={role}
-              onChange={(value) => setRole(value || '')}
+              {...form.getInputProps('role')}
             />
             <div className="flex gap-3">
               <Button type="submit" color="blue" className="mt-5">
