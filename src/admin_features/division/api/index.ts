@@ -1,1 +1,1 @@
-export * from './getDivision'
+export * from './getDivision';

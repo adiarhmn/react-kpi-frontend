@@ -24,8 +24,7 @@ export const TableUser = () => {
   const confirmDeleteUser = async () => {
     try {
       const response = await deleteUser(userToDelete?.id);
-      // const response = await axios.delete(`${BaseURL}/user/${userToDelete?.id}`);
-      if (response.data.status == 200) {
+      if (response.status == 200) {
         close();
         const newUsers = users.filter((user) => user.id !== userToDelete?.id);
         setUsers(newUsers);
