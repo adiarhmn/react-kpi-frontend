@@ -1,11 +1,13 @@
 import { Text } from '@mantine/core';
-import { IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
-import { getEduBackground } from '../api/getEduBackground';
+import { useNavigate } from 'react-router-dom';
+import { getEduBackground } from '../api/EduBackground/getEduBackground';
 import { EducationBackground } from '../types';
 
 export const EduList: React.FC = () => {
   const [educations, setEducations] = useState<EducationBackground[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchEducations() {
@@ -24,8 +26,25 @@ export const EduList: React.FC = () => {
             className="bg-white mx-auto max-w-xs w-full mt-4 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700"
           >
             <div className="flex justify-between text-xs items-center p-2">
-              <span className="font-bold text-blue-700">{edu?.type}</span>
-              <IconChevronRight className="opacity-80" size={20} />
+              <div>
+                <span style={{ fontSize: '16px' }} className="font-bold text-blue-700">
+                  {edu?.type}
+                </span>
+              </div>
+              <div>
+                <button
+                  className=" bg-transparent me-2"
+                  onClick={() => navigate('/profile/edu-background/add')}
+                >
+                  <IconPencil color="#FAB005" size={20} className="font-bold rounded-md" />
+                </button>
+                <button
+                  className="bg-transparent me-2"
+                  onClick={() => navigate('/profile/edu-background/add')}
+                >
+                  <IconTrash color="#F03E3E" size={20} className="font-bold rounded-md" />
+                </button>
+              </div>
             </div>
             <div className="w-full grid grid-cols-2 pb-2 pt-2 ms-4">
               <div className="gap-2 align-item-left">

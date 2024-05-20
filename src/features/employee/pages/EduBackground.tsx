@@ -8,7 +8,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { EduList } from '../components/EduList';
 
 export const EduBackground: React.FC = () => {
-  const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 50em)');
   const navigate = useNavigate();
   const [tahunMasuk, setTahunMasuk] = useState<Date | null>(null);
@@ -51,55 +50,16 @@ export const EduBackground: React.FC = () => {
             />
             <h2 className="font-semibold ">Data pendidikan</h2>
           </div>
-          <button className="bg-transparent me-2" onClick={open}>
+          <button
+            className="bg-transparent me-2"
+            onClick={() => navigate('/profile/edu-background/add')}
+          >
             <IconPlus size={21} className="font-bold rounded-md" />
           </button>
         </div>
       </section>
 
       <EduList />
-
-      <Modal
-        opened={opened}
-        onClose={close}
-        title={<span className="font-semibold text-lg">Tambah data pendidikan</span>}
-        fullScreen={isMobile}
-        transitionProps={{ transition: 'fade', duration: 200 }}
-      >
-        <TextInput
-          label="Jenjang pendidikan"
-          name="jenjang"
-          withAsterisk
-          {...form.getInputProps('jenjang')}
-        />
-        <TextInput label="Jurusan" name="jurusan" {...form.getInputProps('jurusan')} />
-        <TextInput
-          label="Nama sekolah"
-          name="namaSekolah"
-          withAsterisk
-          {...form.getInputProps('namaSekolah')}
-        />
-        <YearPickerInput
-          label="Tahun masuk"
-          withAsterisk
-          value={tahunMasuk}
-          onChange={setTahunMasuk}
-        />
-        <YearPickerInput
-          label="Tahun lulus"
-          withAsterisk
-          value={tahunLulus}
-          onChange={setTahunLulus}
-        />
-        <TextInput
-          label="Lulusan asal"
-          name="lulusanAsal"
-          withAsterisk
-          {...form.getInputProps('lulusanAsal')}
-        />
-        <TextInput label="Gelar" name="gelar" {...form.getInputProps('gelar')} />
-        <FileInput label="Ijazah" placeholder="Masukkan bukti ijazah" />
-      </Modal>
     </main>
   );
 };

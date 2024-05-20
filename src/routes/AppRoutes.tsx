@@ -29,6 +29,7 @@ const { Overtime } = lazyImport(() => import('@/features/overtime'), 'Overtime')
 const { AddOvertime } = lazyImport(() => import('@/features/overtime'), 'AddOvertime');
 const { Schedule } = lazyImport(() => import('@/features/schedule'), 'Schedule');
 const { EduBackground } = lazyImport(() => import('@/features/employee'), 'EduBackground');
+const { EduBackgroundAdd } = lazyImport(() => import('@/features/employee'), 'EduBackgroundAdd');
 const { Biodata } = lazyImport(() => import('@/features/employee'), 'Biodata');
 const { BiodataEdit } = lazyImport(() => import('@/features/employee'), 'BiodataEdit');
 const { FileProfile } = lazyImport(() => import('@/features/employee'), 'FileProfile');
@@ -94,7 +95,10 @@ export const AppRoutes: React.FC = () => {
               <Route path="biodata" element={<Biodata />} />
               <Route path="file" element={<FileProfile />} />
               <Route path="biodata/edit" element={<BiodataEdit />} />
-              <Route path="edu-background" element={<EduBackground />} />
+              <Route path="edu-background">
+                <Route index element={<EduBackground />} />
+                <Route path="add" element={<EduBackgroundAdd />} />
+              </Route>
             </Route>
 
             {/* Route Menu List */}
