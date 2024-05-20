@@ -1,4 +1,5 @@
 import { ActionIcon, Button, Select, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,6 +8,10 @@ export const CreateEmployee: React.FC = () => {
   const NavBack = () => {
     navigate(-1);
   };
+
+  const form = useForm({
+    
+  })
 
   return (
     <main>
@@ -30,12 +35,28 @@ export const CreateEmployee: React.FC = () => {
               placeholder="Nama Karyawan"
               required
             />
-            <TextInput className="mb-3" label="Tempat Lahir" placeholder="Tempat Lahir" required />
-            <TextInput className="mb-3" label="Nomor Telepon" placeholder="Nomor Telepon" required />
+            <TextInput className="mb-3" label="NIK" placeholder="NIK" required />
+            <TextInput className="mb-3" label="NIP" placeholder="NIP" required />
+            <TextInput className="mb-3" label="Nomor BPJS" placeholder="Nomor BPJS" required />
             <Select
+              className="mb-3"
               label="Jenis Kelamin"
               placeholder="Pilih Jenis Kelamin"
               data={['Laki-laki', 'Perempuan']}
+            />
+            <TextInput className="mb-3" label="Tempat Lahir" placeholder="Tempat Lahir" required />
+            <Select
+              className="mb-3"
+              label="Agama"
+              placeholder="Pilih Agama"
+              data={['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Konghucu']}
+            />
+            <TextInput className="mb-3" label="Alamat" placeholder="Alamat" required />
+            <TextInput
+              className="mb-3"
+              label="Nomor Telepon"
+              placeholder="Nomor Telepon"
+              required
             />
             <div className="flex gap-3">
               <Button type="submit" color="blue" className="mt-5">

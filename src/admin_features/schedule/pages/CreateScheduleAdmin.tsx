@@ -1,5 +1,6 @@
 import { ActionIcon, Button, Group, MultiSelect, Select } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
+import { useForm } from '@mantine/form';
 import { IconCardboards, IconChevronLeft, IconDeviceFloppy } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,6 +9,16 @@ export const CreateSchedule: React.FC = () => {
   const handleBack = () => {
     return navigate(-1);
   };
+
+  const form = useForm({
+    initialValues: {
+      division: 'Semua Divisi',
+      shift: 'Shift 1',
+      start_date: new Date(),
+      end_date: new Date(),
+      employees: [],
+    },  
+  })
 
   return (
     <main>
@@ -33,6 +44,7 @@ export const CreateSchedule: React.FC = () => {
               placeholder="Pilih Divisi"
               data={['Semua Divisi', 'Developer', 'Designer', 'Marketing', 'HRD', 'Finance']}
               defaultValue="Semua Divisi"
+              {...form.getInputProps('division')}
             ></Select>
             <Select
               label="Pilih Shift"
@@ -58,6 +70,7 @@ export const CreateSchedule: React.FC = () => {
                 'Muhammad Iqbal',
                 'Dian Lucky Prayogi',
               ]}
+              {...form.getInputProps('employees')}
             ></MultiSelect>
           </div>
 

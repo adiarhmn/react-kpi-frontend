@@ -5,7 +5,7 @@ import { DivisionType } from '@/admin_features/types';
 import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 
-export const TableDivision = () => {
+export const TableDivision: React.FC = () => {
   const [division, setDivision] = useState<DivisionType[]>([]);
   const [opened, { open, close }] = useDisclosure(false);
   const [divisionToDelete, setDivisionToDelete] = useState<DivisionType>();
