@@ -1,37 +1,10 @@
-import { ActionIcon, Button, Input, Select, Table, UnstyledButton } from '@mantine/core';
-import { IconInfoCircle, IconPencil, IconPlus, IconSearch, IconTrash } from '@tabler/icons-react';
-import React, { useEffect, useState } from 'react';
+import { Button, Input, Select } from '@mantine/core';
+import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
-import { getUsers } from '../api';
-import axios from 'axios';
-import { UserType } from '@/admin_features/types';
-
-// Base URL API
-const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+import { TableUser } from '../components';
 
 export const Users: React.FC = () => {
-  const [users, setUsers] = useState<UserType[]>([]);
   const navigate = useNavigate();
-
-  // Fungsi Delete User
-  const deleteUser = async (id: number) => {
-    await axios.delete(`${BaseURL}/user/${id}`);
-    console.log(id);
-    setUsers(users.filter((user) => user.id !== id));
-  };
-
-  // Fungsi Fetch Data User
-  useEffect(() => {
-    async function fetchUsers() {
-      const res = await getUsers();
-      console.log(res);
-      setUsers(res);
-    }
-    fetchUsers();
-  }, []);
-
-  console.log(users);
-
   return (
     <main>
       <section className="bg-white p-5 rounded-lg shadow-lg">
@@ -56,36 +29,7 @@ export const Users: React.FC = () => {
           />
         </div>
         <div className="mt-7">
-          <Table withColumnBorders withTableBorder>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th className="font-bold">Username</Table.Th>
-                <Table.Th className="font-bold">Role</Table.Th>
-                <Table.Th className="font-bold">Aksi</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {users.map((user, index) => {
-                return (
-                  <Table.Tr key={index}>
-                    <Table.Td>{user?.username}</Table.Td>
-                    <Table.Td>{user?.role}</Table.Td>
-                    <Table.Td className="flex gap-2 items-center justify-center">
-                      <ActionIcon color="yellow">
-                        <IconPencil size={14} />
-                      </ActionIcon>
-                      <ActionIcon onClick={() => deleteUser(user.id)} color="red">
-                        <IconTrash size={14} />
-                      </ActionIcon>
-                      <UnstyledButton>
-                        <IconInfoCircle className="text-blue-600" size={20} />
-                      </UnstyledButton>
-                    </Table.Td>
-                  </Table.Tr>
-                );
-              })}
-            </Table.Tbody>
-          </Table>
+          <TableUser />
         </div>
       </section>
     </main>
