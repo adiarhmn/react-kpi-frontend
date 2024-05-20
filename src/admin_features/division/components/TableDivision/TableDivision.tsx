@@ -27,7 +27,7 @@ export const TableDivision = () => {
 
   const confirmDeleteDivision = async () => {
     if (divisionToDelete) {
-      deleteDivision(divisionToDelete.id);
+      deleteDivision(divisionToDelete?.id);
       close();
     }
   };
@@ -63,7 +63,7 @@ export const TableDivision = () => {
           {division.map((divisi, index) => {
             return (
               <Table.Tr key={index}>
-                <Table.Td>{index}</Table.Td>
+                <Table.Td>{index + 1}</Table.Td>
                 <Table.Td>{divisi?.division_name}</Table.Td>
                 <Table.Td className="flex gap-2 items-center justify-center">
                   <ActionIcon color="yellow">
