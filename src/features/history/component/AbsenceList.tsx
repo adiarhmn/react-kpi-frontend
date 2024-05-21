@@ -1,24 +1,33 @@
-import { Badge, Divider, Text } from '@mantine/core';
+import { Badge, Divider, Loader, Text } from '@mantine/core';
 import { differenceInDays, format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { getAbsence } from '../api';
+import { getAbsence, useGetAbsence } from '../api';
 import { AbsenceType } from '../types';
 
 export const AbsenceList: React.FC = () => {
   const [absences, setAbsence] = useState<AbsenceType[]>([]);
+  const { data, error, isLoading } = useGetAbsence();
 
   const navigate = useNavigate();
   useEffect(() => {
-    async function fetchEducations() {
-      const data = await getAbsence();
-      console.log(data);
-      setAbsence(Array.isArray(data) ? data : []);
+    if (data) {
+      setAbsence(data);
     }
-    fetchEducations();
-  }, []);
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
+  if (error) {
+    return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
+  }
 
   function getDaysBetweenDates(date1: string, date2: string): number {
     const startDate = new Date(date1);

@@ -12,13 +12,13 @@ import { AbsenceType } from '../types';
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://192.168.1.110:3000/api';
 
 export const AddAbsence: React.FC = () => {
+  const navigate = useNavigate();
   function formatdate(date: string | number | Date) {
     const dateToFormat: Date = new Date(date);
     const formattedDate = format(dateToFormat, 'yyyy-MM-dd', { locale: id });
     return formattedDate;
   }
 
-  const navigate = useNavigate();
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
@@ -31,7 +31,7 @@ export const AddAbsence: React.FC = () => {
       date_start: (value) => (value === '' ? 'tanggal mulai tidak boleh kosong' : null),
       date_end: (value) => (value === '' ? 'tanggal selesai tidak boleh kosong' : null),
       type: (value) => (value === '' ? 'Tipe izin tidak boleh kosong' : null),
-      // description: (value) => (value === '' ? 'Keterangan tidak boleh kosong' : null),
+      description: (value) => (value === '' ? 'Keterangan tidak boleh kosong' : null),
     },
   });
 

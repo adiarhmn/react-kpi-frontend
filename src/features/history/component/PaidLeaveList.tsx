@@ -1,8 +1,46 @@
-import { Badge, Divider, Text } from '@mantine/core';
+import { Badge, Divider, Loader, Text } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGetAbsence } from '../api';
+import { AbsenceType } from '../types';
+import { differenceInDays, format } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 export const PaidLeaveList: React.FC = () => {
+  const [paidLeave, setPaidLeave] = useState<AbsenceType[]>([]);
+  const { data, error, isLoading } = useGetAbsence();
+
   const navigate = useNavigate();
+  useEffect(() => {
+    if (data) {
+      setPaidLeave(data);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
+  if (error) {
+    return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
+  }
+
+  function getDaysBetweenDates(date1: string, date2: string): number {
+    const startDate = new Date(date1);
+    const endDate = new Date(date2);
+
+    return differenceInDays(endDate, startDate);
+  }
+
+  function formatdate(date: string | Date) {
+    const dateToFormat: Date = new Date(date);
+    const formattedDate = format(dateToFormat, 'EEEE, dd MMM yyyy', { locale: id });
+    return formattedDate;
+  }
+
   return (
     <div className="text-center">
       <button

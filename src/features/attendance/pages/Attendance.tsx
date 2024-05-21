@@ -1,33 +1,84 @@
 import {
   Button,
-  ActionIcon,
   Text,
-  Card,
   Image,
-  Group,
   Badge,
   Modal,
   Divider,
   Input,
   JsonInput,
+  Loader,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconDeviceTablet } from '@tabler/icons-react';
-import {
-  IconArrowBarRight,
-  IconArrowBarToRight,
-  IconChevronLeft,
-  IconMap2,
-  IconPlus,
-} from '@tabler/icons-react';
-import { IconChevronRight } from '@tabler/icons-react';
+import { IconArrowBarToRight, IconMap2 } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useGetSchedule } from '../api';
+import { useEffect, useState } from 'react';
+import { AttendanceType, ScheduleType } from '../types';
+import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
 import { id } from 'date-fns/locale';
+
+const BaseURL = import.meta.env.VITE_API_URL;
 
 export const Attendance: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const navigate = useNavigate();
   const currentDate: Date = new Date();
-  const formattedDate = format(currentDate, 'EEEE, dd MMM yyyy', { locale: id });
+  const formattedDate = format(currentDate, 'yyyy-MM-dd', { locale: id });
+  const dateNow = format(currentDate, 'yyyy-MM-dd', { locale: id });
+  console.log(dateNow);
+  const { data, error, isLoading } = useGetSchedule(1, dateNow);
+  const [schedule, setSchedule] = useState<ScheduleType[]>([]);
+
+  const createAttendance = async (attendanceDataPost: AttendanceType) => {
+    const response = await axios.post(`${BaseURL}/request`, attendanceDataPost);
+    return response.data;
+  };
+
+  const mutation = useMutation({
+    mutationFn: createAttendance,
+    onSuccess: (data) => {
+      console.log(data);
+      if (data.status == 201) {
+        navigate(-1);
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  useEffect(() => {
+    if (data) {
+      console.log('effect :', data);
+      setSchedule(data);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const attendanceDataPost = {
+      schedule_id: schedule[0].id,
+      employee_id: schedule[0].employee_schedule.employee_id,
+    };
+    mutation.mutateAsync(attendanceDataPost);
+  };
+
+  // console.log(schedule);
 
   return (
     <main className="min-h-96 relative">
@@ -63,7 +114,7 @@ export const Attendance: React.FC = () => {
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
           <div className="col-span-2 text-center m-auto p-1">
             <Text size="23px" fw={700}>
-              F2
+              {schedule[0].shift.shift_code}
             </Text>
             <Text style={{ marginTop: '-5px' }} size="sm">
               Pagi
@@ -73,7 +124,7 @@ export const Attendance: React.FC = () => {
             <div className="ms-2 -mb-2">
               <Text size="xs">Tanggal</Text>
               <Text size="sm" fw={700}>
-                {formattedDate}
+                {schedule[0].date}
               </Text>
             </div>
             <Divider my="sm" />
@@ -81,7 +132,7 @@ export const Attendance: React.FC = () => {
               <div className="col-span-6 text-left mt-1 ms-2">
                 <Text size="xs">Jam kerja</Text>
                 <Text size="sm" fw={700}>
-                  08:00 - 16:00
+                  {schedule[0].shift.start_time} - {schedule[0].shift.end_time}
                 </Text>
               </div>
               <div className="col-span-6 text-right -mt-1"></div>
@@ -89,9 +140,11 @@ export const Attendance: React.FC = () => {
           </div>
         </div>
         <div className="p-2 mt-2">
-          <Button fullWidth rightSection={<IconArrowBarToRight />}>
-            Check-in
-          </Button>
+          <form onClick={handleSubmit}>
+            <Button type="submit" fullWidth rightSection={<IconArrowBarToRight />}>
+              Check-in
+            </Button>
+          </form>
         </div>
       </section>
       {/* End absen card */}

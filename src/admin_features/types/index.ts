@@ -6,24 +6,25 @@ export type UserType = {
 };
 
 export type ShiftType = {
-    id: number;
-    name: string;
-    start_time: string;
-    end_time: string;
-}
+  id: number;
+  shift_name: string;
+  start_time: string;
+  end_time: string;
+  shift_code: string;
+};
 
 export type DivisionType = {
-    id: number;
-    division_name: string;
-}
+  id: number;
+  division_name: string;
+};
 
 export type EmployeeType = {
-    id: number;
-    name: string;
-    phone: string;
-    address: string;
-    status: boolean;
-    user: UserType;
-    shift: ShiftType;
-    division: DivisionType;
-}
+  id: number;
+  name: string;
+  phone: string;
+  address: string;
+  status: boolean;
+  user: UserType;
+  shift: ShiftType;
+  division: DivisionType;
+};
