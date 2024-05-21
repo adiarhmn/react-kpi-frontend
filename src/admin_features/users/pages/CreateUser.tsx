@@ -127,8 +127,8 @@ export const CreateUser: React.FC = () => {
               {...form.getInputProps('role')}
             />
             <div className="flex gap-3">
-              <Button type="submit" color="blue" className="mt-5" disabled={mutationUser.isPending}>
-                {mutationUser.isPending ? 'Loading...' : 'Simpan'}
+              <Button type="submit" color="blue" className="mt-5" disabled={mutationUser.isPending} loading={mutationUser.isPending}>
+                Simpan
               </Button>
               <Button onClick={NavBack} type="button" color="gray" className="mt-5">
                 Batal

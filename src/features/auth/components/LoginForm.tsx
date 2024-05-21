@@ -5,6 +5,8 @@ import { IconAt, IconLock } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useLogin } from '../api';
+import { queryClient } from '@/lib/react-query';
+import storage from '@/utils/storage';
 
 export const LoginForm: React.FC = () => {
   const form = useForm({
@@ -34,10 +36,15 @@ export const LoginForm: React.FC = () => {
             });
           }
         },
+        onSuccess: (data) => {
+          console.log(data);
+          queryClient.setQueryData(['creds'], data.creds);
+          storage.setToken(data.token);
+          navigate('/');
+        },
       }
     );
 
-    // navigate('/');
   }
 
   return (

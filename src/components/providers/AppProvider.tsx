@@ -26,10 +26,8 @@ const LocationProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     App.addListener('backButton', ({ canGoBack }) => {
       if (canGoBack) return navigate(-1);
-
       App.exitApp();
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <>{children}</>;  

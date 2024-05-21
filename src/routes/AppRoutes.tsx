@@ -2,6 +2,8 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { HomeLayout, AuthLayout, AppLayout, AdminLayout } from '@/components/layout';
 import { lazyImport } from '@/utils/lazyImport';
 import { useEffect } from 'react';
+import { queryClient } from '@/lib/react-query';
+import { useAuth } from '@/features/auth';
 
 const { Development } = lazyImport(() => import('@/features/misc'), 'Development');
 const { NotFoundLayout } = lazyImport(() => import('@/components/layout'), 'NotFoundLayout');
@@ -53,17 +55,18 @@ const { CreateEmployee } = lazyImport(() => import('@/admin_features/employees')
 const { Users } = lazyImport(() => import('@/admin_features/users'), 'Users');
 const { CreateUser } = lazyImport(() => import('@/admin_features/users'), 'CreateUser');
 
-// Data Dummy Gambaran API Untuk Development
-const useAuth = () => {
-  return {
-    creds: {
-      role: 'admin',
-    },
-  };
-};
+// const useAuth = () => {
+//   return {
+//     creds: {
+//       role: 'admin',
+//     },
+//   };
+// };
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
+  const dataCredentials = creds?.creds;
+
   return (
     <Routes>
       <Route path="/" element={<AppLayout />}>
