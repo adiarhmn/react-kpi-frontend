@@ -44,3 +44,10 @@ export type EducationBackground = {
   graduation_year: string;
   employee_id: number;
 };
+
+export type EmployeeFilesType = {
+  id?: number;
+  file_name: string;
+  file: string;
+  employee_id: number;
+};
