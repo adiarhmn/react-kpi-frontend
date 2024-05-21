@@ -5,178 +5,19 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetSchedule } from '../api/getSchedule';
 
-const Employees = [
-  {
-    id: 1,
-    name: 'Adi Aulia Rahman',
-    schedule: [
-      { date: new Date('2022-01-01'), day: 1, shift: 1, free: false },
-      { date: new Date('2022-01-02'), day: 2, shift: 1, free: false },
-      { date: new Date('2022-01-03'), day: 3, shift: 1, free: false },
-      { date: new Date('2022-01-04'), day: 4, shift: 1, free: false },
-      { date: new Date('2022-01-05'), day: 5, shift: 1, free: false },
-      { date: new Date('2022-01-06'), day: 6, shift: 1, free: false },
-      { date: new Date('2022-01-07'), day: 7, shift: 1, free: false },
-      { date: new Date('2022-01-08'), day: 8, shift: 1, free: false },
-      { date: new Date('2022-01-09'), day: 9, shift: 1, free: false },
-      { date: new Date('2022-01-10'), day: 10, shift: 1, free: false },
-      { date: new Date('2022-01-11'), day: 11, shift: 2, free: false },
-      { date: new Date('2022-01-12'), day: 12, shift: 2, free: false },
-      { date: new Date('2022-01-13'), day: 13, shift: 2, free: false },
-      { date: new Date('2022-01-14'), day: 14, shift: 2, free: false },
-      { date: new Date('2022-01-15'), day: 15, shift: 2, free: false },
-      { date: new Date('2022-01-16'), day: 16, shift: 2, free: false },
-      { date: new Date('2022-01-17'), day: 17, shift: 2, free: false },
-      { date: new Date('2022-01-18'), day: 18, shift: 2, free: false },
-      { date: new Date('2022-01-19'), day: 19, shift: 2, free: false },
-      { date: new Date('2022-01-20'), day: 20, shift: 2, free: false },
-      { date: new Date('2022-01-21'), day: 21, shift: 1, free: false },
-      { date: new Date('2022-01-22'), day: 22, shift: 1, free: false },
-      { date: new Date('2022-01-23'), day: 23, shift: 1, free: false },
-      { date: new Date('2022-01-24'), day: 24, shift: 1, free: false },
-      { date: new Date('2022-01-25'), day: 25, shift: 1, free: false },
-      { date: new Date('2022-01-26'), day: 26, shift: 1, free: false },
-      { date: new Date('2022-01-27'), day: 27, shift: 1, free: false },
-      { date: new Date('2022-01-28'), day: 28, shift: 1, free: false },
-      { date: new Date('2022-01-29'), day: 29, shift: 1, free: false },
-      { date: new Date('2022-01-30'), day: 30, shift: 1, free: false },
-      { date: new Date('2022-01-31'), day: 31, shift: 1, free: false },
-    ],
-  },
-  {
-    id: 2,
-    name: 'Muhammad Budi',
-    schedule: [
-      { date: new Date('2022-01-01'), day: 1, shift: 1, free: false },
-      { date: new Date('2022-01-02'), day: 2, shift: 1, free: false },
-      { date: new Date('2022-01-03'), day: 3, shift: 1, free: false },
-      { date: new Date('2022-01-04'), day: 4, shift: 1, free: false },
-      { date: new Date('2022-01-05'), day: 5, shift: 1, free: false },
-      { date: new Date('2022-01-06'), day: 6, shift: 1, free: false },
-      { date: new Date('2022-01-07'), day: 7, shift: 1, free: false },
-      { date: new Date('2022-01-08'), day: 8, shift: 1, free: false },
-      { date: new Date('2022-01-09'), day: 9, shift: 1, free: false },
-      { date: new Date('2022-01-10'), day: 10, shift: 1, free: false },
-      { date: new Date('2022-01-11'), day: 11, shift: 2, free: false },
-      { date: new Date('2022-01-12'), day: 12, shift: 2, free: false },
-      { date: new Date('2022-01-13'), day: 13, shift: 2, free: false },
-      { date: new Date('2022-01-14'), day: 14, shift: 2, free: false },
-      { date: new Date('2022-01-15'), day: 15, shift: 2, free: false },
-      { date: new Date('2022-01-16'), day: 16, shift: 2, free: false },
-      { date: new Date('2022-01-17'), day: 17, shift: 2, free: false },
-      { date: new Date('2022-01-18'), day: 18, shift: 2, free: false },
-      { date: new Date('2022-01-19'), day: 19, shift: 2, free: false },
-      { date: new Date('2022-01-20'), day: 20, shift: 2, free: false },
-      { date: new Date('2022-01-21'), day: 21, shift: 1, free: false },
-      { date: new Date('2022-01-22'), day: 22, shift: 1, free: false },
-      { date: new Date('2022-01-23'), day: 23, shift: 1, free: false },
-      { date: new Date('2022-01-24'), day: 24, shift: 1, free: false },
-      { date: new Date('2022-01-25'), day: 25, shift: 1, free: false },
-      { date: new Date('2022-01-26'), day: 26, shift: 1, free: false },
-      { date: new Date('2022-01-27'), day: 27, shift: 1, free: false },
-      { date: new Date('2022-01-28'), day: 28, shift: 1, free: false },
-      { date: new Date('2022-01-29'), day: 29, shift: 1, free: false },
-      { date: new Date('2022-01-30'), day: 30, shift: 1, free: false },
-      { date: new Date('2022-01-31'), day: 31, shift: 1, free: false },
-    ],
-  },
-];
-
-const ScheduleEmployees = {
-  month: '01',
-  year: '2022',
-  Employees: [
-    {
-      id: 1,
-      name: 'Adi Aulia Rahman',
-      schedule: [
-        { date: new Date('2022-01-01'), day: 1, shift: 1, free: false },
-        { date: new Date('2022-01-02'), day: 2, shift: 1, free: false },
-        { date: new Date('2022-01-03'), day: 3, shift: 1, free: false },
-        { date: new Date('2022-01-04'), day: 4, shift: 1, free: false },
-        { date: new Date('2022-01-05'), day: 5, shift: 1, free: false },
-        { date: new Date('2022-01-06'), day: 6, shift: 1, free: false },
-        { date: new Date('2022-01-07'), day: 7, shift: 1, free: false },
-        { date: new Date('2022-01-08'), day: 8, shift: 1, free: false },
-        { date: new Date('2022-01-09'), day: 9, shift: 1, free: false },
-        { date: new Date('2022-01-10'), day: 10, shift: 1, free: false },
-        { date: new Date('2022-01-11'), day: 11, shift: 2, free: false },
-        { date: new Date('2022-01-12'), day: 12, shift: 2, free: false },
-        { date: new Date('2022-01-13'), day: 13, shift: 2, free: false },
-        { date: new Date('2022-01-14'), day: 14, shift: 2, free: false },
-        { date: new Date('2022-01-15'), day: 15, shift: 2, free: false },
-        { date: new Date('2022-01-16'), day: 16, shift: 2, free: false },
-        { date: new Date('2022-01-17'), day: 17, shift: 2, free: false },
-        { date: new Date('2022-01-18'), day: 18, shift: 2, free: false },
-        { date: new Date('2022-01-19'), day: 19, shift: 2, free: false },
-        { date: new Date('2022-01-20'), day: 20, shift: 2, free: false },
-        { date: new Date('2022-01-21'), day: 21, shift: 1, free: false },
-        { date: new Date('2022-01-22'), day: 22, shift: 1, free: false },
-        { date: new Date('2022-01-23'), day: 23, shift: 1, free: false },
-        { date: new Date('2022-01-24'), day: 24, shift: 1, free: false },
-        { date: new Date('2022-01-25'), day: 25, shift: 1, free: false },
-        { date: new Date('2022-01-26'), day: 26, shift: 1, free: false },
-        { date: new Date('2022-01-27'), day: 27, shift: 1, free: false },
-        { date: new Date('2022-01-28'), day: 28, shift: 1, free: false },
-        { date: new Date('2022-01-29'), day: 29, shift: 1, free: false },
-        { date: new Date('2022-01-30'), day: 30, shift: 1, free: false },
-        { date: new Date('2022-01-31'), day: 31, shift: 1, free: false },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Muhammad Budi',
-      schedule: [
-        { date: new Date('2022-01-01'), day: 1, shift: 1, free: false },
-        { date: new Date('2022-01-02'), day: 2, shift: 1, free: false },
-        { date: new Date('2022-01-03'), day: 3, shift: 1, free: false },
-        { date: new Date('2022-01-04'), day: 4, shift: 1, free: false },
-        { date: new Date('2022-01-05'), day: 5, shift: 1, free: false },
-        { date: new Date('2022-01-06'), day: 6, shift: 1, free: false },
-        { date: new Date('2022-01-07'), day: 7, shift: 1, free: false },
-        { date: new Date('2022-01-08'), day: 8, shift: 1, free: false },
-        { date: new Date('2022-01-09'), day: 9, shift: 1, free: false },
-        { date: new Date('2022-01-10'), day: 10, shift: 1, free: false },
-        { date: new Date('2022-01-11'), day: 11, shift: 2, free: false },
-        { date: new Date('2022-01-12'), day: 12, shift: 2, free: false },
-        { date: new Date('2022-01-13'), day: 13, shift: 2, free: false },
-        { date: new Date('2022-01-14'), day: 14, shift: 2, free: false },
-        { date: new Date('2022-01-15'), day: 15, shift: 2, free: false },
-        { date: new Date('2022-01-16'), day: 16, shift: 2, free: false },
-        { date: new Date('2022-01-17'), day: 17, shift: 2, free: false },
-        { date: new Date('2022-01-18'), day: 18, shift: 2, free: false },
-        { date: new Date('2022-01-19'), day: 19, shift: 2, free: false },
-        { date: new Date('2022-01-20'), day: 20, shift: 2, free: false },
-        { date: new Date('2022-01-21'), day: 21, shift: 1, free: false },
-        { date: new Date('2022-01-22'), day: 22, shift: 1, free: false },
-        { date: new Date('2022-01-23'), day: 23, shift: 1, free: false },
-        { date: new Date('2022-01-24'), day: 24, shift: 1, free: false },
-        { date: new Date('2022-01-25'), day: 25, shift: 1, free: false },
-        { date: new Date('2022-01-26'), day: 26, shift: 1, free: false },
-        { date: new Date('2022-01-27'), day: 27, shift: 1, free: false },
-        { date: new Date('2022-01-28'), day: 28, shift: 1, free: false },
-        { date: new Date('2022-01-29'), day: 29, shift: 1, free: false },
-        { date: new Date('2022-01-30'), day: 30, shift: 1, free: false },
-        { date: new Date('2022-01-31'), day: 31, shift: 1, free: false },
-      ],
-    },
-  ],
-};
-
 export const Schedule: React.FC = () => {
-  const [employees, setEmployees] = useState(Employees);
   const [FreeDays, setFreeDay] = useState(false);
   const [dataSchedule, setDataSchedule] = useState([]);
   const navigate = useNavigate();
-  const [month, setMonth] = useState<Date | null>(new Date('2022-01-01'));
+  const [month, setMonth] = useState<Date>(new Date());
 
-  const { data, isLoading } = useGetSchedule();
+  const { data, isLoading } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
   useEffect(() => {
     if (data) {
       setDataSchedule(data.data);
     }
-  }
-  , [data]);
+  }, [data]);
+
   if (isLoading) {
     return (
       <div className="flex justify-center my-20">
@@ -184,8 +25,6 @@ export const Schedule: React.FC = () => {
       </div>
     );
   }
-
-
 
   return (
     <main>
@@ -204,14 +43,18 @@ export const Schedule: React.FC = () => {
 
       <section className="bg-white rounded-lg shadow-lg p-3">
         <div className="mb-3 flex gap-2 justify-between flex-wrap">
-          <div>
-            <MonthPickerInput
-              className="w-56"
-              placeholder="Pilih Bulan"
-              value={month}
-              onChange={setMonth}
-            ></MonthPickerInput>
-          </div>
+          <MonthPickerInput
+            className="w-56"
+            placeholder="Pilih Bulan"
+            value={month}
+            onChange={(value) => {
+              if (value === null) {
+                setMonth(new Date());
+              } else {
+                setMonth(value);
+              }
+            }}
+          ></MonthPickerInput>
           <div className="flex gap-2">
             <Button
               onClick={() => {
