@@ -1,11 +1,17 @@
-import { ActionIcon, Button, Group, MultiSelect, Select } from '@mantine/core';
+import { useGetEmployees } from '@/admin_features/employees/api';
+import { ActionIcon, Button, Group, MultiSelect, Select, em } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconCardboards, IconChevronLeft, IconDeviceFloppy } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+import { useCreateSchedule, useValidateSchedule } from '../api';
+import { useGetShift } from '@/admin_features/shift/api';
+import { parse } from 'date-fns';
 
 export const CreateSchedule: React.FC = () => {
   const navigate = useNavigate();
+  const mutationSchedule = useCreateSchedule();
+  const mutationValidateSchedule = useValidateSchedule();
   const handleBack = () => {
     return navigate(-1);
   };
@@ -13,12 +19,83 @@ export const CreateSchedule: React.FC = () => {
   const form = useForm({
     initialValues: {
       division: 'Semua Divisi',
-      shift: 'Shift 1',
+      shift_id: '0',
       start_date: new Date(),
       end_date: new Date(),
       employees: [],
-    },  
-  })
+    },
+  });
+
+  const { startOfMonth, endOfMonth } = getStartAndEndOfMonth();
+
+  console.log(startOfMonth, '-', endOfMonth);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    // Membuat Format sesuai backend api
+    const dataPostSchedule = form.values.employees.map((employee: string) => ({
+      date_start: formatDate(startOfMonth.toString()),
+      date_end: formatDate(endOfMonth.toString()),
+      employee_id: parseInt(employee),
+    }));
+
+    mutationSchedule.mutateAsync(dataPostSchedule, {
+      onSuccess: (data) => {
+        console.log('Response:', data);
+        if (data.data) {
+          const dataValidateSchedule = data.data.map((item: any) => ({
+            employee_schedule_id: item.id,
+            default_shift: parseInt(form.values.shift_id),
+          }));
+          mutationValidateSchedule.mutateAsync(dataValidateSchedule, {
+            onSuccess: (data) => {
+              console.log('Success:', data);
+            },
+          });
+        }
+      },
+    });
+  };
+
+  function getStartAndEndOfMonth(): { startOfMonth: Date; endOfMonth: Date } {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const endOfMonth = new Date(startOfNextMonth.getTime() - 1);
+
+    return { startOfMonth, endOfMonth };
+  }
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() mengembalikan bulan mulai dari 0
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
+  // Mengisi Data Dari Inputan
+  const { data: DataEmployees, error, isLoading } = useGetEmployees();
+  const { data: DataShift, error: errorShift, isLoading: isLoadingShift } = useGetShift();
+  if (isLoading || isLoadingShift) {
+    return <div>Loading...</div>; // or your loading component
+  }
+
+  if (error || errorShift) {
+    return <div>Error: {error?.message || errorShift?.message}</div>; // or your error component
+  }
+
+  // Mengisi data untuk Multiselect Karyawan
+  const optionsMultiselect = DataEmployees.map((employee: any) => ({
+    value: employee.id.toString(),
+    label: employee.name,
+  }));
+
+  const optionsMultiselectShift = DataShift.data.map((shift: any) => ({
+    value: shift.id.toString(),
+    label: shift.shift_name,
+  }));
 
   return (
     <main>
@@ -35,9 +112,11 @@ export const CreateSchedule: React.FC = () => {
             </div>
           </div>
         </Group>
+
         {/* Form Tambah Jadwal */}
-        <form action="" className="mt-4">
+        <form onSubmit={handleSubmit} className="mt-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {/* Divisi Input */}
             <Select
               label="Pilih Divisi"
               className="col-span-2 lg:col-span-1"
@@ -46,30 +125,36 @@ export const CreateSchedule: React.FC = () => {
               defaultValue="Semua Divisi"
               {...form.getInputProps('division')}
             ></Select>
+
+            {/* Shift Selection */}
             <Select
               label="Pilih Shift"
               className="col-span-2 lg:col-span-1"
               placeholder="Pilih Shift"
-              data={['Shift 1', 'Shift 2', 'Shift 3']}
+              data={optionsMultiselectShift}
               defaultValue="Shift 1"
+              {...form.getInputProps('shift_id')}
             ></Select>
 
             {/* Pilih Periode Hari */}
             <div className="col-span-2 flex flex-col lg:flex-row gap-2 items-center">
-              <DateInput label="Pilih Priode" className="flex-grow w-full"></DateInput>
+              <DateInput
+                label="Pilih Priode"
+                className="flex-grow w-full"
+                {...form.getInputProps('start_date')}
+              ></DateInput>
               <div className="pt-5 text-slate-400 text-xs hidden lg:block">S/D</div>
-              <DateInput label="Pilih Priode" className="flex-grow w-full"></DateInput>
+              <DateInput
+                label="Pilih Priode"
+                className="flex-grow w-full"
+                {...form.getInputProps('end_date')}
+              ></DateInput>
             </div>
             <MultiSelect
               className="col-span-2"
               label="Pilih Karyawan"
               placeholder="Pilih Karyawan"
-              data={[
-                'Adi Aulia Rahman',
-                'David Hadi Nugroho',
-                'Muhammad Iqbal',
-                'Dian Lucky Prayogi',
-              ]}
+              data={optionsMultiselect}
               {...form.getInputProps('employees')}
             ></MultiSelect>
           </div>

@@ -1,8 +1,9 @@
-import { Button, Table } from '@mantine/core';
+import { Button, Loader, Table } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { IconPlus, IconSettings } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGetSchedule } from '../api/getSchedule';
 
 const Employees = [
   {
@@ -165,8 +166,26 @@ const ScheduleEmployees = {
 export const Schedule: React.FC = () => {
   const [employees, setEmployees] = useState(Employees);
   const [FreeDays, setFreeDay] = useState(false);
+  const [dataSchedule, setDataSchedule] = useState([]);
   const navigate = useNavigate();
   const [month, setMonth] = useState<Date | null>(new Date('2022-01-01'));
+
+  const { data, isLoading } = useGetSchedule();
+  useEffect(() => {
+    if (data) {
+      setDataSchedule(data.data);
+    }
+  }
+  , [data]);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
+
+
 
   return (
     <main>
@@ -209,36 +228,39 @@ export const Schedule: React.FC = () => {
           className="absolute bg-black opacity-50 top-0 left-0 w-full h-screen"
           style={{ zIndex: FreeDays ? 999 : 1, display: FreeDays ? '' : 'none' }}
         ></div>
-        <div className="relative bg-white overflow-x-auto border border-slate-300" style={{ zIndex: FreeDays ? 9999 : 1 }}>
+        <div
+          className="relative bg-white overflow-x-auto border border-slate-300"
+          style={{ zIndex: FreeDays ? 9999 : 1 }}
+        >
           <Table withColumnBorders>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th className="sticky left-0 bg-white">
                   <sub>Nama</sub>\<sup>Tgl</sup>
                 </Table.Th>
-                {Array.from({ length: 31 }).map((_, index) => (
+                {Array.from({ length: data?.data[0].Schedules.length }).map((_, index) => (
                   <Table.Th key={index}>Hari {index + 1}</Table.Th>
                 ))}
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {Employees.map((employee, rowIndex) => (
-                <Table.Tr key={rowIndex}>
-                  <Table.Td className="sticky left-0 bg-white">{employee.name}</Table.Td>
-                  {employee.schedule.map((schedule, colIndex) => (
+              {dataSchedule.map((item: any, indexnumber: number) => (
+                <Table.Tr key={indexnumber}>
+                  <Table.Td className="sticky left-0 bg-white">{item.employee.name}</Table.Td>
+                  {item.Schedules.map((schedule: any, colIndex: number) => (
                     <Table.Td
                       key={colIndex}
                       onClick={() => {
-                        if (FreeDays) {
-                          const newEmployees = [...employees];
-                          newEmployees[rowIndex].schedule[colIndex].free =
-                            !newEmployees[rowIndex].schedule[colIndex].free;
-                          setEmployees(newEmployees);
-                        }
+                        // if (FreeDays) {
+                        //   const newEmployees = [...employees];
+                        //   newEmployees[rowIndex].schedule[colIndex].free =
+                        //     !newEmployees[rowIndex].schedule[colIndex].free;
+                        //   setEmployees(newEmployees);
+                        // }
                       }}
-                      className={schedule.free ? 'bg-red-600 text-white' : ''}
+                      className={schedule.status == 'off' ? 'bg-red-600 text-white' : ''}
                     >
-                      {schedule.free ? '-' : schedule.shift}
+                      {schedule.status == 'off' ? '-' : schedule.shift_id}
                     </Table.Td>
                   ))}
                 </Table.Tr>

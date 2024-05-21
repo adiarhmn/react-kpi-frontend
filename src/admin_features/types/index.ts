@@ -7,7 +7,7 @@ export type UserType = {
 
 export type ShiftType = {
     id: number;
-    name: string;
+    shift_name: string;
     start_time: string;
     end_time: string;
 }

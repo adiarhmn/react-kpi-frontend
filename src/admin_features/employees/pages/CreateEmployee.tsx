@@ -1,3 +1,6 @@
+import { useGetDivisions } from '@/admin_features/division/api';
+import { UserType } from '@/admin_features/types';
+import { useGetUsers } from '@/admin_features/users/api';
 import { ActionIcon, Button, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft } from '@tabler/icons-react';
@@ -5,14 +8,27 @@ import { useNavigate } from 'react-router-dom';
 
 export const CreateEmployee: React.FC = () => {
   const navigate = useNavigate();
+  const { data: DataUser, error: getUserError, isLoading: loadingUsers } = useGetUsers();
+  const {
+    data: DataDivision,
+    error: getDivisionError,
+    isLoading: loadingDivisions,
+  } = useGetDivisions();
+
   const NavBack = () => {
     navigate(-1);
   };
 
-  const form = useForm({
-    
-  })
+  const form = useForm({});
 
+  if (loadingDivisions || loadingUsers) {
+    return <div>Loading...</div>;
+  }
+
+  const optionDataUser = DataUser.map((user: UserType) => ({
+    value: user.id.toString(),
+    label: user.username,
+  }));
   return (
     <main>
       <section className="bg-white p-5 rounded-lg">
@@ -52,6 +68,13 @@ export const CreateEmployee: React.FC = () => {
               data={['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Konghucu']}
             />
             <TextInput className="mb-3" label="Alamat" placeholder="Alamat" required />
+            <TextInput className="mb-3" label="RT" placeholder="RT" required />
+            <TextInput className="mb-3" label="RW" placeholder="RW" required />
+            <TextInput className="mb-3" label="Kelurahan" placeholder="Kelurahan" required />
+            <TextInput className="mb-3" label="Kecamatan" placeholder="Kecamatan" required />
+            <TextInput className="mb-3" label="Kabupaten" placeholder="Kabupaten" required />
+            <TextInput className="mb-3" label="Provinsi" placeholder="Provinsi" required />
+            <TextInput className="mb-3" label="Kode Pos" placeholder="Kode Pos" required />
             <TextInput
               className="mb-3"
               label="Nomor Telepon"
