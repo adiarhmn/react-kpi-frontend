@@ -18,10 +18,8 @@ export const CreateSchedule: React.FC = () => {
 
   const form = useForm({
     initialValues: {
-      division: 'Semua Divisi',
+      division_id: '0',
       shift_id: '0',
-      start_date: new Date(),
-      end_date: new Date(),
       employees: [],
     },
   });
@@ -57,6 +55,7 @@ export const CreateSchedule: React.FC = () => {
     });
   };
 
+  // Fungsi untuk mendapatkan tanggal awal dan akhir bulan
   function getStartAndEndOfMonth(): { startOfMonth: Date; endOfMonth: Date } {
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -66,6 +65,7 @@ export const CreateSchedule: React.FC = () => {
     return { startOfMonth, endOfMonth };
   }
 
+  // Fungsi untuk mengubah format tanggal
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -123,7 +123,7 @@ export const CreateSchedule: React.FC = () => {
               placeholder="Pilih Divisi"
               data={['Semua Divisi', 'Developer', 'Designer', 'Marketing', 'HRD', 'Finance']}
               defaultValue="Semua Divisi"
-              {...form.getInputProps('division')}
+              {...form.getInputProps('division_id')}
             ></Select>
 
             {/* Shift Selection */}
@@ -136,20 +136,6 @@ export const CreateSchedule: React.FC = () => {
               {...form.getInputProps('shift_id')}
             ></Select>
 
-            {/* Pilih Periode Hari */}
-            <div className="col-span-2 flex flex-col lg:flex-row gap-2 items-center">
-              <DateInput
-                label="Pilih Priode"
-                className="flex-grow w-full"
-                {...form.getInputProps('start_date')}
-              ></DateInput>
-              <div className="pt-5 text-slate-400 text-xs hidden lg:block">S/D</div>
-              <DateInput
-                label="Pilih Priode"
-                className="flex-grow w-full"
-                {...form.getInputProps('end_date')}
-              ></DateInput>
-            </div>
             <MultiSelect
               className="col-span-2"
               label="Pilih Karyawan"

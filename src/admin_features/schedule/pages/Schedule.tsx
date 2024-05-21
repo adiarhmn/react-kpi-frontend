@@ -26,6 +26,12 @@ export const Schedule: React.FC = () => {
     );
   }
 
+  if(dataSchedule.length === 0) {
+    return (
+      <div className="text-red-600 text-center my-20 font-bold">Data Kosong</div>
+    )
+  }
+
   return (
     <main>
       {/* Header */}
@@ -54,6 +60,7 @@ export const Schedule: React.FC = () => {
                 setMonth(value);
               }
             }}
+
           ></MonthPickerInput>
           <div className="flex gap-2">
             <Button
@@ -81,7 +88,7 @@ export const Schedule: React.FC = () => {
                 <Table.Th className="sticky left-0 bg-white">
                   <sub>Nama</sub>\<sup>Tgl</sup>
                 </Table.Th>
-                {Array.from({ length: data?.data[0].Schedules.length }).map((_, index) => (
+                {Array.from({ length: data?.data[0]?.Schedules.length }).map((_, index) => (
                   <Table.Th key={index}>Hari {index + 1}</Table.Th>
                 ))}
               </Table.Tr>
@@ -90,7 +97,7 @@ export const Schedule: React.FC = () => {
               {dataSchedule.map((item: any, indexnumber: number) => (
                 <Table.Tr key={indexnumber}>
                   <Table.Td className="sticky left-0 bg-white">{item.employee.name}</Table.Td>
-                  {item.Schedules.map((schedule: any, colIndex: number) => (
+                  {item?.Schedules.map((schedule: any, colIndex: number) => (
                     <Table.Td
                       key={colIndex}
                       onClick={() => {

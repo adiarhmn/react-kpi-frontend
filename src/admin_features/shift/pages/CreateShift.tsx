@@ -8,6 +8,7 @@ import { useCreateShift } from '../api/createShift';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
+
 export const CreateShift: React.FC = () => {
   const navigate = useNavigate();
   const mutationShift = useCreateShift();
@@ -19,7 +20,7 @@ export const CreateShift: React.FC = () => {
     initialValues: { shift_name: '', shift_code: '', start_time: '', end_time: '' },
     validate: {
       shift_name: (value) => (value.length < 8 ? 'Name must have at least 8 letters' : null),
-      shift_code: (value) => (value.length < 2 ? 'Name must have at least 5 letters' : null),
+      shift_code: (value) => (value.length > 2 ? 'Shift Code cannot more than 2 letters' : null),
       start_time: (value) => (value.length < 2 ? 'Name must have at least 5 letters' : null),
       end_time: (value) => (value.length < 2 ? 'Name must have at least 5 letters' : null),
     },
