@@ -1,12 +1,40 @@
-import { ActionIcon, Loader, Table, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Button, Loader, Modal, Table, UnstyledButton } from '@mantine/core';
 import { useGetEmployees } from '../../api';
 import { useEffect, useState } from 'react';
 import { EmployeeType } from '@/admin_features/types';
 import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
+import { useDeleteEmployee } from '../../api/deleteEmployee';
+import { useDisclosure } from '@mantine/hooks';
 
 export const TableEmployee: React.FC = () => {
   const [employees, setEmployees] = useState<EmployeeType[]>([]);
+  const [opened, { open, close }] = useDisclosure(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState<EmployeeType>();
+  const mutationDeleteEmployee = useDeleteEmployee();
   const { data, error, isLoading } = useGetEmployees();
+
+  // Fungsi Delete Division
+  const deleteEmployee = async (id: number) => {
+    mutationDeleteEmployee.mutateAsync(id, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        const newEmployees = employees.filter((employee) => employee.id !== id);
+        setEmployees(newEmployees);
+      },
+    });
+  };
+
+  const openDeleteModal = (Employee: EmployeeType) => {
+    setEmployeeToDelete(Employee);
+    open();
+  };
+
+  const confirmDeleteDivision = async () => {
+    if (employeeToDelete) {
+      deleteEmployee(employeeToDelete?.id);
+      close();
+    }
+  };
 
   // UseEffect for access API
   useEffect(() => {
@@ -53,7 +81,7 @@ export const TableEmployee: React.FC = () => {
                   <ActionIcon color="yellow">
                     <IconPencil size={14} />
                   </ActionIcon>
-                  <ActionIcon color="red">
+                  <ActionIcon onClick={() => openDeleteModal(employee)} color="red">
                     <IconTrash size={14} />
                   </ActionIcon>
                   <UnstyledButton>
@@ -65,6 +93,27 @@ export const TableEmployee: React.FC = () => {
           })}
         </Table.Tbody>
       </Table>
+
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        title={<span className="font-bold">Konfirmasi Hapus ?</span>}
+      >
+        <div>
+          <span>Yakin hapus karyawan </span>
+          <span className="font-semibold text-blue-600"> {employeeToDelete?.name}</span>
+        </div>
+        <div className="pt-10 flex gap-2 justify-end">
+          <Button onClick={confirmDeleteDivision} disabled={mutationDeleteEmployee.isPending}>
+            {mutationDeleteEmployee.isPending ? 'Loading...' : 'Yakin'}
+          </Button>
+
+          <Button color="red" onClick={close}>
+            Batal
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

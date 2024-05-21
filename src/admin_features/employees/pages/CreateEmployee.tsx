@@ -73,6 +73,7 @@ export const CreateEmployee: React.FC = () => {
     await mutationEmployeeCreate.mutateAsync(employeeDataPost, {
       onSuccess: (data) => {
         console.log('Success:', data);
+        navigate(-1);
       },
     });
 

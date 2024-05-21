@@ -22,7 +22,7 @@ export const CreateUser: React.FC = () => {
   const mutationUser = useCreateUser();
   const form = useForm({
     validateInputOnChange: true,
-    initialValues: { username: '', password: '', role: 'Employee' },
+    initialValues: { username: '', password: '', role: 'employee' },
     validate: {
       username: (value) => (value.length < 5 ? 'Name must have at least 5 letters' : null),
       password: (value) => (value.length < 8 ? 'Name must have at least 8 letters' : null),
@@ -104,8 +104,25 @@ export const CreateUser: React.FC = () => {
               label="Role atau Level"
               required
               placeholder="Pilih Role"
-              data={['Supervisor', 'Admin', 'Superadmin', 'Employee']}
-              defaultValue="Employee"
+              data={[
+                {
+                  value: 'admin',
+                  label: 'Admin',
+                },
+                {
+                  value: 'employee',
+                  label: 'Employee',
+                },
+                {
+                  value: 'owner',
+                  label: 'Owner',
+                },
+                {
+                  value: 'supervisor',
+                  label: 'Supervisor',
+                },
+              ]}
+              value={form.values.role}
               allowDeselect={false}
               {...form.getInputProps('role')}
             />
