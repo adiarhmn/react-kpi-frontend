@@ -1,12 +1,16 @@
-import { Text } from '@mantine/core';
+import { Button, Modal, Text } from '@mantine/core';
 import { IconChevronRight, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getEduBackground } from '../api/EduBackground/getEduBackground';
+import { getEduBackground, useDeleteEducation } from '../api/EduBackground/';
 import { EducationBackground } from '../types';
+import { useDisclosure } from '@mantine/hooks';
 
 export const EduList: React.FC = () => {
   const [educations, setEducations] = useState<EducationBackground[]>([]);
+  const [opened, { open, close }] = useDisclosure(false);
+  const [educationToDelete, setEducationToDelete] = useState<EducationBackground>();
+  const deleteEducationMutation = useDeleteEducation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +20,26 @@ export const EduList: React.FC = () => {
     }
     fetchEducations();
   }, []);
+
+  const openDeleteModal = (education: EducationBackground) => {
+    setEducationToDelete(education);
+    console.log(educationToDelete);
+    open();
+  };
+
+  const confirmDeleteEducation = async () => {
+    if (educationToDelete) {
+      deleteEducation(educationToDelete.id!);
+      close();
+    }
+  };
+
+  const deleteEducation = async (id: number) => {
+    deleteEducationMutation.mutateAsync(id);
+    // Update Division Data
+    const newDivision = educations.filter((edu) => edu.id !== id);
+    setEducations(newDivision);
+  };
 
   return (
     <main>
@@ -38,10 +62,7 @@ export const EduList: React.FC = () => {
                 >
                   <IconPencil color="#FAB005" size={20} className="font-bold rounded-md" />
                 </button>
-                <button
-                  className="bg-transparent me-2"
-                  onClick={() => navigate('/profile/edu-background/add')}
-                >
+                <button className="bg-transparent me-2" onClick={() => openDeleteModal(edu)}>
                   <IconTrash color="#F03E3E" size={20} className="font-bold rounded-md" />
                 </button>
               </div>
@@ -96,6 +117,31 @@ export const EduList: React.FC = () => {
           <span className="font-bold text-slate-400 text-xl">Belum ada data pendidikan</span>
         </section>
       )}
+
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        title={<span className="font-bold">Konfirmasi Hapus ?</span>}
+      >
+        <div>
+          <span>Apakah anda yakin ingin menghapus data pendidikan</span>
+          <span className="font-semibold text-blue-600"> {educationToDelete?.name}</span>
+        </div>
+        <div className="pt-10 flex gap-2 justify-end">
+          {deleteEducationMutation.isPending ? (
+            <Button color="red" disabled>
+              Loading...
+            </Button>
+          ) : (
+            <Button onClick={confirmDeleteEducation}>Yakin</Button>
+          )}
+
+          <Button color="red" onClick={close}>
+            Batal
+          </Button>
+        </div>
+      </Modal>
     </main>
   );
 };

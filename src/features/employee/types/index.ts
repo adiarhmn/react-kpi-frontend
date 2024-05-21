@@ -35,7 +35,7 @@ export type Attendance = {
 };
 
 export type EducationBackground = {
-  id: number;
+  id: number | null;
   type: string;
   name: string;
   major: string;

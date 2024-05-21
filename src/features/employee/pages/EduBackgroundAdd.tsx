@@ -2,9 +2,11 @@ import { Button, FileInput, Select, TextInput } from '@mantine/core';
 import { YearPickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft, IconSchool } from '@tabler/icons-react';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { EducationBackground } from '../types';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://192.168.1.110:3000/api';
 
@@ -29,27 +31,40 @@ export const EduBackgroundAdd: React.FC = () => {
     },
   });
 
+  const createEduBackground = async (educationDataPost: EducationBackground) => {
+    const response = await axios.post(`${BaseURL}/employee-education`, educationDataPost);
+    return response.data;
+  };
+
+  const mutation = useMutation({
+    mutationFn: createEduBackground,
+    onSuccess: (data) => {
+      console.log(data);
+      if (data.status == 201) {
+        navigate(-1);
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const entryYear = new Date(form.values.tahunMasuk);
+    const graduateYear = new Date(form.values.tahunLulus);
+    console.log(graduateYear.getFullYear());
     const educationData = {
+      id: null,
       type: form.values.jenjang,
       major: form.values.jurusan,
       name: form.values.namaSekolah,
-      entry_year: form.values.tahunMasuk,
-      graduation_year: form.values.tahunLulus,
+      entry_year: entryYear.getFullYear().toString(),
+      graduation_year: graduateYear.getFullYear().toString(),
       graduate_from: form.values.lulusanAsal,
       employee_id: 1,
     };
-
-    try {
-      const response = await axios.post(`${BaseURL}/employee_education`, educationData);
-      if (response.data.status == 201) {
-        setAlert(true);
-        setTimeout(() => {
-          navigate(-1);
-        }, 3000);
-      }
-    } catch (error) {}
+    mutation.mutateAsync(educationData);
   };
   return (
     <main>
@@ -102,20 +117,29 @@ export const EduBackgroundAdd: React.FC = () => {
               data={['Dalam negeri', 'Luar negeri']}
               {...form.getInputProps('lulusanAsal')}
             />
-            <div className="flex gap-3">
-              <Button type="submit" color="blue" className="mt-5">
-                Simpan
-              </Button>
-              <Button
-                onClick={() => {
-                  navigate(-1);
-                }}
-                type="button"
-                color="gray"
-                className="mt-5"
-              >
-                Batal
-              </Button>
+            <div className="w-full mt-4 grid grid-cols-12 text-center">
+              <div className="col-span-6 pe-1">
+                {mutation.isPending ? (
+                  <Button fullWidth color="blue" disabled>
+                    Loading...
+                  </Button>
+                ) : (
+                  <Button fullWidth type="submit" color="blue">
+                    Simpan
+                  </Button>
+                )}
+              </div>
+              <div className="col-span-6 ps-1">
+                <Button
+                  onClick={() => {
+                    navigate(-1);
+                  }}
+                  fullWidth
+                  color="grey"
+                >
+                  Batal
+                </Button>
+              </div>
             </div>
           </form>
         </div>
