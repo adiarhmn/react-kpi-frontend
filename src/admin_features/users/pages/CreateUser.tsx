@@ -13,11 +13,13 @@ import { IconChevronLeft } from '@tabler/icons-react';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCreateUser } from '../api/createUser';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export const CreateUser: React.FC = () => {
   const [alert, setAlert] = useState(false);
+  const mutationUser = useCreateUser();
   const form = useForm({
     validateInputOnChange: true,
     initialValues: { username: '', password: '', role: 'Employee' },
@@ -43,15 +45,13 @@ export const CreateUser: React.FC = () => {
       status: true,
     };
 
-    try {
-      const response = await axios.post(`${BaseURL}/user`, userData);
-      if (response.data.status == 201) {
+    await mutationUser.mutateAsync(userData, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
         setAlert(true);
-        setTimeout(() => {
-          navigate(-1);
-        }, 3000);
-      }
-    } catch (error) {}
+        navigate(-1);
+      },
+    });
   };
 
   return (
@@ -60,7 +60,7 @@ export const CreateUser: React.FC = () => {
         // Alert Notification
         alert && (
           <Notification
-            className='mb-5'
+            className="mb-5"
             title="Berhasil"
             color="teal"
             icon={<CheckIcon size={14} />}
@@ -110,8 +110,8 @@ export const CreateUser: React.FC = () => {
               {...form.getInputProps('role')}
             />
             <div className="flex gap-3">
-              <Button type="submit" color="blue" className="mt-5">
-                Simpan
+              <Button type="submit" color="blue" className="mt-5" disabled={mutationUser.isPending}>
+                {mutationUser.isPending ? 'Loading...' : 'Simpan'}
               </Button>
               <Button onClick={NavBack} type="button" color="gray" className="mt-5">
                 Batal
