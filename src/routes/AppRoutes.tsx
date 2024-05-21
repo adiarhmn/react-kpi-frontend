@@ -55,17 +55,15 @@ const { CreateEmployee } = lazyImport(() => import('@/admin_features/employees')
 const { Users } = lazyImport(() => import('@/admin_features/users'), 'Users');
 const { CreateUser } = lazyImport(() => import('@/admin_features/users'), 'CreateUser');
 
-// const useAuth = () => {
-//   return {
-//     creds: {
-//       role: 'admin',
-//     },
-//   };
-// };
-
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
-  const dataCredentials = creds?.creds;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!creds) {
+      navigate('/login');
+    }
+  }, []);
 
   return (
     <Routes>

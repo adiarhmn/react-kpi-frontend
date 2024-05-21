@@ -7,7 +7,6 @@ import { LoadingScreen } from '../elements';
 
 export const AuthLayout: React.FC = () => {
   const { creds } = useAuth();
-
   if (creds) return <Navigate to="/" replace />;
 
   return (

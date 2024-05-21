@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 
 import { axios } from '@/lib/axios';
 import { MutationConfig, queryClient } from '@/lib/react-query';
-import storage from '@/utils/storage';
 
 
 import { Creds } from '../types';
