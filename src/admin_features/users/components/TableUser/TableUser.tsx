@@ -2,19 +2,15 @@ import { ActionIcon, Button, Loader, Modal, Table, UnstyledButton } from '@manti
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { UserType } from '@/admin_features/types';
-import { useGetUsers, deleteUser } from '@/admin_features/users/api';
+import { useGetUsers, useDeleteUser } from '@/admin_features/users/api';
 import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
-import { id } from 'date-fns/locale';
-import { LoadingScreen } from '@/components/elements';
-
-const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export const TableUser = () => {
-  // Hook
   const [users, setUsers] = useState<UserType[]>([]);
   const { data, error, isLoading } = useGetUsers();
   const [userToDelete, setUserToDelete] = useState({ id: 0, username: '' });
   const [opened, { open, close }] = useDisclosure(false);
+  const mutationDeleteUser = useDeleteUser();
 
   // Fungsi Delete User
   const deleteUserModal = (user: UserType) => {
@@ -22,16 +18,14 @@ export const TableUser = () => {
     open();
   };
   const confirmDeleteUser = async () => {
-    try {
-      const response = await deleteUser(userToDelete?.id);
-      if (response.status == 200) {
-        close();
+    mutationDeleteUser.mutateAsync(userToDelete?.id, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
         const newUsers = users.filter((user) => user.id !== userToDelete?.id);
         setUsers(newUsers);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+        close();
+      },
+    });
   };
 
   // Set Data Users
@@ -44,12 +38,12 @@ export const TableUser = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center my-20">
-          <Loader size="sm" />
+        <Loader size="sm" />
       </div>
     );
   }
   if (error) {
-    return <div className='text-red-600 text-center my-20 font-bold'>{error.message}</div>;
+    return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
   return (
@@ -95,7 +89,7 @@ export const TableUser = () => {
         Yakin hapus user atau akun{' '}
         <span className="font-semibold text-blue-600">{userToDelete?.username}</span>
         <div className="pt-10 flex gap-2 justify-end">
-          <Button onClick={confirmDeleteUser}>Yakin</Button>
+          <Button onClick={confirmDeleteUser} disabled={mutationDeleteUser.isPending}>Yakin</Button>
           <Button color="red" onClick={close}>
             Batal
           </Button>
