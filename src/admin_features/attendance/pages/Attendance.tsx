@@ -1,5 +1,7 @@
 import { Badge, Button, Table } from '@mantine/core';
 import { IconArrowUpRight, IconPlus } from '@tabler/icons-react';
+import { useGetAttendance } from '../api';
+import { useEffect } from 'react';
 
 const AttendanceData = {
   data: [
@@ -83,6 +85,11 @@ const AttendanceData = {
   status: '200',
 };
 export const Attendance: React.FC = () => {
+  const { data, isLoading, error } = useGetAttendance();
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
   return (
     <main>
       <section className="bg-white rounded-lg shadow-lg p-5">
@@ -92,7 +99,10 @@ export const Attendance: React.FC = () => {
             <div className="-mt-1 text-xs text-slate-400 mb-2">Berikut data presensi karyawan</div>
           </div>
           <div>
-            <Button className="border-2 shadow-lg lg:max-w-40 lg:float-end" rightSection={<IconArrowUpRight size={14} />}>
+            <Button
+              className="border-2 shadow-lg lg:max-w-40 lg:float-end"
+              rightSection={<IconArrowUpRight size={14} />}
+            >
               Download PDF
             </Button>
           </div>
