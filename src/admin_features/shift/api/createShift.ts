@@ -7,6 +7,7 @@ type ShiftPost = {
   shift_name: string;
   start_time: string;
   end_time: string;
+  shift_code: string;
 };
 
 const CreateShift = async (shift: ShiftPost) => {
@@ -14,7 +15,7 @@ const CreateShift = async (shift: ShiftPost) => {
   return response.data;
 };
 
-const useCreateShift = () => {
+export const useCreateShift = () => {
   return useMutation({
     mutationFn: CreateShift,
     onMutate: async (shift: ShiftPost) => {

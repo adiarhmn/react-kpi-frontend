@@ -1,23 +1,11 @@
 import { ActionIcon, Button, Loader, Table } from '@mantine/core';
 import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
-import { useGetShift } from '../api';
-import { ShiftType } from '@/admin_features/types';
+import { TableShift } from '../components';
 
 export const ShiftAdmin: React.FC = () => {
-  const { data, error, isLoading } = useGetShift();
 
   const navigate = useNavigate();
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center my-20">
-        <Loader size="sm" />
-      </div>
-    );
-  }
-
-  const dataShift: ShiftType[] = data?.data;
 
   return (
     <main>
@@ -33,37 +21,7 @@ export const ShiftAdmin: React.FC = () => {
             Tambah Shift
           </Button>
         </div>
-        <div className="mt-3">
-          <Table withColumnBorders withTableBorder>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th className="font-bold">Nama Shift</Table.Th>
-                <Table.Th className="font-bold">Mulai</Table.Th>
-                <Table.Th className="font-bold">Selesai</Table.Th>
-                <Table.Th className="font-bold">Aksi</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {dataShift.map((shift, index) => {
-                return (
-                  <Table.Tr key={index}>
-                    <Table.Td>{shift?.shift_name}</Table.Td>
-                    <Table.Td>{shift?.start_time}</Table.Td>
-                    <Table.Td>{shift?.end_time}</Table.Td>
-                    <Table.Td>
-                      <ActionIcon className="me-2" color="yellow">
-                        <IconPencil size={14} />
-                      </ActionIcon>
-                      <ActionIcon className="me-2" color="red">
-                        <IconTrash size={14} />
-                      </ActionIcon>
-                    </Table.Td>
-                  </Table.Tr>
-                );
-              })}
-            </Table.Tbody>
-          </Table>
-        </div>
+        <TableShift />
       </section>
     </main>
   );
