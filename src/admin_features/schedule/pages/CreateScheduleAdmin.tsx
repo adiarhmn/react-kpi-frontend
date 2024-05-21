@@ -1,15 +1,22 @@
 import { useGetEmployees } from '@/admin_features/employees/api';
 import { ActionIcon, Button, Group, MultiSelect, Select, em } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconCardboards, IconChevronLeft, IconDeviceFloppy } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useLocation, useNavigate } from 'react-router-dom';
 import { useCreateSchedule, useValidateSchedule } from '../api';
 import { useGetShift } from '@/admin_features/shift/api';
-import { parse } from 'date-fns';
+import { formatDateToString, getStartAndEndOfMonth } from '@/utils/format';
 
 export const CreateSchedule: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const month = query.get('month') || "";
+
+  if (!month) {
+    navigate('/schedule');
+  }
+
   const mutationSchedule = useCreateSchedule();
   const mutationValidateSchedule = useValidateSchedule();
   const handleBack = () => {
@@ -24,19 +31,17 @@ export const CreateSchedule: React.FC = () => {
     },
   });
 
-  const { startOfMonth, endOfMonth } = getStartAndEndOfMonth();
-
-  console.log(startOfMonth, '-', endOfMonth);
+  const { startOfMonth, endOfMonth } = getStartAndEndOfMonth(month);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Membuat Format sesuai backend api
     const dataPostSchedule = form.values.employees.map((employee: string) => ({
-      date_start: formatDate(startOfMonth.toString()),
-      date_end: formatDate(endOfMonth.toString()),
+      date_start: formatDateToString(startOfMonth.toString()),
+      date_end: formatDateToString(endOfMonth.toString()),
       employee_id: parseInt(employee),
     }));
-
+    
     mutationSchedule.mutateAsync(dataPostSchedule, {
       onSuccess: (data) => {
         console.log('Response:', data);
@@ -55,25 +60,6 @@ export const CreateSchedule: React.FC = () => {
     });
   };
 
-  // Fungsi untuk mendapatkan tanggal awal dan akhir bulan
-  function getStartAndEndOfMonth(): { startOfMonth: Date; endOfMonth: Date } {
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-    const endOfMonth = new Date(startOfNextMonth.getTime() - 1);
-
-    return { startOfMonth, endOfMonth };
-  }
-
-  // Fungsi untuk mengubah format tanggal
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() mengembalikan bulan mulai dari 0
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
-  };
 
   // Mengisi Data Dari Inputan
   const { data: DataEmployees, error, isLoading } = useGetEmployees();

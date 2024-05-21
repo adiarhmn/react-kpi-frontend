@@ -8,9 +8,10 @@ import { IconSettings } from '@tabler/icons-react';
 type TableScheduleProps = {
   month: Date;
   setMonth: (month: Date) => void;
+  setIsSchedule: (value: boolean) => void;
 };
 
-export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth }) => {
+export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, setIsSchedule }) => {
   const [FreeDays, setFreeDay] = useState(false);
   const [dataSchedule, setDataSchedule] = useState([]);
   const navigate = useNavigate();
@@ -19,6 +20,11 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth })
   useEffect(() => {
     if (data) {
       setDataSchedule(data.data);
+      if (data.data.length > 0) {
+        setIsSchedule(true);
+      }else{
+        setIsSchedule(false);
+      }
     }
   }, [data]);
 
