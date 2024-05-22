@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useGetSchedule } from '../../api/getSchedule';
 import { Button, Table } from '@mantine/core';
 import { IconSettings } from '@tabler/icons-react';
+import { Employee } from '@/features/employee';
+import { EmployeeType, ShiftType } from '@/admin_features/types';
+import { useGetShift } from '@/admin_features/shift/api';
 
 type TableScheduleProps = {
   month: Date;
@@ -11,22 +14,42 @@ type TableScheduleProps = {
   setIsSchedule: (value: boolean) => void;
 };
 
+type ScheduleItemType = {
+  id: number;
+  date: string;
+  status: string;
+  shift_id: number;
+  shift: ShiftType;
+};
+type SchedulesType = {
+  Schedules: ScheduleItemType[];
+  employee: EmployeeType;
+  employee_id: number;
+  date_start: string;
+  date_end: string;
+};
+
 export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, setIsSchedule }) => {
   const [FreeDays, setFreeDay] = useState(false);
-  const [dataSchedule, setDataSchedule] = useState([]);
+  const [dataSchedule, setDataSchedule] = useState<SchedulesType[]>([]);
   const navigate = useNavigate();
 
   const { data, isLoading } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
+  const { data: dataShift, error: errorShift, isLoading: loadingShift } = useGetShift();
   useEffect(() => {
     if (data) {
       setDataSchedule(data.data);
       if (data.data.length > 0) {
         setIsSchedule(true);
-      }else{
+      } else {
         setIsSchedule(false);
       }
     }
-  }, [data]);
+
+    if (dataShift) {
+      console.log(dataShift);
+    }
+  }, [data, dataShift]);
 
   return (
     <section className="bg-white rounded-lg shadow-lg p-3">
@@ -83,12 +106,15 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                     <Table.Td
                       key={colIndex}
                       onClick={() => {
-                        // if (FreeDays) {
-                        //   const newEmployees = [...employees];
-                        //   newEmployees[rowIndex].schedule[colIndex].free =
-                        //     !newEmployees[rowIndex].schedule[colIndex].free;
-                        //   setEmployees(newEmployees);
-                        // }
+                        if (FreeDays) {
+                          const newSchedule = [...dataSchedule];
+                          console.log(newSchedule);
+                            newSchedule[indexnumber].Schedules[colIndex].status =
+                              newSchedule[indexnumber].Schedules[colIndex].status == 'off'
+                                ? 'on'
+                                : 'off';
+                          setDataSchedule(newSchedule);
+                        }
                       }}
                       className={schedule.status == 'off' ? 'bg-red-600 text-white' : ''}
                     >

@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TableSchedule } from '../components';
 import { formatDateToString } from '@/utils/format';
-import { useGetSchedule } from '../api/getSchedule';
 
 export const Schedule: React.FC = () => {
   const navigate = useNavigate();

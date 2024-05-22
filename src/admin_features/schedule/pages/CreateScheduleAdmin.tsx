@@ -11,7 +11,7 @@ export const CreateSchedule: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  const month = query.get('month') || "";
+  const month = query.get('month') || '';
 
   if (!month) {
     navigate('/schedule');
@@ -41,7 +41,7 @@ export const CreateSchedule: React.FC = () => {
       date_end: formatDateToString(endOfMonth.toString()),
       employee_id: parseInt(employee),
     }));
-    
+
     mutationSchedule.mutateAsync(dataPostSchedule, {
       onSuccess: (data) => {
         console.log('Response:', data);
@@ -53,13 +53,13 @@ export const CreateSchedule: React.FC = () => {
           mutationValidateSchedule.mutateAsync(dataValidateSchedule, {
             onSuccess: (data) => {
               console.log('Success:', data);
+              navigate(-1);
             },
           });
         }
       },
     });
   };
-
 
   // Mengisi Data Dari Inputan
   const { data: DataEmployees, error, isLoading } = useGetEmployees();
