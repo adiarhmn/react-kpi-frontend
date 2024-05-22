@@ -14,9 +14,11 @@ import {
 import { Link } from 'react-router-dom';
 
 import { MenuList } from '@/components/navigation';
+import { useCreds } from '@/features/auth/api';
 
 export const Home: React.FC = () => {
   // const { creds, getRoleText } = useAuth();
+  const Creds = useCreds();
 
   return (
     <main>

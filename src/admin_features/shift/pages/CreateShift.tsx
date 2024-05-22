@@ -4,19 +4,23 @@ import { useForm } from '@mantine/form';
 import { IconChevronLeft } from '@tabler/icons-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useCreateShift } from '../api/createShift';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
+
 export const CreateShift: React.FC = () => {
   const navigate = useNavigate();
+  const mutationShift = useCreateShift();
   const NavBack = () => {
     navigate(-1);
   };
   const form = useForm({
     validateInputOnChange: true,
-    initialValues: { shift_name: '', start_time: '', end_time: '' },
+    initialValues: { shift_name: '', shift_code: '', start_time: '', end_time: '' },
     validate: {
       shift_name: (value) => (value.length < 8 ? 'Name must have at least 8 letters' : null),
+      shift_code: (value) => (value.length > 2 ? 'Shift Code cannot more than 2 letters' : null),
       start_time: (value) => (value.length < 2 ? 'Name must have at least 5 letters' : null),
       end_time: (value) => (value.length < 2 ? 'Name must have at least 5 letters' : null),
     },
@@ -28,20 +32,17 @@ export const CreateShift: React.FC = () => {
       shift_name: form.values.shift_name,
       start_time: form.values.start_time,
       end_time: form.values.end_time,
+      shift_code: form.values.shift_code,
     };
 
     console.log(shiftDataPost);
 
-    try {
-      const response = await axios.post(`${BaseURL}/shift`, shiftDataPost);
-      if (response.data.status == 201) {
-        setTimeout(() => {
-          navigate(-1);
-        }, 3000);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    await mutationShift.mutateAsync(shiftDataPost, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        navigate(-1);
+      },
+    });
   };
 
   return (
@@ -58,22 +59,26 @@ export const CreateShift: React.FC = () => {
         </div>
         <div className="mt-5">
           <form onSubmit={handleSubmit}>
-            <TextInput
-              className="mb-3"
-              label="Nama Shift"
-              placeholder="Nama Shift"
-              required
-              {...form.getInputProps('shift_name')}
-            />
+            <div className="grid grid-cols-2 gap-5 mb-3">
+              <TextInput
+                className="mb-3"
+                label="Nama Shift"
+                placeholder="Nama Shift"
+                required
+                {...form.getInputProps('shift_name')}
+              />
+              <TextInput
+                className="mb-3"
+                label="Kode Shift"
+                placeholder="Kode Shift"
+                required
+                {...form.getInputProps('shift_code')}
+              />
+            </div>
             <div className="grid grid-cols-2 gap-5 mb-3">
               <TimeInput label="Jam Masuk" {...form.getInputProps('start_time')} />
               <TimeInput label="Jam Keluar" {...form.getInputProps('end_time')} />
             </div>
-            <div className="grid grid-cols-2 gap-5 mb-3">
-              <TimeInput label="Minimal Jam Masuk" />
-              <TimeInput label="Maksimal Jam Keluar" />
-            </div>
-
             <div className="flex gap-3">
               <Button type="submit" color="blue" className="mt-5">
                 Simpan

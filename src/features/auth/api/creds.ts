@@ -5,17 +5,21 @@ import storage from '@/utils/storage';
 
 import { Creds } from '../types';
 
+type AuthMeType = {
+  creds: Creds;
+  status: string; 
+};
+const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+
 export async function getCreds() {
-  const res = await axios.get<Creds>('http://192.168.1.109:3000/api/auth/me');
-  console.log(res.data);
-  return res.data;
+  const res = await axios.get<AuthMeType>(`${BaseURL}/auth/me`);
+  console.log('Creds:', res.data.creds);
+  return res.data.creds;
 }
 
 export async function loadCreds() {
   if (!storage.getToken()) return null;
-
   const data = await getCreds();
-  console.log(data);
   return data;
 }
 
@@ -24,6 +28,7 @@ export function useCreds() {
     queryKey: ['creds'],
     queryFn: loadCreds,
     throwOnError: () => {
+      console.log('Error loading creds');
       storage.clear();
       return false;
     },

@@ -13,14 +13,16 @@ import { IconChevronLeft } from '@tabler/icons-react';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCreateUser } from '../api/createUser';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export const CreateUser: React.FC = () => {
   const [alert, setAlert] = useState(false);
+  const mutationUser = useCreateUser();
   const form = useForm({
     validateInputOnChange: true,
-    initialValues: { username: '', password: '', role: 'Employee' },
+    initialValues: { username: '', password: '', role: 'employee' },
     validate: {
       username: (value) => (value.length < 5 ? 'Name must have at least 5 letters' : null),
       password: (value) => (value.length < 8 ? 'Name must have at least 8 letters' : null),
@@ -43,15 +45,13 @@ export const CreateUser: React.FC = () => {
       status: true,
     };
 
-    try {
-      const response = await axios.post(`${BaseURL}/user`, userData);
-      if (response.data.status == 201) {
+    await mutationUser.mutateAsync(userData, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
         setAlert(true);
-        setTimeout(() => {
-          navigate(-1);
-        }, 3000);
-      }
-    } catch (error) {}
+        navigate(-1);
+      },
+    });
   };
 
   return (
@@ -60,7 +60,7 @@ export const CreateUser: React.FC = () => {
         // Alert Notification
         alert && (
           <Notification
-            className='mb-5'
+            className="mb-5"
             title="Berhasil"
             color="teal"
             icon={<CheckIcon size={14} />}
@@ -104,13 +104,30 @@ export const CreateUser: React.FC = () => {
               label="Role atau Level"
               required
               placeholder="Pilih Role"
-              data={['Supervisor', 'Admin', 'Superadmin', 'Employee']}
-              defaultValue="Employee"
+              data={[
+                {
+                  value: 'admin',
+                  label: 'Admin',
+                },
+                {
+                  value: 'employee',
+                  label: 'Employee',
+                },
+                {
+                  value: 'owner',
+                  label: 'Owner',
+                },
+                {
+                  value: 'supervisor',
+                  label: 'Supervisor',
+                },
+              ]}
+              value={form.values.role}
               allowDeselect={false}
               {...form.getInputProps('role')}
             />
             <div className="flex gap-3">
-              <Button type="submit" color="blue" className="mt-5">
+              <Button type="submit" color="blue" className="mt-5" disabled={mutationUser.isPending} loading={mutationUser.isPending}>
                 Simpan
               </Button>
               <Button onClick={NavBack} type="button" color="gray" className="mt-5">

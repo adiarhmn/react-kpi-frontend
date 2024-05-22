@@ -1,5 +1,5 @@
 import { Suspense, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { AppShell, Avatar, Burger, Button, Group, Menu, UnstyledButton, Text } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 // import { MantineLogo } from '@mantinex/mantine-logo';
@@ -20,36 +20,36 @@ import {
   IconGauge,
   IconBuildingEstate,
   IconBriefcase,
+  IconLogout,
 } from '@tabler/icons-react';
 import { SideNav } from '../navigation';
+import { useAuth } from '@/features/auth';
 
-const MenuMain = [
-  { title: 'Beranda', href: '/beranda', icon: IconHome2 },
-];
+const MenuMain = [{ title: 'Beranda', href: '/beranda', icon: IconHome2 }];
 
 const MenuDataMaster = [
-  { title: 'Divisi', href: '/division', icon: IconBuildingEstate},
+  { title: 'Divisi', href: '/division', icon: IconBuildingEstate },
   { title: 'Shift', href: '/shift', icon: IconClockHour1 },
-  { title: 'Karyawan', href: '/employees', icon: IconBriefcase },
   { title: 'User', href: '/users', icon: IconUsersGroup },
+  { title: 'Karyawan', href: '/employees', icon: IconBriefcase },
 ];
 
 const MenuAbsensi = [
   { title: 'Jadwal', href: '/schedule', icon: IconCalendar },
   { title: 'Presensi', href: '/attendance', icon: IconClipboardText },
   { title: 'Aktivitas', href: '/activity', icon: IconGauge },
-]
+];
 
 const MenuPengajuan = [
   { title: 'Cuti', href: '/leave', icon: IconTrash },
   { title: 'Izin', href: '/permit', icon: IconTrash },
   { title: 'Lembur', href: '/overtime', icon: IconTrash },
-]
-
+];
 
 export const AdminLayout: React.FC = () => {
-  // const { creds } = useAuth();
-  // if (!creds) return <Navigate to="/login" replace />;
+  const { creds, getRoleText, logout } = useAuth();
+  if (!creds) return <Navigate to="/login" replace />;
+
   const [opened, { toggle }] = useDisclosure();
 
   const [title, setTitle] = useState('Beranda');
@@ -105,25 +105,17 @@ export const AdminLayout: React.FC = () => {
                   </Menu.Target>
 
                   <Menu.Dropdown>
-                    <Menu.Label>Application</Menu.Label>
+                    <Menu.Label>List Menu</Menu.Label>
                     <Menu.Item leftSection={<IconSettings size={14} />}>Settings</Menu.Item>
-                    <Menu.Item leftSection={<IconMessageCircle size={14} />}>Messages</Menu.Item>
-                    <Menu.Item leftSection={<IconPhoto size={14} />}>Gallery</Menu.Item>
-                    <Menu.Item
-                      leftSection={<IconSearch size={14} />}
-                      rightSection={<IconSearch size={14} />}
-                    >
-                      Search
-                    </Menu.Item>
 
                     <Menu.Divider />
 
-                    <Menu.Label>Danger zone</Menu.Label>
-                    <Menu.Item leftSection={<IconArrowsLeftRight size={14} />}>
-                      Transfer my data
-                    </Menu.Item>
-                    <Menu.Item color="red" leftSection={<IconTrash size={14} />}>
-                      Delete my account
+                    <Menu.Item
+                      onClick={() => logout()}
+                      color="red"
+                      leftSection={<IconLogout size={14} />}
+                    >
+                      Logout
                     </Menu.Item>
                   </Menu.Dropdown>
                 </Menu>
@@ -142,19 +134,19 @@ export const AdminLayout: React.FC = () => {
               />
               <SideNav
                 SideNavProps={MenuDataMaster}
-                HeaderList={"Data Master"}
+                HeaderList={'Data Master'}
                 ToggleButton={() => toggle()}
                 TitleSetting={setTitle}
               />
               <SideNav
                 SideNavProps={MenuAbsensi}
-                HeaderList={"Absensi"}
+                HeaderList={'Absensi'}
                 ToggleButton={() => toggle()}
                 TitleSetting={setTitle}
               />
               <SideNav
                 SideNavProps={MenuPengajuan}
-                HeaderList={"Pengajuan"}
+                HeaderList={'Pengajuan'}
                 ToggleButton={() => toggle()}
                 TitleSetting={setTitle}
               />

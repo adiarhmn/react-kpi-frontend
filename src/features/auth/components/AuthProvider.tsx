@@ -6,6 +6,7 @@ import { useEmployee } from '@/features/employee';
 
 import { logout, useCreds } from '../api';
 import { AuthContext } from '../contexts';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   children: React.ReactNode;
@@ -14,12 +15,14 @@ type Props = {
 export const AuthProvider: React.FC<Props> = ({ children }) => {
   const queryClient = useQueryClient();
   const credsQuery = useCreds();
+  const navigate = useNavigate();
   const employeeQuery = useEmployee({ config: { enabled: false } });
 
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: () => {
       queryClient.clear();
+      navigate('/login');
     },
   });
 
