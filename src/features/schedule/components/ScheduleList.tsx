@@ -6,26 +6,23 @@ import { useNavigate } from 'react-router-dom';
 import { ScheduleType } from '@/features/attendance';
 import { useGetSchedule, useGetScheduleMonthly } from '../api';
 import { useAuth } from '@/features/auth';
-
-type ScheduleListProps = {
+type ScheduleProps = {
   month: Date;
-  setMonth: (month: Date) => void;
 };
 
-export const ScheduleList: React.FC<ScheduleListProps> = ({ month, setMonth }) => {
-  console.log('Bulan', month.getMonth());
+export const ScheduleList: React.FC<ScheduleProps> = ({ month }) => {
   const navigate = useNavigate();
+  // const [month, setMonth] = useState<Date>(new Date());
   const { creds } = useAuth();
   const [schedules, setSchedule] = useState<ScheduleType[]>([]);
   const { data, error, isLoading } = useGetScheduleMonthly(
-    creds.employee_id,
+    creds?.employee_id,
     month.getMonth() + 1,
     month.getFullYear()
   );
-
   useEffect(() => {
+    // console.log('effect jalan');
     if (data) {
-      console.log(data);
       setSchedule(data);
     }
   }, [data]);
@@ -119,14 +116,16 @@ export const ScheduleList: React.FC<ScheduleListProps> = ({ month, setMonth }) =
             </div>
           ))
         ) : (
-          <section className="min-h-96 flex flex-col items-center justify-center mt-10">
-            <img
-              className="w-40 mb-2 bg-slate-200 rounded-full p-2"
-              src="/images/blank-canvas.svg"
-              alt=""
-            />
-            <span className="font-bold text-slate-400 text-xl">Belum ada data izin</span>
-          </section>
+          <div className="w-full col-span-12">
+            <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+              <img
+                className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+                src="/images/blank-canvas.svg"
+                alt=""
+              />
+              <span className="font-bold text-slate-400 text-xl">Belum ada data izin</span>
+            </section>
+          </div>
         )}
       </div>
     </div>

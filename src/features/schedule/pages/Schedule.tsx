@@ -1,12 +1,20 @@
-import { useState } from 'react';
-import { MonthPickerInput } from '@mantine/dates';
-import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { ScheduleList } from '../components';
+import { IconChevronLeft } from '@tabler/icons-react';
+import { MonthPickerInput } from '@mantine/dates';
+import { useState } from 'react';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 export const Schedule: React.FC = () => {
-  const navigate = useNavigate();
   const [month, setMonth] = useState<Date>(new Date());
+  const navigate = useNavigate();
+
+  function formatDate(date: string, formatType: string) {
+    const dateToFormat: Date = new Date(date);
+    const formattedDate = format(dateToFormat, formatType, { locale: id });
+    return formattedDate;
+  }
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -21,10 +29,10 @@ export const Schedule: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
-            <h2 className="font-semibold ">Data Izin</h2>
+            <h2 className="font-semibold ">Data Jadwal</h2>
           </div>
           <span className="font-semibold">
-            {month?.toLocaleString('default', { month: 'long' })} {month?.getFullYear()}
+            {month?.toLocaleString('id-ID', { month: 'long' })} {month?.getFullYear()}
           </span>
         </div>
 
@@ -46,7 +54,7 @@ export const Schedule: React.FC = () => {
         </div>
       </section>
 
-      <ScheduleList month={month} setMonth={setMonth} />
+      <ScheduleList month={month} />
 
       {/* <section className="min-h-96 flex flex-col items-center justify-center mt-10">
         <img

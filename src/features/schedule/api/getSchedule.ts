@@ -15,25 +15,39 @@ export async function getSchedule(employee_id: number, date?: string) {
   }
 }
 
-export async function getScheduleMonthly(employee_id: number | null, month: number, year: number) {
+export async function getScheduleMonthly(
+  employee_id: number | null | undefined,
+  month: number,
+  year: number
+) {
+  console.log(month, year);
   const res = await axios.get(
     `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}`
   );
+  console.log('Data respon ini bang :', res.data.data);
   return res.data.data;
 }
 
 export async function getScheduleDaily(employee_id: number | null, date: string) {
   const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&date=${date}`);
+  console.log('schedule daily : ', res.data.data);
   return res.data.data;
 }
 
 export const useGetSchedule = (employee_id: number, date?: string) => {
-  return useQuery({ queryKey: ['schedule'], queryFn: () => getSchedule(employee_id, date) });
+  return useQuery({
+    queryKey: ['schedule', employee_id, date],
+    queryFn: () => getSchedule(employee_id, date),
+  });
 };
 
-export const useGetScheduleMonthly = (employee_id: number | null, month: number, year: number) => {
+export const useGetScheduleMonthly = (
+  employee_id: number | null | undefined,
+  month: number,
+  year: number
+) => {
   return useQuery({
-    queryKey: ['schedule'],
+    queryKey: ['schedule', employee_id, month, year],
     queryFn: () => getScheduleMonthly(employee_id, month, year),
   });
 };
