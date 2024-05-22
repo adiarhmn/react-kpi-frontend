@@ -17,8 +17,8 @@ import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetSchedule } from '../api';
 import { AttendanceType, ScheduleType } from '../types';
+import { useGetScheduleDaily } from '@/features/schedule/api';
 
 const BaseURL = import.meta.env.VITE_API_URL;
 
@@ -31,9 +31,10 @@ export const Attendance: React.FC = () => {
   console.log(dateNow);
   const [schedule, setSchedule] = useState<ScheduleType[]>([]);
 
-  const { data, error, isLoading } = useGetSchedule({ employee_id: 1, date: dateNow });
+  const { data, error, isLoading } = useGetScheduleDaily(1, dateNow);
 
   useEffect(() => {
+    console.log('data:', isLoading, data);
     if (data) {
       setSchedule(data);
     }

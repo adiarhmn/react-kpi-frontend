@@ -4,13 +4,15 @@ import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@/features/auth';
 import { getAbsence, useGetAbsence } from '../api';
 import { AbsenceType } from '../types';
 
 export const AbsenceList: React.FC = () => {
   const [absences, setAbsence] = useState<AbsenceType[]>([]);
-  const { data, error, isLoading } = useGetAbsence();
-
+  const { creds } = useAuth();
+  const employee_id = creds?.employee_id;
+  const { data, error, isLoading } = useGetAbsence(employee_id);
   const navigate = useNavigate();
   useEffect(() => {
     if (data) {

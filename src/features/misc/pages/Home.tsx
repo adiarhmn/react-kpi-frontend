@@ -14,11 +14,13 @@ import {
 import { Link } from 'react-router-dom';
 
 import { MenuList } from '@/components/navigation';
+import { useAuth } from '@/features/auth';
 import { useCreds } from '@/features/auth/api';
 
 export const Home: React.FC = () => {
   // const { creds, getRoleText } = useAuth();
-  const Creds = useCreds();
+  // const { creds } = useCreds();
+  const { creds } = useAuth();
 
   return (
     <main>
@@ -28,8 +30,10 @@ export const Home: React.FC = () => {
           className="absolute w-44 right-3 -top-4 opacity-85"
           alt=""
         />
-        <div className="text-white font-bold text-lg relative z-10">Adi Aulia Rahman</div>
-        <div className="text-sm font-semibold text-white">Karyawan</div>
+        <div style={{ fontSize: '25px' }} className="text-white font-bold relative z-10">
+          {creds?.username}
+        </div>
+        <div className="text-sm font-semibold text-white">{creds?.role}</div>
 
         <div className="absolute right-5 top-5">
           <img src="/images/white-logo.png" alt="" className="w-14" />

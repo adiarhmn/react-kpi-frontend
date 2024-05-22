@@ -4,15 +4,28 @@ import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ScheduleType } from '@/features/attendance';
-import { useGetSchedule } from '../api';
+import { useGetSchedule, useGetScheduleMonthly } from '../api';
+import { useAuth } from '@/features/auth';
 
-export const ScheduleList: React.FC = () => {
+type ScheduleListProps = {
+  month: Date;
+  setMonth: (month: Date) => void;
+};
+
+export const ScheduleList: React.FC<ScheduleListProps> = ({ month, setMonth }) => {
+  console.log('Bulan', month.getMonth());
   const navigate = useNavigate();
+  const { creds } = useAuth();
   const [schedules, setSchedule] = useState<ScheduleType[]>([]);
-  const { data, error, isLoading } = useGetSchedule(1);
+  const { data, error, isLoading } = useGetScheduleMonthly(
+    creds.employee_id,
+    month.getMonth() + 1,
+    month.getFullYear()
+  );
 
   useEffect(() => {
     if (data) {
+      console.log(data);
       setSchedule(data);
     }
   }, [data]);

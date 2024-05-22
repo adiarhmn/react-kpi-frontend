@@ -7,12 +7,14 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/features/auth';
 import { AbsenceType } from '../types';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://192.168.1.110:3000/api';
 
 export const AddAbsence: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
   function formatdate(date: string | number | Date) {
     const dateToFormat: Date = new Date(date);
     const formattedDate = format(dateToFormat, 'yyyy-MM-dd', { locale: id });
@@ -62,7 +64,7 @@ export const AddAbsence: React.FC = () => {
       status: 'belum disetujui',
       type: form.values.type,
       description: form.values.description,
-      employee_id: 1,
+      employee_id: creds?.employee_id,
     };
     mutation.mutateAsync(absenceData);
   };

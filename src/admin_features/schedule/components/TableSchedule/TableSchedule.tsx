@@ -15,14 +15,14 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   const [FreeDays, setFreeDay] = useState(false);
   const [dataSchedule, setDataSchedule] = useState([]);
   const navigate = useNavigate();
-
+  // console.log('Month :', month.getMonth());
   const { data, isLoading } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
   useEffect(() => {
     if (data) {
       setDataSchedule(data.data);
       if (data.data.length > 0) {
         setIsSchedule(true);
-      }else{
+      } else {
         setIsSchedule(false);
       }
     }

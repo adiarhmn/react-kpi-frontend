@@ -4,5 +4,5 @@ export type AbsenceType = {
   date_end: string;
   type: string;
   description: string;
-  employee_id: number;
+  employee_id?: number | null;
 };
