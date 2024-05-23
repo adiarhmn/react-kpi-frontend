@@ -15,6 +15,7 @@ export const Schedule: React.FC = () => {
   const [selectStatus, setSelectStatus] = useState('');
   console.log('Value Shift : ', selectShift);
   console.log('Value Status : ', selectStatus);
+
   const navigate = useNavigate();
 
   function formatDate(date: string, formatType: string) {
@@ -67,7 +68,7 @@ export const Schedule: React.FC = () => {
           </div>
         </div>
       </section>
-      <ScheduleList month={month} />
+      <ScheduleList month={month} shift={selectShift} status={selectStatus} modalState={opened} />
 
       <Modal opened={opened} title="Filter" onClose={close} withCloseButton={false}>
         <div>
@@ -76,7 +77,7 @@ export const Schedule: React.FC = () => {
             <Select
               className="-m-3"
               placeholder="Pilih shift"
-              data={['Siang', 'Malam']}
+              data={['siang', 'malam']}
               searchValue={selectShift}
               onSearchChange={setSelectShift}
               allowDeselect
@@ -86,7 +87,7 @@ export const Schedule: React.FC = () => {
             <Select
               className="-m-3"
               placeholder="Pilih status"
-              data={['On', 'Off']}
+              data={['on', 'off']}
               searchValue={selectStatus}
               onSearchChange={setSelectStatus}
               allowDeselect
@@ -94,7 +95,9 @@ export const Schedule: React.FC = () => {
           </Fieldset>
         </div>
         <div className="text-right mt-3">
-          <Button style={{ width: '160px' }}>Cari</Button>
+          <Button onClick={close} style={{ width: '160px' }}>
+            Cari
+          </Button>
         </div>
       </Modal>
     </main>
