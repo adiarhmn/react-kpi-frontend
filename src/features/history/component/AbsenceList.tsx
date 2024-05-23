@@ -44,6 +44,7 @@ export const AbsenceList: React.FC = () => {
     return formattedDate;
   }
 
+  console.log('Data sakit : ', absences);
   return (
     <>
       <div className="text-center">

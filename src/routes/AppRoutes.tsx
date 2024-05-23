@@ -80,7 +80,7 @@ export const AppRoutes: React.FC = () => {
               <Route path="data-attendance" element={<DataAttendance />} />
               <Route path="data-absence">
                 <Route index element={<DataAbsence />} />
-                <Route path="detail" element={<DetailAbsence />} />
+                <Route path=":id" element={<DetailAbsence />} />
               </Route>
               <Route path="data-paid-leave">
                 <Route index element={<DataPaidLeave />} />

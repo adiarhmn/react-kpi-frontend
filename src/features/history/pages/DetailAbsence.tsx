@@ -6,10 +6,13 @@ import {
   IconDoorEnter,
   IconDoorExit,
 } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const DetailAbsence: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  // console.log('id : ', id);
+
   const iconStyle = { width: rem(12), height: rem(12) };
   return (
     <main>
