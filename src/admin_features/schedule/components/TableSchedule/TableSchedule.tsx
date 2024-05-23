@@ -27,6 +27,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
       if (data.data.length > 0) {
         setIsSchedule(true);
       } else {
+      } else {
         setIsSchedule(false);
       }
     }

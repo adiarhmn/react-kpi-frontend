@@ -35,12 +35,19 @@ export type Attendance = {
 };
 
 export type EducationBackground = {
-  id: number;
+  id: number | null;
   type: string;
   name: string;
   major: string;
   graduate_from: string;
   entry_year: string;
   graduation_year: string;
+  employee_id: number;
+};
+
+export type EmployeeFilesType = {
+  id?: number;
+  file_name: string;
+  file: string;
   employee_id: number;
 };

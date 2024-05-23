@@ -1,34 +1,40 @@
-import {
-  Button,
-  ActionIcon,
-  Text,
-  Card,
-  Image,
-  Group,
-  Badge,
-  Modal,
-  Divider,
-  Input,
-  JsonInput,
-} from '@mantine/core';
+import { Button, Text, Image, Loader, Modal, Input, JsonInput, Textarea } from '@mantine/core';
+import { IconArrowBarToRight, IconMap2 } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CardAttendance } from '../components';
 import { useDisclosure } from '@mantine/hooks';
-import { IconDeviceTablet } from '@tabler/icons-react';
-import {
-  IconArrowBarRight,
-  IconArrowBarToRight,
-  IconChevronLeft,
-  IconMap2,
-  IconPlus,
-} from '@tabler/icons-react';
-import { IconChevronRight } from '@tabler/icons-react';
+import { ScheduleType } from '../types';
+import { useGetSchedule } from '../api';
+import { useAuth } from '@/features/auth';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 
 export const Attendance: React.FC = () => {
+  const [schedule, setSchedule] = useState<ScheduleType[]>([]);
+  const { creds } = useAuth();
+  const employee_id = creds?.employee_id;
   const [opened, { open, close }] = useDisclosure(false);
-  const currentDate: Date = new Date();
-  const formattedDate = format(currentDate, 'EEEE, dd MMM yyyy', { locale: id });
+  const date = new Date();
+  const dateToday = format(date, 'yyyy-MM-dd', { locale: id });
+  const { data, error, isLoading } = useGetSchedule(employee_id, dateToday);
 
+  // console.log('adaaa;', dataschedule);
+  useEffect(() => {}, [data]);
+  // console.log('Data schedule', data);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
+  if (error) {
+    return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
+  }
+
+  const dataSchedule = data;
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -46,54 +52,7 @@ export const Attendance: React.FC = () => {
       {/* End card map */}
 
       {/* Absen card */}
-      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
-        <div className="flex justify-between text-xs items-center p-2">
-          <span className="font-bold text-blue-700">Absensi</span>
-          <Badge
-            size="xs"
-            style={{
-              marginLeft: '4px',
-              borderRadius: '2px',
-            }}
-            color="red"
-          >
-            belum check-in
-          </Badge>
-        </div>
-        <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
-          <div className="col-span-2 text-center m-auto p-1">
-            <Text size="23px" fw={700}>
-              F2
-            </Text>
-            <Text style={{ marginTop: '-5px' }} size="sm">
-              Pagi
-            </Text>
-          </div>
-          <div className="col-span-10 ms-2 text-left">
-            <div className="ms-2 -mb-2">
-              <Text size="xs">Tanggal</Text>
-              <Text size="sm" fw={700}>
-                {formattedDate}
-              </Text>
-            </div>
-            <Divider my="sm" />
-            <div className="-mt-2 w-full grid grid-cols-12 mb-1">
-              <div className="col-span-6 text-left mt-1 ms-2">
-                <Text size="xs">Jam kerja</Text>
-                <Text size="sm" fw={700}>
-                  08:00 - 16:00
-                </Text>
-              </div>
-              <div className="col-span-6 text-right -mt-1"></div>
-            </div>
-          </div>
-        </div>
-        <div className="p-2 mt-2">
-          <Button fullWidth rightSection={<IconArrowBarToRight />}>
-            Check-in
-          </Button>
-        </div>
-      </section>
+      <CardAttendance schedule={dataSchedule[0]} />
       {/* End absen card */}
 
       {/* Tugas card */}
@@ -145,10 +104,9 @@ export const Attendance: React.FC = () => {
           </Input.Wrapper>
         </div>
         <div className="mb-2">
-          <JsonInput
+          <Textarea
             label="Deskripsi kegiatan"
             placeholder="masukkan deskripsi kegiatan"
-            formatOnBlur
             autosize
             minRows={5}
           />

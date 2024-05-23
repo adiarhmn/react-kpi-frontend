@@ -1,14 +1,41 @@
-import { Badge, Divider, Text } from '@mantine/core';
+import { useAuth } from '@/features/auth';
+import { Badge, Divider, Loader, Text } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
+import { useGetAttendance } from '../api/getAttendance';
+import { useEffect, useState } from 'react';
+import { AttendanceType } from '../types';
 
 export const AttendanceInfo: React.FC = () => {
   const navigate = useNavigate();
+  const [attendance, setAttendance] = useState<AttendanceType[]>([]);
   const currentDate: Date = new Date();
   const formattedDate = format(currentDate, 'EEEE, dd MMM yyyy', { locale: id });
+  const dateSend = format(currentDate, 'yyyy-MMM-dd', { locale: id });
+  const { creds } = useAuth();
+  const employee_id = creds?.employee_id;
+  const { data, error, isLoading } = useGetAttendance(employee_id, dateSend);
 
+  useEffect(() => {
+    if (data) {
+      setAttendance(data);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
+  if (error) {
+    return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
+  }
+
+  console.log('Data attendance :', attendance);
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>

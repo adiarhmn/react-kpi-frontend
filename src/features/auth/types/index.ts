@@ -1,8 +1,9 @@
 export type Creds = {
-  id: string | number;
+  id: number | null;
   username: string;
   name: string;
   role: 'admin' | 'superadmin' | 'employee';
+  employee_id: number;
 };
 
 export type User = {
