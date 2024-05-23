@@ -19,12 +19,12 @@ export type ScheduleType = {
 };
 
 export type AttendanceType = {
-  id?: number;
+  id: number;
   check_in?: string;
   check_out?: string;
   shift_in?: string;
   shift_out?: string;
   status?: string;
-  employee_id: number;
+  employee_id?: number;
   schedule_id: number;
 };

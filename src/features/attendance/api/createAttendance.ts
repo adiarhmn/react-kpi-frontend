@@ -9,6 +9,7 @@ type AttendanceDataPost = {
 };
 
 export const postCreateAttendance = async (attendanceDataPost: AttendanceDataPost) => {
+  console.log('Data yang dikirim : ', attendanceDataPost);
   const response = await axios.post(`${BaseURL}/attendance/in`, attendanceDataPost);
   return response.data;
 };

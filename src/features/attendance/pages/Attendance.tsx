@@ -6,18 +6,22 @@ import { CardAttendance } from '../components';
 import { useDisclosure } from '@mantine/hooks';
 import { ScheduleType } from '../types';
 import { useGetSchedule } from '../api';
+import { useAuth } from '@/features/auth';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 export const Attendance: React.FC = () => {
   const [schedule, setSchedule] = useState<ScheduleType[]>([]);
+  const { creds } = useAuth();
+  const employee_id = creds?.employee_id;
   const [opened, { open, close }] = useDisclosure(false);
-  const { data: dataschedule, error, isLoading } = useGetSchedule(1, '2024-05-22');
+  const date = new Date();
+  const dateToday = format(date, 'yyyy-MM-dd', { locale: id });
+  const { data, error, isLoading } = useGetSchedule(employee_id, dateToday);
 
   // console.log('adaaa;', dataschedule);
-  useEffect(() => {
-    //
-    // console.log('test running');
-  }, [dataschedule]);
-  // console.log('Data schedule', schedule);
+  useEffect(() => {}, [data]);
+  // console.log('Data schedule', data);
 
   if (isLoading) {
     return (
@@ -30,7 +34,7 @@ export const Attendance: React.FC = () => {
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
-  const datasceduleboss = dataschedule;
+  const dataSchedule = data;
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -48,7 +52,7 @@ export const Attendance: React.FC = () => {
       {/* End card map */}
 
       {/* Absen card */}
-      <CardAttendance schedule={datasceduleboss[0]} />
+      <CardAttendance schedule={dataSchedule[0]} />
       {/* End absen card */}
 
       {/* Tugas card */}
