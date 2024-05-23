@@ -2,8 +2,9 @@ import { ActionIcon, Button, Loader, Modal, Table, UnstyledButton } from '@manti
 import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useDeleteDivision, useGetDivisions } from '../../api';
 import { DivisionType } from '@/admin_features/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
 
 export const TableDivision: React.FC = () => {
   const [division, setDivision] = useState<DivisionType[]>([]);
@@ -14,7 +15,14 @@ export const TableDivision: React.FC = () => {
 
   // Fungsi Delete Division
   const deleteDivision = async (id: number) => {
-    deleteDivisionMutation.mutateAsync(id);
+    deleteDivisionMutation.mutateAsync(id, {
+      onSuccess: (data) => {
+        notifications.show({
+          message: 'Berhasil Menghapus Data',
+          color: 'green',
+        });
+      },
+    });
     // Update Division Data
     const newDivision = division.filter((divisi) => divisi.id !== id);
     setDivision(newDivision);
