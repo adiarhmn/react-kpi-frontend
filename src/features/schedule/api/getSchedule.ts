@@ -34,6 +34,12 @@ export async function getScheduleDaily(employee_id: number | null, date: string)
   return res.data.data;
 }
 
+export async function getScheduleByStatus(employee_id: number | null, status: string) {
+  const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&status=${status}`);
+  console.log('schedule daily : ', res.data.data);
+  return res.data.data;
+}
+
 export const useGetSchedule = (employee_id: number, date?: string) => {
   return useQuery({
     queryKey: ['schedule', employee_id, date],
