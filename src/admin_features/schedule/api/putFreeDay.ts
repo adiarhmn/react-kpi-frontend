@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { EditScheduleItemType } from '../types';
 import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+
+import { EditScheduleItemType } from '../types';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 

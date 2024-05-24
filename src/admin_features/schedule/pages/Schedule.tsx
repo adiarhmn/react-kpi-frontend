@@ -1,10 +1,11 @@
-import { Button, Loader, Table } from '@mantine/core';
-import { MonthPickerInput } from '@mantine/dates';
-import { IconPencil, IconPlus, IconSettings } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { Button } from '@mantine/core';
+import { IconPencil, IconPlus } from '@tabler/icons-react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TableSchedule } from '../components';
+
 import { formatDateToString } from '@/utils/format';
+
+import { TableSchedule } from '../components';
 
 export const Schedule: React.FC = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export const Schedule: React.FC = () => {
             }
             leftSection={<IconPlus size={15} />}
           >
-            Tambah Data
+            Buat Jadwal
           </Button>
         )}
         {isSchedule && <Button leftSection={<IconPencil size={15} />}>Edit Data</Button>}
