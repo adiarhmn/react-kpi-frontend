@@ -33,7 +33,7 @@ export const Home: React.FC = () => {
         <div style={{ fontSize: '25px' }} className="text-white font-bold relative z-10">
           {creds?.username}
         </div>
-        <div className="text-sm font-semibold text-white">{creds?.role}</div>
+        <div className="text-sm= font-semibold text-white">{creds?.role}</div>
 
         <div className="absolute right-5 top-5">
           <img src="/images/white-logo.png" alt="" className="w-14" />

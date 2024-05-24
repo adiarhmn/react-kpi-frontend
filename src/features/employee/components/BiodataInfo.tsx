@@ -1,7 +1,23 @@
+import { useAuth } from '@/features/auth';
 import { Text } from '@mantine/core';
 import { IconChevronRight, IconMap2, IconUser } from '@tabler/icons-react';
+import { useGetEmployee } from '../api/Profile';
+import { useEffect, useState } from 'react';
+import { EmployeeType } from '@/admin_features/types';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 export const BiodataInfo: React.FC = () => {
+  const { creds } = useAuth();
+  const [employee, setEmployee] = useState<EmployeeType[]>([]);
+  const { data, isLoading, error } = useGetEmployee(creds.id);
+  useEffect(() => {
+    if (data) {
+      setEmployee(data);
+    }
+  }, [data]);
+
+  console.log('data employee : ', employee);
   return (
     <>
       <section className="bg-white mx-auto max-w-xs w-full mt-4 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
@@ -13,13 +29,13 @@ export const BiodataInfo: React.FC = () => {
           <div className="gap-2 align-item-left">
             <Text size="xs">Nomor Induk Pegawai</Text>
             <Text size="xs" fw={700}>
-              2201301122
+              {employee.nip != null ? employee.nip : '-'}
             </Text>
           </div>
           <div className="mt-2 gap-2 align-item-left">
             <Text size="xs">Nama lengkap pegawai</Text>
             <Text size="xs" fw={700}>
-              Dian Lucky Prayogi
+              {employee.name != null ? employee.name : '-'}
             </Text>
           </div>
           <div className="mt-2 gap-2 align-item-left">
@@ -45,37 +61,39 @@ export const BiodataInfo: React.FC = () => {
           <div className="mt-2 gap-2 align-item-left">
             <Text size="xs">Jenis kelamin</Text>
             <Text size="xs" fw={700}>
-              Laki - laki
+              {employee.sex != null ? employee.sex : '-'}
             </Text>
           </div>
           <div className="mt-2 ps-2 gap-2 align-item-left">
             <Text size="xs">Tanggal lahir</Text>
             <Text size="xs" fw={700}>
-              23 Mei 2003
+              {employee.birth_date != null
+                ? format(employee.birth_date, 'dd MMM yyyy', { locale: id })
+                : '-'}
             </Text>
           </div>
           <div className="mt-2 gap-2 align-item-left">
             <Text size="xs">No Whatsapp</Text>
             <Text size="xs" fw={700}>
-              081349445267
+              {employee.phone != null ? employee.phone : '-'}
             </Text>
           </div>
           <div className="mt-2 ps-2 gap-2 align-item-left">
             <Text size="xs">Agama</Text>
             <Text size="xs" fw={700}>
-              Islam
+              {employee.religion != null ? employee.religion : '-'}
             </Text>
           </div>
           <div className="mt-2 gap-2 align-item-left">
             <Text size="xs">Nomor KTP</Text>
             <Text size="xs" fw={700}>
-              350404xxxxxxxxx2
+              {employee.nik != null ? employee.nik : '-'}
             </Text>
           </div>
           <div className="mt-2 mb-2 ps-2 gap-2 align-item-left">
             <Text size="xs">Nomor BPJS </Text>
             <Text size="xs" fw={700}>
-              -
+              {employee.no_bpjs != null ? employee.no_bpjs : '-'}
             </Text>
           </div>
         </div>
@@ -89,43 +107,43 @@ export const BiodataInfo: React.FC = () => {
           <div className="gap-2 align-item-left">
             <Text size="xs">Provinsi</Text>
             <Text size="xs" fw={700}>
-              Jawa Timur
+              {employee.province != null ? employee.province : '-'}
             </Text>
           </div>
           <div className="ps-2 gap-2 align-item-left">
             <Text size="xs">Kabupaten</Text>
             <Text size="xs" fw={700}>
-              Tulungagung
+              {employee.district != null ? employee.district : '-'}
             </Text>
           </div>
           <div className="mt-2 gap-2 align-item-left">
             <Text size="xs">Kecamatan</Text>
             <Text size="xs" fw={700}>
-              Ngantru
+              {employee.subdistrict != null ? employee.subdistrict : '-'}
             </Text>
           </div>
           <div className="mt-2 ps-2 gap-2 align-item-left">
             <Text size="xs">Kelurahan</Text>
             <Text size="xs" fw={700}>
-              Pulerejo
+              {employee.village != null ? employee.village : '-'}
             </Text>
           </div>
           <div className="mt-2 gap-2 align-item-left">
             <Text size="xs">RT</Text>
             <Text size="xs" fw={700}>
-              003
+              {employee.rt != null ? employee.rt : '-'}
             </Text>
           </div>
           <div className="mt-2 ps-2 gap-2 align-item-left">
             <Text size="xs">RW</Text>
             <Text size="xs" fw={700}>
-              001
+              {employee.rw != null ? employee.rw : '-'}
             </Text>
           </div>
           <div className="mt-2 gap-2 align-item-left">
             <Text size="xs">Kode POS</Text>
             <Text size="xs" fw={700}>
-              66252
+              {employee.postal_code != null ? employee.postal_code : '-'}
             </Text>
           </div>
         </div>

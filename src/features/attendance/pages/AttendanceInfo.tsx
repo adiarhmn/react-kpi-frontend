@@ -6,36 +6,56 @@ import { id } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
 import { useGetAttendance } from '../api/getAttendance';
 import { useEffect, useState } from 'react';
-import { AttendanceType } from '../types';
+import { AttendanceType, ScheduleType } from '../types';
+import { useGetSchedule } from '../api';
 
 export const AttendanceInfo: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
   const [attendance, setAttendance] = useState<AttendanceType[]>([]);
+  const [schedule, setSchedule] = useState<ScheduleType[]>([]);
+  const status = localStorage.getItem('isCheckedIn');
   const currentDate: Date = new Date();
   const formattedDate = format(currentDate, 'EEEE, dd MMM yyyy', { locale: id });
-  const dateSend = format(currentDate, 'yyyy-MMM-dd', { locale: id });
-  const { creds } = useAuth();
-  const employee_id = creds?.employee_id;
-  const { data, error, isLoading } = useGetAttendance(employee_id, dateSend);
+  const dateSend = format(currentDate, 'yyyy-MM-dd', { locale: id });
+
+  function formatterDate(date: Date | string, formatType: string) {
+    return format(date, formatType, { locale: id });
+  }
+
+  const {
+    data: dataAttendance,
+    error: errorAttendance,
+    isLoading: loadingAttendance,
+  } = useGetAttendance(creds?.employee_id, dateSend);
+
+  const {
+    data: dataSchedule,
+    error: errorSchedule,
+    isLoading: loadingSchedule,
+  } = useGetSchedule(creds?.employee_id, dateSend);
 
   useEffect(() => {
-    if (data) {
-      setAttendance(data);
+    if (dataSchedule) {
+      setSchedule(dataSchedule[0]);
     }
-  }, [data]);
+  }, [dataSchedule]);
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center my-20">
-        <Loader size="sm" />
-      </div>
-    );
-  }
-  if (error) {
+  useEffect(() => {
+    if (dataAttendance) {
+      setAttendance(dataAttendance[0]);
+    }
+  }, [dataAttendance]);
+
+  if (errorAttendance) {
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
-  console.log('Data attendance :', attendance);
+  console.log('Data attendance :', attendance != null);
+  console.log('Data schedule :', schedule);
+  console.log('Tipe data jam checkOut : ', typeof attendance.check_in);
+  // console.log('Sudah login :', localStorage.getItem('isCheckedIn'));
+  console.log('Sudah login :', status);
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -64,25 +84,25 @@ export const AttendanceInfo: React.FC = () => {
               marginLeft: '4px',
               borderRadius: '2px',
             }}
-            color="yellow"
+            color={status == 'false' ? 'red' : 'yellow'}
           >
-            Sudah check-in
+            {status === 'false' ? 'Belum CheckIn' : 'Sedang Bekerja'}
           </Badge>
         </div>
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
-          <div className="col-span-2 text-center m-auto p-1">
-            <Text size="23px" fw={700}>
-              F2
+          <div className="col-span-3 text-center m-auto ">
+            <Text size="27px" fw={700}>
+              {schedule.shift.shift_code}
             </Text>
             <Text style={{ marginTop: '-5px' }} size="sm">
-              Pagi
+              {schedule.shift.shift_name}
             </Text>
           </div>
-          <div className="col-span-10 ms-2 text-left">
+          <div className="col-span-9 ms-2 text-left">
             <div className="ms-2">
               <Text size="xs">Tanggal</Text>
               <Text size="sm" fw={700}>
-                {formattedDate}
+                {formatterDate(currentDate, 'EEEE, dd MMM yyyy')}
               </Text>
             </div>
             <Divider my="sm" />
@@ -90,13 +110,17 @@ export const AttendanceInfo: React.FC = () => {
               <div className="col-span-6 text-left mt-1 ms-2">
                 <Text size="xs">Check-in</Text>
                 <Text size="sm" fw={700}>
-                  07:53
+                  {attendance.check_in != undefined
+                    ? formatterDate(attendance.check_in, 'HH:mm')
+                    : '-- --'}
                 </Text>
               </div>
               <div className="col-span-6 text-left mt-1">
                 <Text size="xs">Check-out</Text>
                 <Text size="sm" fw={700}>
-                  -- --
+                  {attendance.check_out != undefined
+                    ? formatterDate(attendance.check_out, 'HH:mm')
+                    : '-- --'}
                 </Text>
               </div>
             </div>

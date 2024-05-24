@@ -1,66 +1,93 @@
 import { Badge, Button, Divider, Text } from '@mantine/core';
-import { ScheduleType } from '../types';
+import { AttendanceType, ScheduleType } from '../types';
 import { useCreateAttendance } from '../api';
 import { useNavigate } from 'react-router-dom';
 import { IconArrowBarToLeft, IconArrowBarToRight } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { ButtonCheckIn } from './ButtonCheckIn';
-import { ButtonCheckOut } from './ButtonCheckOut';
+import { useUpdateAttendance } from '../api/updateAttendance';
+import { useGetAttendance } from '../api/getAttendance';
 
 type ScheduleProps = {
   schedule: ScheduleType;
 };
 
 export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: ScheduleProps) => {
-  const mutationCheckOut = useCreateAttendance();
-  // const [attendanceId, setAttendanceId] = useState();
-  const [isCheckIn, setIsCheckIn] = useState(localStorage.getItem('isCheckin'));
-  console.log('Apakah sudah checkin? :', isCheckIn);
+  const [isCheckedIn, setIsCheckedIn] = useState<boolean>(() => {
+    const savedState = localStorage.getItem('isCheckedIn');
+    return savedState ? JSON.parse(savedState) : false;
+  });
+
+  console.log('status checkin : ', isCheckedIn);
+  useEffect(() => {
+    localStorage.setItem('isCheckedIn', JSON.stringify(isCheckedIn));
+  }, [isCheckedIn]);
+
+  const [attendance, setAttendance] = useState<AttendanceType[]>([]);
   console.log(schedule);
   const navigate = useNavigate();
-  // const [isCheckIn, setCheckIn] = useState(false);
+
+  // console.log('Apakah sudah checkin? :', isCheckIn);
 
   function formatDate(date: string, formatType: string) {
     return format(date, formatType, { locale: id });
   }
-  // console.log(schedule);
 
-  // const handleCheckOut = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   console.log('checkout button');
-  //   const attendanceCheckOut = {
-  //     schedule_id: schedule.id,
-  //     employee_id: schedule.employee_schedule.employee_id,
-  //   };
+  // {BUTTON CHECK-IN}
+  const mutationCheckIn = useCreateAttendance();
+  const handleCheckIn = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  //   await mutationCheckOut.mutateAsync(attendanceCheckOut, {
-  //     onSuccess: (data) => {
-  //       setAttendanceId(data.id);
-  //       console.log('Success:', data);
-  //       console.log('Attendance ID', data.id);
-  //       setCheckIn(false);
-  //     },
-  //   });
-  // };
+    const attendanceCheckIn = {
+      schedule_id: schedule.id,
+      employee_id: schedule.employee_schedule.employee_id,
+    };
 
-  // const handleCheckIn = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   console.log('Checkin button');
-  //   const attendanceCheckIn = {
-  //     schedule_id: schedule.id,
-  //     employee_id: schedule.employee_schedule.employee_id,
-  //   };
+    await mutationCheckIn.mutateAsync(attendanceCheckIn, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        setAttendance(data.data);
+        setIsCheckedIn(true);
+        // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
+      },
+    });
+  };
+  // {END BUTTON CHECK-IN}
 
-  //   await mutationCheckIn.mutateAsync(attendanceCheckIn, {
-  //     onSuccess: (data) => {
-  //       console.log('Success:', data);
-  //       setCheckIn(true);
-  //     },
-  //   });
+  // {BUTTON CHECK-OUT}
+  const mutationCheckOut = useUpdateAttendance();
 
-  console.log('Status checkIn :', isCheckIn);
+  const { data, isLoading, error } = useGetAttendance(
+    schedule.employee_schedule.employee_id,
+    schedule.date
+  );
+  useEffect(() => {
+    if (data) {
+      setAttendance(data[0]);
+    }
+  }, [data]);
+
+  //
+  // const dataAttendance = data;
+  console.log('data Attendance : ', attendance);
+  // console.log('Sebelum update :', localStorage.getItem('isCheckIn'));
+
+  const handleCheckOut = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const attendanceCheckOut = {
+      attendance_id: attendance.id,
+    };
+
+    await mutationCheckOut.mutateAsync(attendanceCheckOut, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        setIsCheckedIn(false);
+        // console.log('Sesudah update  :', localStorage.getItem('isCheckIn'));
+      },
+    });
+  };
+  // {END BUTTON CHECK-OUT}
 
   return (
     <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
@@ -73,9 +100,9 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
             marginLeft: '4px',
             borderRadius: '2px',
           }}
-          // color={isCheckIn == true ? 'red' : 'yellow'}
+          color={isCheckedIn == false ? 'red' : 'yellow'}
         >
-          {/* {isCheckIn == true ? 'Belum check-in' : 'Sedang bekerja'} */}
+          {isCheckedIn == false ? 'Belum check-in' : 'Sedang bekerja'}
         </Badge>
       </div>
       <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
@@ -107,10 +134,18 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
         </div>
       </div>
       <div className="p-2 mt-2">
-        {isCheckIn == 'no' ? (
-          <ButtonCheckIn schedule={schedule} />
+        {isCheckedIn == false ? (
+          <form onClick={handleCheckIn}>
+            <Button type="submit" fullWidth rightSection={<IconArrowBarToRight />}>
+              Check-in
+            </Button>
+          </form>
         ) : (
-          <ButtonCheckOut schedule={schedule} />
+          <form onClick={handleCheckOut}>
+            <Button type="submit" color="red" fullWidth rightSection={<IconArrowBarToLeft />}>
+              Check-out
+            </Button>
+          </form>
         )}
       </div>
     </section>

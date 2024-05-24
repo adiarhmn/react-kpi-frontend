@@ -23,9 +23,9 @@ export const Profile: React.FC = () => {
           <IconUser className="w-10 h-10" />
         </div>
         <div className="font-bold text-lg">
-          Adi Aulia Rahman
+          {creds?.username}
           <div className="text-sm text-gray-600 flex gap-1 items-center">
-            <IconBriefcase size={20} /> <span className="font-semibold">Mahasiswa</span>
+            <IconBriefcase size={20} /> <span className="font-semibold">{creds?.role}</span>
           </div>
         </div>
       </section>
