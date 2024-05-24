@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetEmployeeFiles } from '../api';
 import { EmployeeFilesType } from '../types';
+import { useAuth } from '@/features/auth';
 
 export const FileList: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
   const [files, setFiles] = useState<EmployeeFilesType[]>([]);
-  const { data, error, isLoading } = useGetEmployeeFiles(1);
+  const { data, error, isLoading } = useGetEmployeeFiles(creds?.id);
 
   useEffect(() => {
     if (data) {

@@ -1,3 +1,4 @@
+import { Button } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
@@ -20,14 +21,17 @@ export const Overtime: React.FC = () => {
             />
             <h2 className="font-semibold ">Data lembur</h2>
           </div>
-          <button
-            className="bg-transparent me-2"
-            onClick={() => {
-              navigate('/overtime/add');
-            }}
-          >
-            <IconPlus size={21} className="font-bold rounded-md" />
-          </button>
+          <span className="font-semibold">
+            <Button
+              className="shadow-sm me-1"
+              size="xs"
+              onClick={() => {
+                navigate('/overtime/add');
+              }}
+            >
+              <IconPlus className=" -ms-1" />
+            </Button>
+          </span>
         </div>
       </section>
 

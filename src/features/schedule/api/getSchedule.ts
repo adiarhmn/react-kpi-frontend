@@ -18,18 +18,65 @@ export async function getSchedule(employee_id: number, date?: string) {
 export async function getScheduleMonthly(
   employee_id: number | null | undefined,
   month: number,
-  year: number
+  year: number,
+  shift: string | null,
+  status: string | null
 ) {
-  console.log(month, year);
-  const res = await axios.get(
-    `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}`
-  );
-  console.log('Data respon ini bang :', res.data.data);
-  return res.data.data;
+  // console.log(month, year);
+  if (shift == null && status == null) {
+    const res = await axios.get(
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}`
+    );
+    console.log('URL :', `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}`);
+    console.log('Data respon ini bang :', res.data.data);
+    return res.data.data;
+  }
+
+  if (shift != null && status == null) {
+    const res = await axios.get(
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}$shift=${shift}`
+    );
+    console.log(
+      'URL :',
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&shift=${shift}`
+    );
+    console.log('Data respon ini bang :', res.data.data);
+    return res.data.data;
+  }
+
+  if (shift == null && status != null) {
+    const res = await axios.get(
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&status=${status}`
+    );
+    console.log(
+      'URL :',
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&status=${status}`
+    );
+    console.log('Data respon ini bang :', res.data.data);
+    return res.data.data;
+  }
+
+  if (shift != null && status != null) {
+    const res = await axios.get(
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&shift=${shift}&status=${status}`
+    );
+    console.log(
+      'URL :',
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&shift=${shift}&status=${status}`
+    );
+    console.log('Data respon ini bang :', res.data.data);
+    return res.data.data;
+  }
 }
 
 export async function getScheduleDaily(employee_id: number | null, date: string) {
   const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&date=${date}`);
+  console.log('schedule daily : ', res.data.data);
+  return res.data.data;
+}
+
+export async function getScheduleByStatus(employee_id: number | null, status: string) {
+  const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&status=${status}`);
   console.log('schedule daily : ', res.data.data);
   return res.data.data;
 }
@@ -44,11 +91,13 @@ export const useGetSchedule = (employee_id: number, date?: string) => {
 export const useGetScheduleMonthly = (
   employee_id: number | null | undefined,
   month: number,
-  year: number
+  year: number,
+  shift: string | null,
+  status: string | null
 ) => {
   return useQuery({
-    queryKey: ['schedule', employee_id, month, year],
-    queryFn: () => getScheduleMonthly(employee_id, month, year),
+    queryKey: ['schedule', employee_id, month, year, shift, status],
+    queryFn: () => getScheduleMonthly(employee_id, month, year, shift, status),
   });
 };
 

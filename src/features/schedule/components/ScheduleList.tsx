@@ -6,26 +6,53 @@ import { useNavigate } from 'react-router-dom';
 import { ScheduleType } from '@/features/attendance';
 import { useGetSchedule, useGetScheduleMonthly } from '../api';
 import { useAuth } from '@/features/auth';
+import { modals } from '@mantine/modals';
 type ScheduleProps = {
   month: Date;
+  shift: string;
+  status: string;
+  modalState: boolean;
 };
 
-export const ScheduleList: React.FC<ScheduleProps> = ({ month }) => {
+export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, modalState }) => {
   const navigate = useNavigate();
   // const [month, setMonth] = useState<Date>(new Date());
   const { creds } = useAuth();
   const [schedules, setSchedule] = useState<ScheduleType[]>([]);
+  const [params, setParams] = useState({
+    employeeId: creds?.employee_id,
+    month: month.getMonth() + 1,
+    year: month.getFullYear(),
+    shift,
+    status,
+  });
+
   const { data, error, isLoading } = useGetScheduleMonthly(
-    creds?.employee_id,
-    month.getMonth() + 1,
-    month.getFullYear()
+    params.employeeId,
+    params.month,
+    params.year,
+    params.shift,
+    params.status
   );
+
   useEffect(() => {
     // console.log('effect jalan');
     if (data) {
       setSchedule(data);
     }
   }, [data]);
+
+  useEffect(() => {
+    console.log('effect jalan');
+    const newParams = {
+      employeeId: creds?.employee_id,
+      month: month.getMonth() + 1,
+      year: month.getFullYear(),
+      shift,
+      status,
+    };
+    setParams(newParams);
+  }, [modalState]);
 
   function formatDate(date: string, formatType: string) {
     const dateToFormat: Date = new Date(date);
@@ -44,7 +71,10 @@ export const ScheduleList: React.FC<ScheduleProps> = ({ month }) => {
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
-  // console.log('Data schedule :', schedule);
+  console.log('Data schedule :', schedules);
+  console.log('Data shift :', shift);
+  console.log('Data status :', status);
+  console.log('Modal condition : ', modalState);
 
   return (
     <div className="text-center">
@@ -52,10 +82,7 @@ export const ScheduleList: React.FC<ScheduleProps> = ({ month }) => {
         {schedules.length > 0 ? (
           schedules.map((schedule, index) => (
             <div key={index} className="col-span-6 px-1">
-              <button
-                onClick={() => navigate('/history/data-absence/detail')}
-                className=" bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
-              >
+              <button className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700">
                 <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
                   {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
                   <div className="col-span-4 text-center -ms-5 mt-4">
