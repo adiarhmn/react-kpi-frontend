@@ -21,7 +21,7 @@ const CreateSchedule = async (schedule: SchedulePost[]) => {
 const ValidateSchedule = async (employee_schedule_id: ScheduleValidatePost[]) => {
   const response = await axios.post(`${BaseURL}/schedule`, employee_schedule_id);
   return response.data;
-}
+};
 
 export const useCreateSchedule = () => {
   return useMutation({

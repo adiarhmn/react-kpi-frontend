@@ -1,9 +1,11 @@
 import { ActionIcon, Button, Loader, Modal, Table, UnstyledButton } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
+import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+
 import { UserType } from '@/admin_features/types';
 import { useGetUsers, useDeleteUser } from '@/admin_features/users/api';
-import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
 
 export const TableUser = () => {
   const [users, setUsers] = useState<UserType[]>([]);
@@ -20,10 +22,15 @@ export const TableUser = () => {
   const confirmDeleteUser = async () => {
     mutationDeleteUser.mutateAsync(userToDelete?.id, {
       onSuccess: (data) => {
-        console.log('Success:', data);
+        console.log('Success Delete:', data);
         const newUsers = users.filter((user) => user.id !== userToDelete?.id);
         setUsers(newUsers);
         close();
+
+        notifications.show({
+          message: 'Berhasil Menghapus Data',
+          color: 'green',
+        });
       },
     });
   };
@@ -89,7 +96,9 @@ export const TableUser = () => {
         Yakin hapus user atau akun{' '}
         <span className="font-semibold text-blue-600">{userToDelete?.username}</span>
         <div className="pt-10 flex gap-2 justify-end">
-          <Button onClick={confirmDeleteUser} disabled={mutationDeleteUser.isPending}>Yakin</Button>
+          <Button onClick={confirmDeleteUser} loading={mutationDeleteUser.isPending}>
+            Yakin
+          </Button>
           <Button color="red" onClick={close}>
             Batal
           </Button>

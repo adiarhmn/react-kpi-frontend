@@ -1,9 +1,10 @@
 import { Button, Input } from '@mantine/core';
-import { IconPlus, IconSearch, IconTrash } from '@tabler/icons-react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { TableDivision } from '../components';
-import { useEffect, useRef } from 'react';
 import { notifications } from '@mantine/notifications';
+import { IconPlus, IconSearch } from '@tabler/icons-react';
+import { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import { TableDivision } from '../components';
 
 export const Division: React.FC = () => {
   const { state } = useLocation();

@@ -1,6 +1,7 @@
-import { ActionIcon, Button, Input, Select, Table, UnstyledButton } from '@mantine/core';
+import { Button, Input, Select } from '@mantine/core';
 import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+
 import { TableEmployee } from '../components';
 
 // Base URL API

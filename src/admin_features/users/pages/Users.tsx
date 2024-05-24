@@ -1,10 +1,25 @@
 import { Button, Input, Select } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconPlus, IconSearch } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 import { TableUser } from '../components';
 
 export const Users: React.FC = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const hasNotifiedRef = useRef(false);
+
+  useEffect(() => {
+    if (state?.success && !hasNotifiedRef.current) {
+      notifications.show({
+        message: state.success,
+        color: 'green',
+      });
+      hasNotifiedRef.current = true;
+    }
+  });
   return (
     <main>
       <section className="bg-white p-5 rounded-lg shadow-lg">
