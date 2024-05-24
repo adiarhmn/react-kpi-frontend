@@ -1,13 +1,28 @@
 import { Button, Input } from '@mantine/core';
-import { IconPlus, IconSearch, IconTrash } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { notifications } from '@mantine/notifications';
+import { IconPlus, IconSearch } from '@tabler/icons-react';
+import { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import { TableDivision } from '../components';
 
 export const Division: React.FC = () => {
+  const { state } = useLocation();
   const navigate = useNavigate();
+  const hasNotifiedRef = useRef(false);
+
+  useEffect(() => {
+    if (state?.success && !hasNotifiedRef.current) {
+      notifications.show({
+        message: state.success,
+        color: 'green',
+      });
+      hasNotifiedRef.current = true;
+    }
+  }, [state, navigate]);
+
   return (
     <main>
-
       {/* Menampilkan Data Divisi */}
       <section className="bg-white p-5 rounded-lg shadow-lg">
         <div className="flex justify-between items-center mb-2">
@@ -25,7 +40,7 @@ export const Division: React.FC = () => {
           <Input placeholder="Cari..." leftSection={<IconSearch size={14}></IconSearch>}></Input>
         </div>
         <div className="mt-7">
-          <TableDivision/>
+          <TableDivision />
         </div>
       </section>
     </main>

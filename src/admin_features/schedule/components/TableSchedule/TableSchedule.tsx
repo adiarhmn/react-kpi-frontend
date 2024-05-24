@@ -1,9 +1,11 @@
 import { MonthPickerInput } from '@mantine/dates';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useGetSchedule } from '../../api/getSchedule';
 import { Button, Table } from '@mantine/core';
 import { IconSettings } from '@tabler/icons-react';
+import { useGetShift } from '@/admin_features/shift/api';
+import { SchedulesType, EditScheduleItemType } from '@/admin_features/schedule/types';
+import { useEditFreeDay } from '../../api';
 
 type TableScheduleProps = {
   month: Date;
@@ -13,10 +15,12 @@ type TableScheduleProps = {
 
 export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, setIsSchedule }) => {
   const [FreeDays, setFreeDay] = useState(false);
-  const [dataSchedule, setDataSchedule] = useState([]);
-  const navigate = useNavigate();
-  console.log('Month :', month.getMonth());
+  const [dataSchedule, setDataSchedule] = useState<SchedulesType[]>([]);
+  const [DataEditFreeDay, setDataEditFreeDay] = useState<EditScheduleItemType[]>([]);
+  const MutationEditFreeDay = useEditFreeDay();
   const { data, isLoading } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
+  const { data: dataShift, error: errorShift, isLoading: loadingShift } = useGetShift();
+
   useEffect(() => {
     if (data) {
       setDataSchedule(data.data);
@@ -26,7 +30,37 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
         setIsSchedule(false);
       }
     }
-  }, [data]);
+
+    if (dataShift) {
+      console.log(dataShift);
+    }
+  }, [data, dataShift]);
+
+  //Simpan Data Edit Libur
+  const EditFreeDays = async (newFreeDay: EditScheduleItemType) => {
+    const newEditLibur = [...DataEditFreeDay];
+    const index = newEditLibur.findIndex((item) => item.schedule_id === newFreeDay.schedule_id);
+    if (index === -1) {
+      setDataEditFreeDay((prev) => prev.concat(newFreeDay));
+    } else {
+      setDataEditFreeDay((prev) =>
+        prev.filter((item) => item.schedule_id !== newFreeDay.schedule_id)
+      );
+    }
+  };
+
+  const HandleDoneFreeDay = async () => {
+    MutationEditFreeDay.mutateAsync(DataEditFreeDay, {
+      onSuccess: (data) => {
+        console.log('Success :', data);
+      },
+    });
+  };
+
+  useEffect(() => {
+    console.log('Clicked');
+    console.log(DataEditFreeDay);
+  }, [dataSchedule]);
 
   return (
     <section className="bg-white rounded-lg shadow-lg p-3">
@@ -47,6 +81,9 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
           <Button
             onClick={() => {
               setFreeDay(!FreeDays);
+              if (DataEditFreeDay.length > 0) {
+                HandleDoneFreeDay();
+              }
             }}
             style={{ zIndex: FreeDays ? 9999 : 1, position: 'relative' }}
             leftSection={<IconSettings size={15} />}
@@ -83,12 +120,23 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                     <Table.Td
                       key={colIndex}
                       onClick={() => {
-                        // if (FreeDays) {
-                        //   const newEmployees = [...employees];
-                        //   newEmployees[rowIndex].schedule[colIndex].free =
-                        //     !newEmployees[rowIndex].schedule[colIndex].free;
-                        //   setEmployees(newEmployees);
-                        // }
+                        if (FreeDays) {
+                          const newSchedule = [...dataSchedule];
+                          console.log(newSchedule);
+                          newSchedule[indexnumber].Schedules[colIndex].status =
+                            newSchedule[indexnumber].Schedules[colIndex].status == 'off'
+                              ? 'on'
+                              : 'off';
+                          setDataSchedule(newSchedule);
+
+                          //   Menyimpan Data Untuk Direquest
+                          const newFreeDay: EditScheduleItemType = {
+                            schedule_id: newSchedule[indexnumber].Schedules[colIndex].id,
+                            status: newSchedule[indexnumber].Schedules[colIndex].status,
+                            shift_id: newSchedule[indexnumber].Schedules[colIndex].shift_id,
+                          };
+                          EditFreeDays(newFreeDay);
+                        }
                       }}
                       className={schedule.status == 'off' ? 'bg-red-600 text-white' : ''}
                     >

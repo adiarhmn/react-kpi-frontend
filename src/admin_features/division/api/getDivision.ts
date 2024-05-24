@@ -11,5 +11,3 @@ export async function getDivisions() {
 export const useGetDivisions = () => {
   return useQuery({ queryKey: ['division'], queryFn: () => getDivisions() });
 };
-
-

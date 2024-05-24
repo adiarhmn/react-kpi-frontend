@@ -1,12 +1,13 @@
-import { Anchor, Button, Divider, PasswordInput, TextInput } from '@mantine/core';
+import { Anchor, Button, PasswordInput, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconAt, IconLock } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useLogin } from '../api';
 import { queryClient } from '@/lib/react-query';
 import storage from '@/utils/storage';
+
+import { useLogin } from '../api';
 
 export const LoginForm: React.FC = () => {
   const form = useForm({
@@ -44,7 +45,6 @@ export const LoginForm: React.FC = () => {
         },
       }
     );
-
   }
 
   return (

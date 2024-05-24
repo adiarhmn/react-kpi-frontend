@@ -1,24 +1,11 @@
-import {
-  ActionIcon,
-  Alert,
-  Button,
-  CheckIcon,
-  Notification,
-  Select,
-  TextInput,
-} from '@mantine/core';
+import { ActionIcon, Button, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { Notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
-import axios from 'axios';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useCreateUser } from '../api/createUser';
 
-const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
-
 export const CreateUser: React.FC = () => {
-  const [alert, setAlert] = useState(false);
   const mutationUser = useCreateUser();
   const form = useForm({
     validateInputOnChange: true,
@@ -48,30 +35,13 @@ export const CreateUser: React.FC = () => {
     await mutationUser.mutateAsync(userData, {
       onSuccess: (data) => {
         console.log('Success:', data);
-        setAlert(true);
-        navigate(-1);
+        navigate('/users', { state: { success: 'Data berhasil ditambahkan' } });
       },
     });
   };
 
   return (
     <main>
-      {
-        // Alert Notification
-        alert && (
-          <Notification
-            className="mb-5"
-            title="Berhasil"
-            color="teal"
-            icon={<CheckIcon size={14} />}
-            onClose={() => setAlert(false)}
-            withCloseButton
-          >
-            User berhasil ditambahkan
-          </Notification>
-        )
-      }
-
       <section className="bg-white p-5 rounded-lg">
         <div className="flex gap-3 items-center">
           <ActionIcon onClick={NavBack} color="blue">
@@ -127,7 +97,7 @@ export const CreateUser: React.FC = () => {
               {...form.getInputProps('role')}
             />
             <div className="flex gap-3">
-              <Button type="submit" color="blue" className="mt-5" disabled={mutationUser.isPending} loading={mutationUser.isPending}>
+              <Button type="submit" color="blue" className="mt-5" loading={mutationUser.isPending}>
                 Simpan
               </Button>
               <Button onClick={NavBack} type="button" color="gray" className="mt-5">
