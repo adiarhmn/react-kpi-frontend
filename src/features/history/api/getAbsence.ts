@@ -15,7 +15,14 @@ export async function getAbsenceById(id?: number | null) {
   return res.data.data;
 }
 
-export const useGetAbsenceById = (id?: string) => {
+export async function getAbsenceByType(id?: number | null, type?: string, status?: string) {
+  const res = await axios.get(`${BaseURL}/request?employee=${id}&types=${type}&status=${status}`);
+  console.log('URL : ', `${BaseURL}/request?employee=${id}&type=${type}&status${status}`);
+  console.log('Data Request : ', res.data.data);
+  return res.data.data;
+}
+
+export const useGetAbsenceById = (id?: number | null) => {
   return useQuery({ queryKey: ['absence', id], queryFn: () => getAbsenceById(id) });
 };
 
@@ -23,7 +30,15 @@ export const useGetAbsence = (id?: number | null) => {
   return useQuery({ queryKey: ['absence'], queryFn: () => getAbsence(id) });
 };
 
-export function formatterDate(date: any, formatType: string) {
+export const useGetAbsenceByType = (id?: number | null, type?: string, status?: string) => {
+  return useQuery({
+    queryKey: ['absence', id, type, status],
+    queryFn: () => getAbsenceByType(id, type, status),
+  });
+};
+
+// FORMATTER DATE
+export default function formatterDate(date: any, formatType: string) {
   return format(date, formatType, { locale: id });
 }
 

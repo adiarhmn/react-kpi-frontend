@@ -1,7 +1,7 @@
 import { Badge, Divider, Image, Loader, Tabs, Text, rem } from '@mantine/core';
 import { IconChevronLeft, IconClipboardText } from '@tabler/icons-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { formatterDate, getDaysBetweenDates, useGetAbsenceById } from '../api';
+import formatterDate, { getDaysBetweenDates, useGetAbsenceById } from '../api';
 import { useEffect, useState } from 'react';
 import { AbsenceType } from '../types';
 import { format } from 'date-fns';

@@ -5,21 +5,43 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
-import { getAbsence, useGetAbsence } from '../api';
+import { getAbsence, useGetAbsence, useGetAbsenceByType } from '../api';
 import { AbsenceType } from '../types';
 
-export const AbsenceList: React.FC = () => {
-  const [absences, setAbsence] = useState<AbsenceType[]>([]);
+type AbsenceProps = {
+  typeAbsence: string;
+  modalState: boolean;
+  status: string;
+};
+
+export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, status }) => {
   const { creds } = useAuth();
-  const employee_id = creds?.employee_id;
-  const { data, error, isLoading } = useGetAbsence(employee_id);
   const navigate = useNavigate();
+  const [absences, setAbsence] = useState<AbsenceType[]>([]);
+  const [params, setParams] = useState({
+    employeeId: creds?.employee_id,
+    typeAbsence: typeAbsence,
+  });
+
+  const { data, error, isLoading } = useGetAbsenceByType(
+    params.employeeId,
+    params.typeAbsence,
+    status
+  );
   useEffect(() => {
     if (data) {
       setAbsence(data);
     }
   }, [data]);
 
+  useEffect(() => {
+    console.log('effect jalan');
+    const newParams = {
+      employeeId: creds?.employee_id,
+      typeAbsence,
+    };
+    setParams(newParams);
+  }, [modalState]);
   if (isLoading) {
     return (
       <div className="flex justify-center my-20">
@@ -45,6 +67,8 @@ export const AbsenceList: React.FC = () => {
   }
 
   console.log('Data sakit : ', absences);
+  console.log('State Modal : ', modalState);
+  console.log('Type absence : ', typeAbsence);
   return (
     <>
       <div className="text-center">
@@ -74,7 +98,7 @@ export const AbsenceList: React.FC = () => {
                         marginLeft: '4px',
                         borderRadius: '2px',
                       }}
-                      color={absence?.type == 'Sakit' ? 'yellow' : 'blue  '}
+                      color={absence?.type == 'sakit' ? 'yellow' : 'blue  '}
                     >
                       {absence?.type}
                     </Badge>

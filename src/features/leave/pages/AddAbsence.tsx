@@ -91,7 +91,7 @@ export const AddAbsence: React.FC = () => {
               <Select
                 label="Tipe izin"
                 name="type"
-                data={['Sakit', 'Izin']}
+                data={['sakit', 'izin']}
                 {...form.getInputProps('type')}
               />
             </div>

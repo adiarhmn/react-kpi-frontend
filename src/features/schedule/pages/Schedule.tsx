@@ -1,18 +1,34 @@
 import { useNavigate } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
 import { MonthPickerInput } from '@mantine/dates';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react';
 import { ScheduleList } from '../components';
 import { Button, Chip, ChipGroup, Fieldset, Group, Modal, Select, TextInput } from '@mantine/core';
+import { ShiftType } from '@/admin_features/types';
+import { useGetShift } from '../api';
 
 export const Schedule: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [month, setMonth] = useState<Date>(new Date());
   const [selectShift, setSelectShift] = useState('');
   const [selectStatus, setSelectStatus] = useState('');
+  const [shifts, setShifts] = useState<ShiftType[]>([]);
+  const { data, isLoading, error } = useGetShift();
+  useEffect(() => {
+    if (data) {
+      setShifts(data);
+    }
+  }, [data]);
+  // const [dataShift, setDataShift] = useState<string[]>([]);
+  // useEffect(() => {
+  //   // Mengambil shift_name dari setiap objek shift
+  //   let shiftNames = shifts.map((shift) => shift.shift_name);
+  //   setDataShift((prevData) => [...prevData, ...shiftNames]);
+  // }, []);
+
   console.log('Value Shift : ', selectShift);
   console.log('Value Status : ', selectStatus);
 
@@ -68,6 +84,7 @@ export const Schedule: React.FC = () => {
           </div>
         </div>
       </section>
+
       <ScheduleList month={month} shift={selectShift} status={selectStatus} modalState={opened} />
 
       <Modal opened={opened} title="Filter" onClose={close} withCloseButton={false}>
@@ -77,7 +94,7 @@ export const Schedule: React.FC = () => {
             <Select
               className="-m-3"
               placeholder="Pilih shift"
-              data={['siang', 'malam']}
+              data={['pagi', 'siang', 'malam']}
               searchValue={selectShift}
               onSearchChange={setSelectShift}
               allowDeselect

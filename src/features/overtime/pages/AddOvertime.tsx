@@ -1,26 +1,23 @@
+import formatterDate from '@/features/history/api/getAbsence';
 import { Badge, Button, Divider, Image, JsonInput, Modal, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import {
-  IconArrowBarToRight,
-  IconChevronLeft,
-  IconClock24,
-  IconDeviceTablet,
-  IconMap2,
-  IconPlus,
-} from '@tabler/icons-react';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
+import { IconChevronLeft, IconClock24, IconDeviceTablet, IconMap2 } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const AddOvertime: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const navigate = useNavigate();
-  const currentDate: Date = new Date();
-  const formattedDate = format(currentDate, 'EEEE, dd MMM yyyy', { locale: id });
-  const date = format(currentDate, 'dd', { locale: id });
-  const month = format(currentDate, 'MMM', { locale: id });
-  const formattedTime = format(currentDate, 'HH:mm', { locale: id });
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+
+  useEffect(() => {
+    const updateCurrentDate = () => {
+      setCurrentDate(new Date());
+    };
+    const intervalId = setInterval(updateCurrentDate, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <main className="min-h-96 relative">
@@ -62,13 +59,13 @@ export const AddOvertime: React.FC = () => {
         <div className="w-full divide-x divide-gray-300 p-1 -mb-2">
           <div className="ms-2 text-left">
             <Text style={{ marginLeft: '4px' }} size="15px" fw={700}>
-              {formattedDate}
+              {formatterDate(currentDate, 'EEEE, dd MMM yyyy')}
             </Text>
             <Divider my="sm" />
             <div className="-mt-2 w-full grid grid-cols-12">
               <div className="col-span-6 text-left mt-1 ms-1 mb-3">
                 <Text style={{ marginLeft: '4px', paddingBottom: '2px' }} size="16px" fw={500}>
-                  {formattedTime}
+                  {formatterDate(currentDate, 'HH:mm')}
                 </Text>
               </div>
               <div className=" col-span-6 text-right -mt-6">
@@ -104,10 +101,10 @@ export const AddOvertime: React.FC = () => {
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
           <div className="col-span-2 text-center m-auto p-2">
             <Text size="30px" fw={700}>
-              {date}
+              {formatterDate(currentDate, 'dd')}
             </Text>
             <Text style={{ marginTop: '-5px' }} size="md">
-              {month}
+              {formatterDate(currentDate, 'MMM')}
             </Text>
           </div>
           <div className="col-span-10 ms-2 text-left">
