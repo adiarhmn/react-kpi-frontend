@@ -1,16 +1,16 @@
-import { Button, Modal, Select, Table } from '@mantine/core';
+import { Button, Modal, Select, Table, UnstyledButton } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconSettings } from '@tabler/icons-react';
+import { IconCheck, IconSettings, IconTrash } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 
 import { SchedulesType, EditScheduleItemType } from '@/admin_features/schedule/types';
 import { useGetShift } from '@/admin_features/shift/api';
 import { ShiftType } from '@/admin_features/types';
 
-import { useEditFreeDay } from '../../api';
+import { useDeleteScheduleEmployee, useEditFreeDay } from '../../api';
 import { useGetSchedule } from '../../api/getSchedule';
 
 type TableScheduleProps = {
@@ -25,6 +25,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   const [dataSchedule, setDataSchedule] = useState<SchedulesType[]>([]);
   const [DataEditFreeDay, setDataEditFreeDay] = useState<EditScheduleItemType[]>([]);
   const MutationEditItemSchedule = useEditFreeDay();
+  const MutationDeleteEmployeeSchedule = useDeleteScheduleEmployee();
   const { data, refetch } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
   const { data: dataShift, isLoading: loadingGetShift } = useGetShift();
   // Use State Untuk Mengganti Shift atau default Libur
@@ -42,10 +43,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
       } else {
         setIsSchedule(false);
       }
-    }
-
-    if (dataShift) {
-      console.log('Data Shit :', dataShift.data);
     }
   }, [data, dataShift, setIsSchedule]);
 
@@ -85,12 +82,18 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     }
   };
 
+  const ResetDataEditItemSchedule = () => {
+    setDataEditFreeDay([]);
+    modal.close();
+  };
+
   const HandleConfirmEditItemSchedule = async () => {
     const data_submit = HandleFormValue();
     MutationEditItemSchedule.mutateAsync(data_submit, {
       onSuccess: (data) => {
         modal.close();
         refetch();
+        ResetDataEditItemSchedule();
         notifications.show({
           message: 'Berhasil Mengubah Jadwal',
           color: 'green',
@@ -101,9 +104,24 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     });
   };
 
-  const ResetDataEditItemSchedule = () => {
-    setDataEditFreeDay([]);
-    modal.close();
+  const DeleteEmployeeSchedule = (id: number) => {
+    console.log('Delete Schedule');
+    MutationDeleteEmployeeSchedule.mutateAsync(id, {
+      onError: () => {
+        console.log('Error Delete Schedule Employee:');
+        notifications.show({
+          message: 'Gagal Menghapus Jadwal ',
+          color: 'red',
+        });
+      },
+      onSuccess: () => {
+        refetch();
+        notifications.show({
+          message: 'Berhasil Menghapus Jadwal',
+          color: 'green',
+        });
+      },
+    });
   };
 
   useEffect(() => {
@@ -147,20 +165,22 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
             }
           }}
         ></MonthPickerInput>
-        <div className="flex gap-2">
-          <Button
-            onClick={() => {
-              setFreeDay(!FreeDays);
-              if (DataEditFreeDay.length > 0) {
-                modal.open();
-              }
-            }}
-            style={{ zIndex: FreeDays ? 9999 : 1, position: 'relative' }}
-            leftSection={<IconSettings size={15} />}
-          >
-            {FreeDays ? 'Simpan' : 'Edit Jadwal'}
-          </Button>
-        </div>
+        {dataSchedule.length > 0 && (
+          <div className="flex gap-2">
+            <Button
+              onClick={() => {
+                setFreeDay(!FreeDays);
+                if (DataEditFreeDay.length > 0 && FreeDays) {
+                  modal.open();
+                }
+              }}
+              style={{ zIndex: FreeDays ? 9999 : 1, position: 'relative' }}
+              leftSection={<IconSettings size={15} />}
+            >
+              {FreeDays ? 'Simpan' : 'Edit Jadwal'}
+            </Button>
+          </div>
+        )}
       </div>
       <div
         className="absolute bg-black opacity-50 top-0 left-0 w-full h-screen"
@@ -174,7 +194,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
           <Table withColumnBorders>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th className="sticky left-0 bg-white">
+                <Table.Th className="sticky left-0 bg-gray-200 min-w-60">
                   <sub>Nama</sub>\<sup>Tgl</sup>
                 </Table.Th>
                 {Array.from({ length: data?.data[0]?.Schedules.length }).map((_, index) => (
@@ -185,7 +205,14 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
             <Table.Tbody>
               {dataSchedule.map((item: any, rowIndex: number) => (
                 <Table.Tr key={rowIndex}>
-                  <Table.Td className="sticky left-0 bg-white">{item.employee.name}</Table.Td>
+                  <Table.Td className="sticky left-0 bg-gray-200">
+                    <div className="w-full flex justify-between">
+                      <span>{item.employee.name}</span>
+                      <UnstyledButton onClick={() => DeleteEmployeeSchedule(item.id)}>
+                        <IconTrash size={15} className="text-red-600" />
+                      </UnstyledButton>
+                    </div>
+                  </Table.Td>
                   {item?.Schedules.map((schedule: any, colIndex: number) => (
                     <Table.Td
                       key={colIndex}

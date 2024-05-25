@@ -1,8 +1,10 @@
 import { ActionIcon, Loader, Table } from '@mantine/core';
-import { useGetShift } from '../../api';
-import { ShiftType } from '@/admin_features/types';
-import { IconPencil, IconTrash } from '@tabler/icons-react';
+// import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+
+import { ShiftType } from '@/admin_features/types';
+
+import { useGetShift } from '../../api';
 
 export const TableShift: React.FC = () => {
   const [shifts, setShifts] = useState<ShiftType[]>([]); // [1
@@ -32,7 +34,7 @@ export const TableShift: React.FC = () => {
             <Table.Th className="font-bold">Nama Shift</Table.Th>
             <Table.Th className="font-bold">Mulai</Table.Th>
             <Table.Th className="font-bold">Selesai</Table.Th>
-            <Table.Th className="font-bold">Aksi</Table.Th>
+            {/* <Table.Th className="font-bold">Aksi</Table.Th> */}
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -42,14 +44,14 @@ export const TableShift: React.FC = () => {
                 <Table.Td>{shift?.shift_name}</Table.Td>
                 <Table.Td>{shift?.start_time}</Table.Td>
                 <Table.Td>{shift?.end_time}</Table.Td>
-                <Table.Td>
+                {/* <Table.Td>
                   <ActionIcon className="me-2" color="yellow">
                     <IconPencil size={14} />
                   </ActionIcon>
                   <ActionIcon className="me-2" color="red">
                     <IconTrash size={14} />
                   </ActionIcon>
-                </Table.Td>
+                </Table.Td> */}
               </Table.Tr>
             );
           })}

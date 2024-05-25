@@ -1,10 +1,10 @@
-import { ActionIcon, Button, Loader, Table } from '@mantine/core';
-import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
+import { Button } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+
 import { TableShift } from '../components';
 
 export const ShiftAdmin: React.FC = () => {
-
   const navigate = useNavigate();
 
   return (

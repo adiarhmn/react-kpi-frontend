@@ -2,12 +2,9 @@ import { ActionIcon, Button, TextInput } from '@mantine/core';
 import { TimeInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft } from '@tabler/icons-react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 import { useCreateShift } from '../api/createShift';
-
-const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
-
 
 export const CreateShift: React.FC = () => {
   const navigate = useNavigate();
