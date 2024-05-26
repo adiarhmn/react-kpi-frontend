@@ -1,1 +1,2 @@
-export * from './TableUser'
+export * from './TableUser';
+export * from './FormUser';

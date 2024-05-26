@@ -3,6 +3,7 @@ export type UserType = {
   username: string;
   role: string;
   status: boolean;
+  password: string;
 };
 
 export type ShiftType = {

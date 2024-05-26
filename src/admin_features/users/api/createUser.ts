@@ -18,8 +18,5 @@ export async function createUser(user: UserPostType) {
 export const useCreateUser = () => {
   return useMutation({
     mutationFn: createUser,
-    onMutate: async (user: UserPostType) => {
-      console.log(user);
-    },
   });
 };
