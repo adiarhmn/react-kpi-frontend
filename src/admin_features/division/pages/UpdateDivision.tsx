@@ -1,29 +1,33 @@
 import { ActionIcon } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DivisionType } from '@/admin_features/types';
 
-import { useCreateDivision } from '../api';
+import { useUpdateDivision } from '../api';
 import { FormDivision } from '../components';
 
-export const CreateDivision: React.FC = () => {
+export const UpdateDivision: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const NavBack = () => {
     navigate(-1);
   };
 
-  const mutation = useCreateDivision();
+  const division = location.state.division as DivisionType;
+
+  const mutation = useUpdateDivision();
 
   const handleSubmit = async (dataDivision: DivisionType) => {
-    const divisionDataPost = {
+    const dataDivisionUpdate = {
+      id: dataDivision.id,
       division_name: dataDivision.division_name,
     };
 
-    await mutation.mutateAsync(divisionDataPost, {
+    await mutation.mutateAsync(dataDivisionUpdate, {
       onSuccess: (data) => {
         console.log('Success:', data);
-        navigate('/division', { state: { success: 'Data berhasil ditambahkan' } });
+        navigate('/division', { state: { success: 'Data berhasil diupdate' } });
       },
     });
   };
@@ -36,14 +40,18 @@ export const CreateDivision: React.FC = () => {
             <IconChevronLeft size={20} />
           </ActionIcon>
           <div>
-            <h2 className="font-bold">Tambah Divisi</h2>
+            <h2 className="font-bold">Update Divisi</h2>
             <div className="-mt-1 text-xs text-slate-400">
-              Berikut form untuk menambahkan divisi
+              Berikut form untuk mengubah data divisi
             </div>
           </div>
         </div>
         <div className="mt-5">
-          <FormDivision loading={mutation.isPending} onSubmit={handleSubmit} />
+          <FormDivision
+            currentValue={division}
+            loading={mutation.isPending}
+            onSubmit={handleSubmit}
+          />
         </div>
       </section>
     </main>

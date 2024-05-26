@@ -52,6 +52,7 @@ const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'Shift
 const { Employees } = lazyImport(() => import('@/admin_features/employees'), 'Employees');
 const { Division } = lazyImport(() => import('@/admin_features/division'), 'Division');
 const { CreateDivision } = lazyImport(() => import('@/admin_features/division'), 'CreateDivision');
+const { UpdateDivision } = lazyImport(() => import('@/admin_features/division'), 'UpdateDivision');
 const { CreateShift } = lazyImport(() => import('@/admin_features/shift'), 'CreateShift');
 const { CreateEmployee } = lazyImport(() => import('@/admin_features/employees'), 'CreateEmployee');
 const { Users } = lazyImport(() => import('@/admin_features/users'), 'Users');
@@ -135,6 +136,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="employees" element={<Employees />} />
             <Route path="division" element={<Division />} />
             <Route path="division/create" element={<CreateDivision />} />
+            <Route path="division/update" element={<UpdateDivision />} />
             <Route path="shift/create" element={<CreateShift />} />
             <Route path="employees/create" element={<CreateEmployee />} />
             <Route path="users" element={<Users />} />

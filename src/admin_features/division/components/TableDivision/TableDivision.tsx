@@ -3,6 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { DivisionType } from '@/admin_features/types';
 
@@ -14,6 +15,7 @@ export const TableDivision: React.FC = () => {
   const [divisionToDelete, setDivisionToDelete] = useState<DivisionType>();
   const { data, error, isLoading } = useGetDivisions();
   const deleteDivisionMutation = useDeleteDivision();
+  const navigate = useNavigate();
 
   // Fungsi Delete Division
   const deleteDivision = async (id: number) => {
@@ -76,7 +78,12 @@ export const TableDivision: React.FC = () => {
                 <Table.Td>{index + 1}</Table.Td>
                 <Table.Td>{divisi?.division_name}</Table.Td>
                 <Table.Td className="flex gap-2 items-center justify-center">
-                  <ActionIcon color="yellow">
+                  <ActionIcon
+                    onClick={() => {
+                      navigate('/division/update', { state: { division: divisi } });
+                    }}
+                    color="yellow"
+                  >
                     <IconPencil size={14} />
                   </ActionIcon>
                   <ActionIcon onClick={() => openDeleteModal(divisi)} color="red">

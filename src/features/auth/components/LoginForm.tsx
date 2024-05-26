@@ -32,7 +32,7 @@ export const LoginForm: React.FC = () => {
             form.setErrors(response.data.errors);
           } else {
             notifications.show({
-              message,
+              message: JSON.parse(response?.request.response).status ?? message ?? 'Error',
               color: 'red',
             });
           }
