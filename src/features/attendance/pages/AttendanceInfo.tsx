@@ -1,39 +1,35 @@
-import { useAuth } from '@/features/auth';
-import { Badge, Divider, Loader, Text } from '@mantine/core';
+import { Badge, Divider, Text } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { useNavigate } from 'react-router-dom';
-import { useGetAttendance } from '../api/getAttendance';
 import { useEffect, useState } from 'react';
-import { AttendanceType, ScheduleType } from '../types';
+import { useNavigate } from 'react-router-dom';
+
+import { useAuth } from '@/features/auth';
+
 import { useGetSchedule } from '../api';
+import { useGetAttendance } from '../api/getAttendance';
+import { AttendanceType, ScheduleType } from '../types';
 
 export const AttendanceInfo: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
-  const [attendance, setAttendance] = useState<AttendanceType[]>([]);
-  const [schedule, setSchedule] = useState<ScheduleType[]>([]);
+  const [attendance, setAttendance] = useState<AttendanceType>();
+  const [schedule, setSchedule] = useState<ScheduleType>();
   const status = localStorage.getItem('isCheckedIn');
   const currentDate: Date = new Date();
-  const formattedDate = format(currentDate, 'EEEE, dd MMM yyyy', { locale: id });
   const dateSend = format(currentDate, 'yyyy-MM-dd', { locale: id });
 
   function formatterDate(date: Date | string, formatType: string) {
     return format(date, formatType, { locale: id });
   }
 
-  const {
-    data: dataAttendance,
-    error: errorAttendance,
-    isLoading: loadingAttendance,
-  } = useGetAttendance(creds?.employee_id, dateSend);
+  const { data: dataAttendance, error: errorAttendance } = useGetAttendance(
+    creds?.employee_id,
+    dateSend
+  );
 
-  const {
-    data: dataSchedule,
-    error: errorSchedule,
-    isLoading: loadingSchedule,
-  } = useGetSchedule(creds?.employee_id, dateSend);
+  const { data: dataSchedule } = useGetSchedule(creds?.employee_id, dateSend);
 
   useEffect(() => {
     if (dataSchedule) {
@@ -48,14 +44,11 @@ export const AttendanceInfo: React.FC = () => {
   }, [dataAttendance]);
 
   if (errorAttendance) {
-    return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
+    return (
+      <div className="text-red-600 text-center my-20 font-bold">{errorAttendance.message}</div>
+    );
   }
 
-  console.log('Data attendance :', attendance != null);
-  console.log('Data schedule :', schedule);
-  console.log('Tipe data jam checkOut : ', typeof attendance.check_in);
-  // console.log('Sudah login :', localStorage.getItem('isCheckedIn'));
-  console.log('Sudah login :', status);
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -92,10 +85,10 @@ export const AttendanceInfo: React.FC = () => {
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
           <div className="col-span-3 text-center m-auto ">
             <Text size="27px" fw={700}>
-              {schedule.shift.shift_code}
+              {schedule?.shift.shift_code}
             </Text>
             <Text style={{ marginTop: '-5px' }} size="sm">
-              {schedule.shift.shift_name}
+              {schedule?.shift.shift_name}
             </Text>
           </div>
           <div className="col-span-9 ms-2 text-left">
@@ -110,16 +103,16 @@ export const AttendanceInfo: React.FC = () => {
               <div className="col-span-6 text-left mt-1 ms-2">
                 <Text size="xs">Check-in</Text>
                 <Text size="sm" fw={700}>
-                  {attendance.check_in != undefined
-                    ? formatterDate(attendance.check_in, 'HH:mm')
+                  {attendance?.check_in != undefined
+                    ? formatterDate(attendance?.check_in, 'HH:mm')
                     : '-- --'}
                 </Text>
               </div>
               <div className="col-span-6 text-left mt-1">
                 <Text size="xs">Check-out</Text>
                 <Text size="sm" fw={700}>
-                  {attendance.check_out != undefined
-                    ? formatterDate(attendance.check_out, 'HH:mm')
+                  {attendance?.check_out != undefined
+                    ? formatterDate(attendance?.check_out, 'HH:mm')
                     : '-- --'}
                 </Text>
               </div>

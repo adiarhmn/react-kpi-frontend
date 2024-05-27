@@ -2,6 +2,7 @@ import { MonthPickerInput } from '@mantine/dates';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { PaidLeaveList } from '../component/PaidLeaveList';
 
 export const DataPaidLeave: React.FC = () => {
@@ -35,7 +36,7 @@ export const DataPaidLeave: React.FC = () => {
         </div>
       </section>
 
-      <PaidLeaveList />
+      <PaidLeaveList status={''} />
     </main>
   );
 };

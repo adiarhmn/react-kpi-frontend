@@ -1,11 +1,11 @@
-import { AbsenceList } from '@/features/history/component/AbsenceList';
 import { Button, Fieldset, Modal, Select } from '@mantine/core';
-import { MonthPickerInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
-import { IconAdjustmentsHorizontal, IconPlus } from '@tabler/icons-react';
-import { IconChevronLeft } from '@tabler/icons-react';
+import { IconAdjustmentsHorizontal, IconPlus, IconChevronLeft } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+// eslint-disable-next-line no-restricted-imports
+import { AbsenceList } from '@/features/history/component/AbsenceList';
 //
 export const Absence: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);

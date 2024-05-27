@@ -10,7 +10,7 @@ export async function getAbsence(id?: number | null) {
   return res.data.data;
 }
 
-export async function getAbsenceById(id?: number | null) {
+export async function getAbsenceById(id?: number | null | string) {
   const res = await axios.get(`${BaseURL}/request/${id}`);
   return res.data.data;
 }
@@ -22,7 +22,7 @@ export async function getAbsenceByType(id?: number | null, type?: string, status
   return res.data.data;
 }
 
-export const useGetAbsenceById = (id?: number | null) => {
+export const useGetAbsenceById = (id?: number | null | string) => {
   return useQuery({ queryKey: ['absence', id], queryFn: () => getAbsenceById(id) });
 };
 
@@ -42,7 +42,7 @@ export function formatterDate(date: any, formatType: string) {
   return format(date, formatType, { locale: id });
 }
 
-export function getDaysBetweenDates(date1: string, date2: string): number {
+export function getDaysBetweenDates(date1: any, date2: any): number {
   const startDate = new Date(date1);
   const endDate = new Date(date2);
 

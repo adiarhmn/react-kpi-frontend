@@ -1,12 +1,12 @@
 import { Badge, Divider, Loader, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetAbsence, useGetAbsenceByType } from '../api';
-import { AbsenceType } from '../types';
-import { differenceInDays, format } from 'date-fns';
-import { id } from 'date-fns/locale';
+
 import { useAuth } from '@/features/auth';
+
+import { useGetAbsenceByType } from '../api';
 import { getDaysBetweenDates, formatterDate } from '../api/getAbsence';
+import { AbsenceType } from '../types';
 
 type PaidLeaveProps = {
   status: string;

@@ -1,11 +1,15 @@
 import { MonthPickerInput } from '@mantine/dates';
+import { useDisclosure } from '@mantine/hooks';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { AbsenceList } from '../component/AbsenceList';
 
 export const DataAbsence: React.FC = () => {
   const navigate = useNavigate();
+  const [opened, { open, close }] = useDisclosure(false);
+
   const [month, setMonth] = useState<Date | null>(new Date());
   return (
     <main>
@@ -21,6 +25,7 @@ export const DataAbsence: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
+
             <h2 className="font-semibold ">Data Izin</h2>
           </div>
           <span className="font-semibold">
@@ -35,7 +40,7 @@ export const DataAbsence: React.FC = () => {
         </div>
       </section>
 
-      <AbsenceList />
+      <AbsenceList status={'Belum%20Disetujui'} typeAbsence={''} modalState={opened} />
     </main>
   );
 };

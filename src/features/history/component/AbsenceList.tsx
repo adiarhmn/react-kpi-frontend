@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
-import { getAbsence, useGetAbsence, useGetAbsenceByType } from '../api';
+
+import { useGetAbsenceByType } from '../api';
 import { AbsenceType } from '../types';
 
 type AbsenceProps = {
