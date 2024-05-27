@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { LoadingScreen } from '@/components/elements';
 import { useEmployee } from '@/features/employee';
 
 import { logout, useCreds } from '../api';
 import { AuthContext } from '../contexts';
-import { useNavigate } from 'react-router-dom';
 
 type Props = {
   children: React.ReactNode;
