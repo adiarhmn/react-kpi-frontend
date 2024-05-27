@@ -1,13 +1,13 @@
 import { Image, Loader, Text } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useGetEmployeeFiles } from '../api';
-import { EmployeeFilesType } from '../types';
+
 import { useAuth } from '@/features/auth';
 
+import { useGetEmployeeFiles } from '../api';
+import { EmployeeFilesType } from '../types';
+
 export const FileList: React.FC = () => {
-  const navigate = useNavigate();
   const { creds } = useAuth();
   const [files, setFiles] = useState<EmployeeFilesType[]>([]);
   const { data, error, isLoading } = useGetEmployeeFiles(creds?.id);
@@ -46,7 +46,7 @@ export const FileList: React.FC = () => {
               <div className="gap-2 align-item-left">
                 <Text size="xs">Nama berkas</Text>
                 <Text size="xs" fw={700}>
-                  {files.file_name}
+                  {file.file_name}
                 </Text>
               </div>
               <div className="gap-2 mt-2">

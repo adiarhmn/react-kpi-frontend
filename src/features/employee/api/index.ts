@@ -1,4 +1,3 @@
-export * from './getEmployeeOutlets';
 export * from './getEmployees';
 export * from './getEmployee';
 export * from './getShift';

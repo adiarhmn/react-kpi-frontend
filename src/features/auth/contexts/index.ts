@@ -1,7 +1,7 @@
 import { UseMutateAsyncFunction } from '@tanstack/react-query';
 import { createContext } from 'react';
-import { Creds } from '../types';
 
+import { Creds } from '../types';
 
 export type AuthContextValue = {
   creds: Creds | null;
