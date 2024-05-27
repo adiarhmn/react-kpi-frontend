@@ -1,29 +1,42 @@
-import { ActionIcon, Button, Loader, Modal, Table, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { UserType } from '@/admin_features/types';
 import { useGetUsers, useDeleteUser } from '@/admin_features/users/api';
 
 export const TableUser = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState<UserType[]>([]);
   const { data, error, isLoading } = useGetUsers();
-  const [userToDelete, setUserToDelete] = useState({ id: 0, username: '' });
+  const [UserData, setUserData] = useState<UserType>({
+    id: 0,
+    username: '',
+    role: '',
+    status: false,
+    password: '',
+  });
   const [opened, { open, close }] = useDisclosure(false);
   const mutationDeleteUser = useDeleteUser();
 
+  // Fungsi Get User By Id
+  const UpdateUser = (user: UserType) => {
+    navigate('/users/update', { state: { user } });
+  };
+
   // Fungsi Delete User
   const deleteUserModal = (user: UserType) => {
-    setUserToDelete(user);
+    setUserData(user);
     open();
   };
   const confirmDeleteUser = async () => {
-    mutationDeleteUser.mutateAsync(userToDelete?.id, {
+    mutationDeleteUser.mutateAsync(UserData?.id, {
       onSuccess: (data) => {
         console.log('Success Delete:', data);
-        const newUsers = users.filter((user) => user.id !== userToDelete?.id);
+        const newUsers = users.filter((user) => user.id !== UserData?.id);
         setUsers(newUsers);
         close();
 
@@ -70,15 +83,12 @@ export const TableUser = () => {
                 <Table.Td>{user?.username}</Table.Td>
                 <Table.Td>{user?.role}</Table.Td>
                 <Table.Td className="flex gap-2 items-center justify-center">
-                  <ActionIcon color="yellow">
+                  <ActionIcon onClick={() => UpdateUser(user)} color="yellow">
                     <IconPencil size={14} />
                   </ActionIcon>
                   <ActionIcon onClick={() => deleteUserModal(user)} color="red">
                     <IconTrash size={14} />
                   </ActionIcon>
-                  <UnstyledButton>
-                    <IconInfoCircle className="text-blue-600" size={20} />
-                  </UnstyledButton>
                 </Table.Td>
               </Table.Tr>
             );
@@ -94,7 +104,7 @@ export const TableUser = () => {
         title={<span className="font-bold">Konfirmasi Hapus ?</span>}
       >
         Yakin hapus user atau akun{' '}
-        <span className="font-semibold text-blue-600">{userToDelete?.username}</span>
+        <span className="font-semibold text-blue-600">{UserData?.username}</span>
         <div className="pt-10 flex gap-2 justify-end">
           <Button onClick={confirmDeleteUser} loading={mutationDeleteUser.isPending}>
             Yakin

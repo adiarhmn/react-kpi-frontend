@@ -1,9 +1,10 @@
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import { HomeLayout, AuthLayout, AppLayout, AdminLayout } from '@/components/layout';
-import { lazyImport } from '@/utils/lazyImport';
 import { useEffect } from 'react';
-import { queryClient } from '@/lib/react-query';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+
+import { HomeLayout, AuthLayout, AppLayout, AdminLayout } from '@/components/layout';
 import { useAuth } from '@/features/auth';
+// import { queryClient } from '@/lib/react-query';
+import { lazyImport } from '@/utils/lazyImport';
 
 const { Development } = lazyImport(() => import('@/features/misc'), 'Development');
 const { NotFoundLayout } = lazyImport(() => import('@/components/layout'), 'NotFoundLayout');
@@ -51,10 +52,12 @@ const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'Shift
 const { Employees } = lazyImport(() => import('@/admin_features/employees'), 'Employees');
 const { Division } = lazyImport(() => import('@/admin_features/division'), 'Division');
 const { CreateDivision } = lazyImport(() => import('@/admin_features/division'), 'CreateDivision');
+const { UpdateDivision } = lazyImport(() => import('@/admin_features/division'), 'UpdateDivision');
 const { CreateShift } = lazyImport(() => import('@/admin_features/shift'), 'CreateShift');
 const { CreateEmployee } = lazyImport(() => import('@/admin_features/employees'), 'CreateEmployee');
 const { Users } = lazyImport(() => import('@/admin_features/users'), 'Users');
 const { CreateUser } = lazyImport(() => import('@/admin_features/users'), 'CreateUser');
+const { UpdateUser } = lazyImport(() => import('@/admin_features/users'), 'UpdateUser');
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -64,7 +67,7 @@ export const AppRoutes: React.FC = () => {
     if (!creds) {
       navigate('/login');
     }
-  }, []);
+  }, [creds, navigate]);
 
   return (
     <Routes>
@@ -133,10 +136,12 @@ export const AppRoutes: React.FC = () => {
             <Route path="employees" element={<Employees />} />
             <Route path="division" element={<Division />} />
             <Route path="division/create" element={<CreateDivision />} />
+            <Route path="division/update" element={<UpdateDivision />} />
             <Route path="shift/create" element={<CreateShift />} />
             <Route path="employees/create" element={<CreateEmployee />} />
             <Route path="users" element={<Users />} />
             <Route path="users/create" element={<CreateUser />} />
+            <Route path="users/update" element={<UpdateUser />} />
           </Route>
         )}
 

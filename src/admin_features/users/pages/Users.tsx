@@ -20,6 +20,7 @@ export const Users: React.FC = () => {
       hasNotifiedRef.current = true;
     }
   });
+
   return (
     <main>
       <section className="bg-white p-5 rounded-lg shadow-lg">

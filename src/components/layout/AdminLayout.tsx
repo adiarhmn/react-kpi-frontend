@@ -1,19 +1,10 @@
-import { Suspense, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { AppShell, Avatar, Burger, Button, Group, Menu, UnstyledButton, Text } from '@mantine/core';
+import { AppShell, Avatar, Burger, Group, Menu, UnstyledButton } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-// import { MantineLogo } from '@mantinex/mantine-logo';
-
-import { LoadingScreen } from '../elements';
 import {
   IconCalendar,
   IconHome2,
   IconSettings,
-  IconSearch,
-  IconPhoto,
-  IconMessageCircle,
   IconTrash,
-  IconArrowsLeftRight,
   IconClockHour1,
   IconUsersGroup,
   IconClipboardText,
@@ -22,8 +13,14 @@ import {
   IconBriefcase,
   IconLogout,
 } from '@tabler/icons-react';
-import { SideNav } from '../navigation';
+import { Suspense, useState } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+// import { MantineLogo } from '@mantinex/mantine-logo';
+
 import { useAuth } from '@/features/auth';
+
+import { LoadingScreen } from '../elements';
+import { SideNav } from '../navigation';
 
 const MenuMain = [{ title: 'Beranda', href: '/beranda', icon: IconHome2 }];
 
@@ -47,14 +44,12 @@ const MenuPengajuan = [
 ];
 
 export const AdminLayout: React.FC = () => {
-  const { creds, getRoleText, logout } = useAuth();
-  if (!creds) return <Navigate to="/login" replace />;
-
   const [opened, { toggle }] = useDisclosure();
-
   const [title, setTitle] = useState('Beranda');
   const isMobile = useMediaQuery('(max-width: 768px)');
 
+  const { creds, logout } = useAuth();
+  if (!creds) return <Navigate to="/login" replace />;
   return (
     <Suspense fallback={<LoadingScreen />}>
       <AppShell
@@ -89,14 +84,14 @@ export const AdminLayout: React.FC = () => {
                     <UnstyledButton>
                       <Group gap={16} px={20}>
                         <div className="text-sm text-end">
-                          <div className="font-semibold">Adi Aulia Rahman</div>
+                          <div className="font-semibold">{creds.username}</div>
                           <div className="text-xs -mt-1 text-slate-400">
-                            adiauliarahman@gmail.com
+                            {creds.role === 'admin' ? 'Administrator' : 'Karyawan'}
                           </div>
                         </div>
                         <Avatar
                           src={'/images/user-blue-person.png'}
-                          alt={'Adi Aulia Rahman'}
+                          alt={'User'}
                           radius="xl"
                           size={33}
                         />

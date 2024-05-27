@@ -51,7 +51,10 @@ export const formatDateToString = (dateString: string): string => {
   return `${year}-${month}-${day}`;
 };
 
-export function getStartAndEndOfMonth(month: string = ""): { startOfMonth: Date; endOfMonth: Date } {
+export function getStartAndEndOfMonth(month: string = ''): {
+  startOfMonth: Date;
+  endOfMonth: Date;
+} {
   const now = new Date(month);
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
