@@ -1,13 +1,13 @@
 import { Badge, Button, Divider, Text } from '@mantine/core';
-import { AttendanceType, ScheduleType } from '../types';
-import { useCreateAttendance } from '../api';
-import { useNavigate } from 'react-router-dom';
 import { IconArrowBarToLeft, IconArrowBarToRight } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { useUpdateAttendance } from '../api/updateAttendance';
+import { useEffect, useState } from 'react';
+
+import { useCreateAttendance } from '../api';
 import { useGetAttendance } from '../api/getAttendance';
+import { useUpdateAttendance } from '../api/updateAttendance';
+import { AttendanceType, ScheduleType } from '../types';
 
 type ScheduleProps = {
   schedule: ScheduleType;
@@ -24,11 +24,9 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
     localStorage.setItem('isCheckedIn', JSON.stringify(isCheckedIn));
   }, [isCheckedIn]);
 
-  const [attendance, setAttendance] = useState<AttendanceType[]>([]);
+  const [attendance, setAttendance] = useState<AttendanceType>();
   console.log(schedule);
   // const navigate = useNavigate();
-
-  // console.log('Apakah sudah checkin? :', isCheckIn);
 
   function formatDate(date: string, formatType: string) {
     return format(date, formatType, { locale: id });
@@ -68,15 +66,10 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
     }
   }, [data]);
 
-  //
-  // const dataAttendance = data;
-  console.log('data Attendance : ', attendance);
-  // console.log('Sebelum update :', localStorage.getItem('isCheckIn'));
-
   const handleCheckOut = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const attendanceCheckOut = {
-      attendance_id: attendance.id,
+      attendance_id: attendance?.id,
     };
 
     await mutationCheckOut.mutateAsync(attendanceCheckOut, {
@@ -135,13 +128,13 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
       </div>
       <div className="p-2 mt-2">
         {isCheckedIn == false ? (
-          <form onClick={handleCheckIn}>
+          <form onSubmit={handleCheckIn}>
             <Button type="submit" fullWidth rightSection={<IconArrowBarToRight />}>
               Check-in
             </Button>
           </form>
         ) : (
-          <form onClick={handleCheckOut}>
+          <form onSubmit={handleCheckOut}>
             <Button type="submit" color="red" fullWidth rightSection={<IconArrowBarToLeft />}>
               Check-out
             </Button>

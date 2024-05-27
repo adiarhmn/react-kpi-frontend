@@ -1,18 +1,17 @@
 import { Badge, Divider, Image, Loader, Tabs, Text, rem } from '@mantine/core';
 import { IconChevronLeft, IconClipboardText } from '@tabler/icons-react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getDaysBetweenDates, useGetAbsenceById, formatterDate } from '../api';
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { getDaysBetweenDates, useGetAbsenceById, formatterDate } from '../api';
 import { AbsenceType } from '../types';
-import { format } from 'date-fns';
-import { id, ms } from 'date-fns/locale';
 
 export const DetailAbsence: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [absence, setAbsence] = useState<AbsenceType>();
 
-  const { data, isLoading, error } = useGetAbsenceById(id);
+  const { data } = useGetAbsenceById(id);
   useEffect(() => {
     if (data) {
       setAbsence(data);

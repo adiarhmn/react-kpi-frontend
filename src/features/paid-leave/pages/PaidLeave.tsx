@@ -1,7 +1,9 @@
-import { PaidLeaveList } from '@/features/history/component/PaidLeaveList';
 import { Button } from '@mantine/core';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+
+// eslint-disable-next-line no-restricted-imports
+import { PaidLeaveList } from '@/features/history/component/PaidLeaveList';
 
 export const PaidLeave: React.FC = () => {
   const navigate = useNavigate();

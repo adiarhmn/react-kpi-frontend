@@ -4,7 +4,7 @@ import axios from 'axios';
 const BaseURL = import.meta.env.VITE_API_URL;
 
 type UpdateOvertimePost = {
-  overtime_id: number;
+  overtime_id?: number | null;
 };
 
 export const postUpdateOvertime = async (UpdateOvertimePost: UpdateOvertimePost) => {

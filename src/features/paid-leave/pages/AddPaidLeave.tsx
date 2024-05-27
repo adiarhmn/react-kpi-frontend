@@ -1,4 +1,3 @@
-import { AbsenceType } from '@/features/history';
 import { Button, FileInput, JsonInput, Textarea } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
@@ -7,8 +6,9 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { AbsenceType } from '@/features/history';
 
 const BaseURL = import.meta.env.VITE_API_URL;
 
@@ -50,6 +50,7 @@ export const AddPaidLeave: React.FC = () => {
       date_end: formatdate(form.values.date_end).toString(),
       type: 'Cuti',
       description: form.values.description,
+      created_at: null,
       employee_id: 1,
     };
     mutation.mutateAsync(absenceData);

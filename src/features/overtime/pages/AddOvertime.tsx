@@ -1,16 +1,20 @@
-import { AttendanceType } from '@/features/attendance';
-import { useGetAttendance } from '@/features/attendance/api/getAttendance';
-import { useAuth } from '@/features/auth';
-import { formatterDate } from '@/features/history/api/getAbsence';
 import { Badge, Button, Divider, Image, Modal, Text, Textarea, Tooltip } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronLeft, IconClock24, IconDeviceTablet, IconMap2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { AttendanceType } from '@/features/attendance';
+// eslint-disable-next-line no-restricted-imports
+import { useGetAttendance } from '@/features/attendance/api/getAttendance';
+import { useAuth } from '@/features/auth';
+// eslint-disable-next-line no-restricted-imports
+import { formatterDate } from '@/features/history/api/getAbsence';
+
 import { useCreateOvertime } from '../api/createOvertime';
-import { OvertimeType } from '../types';
-import { useForm } from '@mantine/form';
 import { useUpdateOvertime } from '../api/updateOvertime';
+import { OvertimeType } from '../types';
 
 export const AddOvertime: React.FC = () => {
   const [overtimeStatus, setOvertimeStatus] = useState<boolean>(() => {
@@ -24,7 +28,7 @@ export const AddOvertime: React.FC = () => {
   const status = localStorage.getItem('isCheckedIn');
   // const checkInStatus;
   const { creds } = useAuth();
-  const [overtime, setOvertime] = useState<OvertimeType[]>([]);
+  const [overtime, setOvertime] = useState<OvertimeType>();
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
@@ -85,7 +89,7 @@ export const AddOvertime: React.FC = () => {
   const handleEndOvertime = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const attendanceCheckOut = {
-      overtime_id: overtime.id,
+      overtime_id: overtime?.id,
     };
 
     await mutationEndOvertime.mutateAsync(attendanceCheckOut, {
