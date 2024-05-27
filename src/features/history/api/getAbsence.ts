@@ -38,7 +38,7 @@ export const useGetAbsenceByType = (id?: number | null, type?: string, status?: 
 };
 
 // FORMATTER DATE
-export default function formatterDate(date: any, formatType: string) {
+export function formatterDate(date: any, formatType: string) {
   return format(date, formatType, { locale: id });
 }
 

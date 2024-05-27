@@ -6,7 +6,7 @@ import { AbsenceType } from '../types';
 import { differenceInDays, format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useAuth } from '@/features/auth';
-import formatterDate, { getDaysBetweenDates } from '../api/getAbsence';
+import { getDaysBetweenDates, formatterDate } from '../api/getAbsence';
 
 type PaidLeaveProps = {
   status: string;

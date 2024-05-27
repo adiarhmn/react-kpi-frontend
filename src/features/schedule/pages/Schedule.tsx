@@ -22,23 +22,11 @@ export const Schedule: React.FC = () => {
       setShifts(data);
     }
   }, [data]);
-  // const [dataShift, setDataShift] = useState<string[]>([]);
-  // useEffect(() => {
-  //   // Mengambil shift_name dari setiap objek shift
-  //   let shiftNames = shifts.map((shift) => shift.shift_name);
-  //   setDataShift((prevData) => [...prevData, ...shiftNames]);
-  // }, []);
 
   console.log('Value Shift : ', selectShift);
   console.log('Value Status : ', selectStatus);
 
   const navigate = useNavigate();
-
-  function formatDate(date: string, formatType: string) {
-    const dateToFormat: Date = new Date(date);
-    const formattedDate = format(dateToFormat, formatType, { locale: id });
-    return formattedDate;
-  }
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>

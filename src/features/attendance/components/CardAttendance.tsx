@@ -26,7 +26,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
 
   const [attendance, setAttendance] = useState<AttendanceType[]>([]);
   console.log(schedule);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // console.log('Apakah sudah checkin? :', isCheckIn);
 

@@ -1,15 +1,52 @@
-import formatterDate from '@/features/history/api/getAbsence';
-import { Badge, Button, Divider, Image, JsonInput, Modal, Text } from '@mantine/core';
+import { AttendanceType } from '@/features/attendance';
+import { useGetAttendance } from '@/features/attendance/api/getAttendance';
+import { useAuth } from '@/features/auth';
+import { formatterDate } from '@/features/history/api/getAbsence';
+import { Badge, Button, Divider, Image, Modal, Text, Textarea, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronLeft, IconClock24, IconDeviceTablet, IconMap2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCreateOvertime } from '../api/createOvertime';
+import { OvertimeType } from '../types';
+import { useForm } from '@mantine/form';
+import { useUpdateOvertime } from '../api/updateOvertime';
 
 export const AddOvertime: React.FC = () => {
+  const [overtimeStatus, setOvertimeStatus] = useState<boolean>(() => {
+    const savedState = localStorage.getItem('overtimeStatus');
+    return savedState ? JSON.parse(savedState) : false;
+  });
+  console.log('status lembur : ', overtimeStatus);
+  useEffect(() => {
+    localStorage.setItem('overtimeStatus', JSON.stringify(overtimeStatus));
+  }, [overtimeStatus]);
+  const status = localStorage.getItem('isCheckedIn');
+  // const checkInStatus;
+  const { creds } = useAuth();
+  const [overtime, setOvertime] = useState<OvertimeType[]>([]);
+  const form = useForm({
+    validateInputOnChange: true,
+    initialValues: {
+      detail: '',
+    },
+    validate: {
+      detail: (value) => (value === '' ? 'harap mengisi detail kegiatan' : null),
+    },
+  });
+
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [opened, { open, close }] = useDisclosure(false);
+  const [attendance, setAttendance] = useState<AttendanceType>();
+  const { data } = useGetAttendance(creds?.employee_id, formatterDate(currentDate, 'yyyy-MM-dd'));
+
+  useEffect(() => {
+    if (data) {
+      setAttendance(data[0]);
+    }
+  }, [data]);
 
   const navigate = useNavigate();
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
 
   useEffect(() => {
     const updateCurrentDate = () => {
@@ -19,6 +56,49 @@ export const AddOvertime: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  // [Button start overtime]
+  const mutationAddOvertime = useCreateOvertime();
+  const handleOvertime = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const overtimeData = {
+      attendance_id: attendance?.id,
+      detail: form.values.detail,
+    };
+
+    await mutationAddOvertime.mutateAsync(overtimeData, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+
+        setOvertime(data.data);
+        setOvertimeStatus(true);
+        close();
+        // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
+      },
+    });
+  };
+  // [End Button start overtime]
+
+  // [Button Stop Overtime]
+  const mutationEndOvertime = useUpdateOvertime();
+
+  const handleEndOvertime = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const attendanceCheckOut = {
+      overtime_id: overtime.id,
+    };
+
+    await mutationEndOvertime.mutateAsync(attendanceCheckOut, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        setOvertimeStatus(false);
+        // console.log('Sesudah update  :', localStorage.getItem('isCheckIn'));
+      },
+    });
+  };
+  // [End Button Stop Overtime]
+
+  // console.log('data overtime : ', overtime);
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -69,22 +149,56 @@ export const AddOvertime: React.FC = () => {
                 </Text>
               </div>
               <div className=" col-span-6 text-right -mt-6">
-                <Button
-                  onClick={open}
-                  className="shadow-lg"
-                  style={{ borderRadius: '15px', width: '110px' }}
-                  size="sm"
-                  color="green"
-                >
-                  Mulai
-                </Button>
+                {status == 'false' && attendance?.id != null && overtimeStatus != true ? (
+                  <Button
+                    onClick={open}
+                    className="shadow-lg"
+                    style={{ borderRadius: '15px', width: '110px' }}
+                    size="sm"
+                    color="green"
+                  >
+                    Mulai
+                  </Button>
+                ) : (
+                  <Tooltip
+                    label={
+                      status == 'true'
+                        ? 'Anda masih dalam keadaan Check-In'
+                        : attendance?.id == null
+                          ? 'Anda belum melakukan Check-in hari ini'
+                          : 'Anda tidak memenuhi syarat untuk lembur  '
+                    }
+                  >
+                    <Button
+                      data-disabled
+                      className="shadow-lg"
+                      style={{ borderRadius: '15px', width: '110px' }}
+                      size="sm"
+                      color="grey"
+                    >
+                      Mulai{' '}
+                    </Button>
+                  </Tooltip>
+                )}
+                <form onSubmit={handleEndOvertime}>
+                  {' '}
+                  <Button
+                    type="submit"
+                    className="shadow-lg"
+                    style={{ borderRadius: '15px', width: '110px' }}
+                    size="sm"
+                    color="red"
+                  >
+                    Selesai
+                  </Button>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-7">
         <div className="flex justify-between text-xs items-center p-2">
           <span className="font-bold text-blue-700">Data lembur</span>
           <Badge
@@ -111,8 +225,7 @@ export const AddOvertime: React.FC = () => {
             <div className="ms-2 -mb-2">
               <Text size="xs">Lembur mulai</Text>
               <Text size="sm" fw={700}>
-                {/* {formattedTime} */}
-                -- --
+                {/* {overtime != undefined ? formatterDate(overtime.start_time, 'HH:mm') : '-- -- '} */}
               </Text>
             </div>
             <Divider my="sm" />
@@ -133,20 +246,22 @@ export const AddOvertime: React.FC = () => {
 
       {/* Modal tambah kegiatan lembur */}
       <Modal opened={opened} onClose={close} title="Pengajuan lembur">
-        <div className="mb-2">
-          <JsonInput
-            label="Kegiatan"
-            placeholder="masukkan kegiatan yang akan dilakukan"
-            formatOnBlur
-            autosize
-            minRows={5}
-          />
-        </div>
-        <div className="mb-2 mt-3">
-          <Button fullWidth rightSection={<IconClock24 />}>
-            Mulai lembur
-          </Button>
-        </div>
+        <form onSubmit={handleOvertime}>
+          <div className="mb-2">
+            <Textarea
+              label="Kegiatan"
+              placeholder="masukkan kegiatan yang akan dilakukan"
+              autosize
+              minRows={5}
+              {...form.getInputProps('detail')}
+            />
+          </div>
+          <div className="mb-2 mt-3">
+            <Button type="submit" fullWidth rightSection={<IconClock24 />}>
+              Mulai lembur
+            </Button>
+          </div>
+        </form>
       </Modal>
     </main>
   );
