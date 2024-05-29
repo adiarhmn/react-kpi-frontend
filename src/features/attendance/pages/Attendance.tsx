@@ -1,4 +1,4 @@
-import { Button, Text, Image, Loader, Modal, Input, Textarea } from '@mantine/core';
+import { Button, Text, Image, Loader, Modal, Input, Textarea, Divider } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconArrowBarToRight, IconMap2, IconPlus } from '@tabler/icons-react';
@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/features/auth';
 
 import { useCreateActivity, useGetAttendance, useGetSchedule } from '../api';
+import { useGetActivity } from '../api/getActivity';
 import { CardAttendance } from '../components';
 import { ActivityType, AttendanceType } from '../types';
 
@@ -26,16 +27,20 @@ export const Attendance: React.FC = () => {
   const { data: dataAttendance } = useGetAttendance(employee_id, dateToday);
   useEffect(() => {
     if (dataAttendance) {
-      setAttendance(dataAttendance);
+      setAttendance(dataAttendance[0]);
     }
   }, [dataAttendance]);
 
   console.log('Data attendance : ', attendance);
   const [activities, setActivities] = useState<ActivityType[]>([]);
-  // const { data: dataActivity } = useGetActivity(attendance?.id, dateToday);
+  const { data: dataActivity } = useGetActivity(attendance?.id);
   const { data, error, isLoading } = useGetSchedule(employee_id, dateToday);
   // console.log('adaaa;', dataschedule);
-  useEffect(() => {}, [data]);
+  useEffect(() => {
+    if (dataActivity) {
+      setActivities(dataActivity);
+    }
+  }, [dataActivity]);
   // console.log('Data schedule', data);
 
   const form = useForm({
@@ -85,6 +90,7 @@ export const Attendance: React.FC = () => {
 
   const dataSchedule = data;
   console.log('Data activity : ', activities);
+  console.log('Data attendance : ', attendance);
 
   return (
     <main className="min-h-96 relative">
@@ -115,24 +121,41 @@ export const Attendance: React.FC = () => {
           </Button>
         </div>
         <div className="w-full pb-2">
-          <div className="-mt-2 p-2">
-            <Text size="xs" fw={700}>
-              Judul kegiatan
-            </Text>
-            <Text style={{ textAlign: 'justify' }} size="sm">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit
-            </Text>
-          </div>
-          <div className="mt-1 p-2">
-            <Text size="xs" fw={700}>
-              Deskripsi kegiatan
-            </Text>
-            <Text style={{ textAlign: 'justify' }} size="sm">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </div>
+          {activities.length > 0 ? (
+            activities.map((activity, index) => (
+              <div key={index}>
+                {' '}
+                <div className="-mt-2 p-2">
+                  <Text size="xs" fw={700}>
+                    Judul
+                  </Text>
+                  <Text style={{ textAlign: 'justify' }} size="sm">
+                    {activity?.name}
+                  </Text>
+                </div>
+                <div className="mt-1 p-2">
+                  <Text size="xs" fw={700}>
+                    Deskripsi kegiatan
+                  </Text>
+                  <Text style={{ textAlign: 'justify' }} size="sm">
+                    {activity?.description}
+                  </Text>
+                </div>
+                <Divider className="mb-2"></Divider>
+              </div>
+            ))
+          ) : (
+            <div className="w-full col-span-12">
+              <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+                <img
+                  className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+                  src="/images/blank-canvas.svg"
+                  alt=""
+                />
+                <span className="font-bold text-slate-400 text-lg">Belum ada data kegiatan</span>
+              </section>
+            </div>
+          )}
         </div>
       </section>
       {/* End tugas card */}

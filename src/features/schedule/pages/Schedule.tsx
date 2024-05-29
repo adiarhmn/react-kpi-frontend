@@ -28,7 +28,7 @@ export const Schedule: React.FC = () => {
   const [selectShift, setSelectShift] = useState('');
   const [selectStatus, setSelectStatus] = useState('');
   const [shifts, setShifts] = useState<ShiftType[]>([]);
-  const { data, isLoading, error } = useGetShift();
+  const { data } = useGetShift();
   useEffect(() => {
     if (data) {
       setShifts(data);
@@ -91,7 +91,7 @@ export const Schedule: React.FC = () => {
         radius="sm"
         opened={opened}
         onClose={close}
-        title="Authentication"
+        title="Filter"
       >
         <div>
           {' '}

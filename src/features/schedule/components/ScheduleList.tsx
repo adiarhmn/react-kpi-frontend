@@ -126,7 +126,7 @@ export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, mo
                     <div className="my-auto ms-4 mt-1">
                       <Text size="30px" fw={700}>
                         {/* {formatdate(absence?.date_start)} */}
-                        SF2
+                        {schedule?.shift.shift_code}
                       </Text>
                       <Text size="7px" fw={500}>
                         {/* {formatdate(absence?.date_start)} */}

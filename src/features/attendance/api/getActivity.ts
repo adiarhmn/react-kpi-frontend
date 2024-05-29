@@ -3,14 +3,14 @@ import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL;
 
-export async function getActivity(employee_id: number | undefined, date: string) {
-  const res = await axios.get(`${BaseURL}/attendance?employee=${employee_id}&date=${date}`);
+export async function getActivity(attendance_id: number | undefined) {
+  const res = await axios.get(`${BaseURL}/activity?attendance=${attendance_id}`);
   return res.data.data;
 }
 
-export const useGetActivity = (employee_id: number | undefined, date: string) => {
+export const useGetActivity = (attendance_id: number | undefined) => {
   return useQuery({
-    queryKey: ['schedule', employee_id, date],
-    queryFn: () => getActivity(employee_id, date),
+    queryKey: ['activity', attendance_id],
+    queryFn: () => getActivity(attendance_id),
   });
 };
