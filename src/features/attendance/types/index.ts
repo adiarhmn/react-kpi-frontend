@@ -28,3 +28,11 @@ export type AttendanceType = {
   employee_id: number;
   schedule_id: number;
 };
+
+export type ActivityType = {
+  id: number;
+  name: string;
+  description: string;
+  time: string | Date;
+  attendance_id: number;
+};

@@ -21,7 +21,7 @@ export const AddOvertime: React.FC = () => {
     const savedState = localStorage.getItem('overtimeStatus');
     return savedState ? JSON.parse(savedState) : false;
   });
-  console.log('status lembur : ', overtimeStatus);
+  // console.log('status lembur : ', overtimeStatus);
   useEffect(() => {
     localStorage.setItem('overtimeStatus', JSON.stringify(overtimeStatus));
   }, [overtimeStatus]);
@@ -103,6 +103,8 @@ export const AddOvertime: React.FC = () => {
   // [End Button Stop Overtime]
 
   // console.log('data overtime : ', overtime);
+  // console.log('Sudah checkin? : ', status);
+  // console.log('Data attendance : ', attendance);
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -153,49 +155,31 @@ export const AddOvertime: React.FC = () => {
                 </Text>
               </div>
               <div className=" col-span-6 text-right -mt-6">
-                {status == 'false' && attendance?.id != null && overtimeStatus != true ? (
+                {overtimeStatus != true ? (
                   <Button
                     onClick={open}
+                    disabled={status == 'true' || attendance == undefined}
                     className="shadow-lg"
                     style={{ borderRadius: '15px', width: '110px' }}
                     size="sm"
-                    color="green"
+                    color={status != 'true' ? 'green' : 'grey'}
                   >
                     Mulai
                   </Button>
                 ) : (
-                  <Tooltip
-                    label={
-                      status == 'true'
-                        ? 'Anda masih dalam keadaan Check-In'
-                        : attendance?.id == null
-                          ? 'Anda belum melakukan Check-in hari ini'
-                          : 'Anda tidak memenuhi syarat untuk lembur  '
-                    }
-                  >
+                  <form onSubmit={handleEndOvertime}>
+                    {' '}
                     <Button
-                      data-disabled
+                      type="submit"
                       className="shadow-lg"
                       style={{ borderRadius: '15px', width: '110px' }}
                       size="sm"
-                      color="grey"
+                      color="red"
                     >
-                      Mulai{' '}
+                      Selesai
                     </Button>
-                  </Tooltip>
+                  </form>
                 )}
-                <form onSubmit={handleEndOvertime}>
-                  {' '}
-                  <Button
-                    type="submit"
-                    className="shadow-lg"
-                    style={{ borderRadius: '15px', width: '110px' }}
-                    size="sm"
-                    color="red"
-                  >
-                    Selesai
-                  </Button>
-                </form>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { IconArrowBarToLeft, IconArrowBarToRight } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 
 import { useCreateAttendance } from '../api';
 import { useGetAttendance } from '../api/getAttendance';
@@ -44,9 +45,17 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
 
     await mutationCheckIn.mutateAsync(attendanceCheckIn, {
       onSuccess: (data) => {
+        Swal.fire({
+          width: '80%',
+          title: 'Check In Berhasil!',
+          timer: 3000,
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        });
         console.log('Success:', data);
         setAttendance(data.data);
         setIsCheckedIn(true);
+
         // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
       },
     });
@@ -56,10 +65,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
   // {BUTTON CHECK-OUT}
   const mutationCheckOut = useUpdateAttendance();
 
-  const { data, isLoading, error } = useGetAttendance(
-    schedule.employee_schedule.employee_id,
-    schedule.date
-  );
+  const { data } = useGetAttendance(schedule.employee_schedule.employee_id, schedule.date);
   useEffect(() => {
     if (data) {
       setAttendance(data[0]);
@@ -74,6 +80,13 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
 
     await mutationCheckOut.mutateAsync(attendanceCheckOut, {
       onSuccess: (data) => {
+        Swal.fire({
+          width: '80%',
+          title: 'Check Out Berhasil!',
+          timer: 3000,
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        });
         console.log('Success:', data);
         setIsCheckedIn(false);
         // console.log('Sesudah update  :', localStorage.getItem('isCheckIn'));
@@ -85,7 +98,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
   return (
     <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
       <div className="flex justify-between text-xs items-center p-2">
-        <span className="font-bold text-blue-700">Absensi</span>
+        <span className="text-base font-bold text-blue-700">Absensi</span>
 
         <Badge
           size="xs"
