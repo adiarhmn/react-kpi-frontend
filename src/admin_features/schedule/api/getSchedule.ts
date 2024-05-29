@@ -5,6 +5,7 @@ const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export async function getSchedule(month: number, year: number) {
   const res = await axios.get(`${BaseURL}/employee-schedule?month=${month}&year=${year}`);
+  console.log('Schedule Data:', `${BaseURL}/employee-schedule?month=${month}&year=${year}`);
   return res.data;
 }
 

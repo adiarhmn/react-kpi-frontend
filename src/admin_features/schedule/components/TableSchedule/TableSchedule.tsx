@@ -150,6 +150,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     }
   };
 
+  console.log('Data Schedule', data);
   return (
     <section className="bg-white rounded-lg shadow-lg p-3">
       <div className="mb-3 flex gap-2 justify-between flex-wrap">
@@ -241,7 +242,9 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                       }}
                       className={`cursor-pointer ${ShowScheduleCell(schedule).className}`}
                     >
-                      {ShowScheduleCell(schedule).value}
+                      {ShowScheduleCell(schedule).value == 1
+                        ? 'Test'
+                        : ShowScheduleCell(schedule).value}
                     </Table.Td>
                   ))}
                 </Table.Tr>

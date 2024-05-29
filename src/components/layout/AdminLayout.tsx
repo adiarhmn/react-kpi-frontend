@@ -12,6 +12,8 @@ import {
   IconBuildingEstate,
   IconBriefcase,
   IconLogout,
+  IconLuggage,
+  IconFileOff,
 } from '@tabler/icons-react';
 import { Suspense, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
@@ -38,8 +40,8 @@ const MenuAbsensi = [
 ];
 
 const MenuPengajuan = [
-  { title: 'Cuti', href: '/leave', icon: IconTrash },
-  { title: 'Izin', href: '/permit', icon: IconTrash },
+  { title: 'Cuti', href: '/leave', icon: IconLuggage },
+  { title: 'Izin', href: '/permit', icon: IconFileOff },
   { title: 'Lembur', href: '/overtime', icon: IconTrash },
 ];
 

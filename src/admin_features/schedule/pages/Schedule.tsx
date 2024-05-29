@@ -34,7 +34,16 @@ export const Schedule: React.FC = () => {
             Buat Jadwal
           </Button>
         )}
-        {isSchedule && <Button leftSection={<IconPencil size={15} />}>Edit Data</Button>}
+        {isSchedule && (
+          <Button
+            onClick={() =>
+              navigate(`/schedule/update?month=${formatDateToString(month.toString())}`)
+            }
+            leftSection={<IconPencil size={15} />}
+          >
+            Tambah Karyawan
+          </Button>
+        )}
       </section>
 
       {/* Table */}

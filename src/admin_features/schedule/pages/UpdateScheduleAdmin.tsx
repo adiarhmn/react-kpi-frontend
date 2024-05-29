@@ -1,6 +1,8 @@
 import { ActionIcon, Button, Group, MultiSelect, Select } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import { IconChevronLeft, IconDeviceFloppy } from '@tabler/icons-react';
+import { AxiosError } from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useGetEmployees } from '@/admin_features/employees/api';
@@ -9,7 +11,10 @@ import { formatDateToString, getStartAndEndOfMonth } from '@/utils/format';
 
 import { useCreateSchedule, useValidateSchedule } from '../api';
 
-export const CreateSchedule: React.FC = () => {
+type DataError = {
+  message: string;
+};
+export const UpdateSchedule: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const query = new URLSearchParams(location.search);
@@ -57,14 +62,20 @@ export const CreateSchedule: React.FC = () => {
               console.log('Success:', data);
               navigate(-1);
             },
-            onError: (error) => {
-              console.log('Gagal Insert Data:', error);
-            },
           });
         }
       },
-      onError: (error) => {
-        console.log('Gagal Insert Data:', error);
+      onError: (err) => {
+        if (err && (err as AxiosError).response) {
+          const axiosError = err as AxiosError;
+          const dataError = axiosError.response?.data as DataError;
+
+          notifications.show({
+            title: 'Error',
+            message: dataError.message,
+            color: 'red',
+          });
+        }
       },
     });
   };
@@ -100,9 +111,9 @@ export const CreateSchedule: React.FC = () => {
             <IconChevronLeft size={20} />
           </ActionIcon>
           <div>
-            <h1 className="font-semibold">Tambah Jadwal</h1>
+            <h1 className="font-semibold">Update Jadwal</h1>
             <div className="text-xs text-slate-400 -mt-1">
-              Berikut form untuk menambahkan jadwal baru
+              Berikut form untuk menambahkan jadwal baru untuk karyawan
             </div>
           </div>
         </Group>
@@ -140,7 +151,7 @@ export const CreateSchedule: React.FC = () => {
           </div>
 
           <Button className="mt-4" type="submit" leftSection={<IconDeviceFloppy size={17} />}>
-            Tambah Jadwal
+            Tambah Karyawan
           </Button>
         </form>
       </section>
