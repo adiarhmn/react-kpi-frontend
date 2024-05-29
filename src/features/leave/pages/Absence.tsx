@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-import { Button, Drawer, Fieldset, Modal, Select } from '@mantine/core';
+import { Button, Drawer, Fieldset, Select } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconPlus, IconChevronLeft } from '@tabler/icons-react';
 import { useState } from 'react';

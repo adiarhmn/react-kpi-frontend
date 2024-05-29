@@ -10,20 +10,20 @@ import { useGetAttendance } from '../api/getAttendance';
 import { useUpdateAttendance } from '../api/updateAttendance';
 import { AttendanceType, ScheduleType } from '../types';
 
+import { CardActivity } from './CardActivity';
+
 type ScheduleProps = {
   schedule: ScheduleType;
+  isCheckedIn: boolean;
+  setIsCheckIn: (value: boolean) => void;
 };
 
-export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: ScheduleProps) => {
-  const [isCheckedIn, setIsCheckedIn] = useState<boolean>(() => {
-    const savedState = localStorage.getItem('isCheckedIn');
-    return savedState ? JSON.parse(savedState) : false;
-  });
-
+export const CardAttendance: React.FC<ScheduleProps> = ({
+  schedule,
+  isCheckedIn,
+  setIsCheckIn,
+}: ScheduleProps) => {
   console.log('status checkin : ', isCheckedIn);
-  useEffect(() => {
-    localStorage.setItem('isCheckedIn', JSON.stringify(isCheckedIn));
-  }, [isCheckedIn]);
 
   const [attendance, setAttendance] = useState<AttendanceType>();
   console.log(schedule);
@@ -54,7 +54,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
         });
         console.log('Success:', data);
         setAttendance(data.data);
-        setIsCheckedIn(true);
+        setIsCheckIn(true);
 
         // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
       },
@@ -88,7 +88,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
           confirmButtonText: 'Ok',
         });
         console.log('Success:', data);
-        setIsCheckedIn(false);
+        setIsCheckIn(false);
         // console.log('Sesudah update  :', localStorage.getItem('isCheckIn'));
       },
     });
@@ -96,64 +96,68 @@ export const CardAttendance: React.FC<ScheduleProps> = ({ schedule }: SchedulePr
   // {END BUTTON CHECK-OUT}
 
   return (
-    <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
-      <div className="flex justify-between text-xs items-center p-2">
-        <span className="text-base font-bold text-blue-700">Absensi</span>
+    <>
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
+        <div className="flex justify-between text-xs items-center p-2">
+          <span className="text-base font-bold text-blue-700">Absensi</span>
 
-        <Badge
-          size="xs"
-          style={{
-            marginLeft: '4px',
-            borderRadius: '2px',
-          }}
-          color={isCheckedIn == false ? 'red' : 'yellow'}
-        >
-          {isCheckedIn == false ? 'Belum check-in' : 'Sedang bekerja'}
-        </Badge>
-      </div>
-      <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
-        <div className="col-span-2 text-center m-auto p-1">
-          <Text size="28px" fw={700}>
-            {schedule.shift.shift_code}
-          </Text>
-          <Text style={{ marginTop: '-5px' }} size="sm">
-            {schedule.shift.shift_name}
-          </Text>
+          <Badge
+            size="xs"
+            style={{
+              marginLeft: '4px',
+              borderRadius: '2px',
+            }}
+            color={isCheckedIn == false ? 'red' : 'yellow'}
+          >
+            {isCheckedIn == false ? 'Belum check-in' : 'Sedang bekerja'}
+          </Badge>
         </div>
-        <div className="col-span-10 ms-2 text-left">
-          <div className="ms-2 -mb-2">
-            <Text size="xs">Tanggal</Text>
-            <Text size="sm" fw={700}>
-              {formatDate(schedule.date, 'EEEE, dd MMM yyyy')}
+        <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
+          <div className="col-span-3 text-center m-auto p-1">
+            <Text size="28px" fw={700}>
+              {schedule.shift.shift_code}
+            </Text>
+            <Text style={{ marginTop: '-5px' }} size="sm">
+              {schedule.shift.shift_name}
             </Text>
           </div>
-          <Divider my="sm" />
-          <div className="-mt-2 w-full grid grid-cols-12 mb-1">
-            <div className="col-span-6 text-left mt-1 ms-2">
-              <Text size="xs">Jam kerja</Text>
+          <div className="col-span-9 ms-2 text-left">
+            <div className="ms-2 -mb-2">
+              <Text size="xs">Tanggal</Text>
               <Text size="sm" fw={700}>
-                {schedule.shift.start_time} - {schedule.shift.end_time}
+                {formatDate(schedule.date, 'EEEE, dd MMM yyyy')}
               </Text>
             </div>
-            <div className="col-span-6 text-right -mt-1"></div>
+            <Divider my="sm" />
+            <div className="-mt-2 w-full grid grid-cols-12 mb-1">
+              <div className="col-span-6 text-left mt-1 ms-2">
+                <Text size="xs">Jam kerja</Text>
+                <Text size="sm" fw={700}>
+                  {schedule.shift.start_time} - {schedule.shift.end_time}
+                </Text>
+              </div>
+              <div className="col-span-6 text-right -mt-1"></div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="p-2 mt-2">
-        {isCheckedIn == false ? (
-          <form onSubmit={handleCheckIn}>
-            <Button type="submit" fullWidth rightSection={<IconArrowBarToRight />}>
-              Check-in
-            </Button>
-          </form>
-        ) : (
-          <form onSubmit={handleCheckOut}>
-            <Button type="submit" color="red" fullWidth rightSection={<IconArrowBarToLeft />}>
-              Check-out
-            </Button>
-          </form>
-        )}
-      </div>
-    </section>
+        <div className="p-2 mt-2">
+          {isCheckedIn == false ? (
+            <form onSubmit={handleCheckIn}>
+              <Button type="submit" fullWidth rightSection={<IconArrowBarToRight />}>
+                Check-in
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleCheckOut}>
+              <Button type="submit" color="red" fullWidth rightSection={<IconArrowBarToLeft />}>
+                Check-out
+              </Button>
+            </form>
+          )}
+        </div>
+      </section>
+
+      <CardActivity isCheckedIn={isCheckedIn} />
+    </>
   );
 };

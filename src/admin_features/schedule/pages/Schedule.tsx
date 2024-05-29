@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { Button } from '@mantine/core';
 import { IconPencil, IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';

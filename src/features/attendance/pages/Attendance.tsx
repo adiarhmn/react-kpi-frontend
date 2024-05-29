@@ -18,7 +18,15 @@ export const Attendance: React.FC = () => {
   // const [schedule, setSchedule] = useState<ScheduleType[]>([]);
   const { creds } = useAuth();
   const employee_id = creds?.employee_id;
-  const status = localStorage.getItem('isCheckedIn');
+  const [isCheckedIn, setIsCheckedIn] = useState<boolean>(() => {
+    const savedState = localStorage.getItem('isCheckedIn');
+    return savedState ? JSON.parse(savedState) : false;
+  });
+  useEffect(() => {
+    localStorage.setItem('isCheckedIn', JSON.stringify(isCheckedIn));
+  }, [isCheckedIn]);
+  // const [status, setStatus] = useState<string | null>(localStorage.getItem('isCheckedIn'));
+
   const [opened, { open, close }] = useDisclosure(false);
   const date = new Date();
   const dateToday = format(date, 'yyyy-MM-dd', { locale: id });
@@ -91,6 +99,7 @@ export const Attendance: React.FC = () => {
   const dataSchedule = data;
   console.log('Data activity : ', activities);
   console.log('Data attendance : ', attendance);
+  console.log('Data isCheckedIn : ', isCheckedIn);
 
   return (
     <main className="min-h-96 relative">
@@ -109,14 +118,23 @@ export const Attendance: React.FC = () => {
       {/* End card map */}
 
       {/* Absen card */}
-      <CardAttendance schedule={dataSchedule[0]} />
+      <CardAttendance
+        schedule={dataSchedule[0]}
+        setIsCheckIn={setIsCheckedIn}
+        isCheckedIn={isCheckedIn}
+      />
       {/* End absen card */}
 
       {/* Tugas card */}
       <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="flex justify-between text-xs items-center p-2">
           <span className="text-base font-bold text-blue-700">Kegiatan</span>
-          <Button disabled={status == 'false'} onClick={open} className="shadow-sm me-1" size="xs">
+          <Button
+            disabled={isCheckedIn == false}
+            onClick={open}
+            className="shadow-sm me-1"
+            size="xs"
+          >
             <IconPlus className="-ms-1" size={18} />
           </Button>
         </div>
@@ -141,7 +159,7 @@ export const Attendance: React.FC = () => {
                     {activity?.description}
                   </Text>
                 </div>
-                <Divider className="mb-2"></Divider>
+                <Divider my="md" />
               </div>
             ))
           ) : (

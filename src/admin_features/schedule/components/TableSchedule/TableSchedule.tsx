@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { Button, Modal, Select, Table, UnstyledButton } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';

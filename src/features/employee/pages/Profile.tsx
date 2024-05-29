@@ -1,18 +1,17 @@
 import {
   IconChevronRight,
   IconLogout,
-  IconSettings,
   IconUser,
   IconBriefcase,
   IconSchool,
   IconFiles,
 } from '@tabler/icons-react';
-
-import { useAuth } from '@/features/auth';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@/features/auth';
+
 export const Profile: React.FC = () => {
-  const { creds, getRoleText, logout } = useAuth();
+  const { creds, logout } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -74,7 +73,7 @@ export const Profile: React.FC = () => {
           onClick={() => logout()}
           className="bg-transparent text-left flex w-full items-center py-3 hover:bg-slate-100 ps-2"
         >
-          <div className="bg-blue-600 text-white rounded-lg p-2">
+          <div className="bg-red-600 text-white rounded-lg p-2">
             <IconLogout size={25} />
           </div>
           <div className="font-semibold px-4 flex-grow text-sm">Logout</div>
