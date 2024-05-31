@@ -1,12 +1,13 @@
-import { Badge, Divider, Loader, Text } from '@mantine/core';
+import { Badge, Loader, Text } from '@mantine/core';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import { ScheduleType } from '@/features/attendance';
-import { useGetSchedule, useGetScheduleMonthly } from '../api';
 import { useAuth } from '@/features/auth';
-import { modals } from '@mantine/modals';
+
+import { useGetScheduleMonthly } from '../api';
+
 type ScheduleProps = {
   month: Date;
   shift: string;
@@ -15,7 +16,6 @@ type ScheduleProps = {
 };
 
 export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, modalState }) => {
-  const navigate = useNavigate();
   // const [month, setMonth] = useState<Date>(new Date());
   const { creds } = useAuth();
   const [schedules, setSchedule] = useState<ScheduleType[]>([]);
@@ -43,7 +43,7 @@ export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, mo
   }, [data]);
 
   useEffect(() => {
-    console.log('effect jalan');
+    // console.log('effect jalan');
     const newParams = {
       employeeId: creds?.employee_id,
       month: month.getMonth() + 1,
@@ -52,7 +52,7 @@ export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, mo
       status,
     };
     setParams(newParams);
-  }, [modalState]);
+  }, [modalState, month]);
 
   function formatDate(date: string, formatType: string) {
     const dateToFormat: Date = new Date(date);
@@ -71,10 +71,11 @@ export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, mo
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
-  console.log('Data schedule :', schedules);
-  console.log('Data shift :', shift);
-  console.log('Data status :', status);
-  console.log('Modal condition : ', modalState);
+  // console.log('Data schedule :', schedules);
+  // console.log('Data month :', month);
+  // console.log('Data shift :', shift);
+  // console.log('Data status :', status);
+  // console.log('Modal condition : ', modalState);
 
   return (
     <div className="text-center">
@@ -125,7 +126,7 @@ export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, mo
                     <div className="my-auto ms-4 mt-1">
                       <Text size="30px" fw={700}>
                         {/* {formatdate(absence?.date_start)} */}
-                        SF2
+                        {schedule?.shift.shift_code}
                       </Text>
                       <Text size="7px" fw={500}>
                         {/* {formatdate(absence?.date_start)} */}

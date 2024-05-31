@@ -1,4 +1,5 @@
-import { Button, Fieldset, Modal, Select } from '@mantine/core';
+/* eslint-disable linebreak-style */
+import { Button, Drawer, Fieldset, Select } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconPlus, IconChevronLeft } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -46,12 +47,20 @@ export const Absence: React.FC = () => {
 
       <AbsenceList status={'Belum%20Disetujui'} typeAbsence={selectType} modalState={opened} />
 
-      <Modal opened={opened} title="Filter" onClose={close} withCloseButton={false}>
+      <Drawer
+        position="right"
+        offset={3}
+        size="80%"
+        radius="sm"
+        opened={opened}
+        onClose={close}
+        title="Filter"
+      >
         <div>
           <Fieldset className="mb-2" legend="Status">
             <Select
               className="-m-3"
-              placeholder="Pilih status"
+              placeholder="Pilih tipe"
               data={['Sakit', 'Izin']}
               searchValue={selectType}
               onSearchChange={setSelectType}
@@ -65,7 +74,7 @@ export const Absence: React.FC = () => {
             Cari
           </Button>
         </div>
-      </Modal>
+      </Drawer>
     </main>
   );
 };

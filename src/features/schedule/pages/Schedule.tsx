@@ -1,14 +1,26 @@
-import { useNavigate } from 'react-router-dom';
-import { useDisclosure } from '@mantine/hooks';
+/* eslint-disable linebreak-style */
+import {
+  Button,
+  Chip,
+  ChipGroup,
+  Drawer,
+  Fieldset,
+  Group,
+  Modal,
+  Select,
+  TextInput,
+} from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
-import { useEffect, useState } from 'react';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
+import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react';
-import { ScheduleList } from '../components';
-import { Button, Chip, ChipGroup, Fieldset, Group, Modal, Select, TextInput } from '@mantine/core';
+import { id } from 'date-fns/locale';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { ShiftType } from '@/admin_features/types';
+
 import { useGetShift } from '../api';
+import { ScheduleList } from '../components';
 
 export const Schedule: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -16,15 +28,12 @@ export const Schedule: React.FC = () => {
   const [selectShift, setSelectShift] = useState('');
   const [selectStatus, setSelectStatus] = useState('');
   const [shifts, setShifts] = useState<ShiftType[]>([]);
-  const { data, isLoading, error } = useGetShift();
+  const { data } = useGetShift();
   useEffect(() => {
     if (data) {
       setShifts(data);
     }
   }, [data]);
-
-  console.log('Value Shift : ', selectShift);
-  console.log('Value Status : ', selectStatus);
 
   const navigate = useNavigate();
   return (
@@ -75,7 +84,15 @@ export const Schedule: React.FC = () => {
 
       <ScheduleList month={month} shift={selectShift} status={selectStatus} modalState={opened} />
 
-      <Modal opened={opened} title="Filter" onClose={close} withCloseButton={false}>
+      <Drawer
+        position="right"
+        offset={3}
+        size="80%"
+        radius="sm"
+        opened={opened}
+        onClose={close}
+        title="Filter"
+      >
         <div>
           {' '}
           <Fieldset className="mb-2" legend="Shift">
@@ -104,7 +121,38 @@ export const Schedule: React.FC = () => {
             Cari
           </Button>
         </div>
-      </Modal>
+      </Drawer>
+
+      {/* <Modal opened={opened} title="Filter" onClose={close} withCloseButton={false}>
+        <div>
+          {' '}
+          <Fieldset className="mb-2" legend="Shift">
+            <Select
+              className="-m-3"
+              placeholder="Pilih shift"
+              data={['pagi', 'siang', 'malam']}
+              searchValue={selectShift}
+              onSearchChange={setSelectShift}
+              allowDeselect
+            />
+          </Fieldset>
+          <Fieldset className="mb-2" legend="Status">
+            <Select
+              className="-m-3"
+              placeholder="Pilih status"
+              data={['on', 'off']}
+              searchValue={selectStatus}
+              onSearchChange={setSelectStatus}
+              allowDeselect
+            />
+          </Fieldset>
+        </div>
+        <div className="text-right mt-3">
+          <Button onClick={close} style={{ width: '160px' }}>
+            Cari
+          </Button>
+        </div>
+      </Modal> */}
     </main>
   );
 };

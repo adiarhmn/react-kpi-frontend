@@ -1,7 +1,13 @@
+/* eslint-disable linebreak-style */
 import { Badge, Progress, Tooltip } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
-import { IconLuggage } from '@tabler/icons-react';
-import { IconChartCandle, IconChartPie2, IconChevronRight, IconReport } from '@tabler/icons-react';
+import {
+  IconLuggage,
+  IconChartCandle,
+  IconChartPie2,
+  IconChevronRight,
+  IconReport,
+} from '@tabler/icons-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -56,7 +62,7 @@ export const History: React.FC = () => {
       </section>
 
       <section className="p-2 flex flex-col gap-3 text-slate-600 mx-3 mt-4">
-        <h2 className="font-semibold text-sm text-blue-700">Data Riwayat Lainnya:</h2>
+        <h2 className="font-semibold text-sm text-blue-700">Data Riwayat :</h2>
         {/* Data Absensi */}
 
         <Link
@@ -66,8 +72,8 @@ export const History: React.FC = () => {
           <div className="flex gap-3 items-center">
             <IconChartCandle size={25} className="text-blue-700" />
             <div>
-              <span className="font-semibold">Data Absensi</span>
-              <p className="text-xs text-slate-400">Data Absensi</p>
+              <span className="font-semibold">Riwayat Absensi</span>
+              <p className="text-xs text-slate-400">Riwayat Absensi</p>
             </div>
           </div>
           <IconChevronRight className="text-blue-700" size={25} />
@@ -81,8 +87,8 @@ export const History: React.FC = () => {
           <div className="flex gap-3 items-center">
             <IconChartPie2 size={25} className="text-blue-700" />
             <div>
-              <span className="font-semibold">Data Izin</span>
-              <p className="text-xs text-slate-400">Data izin yang disetujui</p>
+              <span className="font-semibold">Riwayat Izin</span>
+              <p className="text-xs text-slate-400">Riwayat izin yang disetujui</p>
             </div>
           </div>
           <IconChevronRight className="text-blue-700" size={25} />
@@ -96,8 +102,8 @@ export const History: React.FC = () => {
           <div className="flex gap-3 items-center">
             <IconLuggage size={25} className="text-blue-700" />
             <div>
-              <span className="font-semibold">Data Cuti</span>
-              <p className="text-xs text-slate-400">Data cuti yang disetujui</p>
+              <span className="font-semibold">Riwayat Cuti</span>
+              <p className="text-xs text-slate-400">Riwayat cuti yang disetujui</p>
             </div>
           </div>
           <IconChevronRight className="text-blue-700" size={25} />
@@ -111,8 +117,8 @@ export const History: React.FC = () => {
           <div className="flex gap-3 items-center">
             <IconReport size={25} className="text-blue-700" />
             <div>
-              <span className="font-semibold">Data Lembur</span>
-              <p className="text-xs text-slate-400">Data Lembur yang sudah disetujui</p>
+              <span className="font-semibold">Riwayat Lembur</span>
+              <p className="text-xs text-slate-400">Riwayat Lembur yang sudah disetujui</p>
             </div>
           </div>
           <IconChevronRight className="text-blue-700" size={25} />

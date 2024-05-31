@@ -8,14 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 
 import { useGetSchedule } from '../api';
+import { useGetActivity } from '../api/getActivity';
 import { useGetAttendance } from '../api/getAttendance';
-import { AttendanceType, ScheduleType } from '../types';
+import { ActivityType, AttendanceType, ScheduleType } from '../types';
 
 export const AttendanceInfo: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   const [attendance, setAttendance] = useState<AttendanceType>();
   const [schedule, setSchedule] = useState<ScheduleType>();
+  const [activities, setActivities] = useState<ActivityType[]>([]);
   const status = localStorage.getItem('isCheckedIn');
   const currentDate: Date = new Date();
   const dateSend = format(currentDate, 'yyyy-MM-dd', { locale: id });
@@ -43,6 +45,12 @@ export const AttendanceInfo: React.FC = () => {
     }
   }, [dataAttendance]);
 
+  const { data: dataActivities } = useGetActivity(attendance?.id);
+  useEffect(() => {
+    if (dataActivities) {
+      setActivities(dataActivities);
+    }
+  }, [dataActivities]);
   if (errorAttendance) {
     return (
       <div className="text-red-600 text-center my-20 font-bold">{errorAttendance.message}</div>
@@ -126,43 +134,41 @@ export const AttendanceInfo: React.FC = () => {
           <span className="font-bold text-blue-700">Kegiatan</span>
         </div>
         <div className="w-full pb-2">
-          <div className="mt-2 p-2">
-            <Text size="xs" fw={700}>
-              Judul kegiatan
-            </Text>
-            <Text style={{ textAlign: 'justify' }} size="sm">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit
-            </Text>
-          </div>
-          <div className="mt-1 p-2">
-            <Text size="xs" fw={700}>
-              Deskripsi kegiatan
-            </Text>
-            <Text style={{ textAlign: 'justify' }} size="sm">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </div>
-          <Divider my="md" />
-          <div className="p-2">
-            <Text size="xs" fw={700}>
-              Judul kegiatan
-            </Text>
-            <Text style={{ textAlign: 'justify' }} size="sm">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit
-            </Text>
-          </div>
-          <div className="mt-1 p-2">
-            <Text size="xs" fw={700}>
-              Deskripsi kegiatan
-            </Text>
-            <Text style={{ textAlign: 'justify' }} size="sm">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </div>
+          {activities.length > 0 ? (
+            activities.map((activity, index) => (
+              <div key={index}>
+                {' '}
+                <div className="-mt-2 p-2">
+                  <Text size="xs" fw={700}>
+                    Judul
+                  </Text>
+                  <Text style={{ textAlign: 'justify' }} size="sm">
+                    {activity?.name}
+                  </Text>
+                </div>
+                <div className="mt-1 p-2">
+                  <Text size="xs" fw={700}>
+                    Deskripsi kegiatan
+                  </Text>
+                  <Text style={{ textAlign: 'justify' }} size="sm">
+                    {activity?.description}
+                  </Text>
+                </div>
+                <Divider my="md" />
+              </div>
+            ))
+          ) : (
+            <div className="w-full col-span-12">
+              <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+                <img
+                  className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+                  src="/images/blank-canvas.svg"
+                  alt=""
+                />
+                <span className="font-bold text-slate-400 text-lg">Belum ada data kegiatan</span>
+              </section>
+            </div>
+          )}
         </div>
       </section>
     </main>

@@ -1,12 +1,16 @@
-import { ShiftType } from '@/admin_features/types';
-import { useGetShift } from '@/features/schedule/api';
-import { ScheduleList } from '@/features/schedule/components';
-import { Button, Fieldset, Modal, Select, Table } from '@mantine/core';
+/* eslint-disable linebreak-style */
+import { Button, Drawer, Fieldset, Modal, Select, Table } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { ShiftType } from '@/admin_features/types';
+// eslint-disable-next-line no-restricted-imports
+import { useGetShift } from '@/features/schedule/api';
+// eslint-disable-next-line no-restricted-imports
+import { ScheduleList } from '@/features/schedule/components';
 
 export const DataAttendance: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -71,7 +75,15 @@ export const DataAttendance: React.FC = () => {
 
       <ScheduleList month={month} shift={selectShift} status={selectStatus} modalState={opened} />
 
-      <Modal opened={opened} title="Filter" onClose={close} withCloseButton={false}>
+      <Drawer
+        position="right"
+        offset={3}
+        size="80%"
+        radius="sm"
+        opened={opened}
+        onClose={close}
+        title="Filter"
+      >
         <div>
           {' '}
           <Fieldset className="mb-2" legend="Shift">
@@ -100,7 +112,7 @@ export const DataAttendance: React.FC = () => {
             Cari
           </Button>
         </div>
-      </Modal>
+      </Drawer>
     </main>
   );
 };

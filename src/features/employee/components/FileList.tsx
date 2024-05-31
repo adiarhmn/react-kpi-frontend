@@ -74,7 +74,7 @@ export const FileList: React.FC = () => {
             src="/images/blank-canvas.svg"
             alt=""
           />
-          <span className="font-bold text-slate-400 text-xl">Belum ada data izin</span>
+          <span className="font-bold text-slate-400 text-xl">Belum ada berkas</span>
         </section>
       )}
     </>
