@@ -61,3 +61,12 @@ export function getStartAndEndOfMonth(month: string = ''): {
   const endOfMonth = new Date(startOfNextMonth.getTime() - 1);
   return { startOfMonth, endOfMonth };
 }
+
+export function getDaysInMonth(dateString: string): number {
+  const date = new Date(dateString);
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+
+  return new Date(year, month, 0).getDate();
+}

@@ -19,6 +19,7 @@ export const UpdateSchedule: React.FC = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const month = query.get('month') || '';
+  const DataMonthDate = new Date(month);
 
   if (!month) {
     navigate('/schedule');
@@ -32,7 +33,7 @@ export const UpdateSchedule: React.FC = () => {
 
   const form = useForm({
     initialValues: {
-      division_id: '0',
+      division: 'Semua Divisi',
       shift_id: '0',
       employees: [],
     },
@@ -111,9 +112,13 @@ export const UpdateSchedule: React.FC = () => {
             <IconChevronLeft size={20} />
           </ActionIcon>
           <div>
-            <h1 className="font-semibold">Update Jadwal</h1>
+            <h1 className="font-semibold">
+              Update Jadwal :{' '}
+              {DataMonthDate.toLocaleString('id-ID', { month: 'long', year: 'numeric' })}
+            </h1>
             <div className="text-xs text-slate-400 -mt-1">
-              Berikut form untuk menambahkan jadwal baru untuk karyawan
+              Berikut form untuk menambahkan karyawan baru untuk jadwal{' '}
+              {DataMonthDate.toLocaleString('id-ID', { month: 'long', year: 'numeric' })}
             </div>
           </div>
         </Group>
@@ -123,12 +128,16 @@ export const UpdateSchedule: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Divisi Input */}
             <Select
-              label="Pilih Divisi"
+              label={
+                <span className="font-semibold">
+                  Pilih Divisi <span className="italic text-xs">(Filter pencarian karyawan)</span>
+                </span>
+              }
               className="col-span-2 lg:col-span-1"
               placeholder="Pilih Divisi"
               data={['Semua Divisi', 'Developer', 'Designer', 'Marketing', 'HRD', 'Finance']}
               defaultValue="Semua Divisi"
-              {...form.getInputProps('division_id')}
+              {...form.getInputProps('division')}
             ></Select>
 
             {/* Shift Selection */}

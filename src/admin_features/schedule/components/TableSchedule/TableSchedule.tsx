@@ -5,10 +5,12 @@ import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconSettings, IconTrash } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { SchedulesType, EditScheduleItemType } from '@/admin_features/schedule/types';
 import { useGetShift } from '@/admin_features/shift/api';
 import { ShiftType } from '@/admin_features/types';
+import { formatDateToString, getDaysInMonth } from '@/utils/format';
 
 import { useDeleteScheduleEmployee, useEditFreeDay } from '../../api';
 import { useGetSchedule } from '../../api/getSchedule';
@@ -21,6 +23,7 @@ type TableScheduleProps = {
 
 export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, setIsSchedule }) => {
   const [FreeDays, setFreeDay] = useState(false);
+  const location = useLocation();
   const [opened, modal] = useDisclosure(false);
   const [dataSchedule, setDataSchedule] = useState<SchedulesType[]>([]);
   const [DataEditFreeDay, setDataEditFreeDay] = useState<EditScheduleItemType[]>([]);
@@ -28,6 +31,8 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   const MutationDeleteEmployeeSchedule = useDeleteScheduleEmployee();
   const { data, refetch } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
   const { data: dataShift, isLoading: loadingGetShift } = useGetShift();
+  const monthLocation =
+    new URLSearchParams(location.search).get('month') ?? formatDateToString(new Date().toString());
   // Use State Untuk Mengganti Shift atau default Libur
   const form = useForm({
     initialValues: {
@@ -154,18 +159,20 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   return (
     <section className="bg-white rounded-lg shadow-lg p-3">
       <div className="mb-3 flex gap-2 justify-between flex-wrap">
-        <MonthPickerInput
-          className="w-56"
-          placeholder="Pilih Bulan"
-          value={month}
-          onChange={(value) => {
-            if (value === null) {
-              setMonth(new Date());
-            } else {
-              setMonth(value);
-            }
-          }}
-        ></MonthPickerInput>
+        <form action="">
+          <MonthPickerInput
+            className="w-56"
+            placeholder="Pilih Bulan"
+            value={month}
+            onChange={(value) => {
+              if (value === null) {
+                setMonth(monthLocation ? new Date(monthLocation) : new Date());
+              } else {
+                setMonth(value);
+              }
+            }}
+          ></MonthPickerInput>
+        </form>
         {dataSchedule.length > 0 && (
           <div className="flex gap-2">
             <Button
@@ -183,6 +190,31 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
           </div>
         )}
       </div>
+
+      {/* Informasi Shift */}
+
+      <div className="mb-4">
+        <div className="text-xs">Keterangan :</div>
+        <table className="text-xs">
+          <tbody>
+            {dataShift.data.map((shift: ShiftType) => (
+              <tr key={shift.id}>
+                <td className="text-center font-bold">{shift.id}</td>
+                <td className="w-5 text-center"> : </td>
+                <td className="w-10">{shift.shift_name}</td>
+                <td className="pl-2">{shift.start_time + ' - ' + shift.end_time}</td>
+              </tr>
+            ))}
+            <tr>
+              <td className="text-center font-bold">-</td>
+              <td className="w-5 text-center"> : </td>
+              <td className="w-10">Libur</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Table Jadwal */}
       <div
         className="absolute bg-black opacity-50 top-0 left-0 w-full h-screen"
         style={{ zIndex: FreeDays ? 999 : 1, display: FreeDays ? '' : 'none' }}
@@ -195,11 +227,13 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
           <Table withColumnBorders>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th className="sticky left-0 bg-gray-200 min-w-60">
+                <Table.Th className="sticky left-0 bg-gray-200 min-w-60 font-semibold">
                   <sub>Nama</sub>\<sup>Tgl</sup>
                 </Table.Th>
-                {Array.from({ length: data?.data[0]?.Schedules.length }).map((_, index) => (
-                  <Table.Th key={index}>{index + 1}</Table.Th>
+                {Array.from({ length: getDaysInMonth(monthLocation) }).map((_, index) => (
+                  <Table.Th className="bg-gray-200 font-semibold" key={index}>
+                    {index + 1}
+                  </Table.Th>
                 ))}
               </Table.Tr>
             </Table.Thead>
@@ -242,9 +276,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                       }}
                       className={`cursor-pointer ${ShowScheduleCell(schedule).className}`}
                     >
-                      {ShowScheduleCell(schedule).value == 1
-                        ? 'Test'
-                        : ShowScheduleCell(schedule).value}
+                      {ShowScheduleCell(schedule).value}
                     </Table.Td>
                   ))}
                 </Table.Tr>

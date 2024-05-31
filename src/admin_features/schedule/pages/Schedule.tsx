@@ -1,7 +1,7 @@
 import { Button } from '@mantine/core';
 import { IconPencil, IconPlus } from '@tabler/icons-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { formatDateToString } from '@/utils/format';
 
@@ -9,8 +9,16 @@ import { TableSchedule } from '../components';
 
 export const Schedule: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isSchedule, setIsSchedule] = useState(false);
-  const [month, setMonth] = useState<Date>(new Date());
+
+  const searchMonth = new URLSearchParams(location.search).get('month');
+
+  const [month, setMonth] = useState<Date>(searchMonth ? new Date(searchMonth) : new Date());
+
+  useEffect(() => {
+    navigate(`/schedule?month=${formatDateToString(month.toString())}`);
+  }, [month, navigate]);
 
   return (
     <main>
