@@ -60,6 +60,8 @@ const { Users } = lazyImport(() => import('@/admin_features/users'), 'Users');
 const { CreateUser } = lazyImport(() => import('@/admin_features/users'), 'CreateUser');
 const { UpdateUser } = lazyImport(() => import('@/admin_features/users'), 'UpdateUser');
 const { Activitys } = lazyImport(() => import('@/admin_features/activity'), 'Activitys');
+const { Leave } = lazyImport(() => import('@/admin_features/leaves'), 'Leave');
+const { Permission } = lazyImport(() => import('@/admin_features/permission'), 'Permission');
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -146,6 +148,8 @@ export const AppRoutes: React.FC = () => {
             <Route path="users/create" element={<CreateUser />} />
             <Route path="users/update" element={<UpdateUser />} />
             <Route path="activity" element={<Activitys />} />
+            <Route path="leave" element={<Leave />} />
+            <Route path="permission" element={<Permission />} />
           </Route>
         )}
 
