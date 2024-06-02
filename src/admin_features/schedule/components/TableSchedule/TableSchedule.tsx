@@ -1,20 +1,28 @@
 /* eslint-disable linebreak-style */
-import { Button, Modal, Select, Table, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Button, CopyButton, Modal, Select, Table } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconSettings, IconTrash } from '@tabler/icons-react';
+import {
+  IconCheck,
+  IconClipboardText,
+  IconCopy,
+  IconSettings,
+  IconTrash,
+} from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { SchedulesType, EditScheduleItemType } from '@/admin_features/schedule/types';
 import { useGetShift } from '@/admin_features/shift/api';
 import { ShiftType } from '@/admin_features/types';
-import { formatDateToString, getDaysInMonth } from '@/utils/format';
+import { formatDateToString, getDaysInMonth, getStartAndEndOfMonth } from '@/utils/format';
 
 import { useDeleteScheduleEmployee, useEditFreeDay } from '../../api';
 import { useGetSchedule } from '../../api/getSchedule';
+import { DataPasteScheduleMonth, usePasteMonthSchedule } from '../../api/pasteMonthSchedule';
+import { DataPasteSchedule, usePasteSchedule } from '../../api/pasteSchedule';
 
 type TableScheduleProps = {
   month: Date;
@@ -23,17 +31,31 @@ type TableScheduleProps = {
 };
 
 export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, setIsSchedule }) => {
-  const [FreeDays, setFreeDay] = useState(false);
-  const location = useLocation();
-  const [opened, modal] = useDisclosure(false);
+  // Data Master Schedule
   const [dataSchedule, setDataSchedule] = useState<SchedulesType[]>([]);
-  const [DataEditFreeDay, setDataEditFreeDay] = useState<EditScheduleItemType[]>([]);
-  const MutationEditItemSchedule = useEditFreeDay();
-  const MutationDeleteEmployeeSchedule = useDeleteScheduleEmployee();
   const { data, refetch } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
   const { data: dataShift, isLoading: loadingGetShift } = useGetShift();
+  const location = useLocation();
+
+  // Edit Data
+  const [opened, modal] = useDisclosure(false);
+  const [FreeDays, setFreeDay] = useState(false);
+  const [DataEditFreeDay, setDataEditFreeDay] = useState<EditScheduleItemType[]>([]);
+  const MutationEditItemSchedule = useEditFreeDay();
+
+  // State For Copy Data Schedule
+  const [DataCopySchedule, setDataCopySchedule] = useState<SchedulesType>();
+  const MutationPaste = usePasteSchedule();
+  const MutationPasteMonth = usePasteMonthSchedule();
+  const [MonthCopyDataSchedule, setMonthCopyDataSchedule] = useState<SchedulesType[]>([]);
+
+  // Delete Data Schedule
+  const MutationDeleteEmployeeSchedule = useDeleteScheduleEmployee();
+
+  // Get Month Location
   const monthLocation =
     new URLSearchParams(location.search).get('month') ?? formatDateToString(new Date().toString());
+
   // Use State Untuk Mengganti Shift atau default Libur
   const form = useForm({
     initialValues: {
@@ -41,6 +63,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     },
   });
 
+  // Update Data Schedule When Data Schedule Change
   useEffect(() => {
     if (data) {
       setDataSchedule(data.data);
@@ -52,7 +75,60 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     }
   }, [data, dataShift, setIsSchedule]);
 
-  //Simpan Data Edit Libur
+  // [START] Copy Data Schedule
+  const SaveCopySchedule = (index: number) => {
+    setDataCopySchedule(dataSchedule[index]);
+  };
+
+  const PasteDataSchedule = (index: number) => {
+    const DataPaste: DataPasteSchedule = {
+      beforeDataSchedule: DataCopySchedule,
+      afterDataSchedule: dataSchedule[index],
+    };
+
+    MutationPaste.mutateAsync(DataPaste, {
+      onSuccess: () => {
+        refetch();
+        notifications.show({
+          message: 'Berhasil Menyalin Jadwal',
+          color: 'green',
+        });
+      },
+      onError: () => {
+        notifications.show({
+          message: 'Gagal Menyalin Jadwal',
+          color: 'red',
+        });
+      },
+    });
+
+    console.log('Data Paste:', DataPaste);
+  };
+
+  const handlePasteSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const { startOfMonth, endOfMonth } = getStartAndEndOfMonth(monthLocation);
+
+    const DataPasteMonth: DataPasteScheduleMonth = {
+      DataScheduleOld: MonthCopyDataSchedule,
+      month: month.getMonth() + 1,
+      year: month.getFullYear(),
+      default_shift: dataShift.data[0].id,
+      date_start: formatDateToString(startOfMonth.toString()),
+      date_end: formatDateToString(endOfMonth.toString()),
+    };
+
+    await MutationPasteMonth.mutateAsync(DataPasteMonth, {
+      onSuccess: (data) => {
+        console.log('Success Paste: ', data);
+        refetch();
+      },
+    });
+  };
+  // [END] Copy Data Schedule
+
+  //[START] Simpan Data Edit Libur
+  //  => Update State Data Edit FreeDay
   const EditFreeDays = async (newFreeDay: EditScheduleItemType) => {
     const newEditLibur = [...DataEditFreeDay];
     const index = newEditLibur.findIndex((item) => item.schedule_id === newFreeDay.schedule_id);
@@ -65,6 +141,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     }
   };
 
+  //  => Handle Form Value (MAPING DATA FOR REQUEST BODY TO API)
   const HandleFormValue = () => {
     if (form.values.value_edit != 'libur') {
       const new_data_edit: EditScheduleItemType[] = DataEditFreeDay.map((data_edit) => {
@@ -88,11 +165,14 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     }
   };
 
+  //  => Reset State Data Edit FreeDay
   const ResetDataEditItemSchedule = () => {
+    refetch();
     setDataEditFreeDay([]);
     modal.close();
   };
 
+  //  => Handle Confirm Edit Schedule (Save Data)
   const HandleConfirmEditItemSchedule = async () => {
     const data_submit = HandleFormValue();
     MutationEditItemSchedule.mutateAsync(data_submit, {
@@ -109,7 +189,9 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
       },
     });
   };
+  //[END] Simpan Data Edit Libur
 
+  // Delete Data Schedule from Employee
   const DeleteEmployeeSchedule = (id: number) => {
     console.log('Delete Schedule');
     MutationDeleteEmployeeSchedule.mutateAsync(id, {
@@ -130,11 +212,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     });
   };
 
-  useEffect(() => {
-    console.log('Clicked');
-    console.log(DataEditFreeDay);
-  }, [DataEditFreeDay, dataSchedule]);
-
+  // Loading Data
   if (loadingGetShift) {
     return <div>Loading...</div>;
   }
@@ -156,7 +234,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     }
   };
 
-  console.log('Data Schedule', data);
   return (
     <section className="bg-white rounded-lg shadow-lg p-3">
       <div className="mb-3 flex gap-2 justify-between flex-wrap">
@@ -166,6 +243,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
             placeholder="Pilih Bulan"
             value={month}
             onChange={(value) => {
+              setDataCopySchedule(undefined);
               if (value === null) {
                 setMonth(monthLocation ? new Date(monthLocation) : new Date());
               } else {
@@ -174,11 +252,27 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
             }}
           ></MonthPickerInput>
         </form>
-        {dataSchedule.length > 0 && (
+        {dataSchedule.length > 0 ? (
           <div className="flex gap-2">
+            <CopyButton value="KPI">
+              {({ copied, copy }) => (
+                <Button
+                  color={copied ? 'yellow' : 'green'}
+                  leftSection={<IconCopy size={15}></IconCopy>}
+                  variant="light"
+                  onClick={() => {
+                    copy();
+                    setMonthCopyDataSchedule(dataSchedule);
+                  }}
+                >
+                  Copy Jadwal
+                </Button>
+              )}
+            </CopyButton>
             <Button
               onClick={() => {
                 setFreeDay(!FreeDays);
+                setDataCopySchedule(undefined);
                 if (DataEditFreeDay.length > 0 && FreeDays) {
                   modal.open();
                 }
@@ -189,6 +283,8 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
               {FreeDays ? 'Simpan' : 'Edit Jadwal'}
             </Button>
           </div>
+        ) : (
+          ''
         )}
       </div>
 
@@ -244,9 +340,33 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                   <Table.Td className="sticky left-0 bg-gray-200">
                     <div className="w-full flex justify-between">
                       <span>{item.employee.name}</span>
-                      <UnstyledButton onClick={() => DeleteEmployeeSchedule(item.id)}>
-                        <IconTrash size={15} className="text-red-600" />
-                      </UnstyledButton>
+                      <ActionIcon.Group>
+                        {
+                          // Menampilkan Tombol Copy Schedule
+                          DataCopySchedule ? (
+                            <ActionIcon
+                              variant="default"
+                              onClick={() => PasteDataSchedule(rowIndex)}
+                              loading={MutationPaste.isPending}
+                            >
+                              <IconClipboardText size={12} />
+                            </ActionIcon>
+                          ) : (
+                            <ActionIcon
+                              variant="default"
+                              onClick={() => SaveCopySchedule(rowIndex)}
+                            >
+                              <IconCopy size={15} />
+                            </ActionIcon>
+                          )
+                        }
+                        <ActionIcon
+                          variant="default"
+                          onClick={() => DeleteEmployeeSchedule(item.id)}
+                        >
+                          <IconTrash size={15} className="text-red-600" />
+                        </ActionIcon>
+                      </ActionIcon.Group>
                     </div>
                   </Table.Td>
                   {item?.Schedules.map((schedule: any, colIndex: number) => (
@@ -325,7 +445,16 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
       )}
 
       {dataSchedule.length === 0 && (
-        <div className="text-center text-slate-400 my-20">Tidak ada jadwal yang tersedia</div>
+        <div className="text-center text-slate-400 my-20">
+          <div className="mb-2">Tidak ada jadwal yang tersedia</div>
+          {MonthCopyDataSchedule.length > 0 && (
+            <form onSubmit={handlePasteSubmit}>
+              <Button type="submit" leftSection={<IconClipboardText size={15} />}>
+                Paste
+              </Button>
+            </form>
+          )}
+        </div>
       )}
     </section>
   );
