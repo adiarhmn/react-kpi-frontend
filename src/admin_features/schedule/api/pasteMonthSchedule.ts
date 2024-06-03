@@ -56,8 +56,8 @@ export async function pasteDataSchedule(request: DataPasteScheduleMonth) {
     return item.Schedules.map((schedule, index) => {
       return {
         schedule_id: schedule.id,
-        status: ScheduleOLD?.Schedules[index].status,
-        shift_id: ScheduleOLD?.Schedules[index].shift_id,
+        status: ScheduleOLD?.Schedules[index].status ?? 'on',
+        shift_id: ScheduleOLD?.Schedules[index].shift_id ?? request.default_shift,
       };
     });
   }).flat();

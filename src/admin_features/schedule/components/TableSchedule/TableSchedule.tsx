@@ -8,6 +8,7 @@ import {
   IconCheck,
   IconClipboardText,
   IconCopy,
+  IconInfoCircle,
   IconSettings,
   IconTrash,
 } from '@tabler/icons-react';
@@ -17,7 +18,7 @@ import { useLocation } from 'react-router-dom';
 import { SchedulesType, EditScheduleItemType } from '@/admin_features/schedule/types';
 import { useGetShift } from '@/admin_features/shift/api';
 import { ShiftType } from '@/admin_features/types';
-import { formatDateToString, getDaysInMonth, getStartAndEndOfMonth } from '@/utils/format';
+import { formatDateToString, getDaysInMonths, getStartAndEndOfMonth } from '@/utils/format';
 
 import { useDeleteScheduleEmployee, useEditFreeDay } from '../../api';
 import { useGetSchedule } from '../../api/getSchedule';
@@ -34,6 +35,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   // Data Master Schedule
   const [dataSchedule, setDataSchedule] = useState<SchedulesType[]>([]);
   const { data, refetch } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
+  const DayinMonth = getDaysInMonths(month.getMonth(), month.getFullYear());
   const { data: dataShift, isLoading: loadingGetShift } = useGetShift();
   const location = useLocation();
 
@@ -101,8 +103,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
         });
       },
     });
-
-    console.log('Data Paste:', DataPaste);
   };
 
   const handlePasteSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -119,8 +119,8 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     };
 
     await MutationPasteMonth.mutateAsync(DataPasteMonth, {
-      onSuccess: (data) => {
-        console.log('Success Paste: ', data);
+      onSuccess: () => {
+        console.log('Success Paste');
         refetch();
       },
     });
@@ -193,7 +193,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
 
   // Delete Data Schedule from Employee
   const DeleteEmployeeSchedule = (id: number) => {
-    console.log('Delete Schedule');
     MutationDeleteEmployeeSchedule.mutateAsync(id, {
       onError: () => {
         console.log('Error Delete Schedule Employee:');
@@ -259,7 +258,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                 <Button
                   color={copied ? 'yellow' : 'green'}
                   leftSection={<IconCopy size={15}></IconCopy>}
-                  variant="light"
                   onClick={() => {
                     copy();
                     setMonthCopyDataSchedule(dataSchedule);
@@ -289,26 +287,18 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
       </div>
 
       {/* Informasi Shift */}
-
-      <div className="mb-4">
-        <div className="text-xs">Keterangan :</div>
-        <table className="text-xs">
-          <tbody>
-            {dataShift.data.map((shift: ShiftType) => (
-              <tr key={shift.id}>
-                <td className="text-center font-bold">{shift.id}</td>
-                <td className="w-5 text-center"> : </td>
-                <td className="w-10">{shift.shift_name}</td>
-                <td className="pl-2">{shift.start_time + ' - ' + shift.end_time}</td>
-              </tr>
-            ))}
-            <tr>
-              <td className="text-center font-bold">-</td>
-              <td className="w-5 text-center"> : </td>
-              <td className="w-10">Libur</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="flex mb-2 text-xs gap-2">
+        <div className="text-xs flex gap-1 text-yellow-600">
+          <IconInfoCircle size={16} /> Info Shift :
+        </div>
+        {dataShift.data.map((shift: ShiftType) => (
+          <div className="border border-slate-400 rounded-md px-2" key={shift.id}>
+            <span className="text-center font-bold">{shift.id}</span>
+            <span className="w-5 text-center"> : </span>
+            <span className="w-10">{shift.shift_name}</span>
+            <span className="pl-2 text-blue-500">{shift.start_time + ' - ' + shift.end_time}</span>
+          </div>
+        ))}
       </div>
 
       {/* Table Jadwal */}
@@ -327,9 +317,14 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                 <Table.Th className="sticky left-0 bg-gray-200 min-w-60 font-semibold">
                   <sub>Nama</sub>\<sup>Tgl</sup>
                 </Table.Th>
-                {Array.from({ length: getDaysInMonth(monthLocation) }).map((_, index) => (
-                  <Table.Th className="bg-gray-200 font-semibold" key={index}>
-                    {index + 1}
+                {DayinMonth.map((day, index) => (
+                  <Table.Th key={index} className="bg-gray-200 font-semibold">
+                    <div className="text-center">
+                      <div className={`text-xxs ${day.dayName === 'Min' ? 'text-red-700' : ''}`}>
+                        {day.dayName}
+                      </div>
+                      <div>{index + 1}</div>
+                    </div>
                   </Table.Th>
                 ))}
               </Table.Tr>
@@ -446,10 +441,19 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
 
       {dataSchedule.length === 0 && (
         <div className="text-center text-slate-400 my-20">
-          <div className="mb-2">Tidak ada jadwal yang tersedia</div>
+          <div className="mb-2">
+            <span className="font-semibold">Tidak ada jadwal yang tersedia</span> <br />
+            <span className="text-blue-500 text-xs">
+              Silahkan Buat atau Copy dari jadwal yang sudah ada
+            </span>
+          </div>
           {MonthCopyDataSchedule.length > 0 && (
             <form onSubmit={handlePasteSubmit}>
-              <Button type="submit" leftSection={<IconClipboardText size={15} />}>
+              <Button
+                loading={MutationPasteMonth.isPending}
+                type="submit"
+                leftSection={<IconClipboardText size={15} />}
+              >
                 Paste
               </Button>
             </form>

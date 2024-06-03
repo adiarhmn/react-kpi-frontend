@@ -70,3 +70,22 @@ export function getDaysInMonth(dateString: string): number {
 
   return new Date(year, month, 0).getDate();
 }
+
+export const getDaysInMonths = (
+  month: number,
+  year: number
+): { date: string; dayName: string }[] => {
+  const daysInMonth = new Date(year, month + 1, 0).getDate(); // Mendapatkan jumlah hari dalam bulan
+  const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+  const daysArray = [];
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    const dayName = dayNames[date.getDay()];
+    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+    daysArray.push({ date: formattedDate, dayName });
+  }
+
+  return daysArray;
+};
