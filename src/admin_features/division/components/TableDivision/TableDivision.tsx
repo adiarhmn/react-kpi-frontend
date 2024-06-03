@@ -7,16 +7,21 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { DivisionType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
 
 import { useDeleteDivision, useGetDivisions } from '../../api';
 
 export const TableDivision: React.FC = () => {
+  const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
+  // State Division
   const [division, setDivision] = useState<DivisionType[]>([]);
   const [opened, { open, close }] = useDisclosure(false);
   const [divisionToDelete, setDivisionToDelete] = useState<DivisionType>();
-  const { data, error, isLoading } = useGetDivisions();
+  const { data, error, isLoading } = useGetDivisions(creds?.company_id);
   const deleteDivisionMutation = useDeleteDivision();
-  const navigate = useNavigate();
 
   // Fungsi Delete Division
   const deleteDivision = async (id: number) => {

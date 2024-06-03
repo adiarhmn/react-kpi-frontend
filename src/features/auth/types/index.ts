@@ -4,6 +4,7 @@ export type Creds = {
   name: string;
   role: 'admin' | 'superadmin' | 'employee';
   employee_id: number;
+  company_id: number;
 };
 
 export type User = {

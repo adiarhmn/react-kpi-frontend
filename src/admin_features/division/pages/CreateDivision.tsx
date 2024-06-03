@@ -4,6 +4,7 @@ import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { DivisionType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
 
 import { useCreateDivision } from '../api';
 import { FormDivision } from '../components';
@@ -15,10 +16,13 @@ export const CreateDivision: React.FC = () => {
   };
 
   const mutation = useCreateDivision();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
 
   const handleSubmit = async (dataDivision: DivisionType) => {
     const divisionDataPost = {
       division_name: dataDivision.division_name,
+      company_id: creds?.company_id,
     };
 
     await mutation.mutateAsync(divisionDataPost, {
