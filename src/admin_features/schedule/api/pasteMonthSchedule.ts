@@ -58,6 +58,7 @@ export async function pasteDataSchedule(request: DataPasteScheduleMonth) {
         schedule_id: schedule.id,
         status: ScheduleOLD?.Schedules[index].status ?? 'on',
         shift_id: ScheduleOLD?.Schedules[index].shift_id ?? request.default_shift,
+        default_place: ScheduleOLD?.Schedules[index].attendance_place ?? '',
       };
     });
   }).flat();

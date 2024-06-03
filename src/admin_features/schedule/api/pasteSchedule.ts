@@ -23,6 +23,7 @@ async function pasteSchedule(data: DataPasteSchedule) {
     schedule_id: data.afterDataSchedule.Schedules[index].id,
     status: item.status,
     shift_id: item.shift_id,
+    default_place: item.attendance_place,
   }));
 
   const res = await axios.put(`${BaseURL}/schedule`, BodyRequest);

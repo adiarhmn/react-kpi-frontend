@@ -416,9 +416,11 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                       className={`cursor-pointer text-center ${ShowScheduleCell(schedule).className}`}
                     >
                       {ShowScheduleCell(schedule).value}
-                      <div className="text-xxs -mt-2 text-slate-400">
-                        {schedule.attendance_place === 'WFH' && 'WFH'}
-                      </div>
+                      {schedule.status === 'on' && (
+                        <div className="text-xxs -mt-2 text-slate-400">
+                          {schedule.attendance_place === 'WFH' && 'WFH'}
+                        </div>
+                      )}
                     </Table.Td>
                   ))}
                 </Table.Tr>
