@@ -55,7 +55,7 @@ export const TableUser = () => {
   // Set Data Users
   useEffect(() => {
     if (data) {
-      setUsers(data.data);
+      setUsers(data);
     }
   }, [data]);
 

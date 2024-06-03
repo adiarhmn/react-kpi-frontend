@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-import { ActionIcon, Button, CopyButton, Modal, Select, Table } from '@mantine/core';
+import { ActionIcon, Button, CopyButton, Loader, Modal, Radio, Select, Table } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
@@ -38,7 +38,12 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   if (creds === null) navigate('/login');
   // Data Master Schedule
   const [dataSchedule, setDataSchedule] = useState<SchedulesType[]>([]);
-  const { data, refetch } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
+  const {
+    data,
+    isLoading: loadingSchedule,
+    isError: errorSchedule,
+    refetch,
+  } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
   const DayinMonth = getDaysInMonths(month.getMonth(), month.getFullYear());
   const { data: dataShift, isLoading: loadingGetShift } = useGetShift(creds?.company_id);
   const location = useLocation();
@@ -66,6 +71,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   const form = useForm({
     initialValues: {
       value_edit: 'libur',
+      value_place: 'WFO',
     },
   });
 
@@ -153,6 +159,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
           schedule_id: data_edit.schedule_id,
           status: 'on',
           shift_id: parseInt(form.values.value_edit),
+          default_place: form.values.value_place,
         };
       });
 
@@ -163,6 +170,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
           schedule_id: data_edit.schedule_id,
           status: 'off',
           shift_id: data_edit.shift_id,
+          default_place: form.values.value_place,
         };
       });
       return new_data_edit;
@@ -179,6 +187,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   //  => Handle Confirm Edit Schedule (Save Data)
   const HandleConfirmEditItemSchedule = async () => {
     const data_submit = HandleFormValue();
+    console.log('Data Submit :', data_submit);
     MutationEditItemSchedule.mutateAsync(data_submit, {
       onSuccess: (data) => {
         modal.close();
@@ -216,8 +225,16 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   };
 
   // Loading Data
-  if (loadingGetShift) {
-    return <div>Loading...</div>;
+  if (loadingGetShift || loadingSchedule) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
+
+  if (errorSchedule) {
+    return <div className="text-red-600 text-center my-20 font-bold">Gagal Mengambil Data</div>;
   }
 
   const OptionDataShiftSelection = dataShift.data.map((shift: ShiftType) => {
@@ -237,6 +254,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     }
   };
 
+  console.log('Data DataSchedule :', dataSchedule);
   return (
     <section className="bg-white rounded-lg shadow-lg p-3">
       <div className="mb-3 flex gap-2 justify-between flex-wrap">
@@ -374,7 +392,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                       onClick={() => {
                         if (FreeDays) {
                           const newSchedule = [...dataSchedule];
-                          console.log(newSchedule);
                           newSchedule[rowIndex].Schedules[colIndex].status =
                             newSchedule[rowIndex].Schedules[colIndex].status == 'off'
                               ? 'on'
@@ -390,13 +407,18 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                             schedule_id: newSchedule[rowIndex].Schedules[colIndex].id,
                             status: newSchedule[rowIndex].Schedules[colIndex].status,
                             shift_id: newSchedule[rowIndex].Schedules[colIndex].shift_id,
+                            default_place:
+                              newSchedule[rowIndex].Schedules[colIndex].attendance_place,
                           };
                           EditFreeDays(newFreeDay);
                         }
                       }}
-                      className={`cursor-pointer ${ShowScheduleCell(schedule).className}`}
+                      className={`cursor-pointer text-center ${ShowScheduleCell(schedule).className}`}
                     >
                       {ShowScheduleCell(schedule).value}
+                      <div className="text-xxs -mt-2 text-slate-400">
+                        {schedule.attendance_place === 'WFH' && 'WFH'}
+                      </div>
                     </Table.Td>
                   ))}
                 </Table.Tr>
@@ -424,6 +446,12 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                   value={form.values.value_edit}
                   {...form.getInputProps('value_edit')}
                 />
+                <Radio.Group name="attendance_place" {...form.getInputProps('value_place')}>
+                  <div className="flex gap-4 mt-3">
+                    <Radio defaultChecked value={'WFO'} label="WFO" />
+                    <Radio value={'WFH'} label="WFH" />
+                  </div>
+                </Radio.Group>
               </div>
               <div className="mt-5 flex justify-end gap-2">
                 <Button

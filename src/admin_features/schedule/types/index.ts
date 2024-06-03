@@ -5,6 +5,7 @@ export type EditScheduleItemType = {
   status: string;
   shift_id: number;
   checked?: boolean;
+  default_place: string;
 };
 
 export type ScheduleItemType = {
@@ -14,6 +15,7 @@ export type ScheduleItemType = {
   shift_id: number;
   shift: ShiftType;
   checked?: boolean;
+  attendance_place: string;
 };
 export type SchedulesType = {
   Schedules: ScheduleItemType[];
