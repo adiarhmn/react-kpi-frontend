@@ -4,6 +4,7 @@ export type UserType = {
   role: string;
   status: boolean;
   password: string;
+  company_id?: number;
 };
 
 export type ShiftType = {

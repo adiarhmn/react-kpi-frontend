@@ -4,12 +4,16 @@ import { IconPencil, IconPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@/features/auth';
 import { formatDateToString } from '@/utils/format';
 
 import { TableSchedule } from '../components';
 
 export const Schedule: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
   const location = useLocation();
   const [isSchedule, setIsSchedule] = useState(false);
 

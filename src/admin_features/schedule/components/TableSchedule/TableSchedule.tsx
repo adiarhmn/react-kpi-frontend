@@ -13,11 +13,12 @@ import {
   IconTrash,
 } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { SchedulesType, EditScheduleItemType } from '@/admin_features/schedule/types';
 import { useGetShift } from '@/admin_features/shift/api';
 import { ShiftType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
 import { formatDateToString, getDaysInMonths, getStartAndEndOfMonth } from '@/utils/format';
 
 import { useDeleteScheduleEmployee, useEditFreeDay } from '../../api';
@@ -32,11 +33,14 @@ type TableScheduleProps = {
 };
 
 export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, setIsSchedule }) => {
+  const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
   // Data Master Schedule
   const [dataSchedule, setDataSchedule] = useState<SchedulesType[]>([]);
   const { data, refetch } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
   const DayinMonth = getDaysInMonths(month.getMonth(), month.getFullYear());
-  const { data: dataShift, isLoading: loadingGetShift } = useGetShift();
+  const { data: dataShift, isLoading: loadingGetShift } = useGetShift(creds?.company_id);
   const location = useLocation();
 
   // Edit Data

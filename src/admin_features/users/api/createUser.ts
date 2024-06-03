@@ -8,6 +8,7 @@ type UserPostType = {
   password: string;
   role: string;
   status: boolean;
+  company_id?: number;
 };
 
 export async function createUser(user: UserPostType) {
