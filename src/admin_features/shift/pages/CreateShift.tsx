@@ -4,10 +4,16 @@ import { useForm } from '@mantine/form';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@/features/auth';
+
 import { useCreateShift } from '../api/createShift';
 
 export const CreateShift: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
+  // Mutation Create Shift
   const mutationShift = useCreateShift();
   const NavBack = () => {
     navigate(-1);
@@ -16,8 +22,8 @@ export const CreateShift: React.FC = () => {
     validateInputOnChange: true,
     initialValues: { shift_name: '', shift_code: '', start_time: '', end_time: '' },
     validate: {
-      shift_name: (value) => (value.length < 8 ? 'Name must have at least 8 letters' : null),
-      shift_code: (value) => (value.length > 2 ? 'Shift Code cannot more than 2 letters' : null),
+      shift_name: (value) => (value.length < 5 ? 'Nama Shift minimal 5 huruf' : null),
+      shift_code: (value) => (value.length < 2 ? 'Kode Shift minimal 2 huruf' : null),
       start_time: (value) => (value.length < 2 ? 'Name must have at least 5 letters' : null),
       end_time: (value) => (value.length < 2 ? 'Name must have at least 5 letters' : null),
     },
@@ -30,6 +36,7 @@ export const CreateShift: React.FC = () => {
       start_time: form.values.start_time,
       end_time: form.values.end_time,
       shift_code: form.values.shift_code,
+      company_id: creds?.company_id,
     };
 
     console.log(shiftDataPost);
@@ -77,7 +84,7 @@ export const CreateShift: React.FC = () => {
               <TimeInput label="Jam Keluar" {...form.getInputProps('end_time')} />
             </div>
             <div className="flex gap-3">
-              <Button type="submit" color="blue" className="mt-5">
+              <Button loading={mutationShift.isPending} type="submit" color="blue" className="mt-5">
                 Simpan
               </Button>
               <Button onClick={NavBack} type="button" color="gray" className="mt-5">

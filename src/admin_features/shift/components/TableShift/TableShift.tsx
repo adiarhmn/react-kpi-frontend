@@ -1,14 +1,23 @@
 import { Loader, Table } from '@mantine/core';
-// import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ShiftType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
 
 import { useGetShift } from '../../api';
 
 export const TableShift: React.FC = () => {
-  const [shifts, setShifts] = useState<ShiftType[]>([]); // [1
-  const { data: DataShift, error: errorShift, isLoading: loadingShift } = useGetShift();
+  const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
+  const [shifts, setShifts] = useState<ShiftType[]>([]);
+  const {
+    data: DataShift,
+    error: errorShift,
+    isLoading: loadingShift,
+  } = useGetShift(creds?.company_id);
 
   useEffect(() => {
     if (DataShift) {
