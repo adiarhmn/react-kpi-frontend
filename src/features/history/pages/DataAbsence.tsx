@@ -40,7 +40,7 @@ export const DataAbsence: React.FC = () => {
         </div>
       </section>
 
-      <AbsenceList status={'Belum%20Disetujui'} typeAbsence={''} modalState={opened} />
+      <AbsenceList status={'Disetujui'} typeAbsence={''} modalState={opened} />
     </main>
   );
 };

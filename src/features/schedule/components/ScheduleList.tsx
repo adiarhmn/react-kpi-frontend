@@ -151,7 +151,7 @@ export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, mo
                 src="/images/blank-canvas.svg"
                 alt=""
               />
-              <span className="font-bold text-slate-400 text-xl">Belum ada data izin</span>
+              <span className="font-bold text-slate-400 text-xl">Belum ada data jadwal</span>
             </section>
           </div>
         )}

@@ -18,14 +18,14 @@
   .bar-scroll-blue::-webkit-scrollbar {
     width: 6px; /* Lebar scrollbar */
   }
-  
+
   .bar-scroll-blue::-webkit-scrollbar-track {
     background: #f1f1f1; /* Warna track scrollbar */
   }
-  
+
   .bar-scroll-blue::-webkit-scrollbar-thumb {
     background: #3b82f6; /* Warna thumb scrollbar */
-    border-radius: 6px
+    border-radius: 6px;
   }
 
   body {
