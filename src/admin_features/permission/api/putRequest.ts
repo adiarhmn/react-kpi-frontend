@@ -5,7 +5,7 @@ import { RequestsType } from '@/admin_features/types';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
-export async function putPermission(data?: RequestsType) {
+export async function putRequest(data?: RequestsType) {
   if (!data) {
     return null;
   }
@@ -13,8 +13,8 @@ export async function putPermission(data?: RequestsType) {
   return res.data;
 }
 
-export const usePutPermission = () => {
+export const usePutRequest = () => {
   return useMutation({
-    mutationFn: putPermission,
+    mutationFn: putRequest,
   });
 };

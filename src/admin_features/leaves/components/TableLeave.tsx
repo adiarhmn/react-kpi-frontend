@@ -3,14 +3,12 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
+import { useGetRequest, usePutRequest } from '@/admin_features/permission/api';
 import { RequestsType } from '@/admin_features/types';
 
-import { useGetRequest } from '../../api';
-import { usePutRequest } from '../../api/putRequest';
-
-export const TablePermission = () => {
+export const TableLeave = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { data, isLoading, error, refetch } = useGetRequest('izin');
+  const { data, isLoading, error, refetch } = useGetRequest('cuti');
   const [DataRequest, setDataRequest] = useState<RequestsType>();
   const MutationUpdateRequest = usePutRequest();
 
