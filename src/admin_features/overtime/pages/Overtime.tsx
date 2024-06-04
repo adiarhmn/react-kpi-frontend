@@ -30,7 +30,7 @@ export const Overtime: React.FC = () => {
               Berikut daftar pengajuan lembur yang terdaftar pada sistem
             </div>
             <MonthPickerInput
-              label="Pick date"
+              className="mt-2"
               placeholder="Pick date"
               value={month}
               onChange={(value) => {

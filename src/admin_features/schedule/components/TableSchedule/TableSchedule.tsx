@@ -36,6 +36,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   const navigate = useNavigate();
   const { creds } = useAuth();
   if (creds === null) navigate('/login');
+
   // Data Master Schedule
   const [dataSchedule, setDataSchedule] = useState<SchedulesType[]>([]);
   const {

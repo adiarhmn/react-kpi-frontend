@@ -1,6 +1,8 @@
 import { ActionIcon, Table } from '@mantine/core';
-import { IconPencil } from '@tabler/icons-react';
+import { IconCheck } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+
+import { useAuth } from '@/features/auth';
 
 import { useGetOvertime } from '../../api';
 
@@ -9,6 +11,9 @@ interface TableOvertimeProps {
 }
 export const TableOvertime: React.FC<TableOvertimeProps> = ({ month }) => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
   const { data, isLoading, error } = useGetOvertime(month.getMonth() + 1, month.getFullYear());
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -30,8 +35,8 @@ export const TableOvertime: React.FC<TableOvertimeProps> = ({ month }) => {
               <Table.Td>{item?.attendance.employee.name}</Table.Td>
               <Table.Td>{item?.detail}</Table.Td>
               <Table.Td className="flex gap-2 items-center justify-center">
-                <ActionIcon color="yellow">
-                  <IconPencil size={14} />
+                <ActionIcon disabled={item?.status == 'Disetujui'} color="green">
+                  <IconCheck size={14} />
                 </ActionIcon>
               </Table.Td>
             </Table.Tr>

@@ -1,13 +1,16 @@
-import { Button, Input, Table } from '@mantine/core';
-import { IconPlus, IconSearch } from '@tabler/icons-react';
+import { Input, Table } from '@mantine/core';
+import { IconSearch } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { ActivitysType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
 
 import { useGetActivitys } from '../api';
 
 export const Activitys: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
   const {
     data: DataActivity,
     error: errorActivity,
@@ -31,9 +34,6 @@ export const Activitys: React.FC = () => {
               Berikut daftar aktivitas karyawan pada hari ini
             </div>
           </div>
-          <Button onClick={() => navigate('create')} leftSection={<IconPlus size={16} />}>
-            Tambah Divisi
-          </Button>
         </div>
         <div className="flex gap-2">
           <Input placeholder="Cari..." leftSection={<IconSearch size={14}></IconSearch>}></Input>
