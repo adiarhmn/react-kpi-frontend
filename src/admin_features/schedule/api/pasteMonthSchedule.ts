@@ -53,12 +53,13 @@ export async function pasteDataSchedule(request: DataPasteScheduleMonth) {
     const ScheduleOLD = request.DataScheduleOld?.find(
       (data) => data.employee_id == item.employee_id
     );
+    console.log('ScheduleOLD', ScheduleOLD);
     return item.Schedules.map((schedule, index) => {
       return {
         schedule_id: schedule.id,
-        status: ScheduleOLD?.Schedules[index].status ?? 'on',
-        shift_id: ScheduleOLD?.Schedules[index].shift_id ?? request.default_shift,
-        default_place: ScheduleOLD?.Schedules[index].attendance_place ?? '',
+        status: ScheduleOLD?.Schedules[index]?.status ?? 'on',
+        shift_id: ScheduleOLD?.Schedules[index]?.shift_id ?? request.default_shift,
+        default_place: ScheduleOLD?.Schedules[index]?.attendance_place ?? '',
       };
     });
   }).flat();

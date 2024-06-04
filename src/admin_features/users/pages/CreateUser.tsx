@@ -1,4 +1,5 @@
 import { ActionIcon } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,7 +31,15 @@ export const CreateUser: React.FC = () => {
     await mutationUser.mutateAsync(userData, {
       onSuccess: (data) => {
         console.log('Success:', data);
-        navigate('/users', { state: { success: 'Data berhasil ditambahkan' } });
+        if (data.status === '400') {
+          notifications.show({
+            message: data.message,
+            color: 'red',
+          });
+          return;
+        } else {
+          navigate('/users', { state: { success: 'Data berhasil ditambahkan' } });
+        }
       },
     });
   };
