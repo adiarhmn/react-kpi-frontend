@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { ShiftType } from '@/admin_features/types';
 
 import { useGetShift } from '../api';
-import { ScheduleList } from '../components';
+import { ScheduleList, ScheduleListNew } from '../components';
 
 export const Schedule: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -80,9 +80,15 @@ export const Schedule: React.FC = () => {
             <div className="col-span-0"></div>
           </div>
         </div>
+        <ScheduleListNew
+          month={month}
+          shift={selectShift}
+          status={selectStatus}
+          modalState={opened}
+        />
       </section>
 
-      <ScheduleList month={month} shift={selectShift} status={selectStatus} modalState={opened} />
+      {/* <ScheduleList month={month} shift={selectShift} status={selectStatus} modalState={opened} /> */}
 
       <Drawer
         position="right"

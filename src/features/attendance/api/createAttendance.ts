@@ -6,6 +6,8 @@ const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 type AttendanceDataPost = {
   schedule_id: number;
   employee_id: number;
+  attendance_lat: string;
+  attendance_lon: string;
 };
 
 export const postCreateAttendance = async (attendanceDataPost: AttendanceDataPost) => {

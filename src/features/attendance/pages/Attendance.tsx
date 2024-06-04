@@ -1,15 +1,20 @@
-import { Button, Text, Image, Loader, Modal, Input, Textarea, Divider } from '@mantine/core';
+import { Button, Text, Loader, Modal, Input, Textarea, Divider } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconArrowBarToRight, IconMap2, IconPlus } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
+// eslint-disable-next-line import/order
+import { Icon } from 'leaflet';
+// eslint-disable-next-line import/order
 import { useEffect, useState } from 'react';
 // import withReactContent from 'sweetalert2-react-content';
 
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+
 import { useAuth } from '@/features/auth';
 
-import { useCreateActivity, useGetAttendance, useGetSchedule } from '../api';
+import { useCreateActivity, useGeoLocation, useGetAttendance, useGetSchedule } from '../api';
 import { useGetActivity } from '../api/getActivity';
 import { CardAttendance } from '../components';
 import { ActivityType, AttendanceType } from '../types';
@@ -85,6 +90,54 @@ export const Attendance: React.FC = () => {
   };
   // [End add kegiatan]
 
+  // [All About Location 🤯]
+  const location = useGeoLocation();
+  console.log('Tipe data coordinates : ', typeof location.coordinates?.longitude);
+  const [statusLocation, setStatusLocation] = useState(false);
+  console.log('UseGeoLocation : ', location);
+  useEffect(() => {
+    if (location.loaded && !location.error) {
+      const latOffice: number = -3.7529315029676833;
+      const lonOffice: number = 114.76686669474925;
+      const distance = calculateDistance(
+        location.coordinates?.latitude,
+        location.coordinates?.longitude,
+        latOffice,
+        lonOffice
+      );
+
+      // [PENTING! 🥶🥶]
+      const radius: number = 2;
+      // [!!!!!!!!!]
+
+      if (distance <= radius) {
+        setStatusLocation(true);
+      } else {
+        setStatusLocation(false);
+      }
+      console.log('Distance : ', distance);
+    }
+  }, [location]);
+
+  console.log('Jarak status : ', statusLocation);
+
+  function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371; // Radius bumi dalam kilometer
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      0.5 -
+      Math.cos(dLat) / 2 +
+      (Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * (1 - Math.cos(dLon))) /
+        2;
+    return R * 2 * Math.asin(Math.sqrt(a));
+  }
+  // [End Location]
+  const customIcon = new Icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/128/684/684908.png',
+    iconSize: [30, 30],
+  });
+
   if (isLoading) {
     return (
       <div className="flex justify-center my-20">
@@ -112,7 +165,33 @@ export const Attendance: React.FC = () => {
           <IconMap2 className="opacity-80" size={20} />
         </div>
         <div className="w-full pb-2">
-          <Image src="/images/map.png" height={160} alt="Map" />
+          {/* <Image src="/images/map.png" height={160} alt="Map" />
+           */}
+          <MapContainer
+            key={location.loaded ? 'loaded' : 'notLoaded'}
+            style={{ height: '33vh' }}
+            center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+            // center={[-3.753033208345266, 114.76683450763974]}
+            zoom={15}
+            scrollWheelZoom={true}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {location.loaded && !location.error ? (
+              <Marker
+                position={[location.coordinates?.latitude, location.coordinates?.longitude]}
+                icon={customIcon}
+              >
+                <Popup>Lokasi anda</Popup>
+              </Marker>
+            ) : (
+              <Marker position={[-3.753033208345266, 114.76683450763974]} icon={customIcon}>
+                <Popup>Lokasi anda</Popup>
+              </Marker>
+            )}
+          </MapContainer>
         </div>
       </section>
       {/* End card map */}
@@ -122,6 +201,9 @@ export const Attendance: React.FC = () => {
         schedule={dataSchedule[0]}
         setIsCheckIn={setIsCheckedIn}
         isCheckedIn={isCheckedIn}
+        long={location.coordinates?.longitude}
+        lat={location.coordinates?.latitude}
+        statusLocation={statusLocation}
       />
       {/* End absen card */}
 

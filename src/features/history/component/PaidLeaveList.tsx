@@ -104,7 +104,7 @@ export const PaidLeaveList: React.FC<PaidLeaveProps> = ({ status }) => {
             src="/images/blank-canvas.svg"
             alt=""
           />
-          <span className="font-bold text-slate-400 text-xl">Belum ada data izin</span>
+          <span className="font-bold text-slate-400 text-xl">Belum ada data cuti</span>
         </section>
       )}
     </div>

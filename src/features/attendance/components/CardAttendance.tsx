@@ -1,5 +1,5 @@
 import { Badge, Button, Divider, Text } from '@mantine/core';
-import { IconArrowBarToLeft, IconArrowBarToRight } from '@tabler/icons-react';
+import { IconArrowBarToLeft, IconArrowBarToRight, IconBan } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
@@ -16,12 +16,18 @@ type ScheduleProps = {
   schedule: ScheduleType;
   isCheckedIn: boolean;
   setIsCheckIn: (value: boolean) => void;
+  long: any;
+  lat: any;
+  statusLocation: boolean;
 };
 
 export const CardAttendance: React.FC<ScheduleProps> = ({
   schedule,
   isCheckedIn,
   setIsCheckIn,
+  long,
+  lat,
+  statusLocation,
 }: ScheduleProps) => {
   console.log('status checkin : ', isCheckedIn);
 
@@ -41,6 +47,8 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
     const attendanceCheckIn = {
       schedule_id: schedule.id,
       employee_id: schedule.employee_schedule.employee_id,
+      attendance_lat: lat,
+      attendance_lon: long,
     };
 
     await mutationCheckIn.mutateAsync(attendanceCheckIn, {
@@ -143,8 +151,13 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
         <div className="p-2 mt-2">
           {isCheckedIn == false ? (
             <form onSubmit={handleCheckIn}>
-              <Button type="submit" fullWidth rightSection={<IconArrowBarToRight />}>
-                Check-in
+              <Button
+                disabled={statusLocation == false}
+                type="submit"
+                fullWidth
+                rightSection={statusLocation == false ? <IconBan /> : <IconArrowBarToRight />}
+              >
+                {statusLocation == false ? 'Anda berada diluar kantor' : 'Check-in'}
               </Button>
             </form>
           ) : (

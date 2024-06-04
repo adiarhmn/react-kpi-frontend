@@ -10,7 +10,7 @@ import { ShiftType } from '@/admin_features/types';
 // eslint-disable-next-line no-restricted-imports
 import { useGetShift } from '@/features/schedule/api';
 // eslint-disable-next-line no-restricted-imports
-import { ScheduleList } from '@/features/schedule/components';
+import { ScheduleList, ScheduleListNew } from '@/features/schedule/components';
 
 export const DataAttendance: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -71,9 +71,13 @@ export const DataAttendance: React.FC = () => {
             <div className="col-span-0"></div>
           </div>
         </div>
+        <ScheduleListNew
+          month={month}
+          shift={selectShift}
+          status={selectStatus}
+          modalState={opened}
+        />
       </section>
-
-      <ScheduleList month={month} shift={selectShift} status={selectStatus} modalState={opened} />
 
       <Drawer
         position="right"
