@@ -43,7 +43,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     isLoading: loadingSchedule,
     isError: errorSchedule,
     refetch,
-  } = useGetSchedule(month.getMonth() + 1, month.getFullYear());
+  } = useGetSchedule(month.getMonth() + 1, month.getFullYear(), creds?.company_id);
   const DayinMonth = getDaysInMonths(month.getMonth(), month.getFullYear());
   const { data: dataShift, isLoading: loadingGetShift } = useGetShift(creds?.company_id);
   const location = useLocation();
