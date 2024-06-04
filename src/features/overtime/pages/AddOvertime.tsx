@@ -144,8 +144,8 @@ export const AddOvertime: React.FC = () => {
         </div>
         <div className="w-full divide-x divide-gray-300 p-1 -mb-2">
           <div className="ms-2 text-left">
-            <Text style={{ marginLeft: '4px' }} size="15px" fw={700}>
-              {formatterDate(currentDate, 'EEEE, dd MMM yyyy')}
+            <Text style={{ marginLeft: '4px' }} size="auto" fw={700}>
+              {formatterDate(currentDate, 'EEEE, dd MMMM yyyy')}
             </Text>
             <Divider my="sm" />
             <div className="-mt-2 w-full grid grid-cols-12">
@@ -213,7 +213,7 @@ export const AddOvertime: React.FC = () => {
             <div className="ms-2 -mb-2">
               <Text size="xs">Lembur mulai</Text>
               <Text size="sm" fw={700}>
-                {/* {overtime != undefined ? formatterDate(overtime.start_time, 'HH:mm') : '-- -- '} */}
+                {overtime != undefined ? formatterDate(overtime.start_time, 'HH:mm') : '-- -- '}
               </Text>
             </div>
             <Divider my="sm" />
@@ -222,7 +222,7 @@ export const AddOvertime: React.FC = () => {
                 <Text size="xs">Lembur selesai</Text>
                 <Text size="sm" fw={700}>
                   {/* {formattedTime} */}
-                  -- --
+                  {overtime != undefined ? formatterDate(overtime.end_time, 'HH:mm') : '-- -- '}
                 </Text>
               </div>
               <div className="col-span-6 text-right -mt-1"></div>

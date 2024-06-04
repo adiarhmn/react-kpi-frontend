@@ -84,7 +84,9 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, s
                 {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
                 <div className="col-span-2 text-center -ms-3">
                   <Text size="30px" fw={700}>
-                    {getDaysBetweenDates(absence?.date_start, absence?.date_end) + 1}
+                    {absence?.date_start != undefined
+                      ? getDaysBetweenDates(absence?.date_start, absence?.date_end) + 1
+                      : '-- --'}
                   </Text>
                   <Text style={{ marginTop: '-5px' }} size="xs">
                     Hari
@@ -118,14 +120,15 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, s
                   <div className="my-auto text-center mt-2">
                     <Divider orientation="vertical" />
                     <Text size="18px" fw={700}>
-                      {formatdate(absence?.date_start)}
+                      {absence?.date_start != undefined ? formatdate(absence?.date_start) : '-- --'}
                     </Text>
                   </div>
                 </div>
               </div>
               <div className="text-left">
                 <Text style={{ marginLeft: '0px', padding: '8px' }} size="11px" fw={500}>
-                  Tanggal pengajuan : {formatdate(absence?.created_at)}
+                  Tanggal pengajuan :{' '}
+                  {absence?.created_at != undefined ? formatdate(absence?.created_at) : '-- --'}
                 </Text>
               </div>
             </button>
