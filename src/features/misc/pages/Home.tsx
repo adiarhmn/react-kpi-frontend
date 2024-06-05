@@ -1,5 +1,4 @@
 import {
-  IconHandStop,
   IconCalendar,
   IconReportMoney,
   IconFileTime,
@@ -7,7 +6,7 @@ import {
   IconFingerprint,
   IconChevronRight,
   IconClockHour8,
-  IconClock,
+  IconFileDots,
   IconClock24,
   IconLuggage,
 } from '@tabler/icons-react';
@@ -15,7 +14,6 @@ import { Link } from 'react-router-dom';
 
 import { MenuList } from '@/components/navigation';
 import { useAuth } from '@/features/auth';
-import { useCreds } from '@/features/auth/api';
 
 export const Home: React.FC = () => {
   // const { creds, getRoleText } = useAuth();
@@ -109,6 +107,12 @@ export const Home: React.FC = () => {
               title: 'Lembur',
               href: '/overtime',
               icon: IconClock24,
+              color: 'bg-blue-600',
+            },
+            {
+              title: 'Terlambat',
+              href: '/late-request',
+              icon: IconFileDots,
               color: 'bg-blue-600',
             },
             {

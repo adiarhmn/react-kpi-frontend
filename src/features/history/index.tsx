@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 // History Feature
 export * from './pages';
 export * from './component';
