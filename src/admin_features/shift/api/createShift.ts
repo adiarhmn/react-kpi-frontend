@@ -8,6 +8,7 @@ type ShiftPost = {
   start_time: string;
   end_time: string;
   shift_code: string;
+  company_id?: number;
 };
 
 const CreateShift = async (shift: ShiftPost) => {

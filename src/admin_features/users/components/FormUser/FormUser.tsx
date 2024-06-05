@@ -3,6 +3,7 @@ import { useForm } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';
 
 import { UserType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
 interface FormUserProps {
   currentUser?: UserType;
   loading: boolean;
@@ -10,11 +11,15 @@ interface FormUserProps {
 }
 
 export const FormUser: React.FC<FormUserProps> = ({ currentUser, loading, onSubmit }) => {
+  const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
   const form = useForm({
     validateInputOnChange: true,
     initialValues: currentUser
-      ? { ...currentUser, password: '' }
-      : { id: '', username: '', password: '', role: 'employee' },
+      ? { ...currentUser, password: '', company_id: creds?.company_id }
+      : { id: '', username: '', password: '', role: 'employee', company_id: creds?.company_id },
     validate: {
       username: (value) => (value.length < 5 ? 'Name must have at least 5 letters' : null),
       password: (value: string) => (value.length < 8 ? 'Name must have at least 8 letters' : null),
@@ -22,7 +27,6 @@ export const FormUser: React.FC<FormUserProps> = ({ currentUser, loading, onSubm
     },
   });
 
-  const navigate = useNavigate();
   const NavBack = () => {
     navigate(-1);
   };
@@ -36,6 +40,7 @@ export const FormUser: React.FC<FormUserProps> = ({ currentUser, loading, onSubm
       password: form.values.password,
       role: form.values.role,
       status: true,
+      company_id: creds?.company_id,
     };
 
     onSubmit(userData);

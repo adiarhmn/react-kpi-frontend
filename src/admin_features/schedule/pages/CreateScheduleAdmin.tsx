@@ -5,16 +5,22 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useGetEmployees } from '@/admin_features/employees/api';
 import { useGetShift } from '@/admin_features/shift/api';
+import { useAuth } from '@/features/auth';
 import { formatDateToString, getStartAndEndOfMonth } from '@/utils/format';
 
 import { useCreateSchedule, useValidateSchedule } from '../api';
+import { useGetDivisions } from '@/admin_features/division/api';
+import { useState } from 'react';
 
 export const CreateSchedule: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
+  const [division, setDivision] = useState('0');
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const month = query.get('month') || '';
-
   if (!month) {
     navigate('/schedule');
   }
@@ -57,16 +63,27 @@ export const CreateSchedule: React.FC = () => {
               console.log('Success:', data);
               navigate(-1);
             },
+            onError: (error) => {
+              console.log('Gagal Insert Data:', error);
+            },
           });
         }
+      },
+      onError: (error) => {
+        console.log('Gagal Insert Data:', error);
       },
     });
   };
 
   // Mengisi Data Dari Inputan
-  const { data: DataEmployees, error, isLoading } = useGetEmployees();
-  const { data: DataShift, error: errorShift, isLoading: isLoadingShift } = useGetShift();
-  if (isLoading || isLoadingShift) {
+  const { data: DataEmployees, error, isLoading } = useGetEmployees(creds?.company_id);
+  const {
+    data: DataShift,
+    error: errorShift,
+    isLoading: isLoadingShift,
+  } = useGetShift(creds?.company_id);
+  const { data: dataDivision, isLoading: loadDivision } = useGetDivisions(creds?.company_id);
+  if (isLoading || isLoadingShift || loadDivision) {
     return <div>Loading...</div>; // or your loading component
   }
 
@@ -78,6 +95,11 @@ export const CreateSchedule: React.FC = () => {
   const optionsMultiselect = DataEmployees.map((employee: any) => ({
     value: employee.id.toString(),
     label: employee.name,
+  }));
+
+  const optionsDivision = dataDivision.map((division: any) => ({
+    value: division.id.toString(),
+    label: division.division_name,
   }));
 
   const optionsMultiselectShift = DataShift.data.map((shift: any) => ({
@@ -109,9 +131,13 @@ export const CreateSchedule: React.FC = () => {
               label="Pilih Divisi"
               className="col-span-2 lg:col-span-1"
               placeholder="Pilih Divisi"
-              data={['Semua Divisi', 'Developer', 'Designer', 'Marketing', 'HRD', 'Finance']}
+              data={[...optionsDivision, { value: '0', label: 'Semua Divisi' }]}
               defaultValue="Semua Divisi"
-              {...form.getInputProps('division_id')}
+              {...form.getInputProps('division_id', {
+                onChange: (value: any) => {
+                  setDivision(value);
+                },
+              })}
             ></Select>
 
             {/* Shift Selection */}

@@ -1,15 +1,19 @@
 import { ActionIcon } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { UserType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
 
 import { useCreateUser } from '../api/createUser';
 import { FormUser } from '../components';
 
 export const CreateUser: React.FC = () => {
-  const mutationUser = useCreateUser();
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+  const mutationUser = useCreateUser();
   const NavBack = () => {
     navigate(-1);
   };
@@ -21,12 +25,21 @@ export const CreateUser: React.FC = () => {
       password: dataUser.password,
       role: dataUser.role,
       status: true,
+      company_id: creds?.company_id,
     };
 
     await mutationUser.mutateAsync(userData, {
       onSuccess: (data) => {
         console.log('Success:', data);
-        navigate('/users', { state: { success: 'Data berhasil ditambahkan' } });
+        if (data.status === '400') {
+          notifications.show({
+            message: data.message,
+            color: 'red',
+          });
+          return;
+        } else {
+          navigate('/users', { state: { success: 'Data berhasil ditambahkan' } });
+        }
       },
     });
   };

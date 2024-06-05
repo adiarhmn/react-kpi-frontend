@@ -1,17 +1,24 @@
 import { ActionIcon, Button, Loader, Modal, Table, UnstyledButton } from '@mantine/core';
-import { useGetEmployees } from '../../api';
-import { useEffect, useState } from 'react';
-import { EmployeeType } from '@/admin_features/types';
-import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
-import { useDeleteEmployee } from '../../api/deleteEmployee';
 import { useDisclosure } from '@mantine/hooks';
+import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { EmployeeType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
+
+import { useGetEmployees } from '../../api';
+import { useDeleteEmployee } from '../../api/deleteEmployee';
 
 export const TableEmployee: React.FC = () => {
+  const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
   const [employees, setEmployees] = useState<EmployeeType[]>([]);
   const [opened, { open, close }] = useDisclosure(false);
   const [employeeToDelete, setEmployeeToDelete] = useState<EmployeeType>();
   const mutationDeleteEmployee = useDeleteEmployee();
-  const { data, error, isLoading } = useGetEmployees();
+  const { data, error, isLoading } = useGetEmployees(creds?.company_id);
 
   // Fungsi Delete Division
   const deleteEmployee = async (id: number) => {

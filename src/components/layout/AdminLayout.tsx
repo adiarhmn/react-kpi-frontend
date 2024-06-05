@@ -4,7 +4,6 @@ import {
   IconCalendar,
   IconHome2,
   IconSettings,
-  IconTrash,
   IconClockHour1,
   IconUsersGroup,
   IconClipboardText,
@@ -12,10 +11,12 @@ import {
   IconBuildingEstate,
   IconBriefcase,
   IconLogout,
+  IconLuggage,
+  IconAlarmPlus,
+  IconFileAlert,
 } from '@tabler/icons-react';
 import { Suspense, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-// import { MantineLogo } from '@mantinex/mantine-logo';
 
 import { useAuth } from '@/features/auth';
 
@@ -38,9 +39,9 @@ const MenuAbsensi = [
 ];
 
 const MenuPengajuan = [
-  { title: 'Cuti', href: '/leave', icon: IconTrash },
-  { title: 'Izin', href: '/permit', icon: IconTrash },
-  { title: 'Lembur', href: '/overtime', icon: IconTrash },
+  { title: 'Cuti', href: '/leave', icon: IconLuggage },
+  { title: 'Izin', href: '/permission', icon: IconFileAlert },
+  { title: 'Lembur', href: '/overtime', icon: IconAlarmPlus },
 ];
 
 export const AdminLayout: React.FC = () => {

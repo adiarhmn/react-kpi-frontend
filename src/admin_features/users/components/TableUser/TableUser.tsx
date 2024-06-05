@@ -7,11 +7,15 @@ import { useNavigate } from 'react-router-dom';
 
 import { UserType } from '@/admin_features/types';
 import { useGetUsers, useDeleteUser } from '@/admin_features/users/api';
+import { useAuth } from '@/features/auth';
 
 export const TableUser = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
   const [users, setUsers] = useState<UserType[]>([]);
-  const { data, error, isLoading } = useGetUsers();
+  const { data, error, isLoading } = useGetUsers(creds?.company_id);
   const [UserData, setUserData] = useState<UserType>({
     id: 0,
     username: '',
@@ -65,6 +69,8 @@ export const TableUser = () => {
   if (error) {
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
+
+  console.log(data);
 
   return (
     <div className="mt-7">

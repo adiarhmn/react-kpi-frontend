@@ -11,14 +11,15 @@ type SchedulePost = {
 
 type ScheduleValidatePost = {
   employee_schedule_id: number;
+  default_shift: number;
 };
 
-const CreateSchedule = async (schedule: SchedulePost[]) => {
+export const CreateSchedule = async (schedule: SchedulePost[]) => {
   const response = await axios.post(`${BaseURL}/employee-schedule`, schedule);
   return response.data;
 };
 
-const ValidateSchedule = async (employee_schedule_id: ScheduleValidatePost[]) => {
+export const ValidateSchedule = async (employee_schedule_id: ScheduleValidatePost[]) => {
   const response = await axios.post(`${BaseURL}/schedule`, employee_schedule_id);
   return response.data;
 };

@@ -49,6 +49,7 @@ const { Attendance: AdminAttendance } = lazyImport(
   'Attendance'
 );
 const { CreateSchedule } = lazyImport(() => import('@/admin_features/schedule'), 'CreateSchedule');
+const { UpdateSchedule } = lazyImport(() => import('@/admin_features/schedule'), 'UpdateSchedule');
 const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'ShiftAdmin');
 const { Employees } = lazyImport(() => import('@/admin_features/employees'), 'Employees');
 const { Division } = lazyImport(() => import('@/admin_features/division'), 'Division');
@@ -59,6 +60,13 @@ const { CreateEmployee } = lazyImport(() => import('@/admin_features/employees')
 const { Users } = lazyImport(() => import('@/admin_features/users'), 'Users');
 const { CreateUser } = lazyImport(() => import('@/admin_features/users'), 'CreateUser');
 const { UpdateUser } = lazyImport(() => import('@/admin_features/users'), 'UpdateUser');
+const { Activitys } = lazyImport(() => import('@/admin_features/activity'), 'Activitys');
+const { Leave } = lazyImport(() => import('@/admin_features/leaves'), 'Leave');
+const { Permission } = lazyImport(() => import('@/admin_features/permission'), 'Permission');
+const { Overtime: OvertimeAdmin } = lazyImport(
+  () => import('@/admin_features/overtime'),
+  'Overtime'
+);
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -136,6 +144,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="beranda" element={<DashboardAdmin />} />
             <Route path="schedule" element={<AdminSchedule />} />
             <Route path="schedule/create" element={<CreateSchedule />} />
+            <Route path="schedule/update" element={<UpdateSchedule />} />
             <Route path="shift" element={<ShiftAdmin />} />
             <Route path="attendance" element={<AdminAttendance />} />
             <Route path="employees" element={<Employees />} />
@@ -147,6 +156,10 @@ export const AppRoutes: React.FC = () => {
             <Route path="users" element={<Users />} />
             <Route path="users/create" element={<CreateUser />} />
             <Route path="users/update" element={<UpdateUser />} />
+            <Route path="activity" element={<Activitys />} />
+            <Route path="leave" element={<Leave />} />
+            <Route path="permission" element={<Permission />} />
+            <Route path="overtime" element={<OvertimeAdmin />} />
           </Route>
         )}
 

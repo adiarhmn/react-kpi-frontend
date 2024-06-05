@@ -7,13 +7,13 @@ import { Creds } from '../types';
 
 type AuthMeType = {
   creds: Creds;
-  status: string; 
+  status: string;
 };
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export async function getCreds() {
   const res = await axios.get<AuthMeType>(`${BaseURL}/auth/me`);
-  console.log('Creds:', res.data.creds);
+  console.log('Creds Data:', res.data.creds);
   return res.data.creds;
 }
 
