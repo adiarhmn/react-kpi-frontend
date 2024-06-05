@@ -2,10 +2,12 @@ import { Badge, Button, Divider, Image, Modal, Text, Textarea, Tooltip } from '@
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronLeft, IconClock24, IconDeviceTablet, IconMap2 } from '@tabler/icons-react';
+import { Icon } from 'leaflet';
 import { useEffect, useState } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 
-import { AttendanceType } from '@/features/attendance';
+import { AttendanceType, useGeoLocation } from '@/features/attendance';
 // eslint-disable-next-line no-restricted-imports
 import { useGetAttendance } from '@/features/attendance/api/getAttendance';
 import { useAuth } from '@/features/auth';
@@ -102,9 +104,79 @@ export const AddOvertime: React.FC = () => {
   };
   // [End Button Stop Overtime]
 
-  // console.log('data overtime : ', overtime);
-  // console.log('Sudah checkin? : ', status);
-  // console.log('Data attendance : ', attendance);
+  // [All About Location 🤯]
+  const location = useGeoLocation();
+  console.log('Tipe data coordinates : ', typeof location.coordinates?.longitude);
+  const [statusLocation, setStatusLocation] = useState(false);
+  console.log('UseGeoLocation : ', location);
+  useEffect(() => {
+    if (location.loaded && !location.error) {
+      const latOffice: number = -3.7529315029676833;
+      const lonOffice: number = 114.76686669474925;
+      const distance = calculateDistance(
+        location.coordinates?.latitude,
+        location.coordinates?.longitude,
+        latOffice,
+        lonOffice
+      );
+
+      // [PENTING! 🥶🥶]
+      const radius: number = 2;
+      // [!!!!!!!!!]
+
+      if (distance <= radius) {
+        setStatusLocation(true);
+      } else {
+        setStatusLocation(false);
+      }
+      console.log('Distance : ', distance);
+    }
+  }, [location]);
+
+  console.log('Jarak status : ', statusLocation);
+
+  function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371; // Radius bumi dalam kilometer
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      0.5 -
+      Math.cos(dLat) / 2 +
+      (Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * (1 - Math.cos(dLon))) /
+        2;
+    return R * 2 * Math.asin(Math.sqrt(a));
+  }
+
+  const officeIcon: any = new Icon({
+    iconUrl: '/images/office-icon.png',
+    iconSize: [40, 40],
+  });
+
+  const myIcon: any = new Icon({
+    iconUrl: '/images/my-icon.png',
+    iconSize: [60, 60],
+  });
+
+  interface Marker {
+    geocode: [number, number]; // Menggunakan tipe tuple langsung
+    popUp: string;
+    icon: any;
+  }
+
+  const markers: Marker[] = [
+    {
+      geocode: [-3.7529315029676833, 114.76686669474925],
+      popUp: 'Lokasi kantor',
+      icon: officeIcon,
+    },
+    {
+      geocode: [location.coordinates?.latitude ?? 0, location.coordinates?.longitude ?? 0],
+      popUp: 'Lokasi saya',
+      icon: myIcon,
+    },
+  ];
+  // [End Location]
+
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -131,7 +203,32 @@ export const AddOvertime: React.FC = () => {
           <IconMap2 className="opacity-80" size={20} />
         </div>
         <div className="w-full pb-2">
-          <Image src="/images/map.png" height={160} alt="Map" />
+          {/* <Image src="/images/map.png" height={160} alt="Map" />
+           */}
+          <MapContainer
+            key={location.loaded ? 'loaded' : 'notLoaded'}
+            style={{ height: '33vh' }}
+            center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+            // center={[-3.753033208345266, 114.76683450763974]}
+            zoom={15}
+            scrollWheelZoom={true}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {!location.loaded && location.error ? (
+              <Marker position={[-3.753033208345266, 114.76683450763974]}>
+                <Popup>Lokasi anda</Popup>
+              </Marker>
+            ) : (
+              markers.map((marker, index) => (
+                <Marker key={index} position={marker.geocode} icon={marker.icon}>
+                  <Popup>{marker.popUp}</Popup>
+                </Marker>
+              ))
+            )}
+          </MapContainer>
         </div>
       </section>
       {/* End card map */}
@@ -158,7 +255,9 @@ export const AddOvertime: React.FC = () => {
                 {overtimeStatus != true ? (
                   <Button
                     onClick={open}
-                    disabled={status == 'true' || attendance == undefined}
+                    disabled={
+                      status == 'true' || attendance == undefined || statusLocation == false
+                    }
                     className="shadow-lg"
                     style={{ borderRadius: '15px', width: '110px' }}
                     size="sm"

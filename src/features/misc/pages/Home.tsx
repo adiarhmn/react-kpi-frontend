@@ -6,9 +6,9 @@ import {
   IconFingerprint,
   IconChevronRight,
   IconClockHour8,
-  IconFileDots,
   IconClock24,
   IconLuggage,
+  IconClockPin,
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
@@ -112,7 +112,7 @@ export const Home: React.FC = () => {
             {
               title: 'Terlambat',
               href: '/late-request',
-              icon: IconFileDots,
+              icon: IconClockPin,
               color: 'bg-blue-600',
             },
             {

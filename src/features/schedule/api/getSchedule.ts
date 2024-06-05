@@ -69,9 +69,10 @@ export async function getScheduleMonthly(
   }
 }
 
-export async function getScheduleDaily(employee_id: number | null, date: string) {
+export async function getScheduleDaily(employee_id?: number | null, date?: string) {
   const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&date=${date}`);
-  console.log('schedule daily : ', res.data.data);
+  // console.log('URL : ', `${BaseURL}/schedule?employee=${employee_id}&date=${date}`);
+  // console.log('schedule daily : ', res.data.data);
   return res.data.data;
 }
 
@@ -101,7 +102,7 @@ export const useGetScheduleMonthly = (
   });
 };
 
-export const useGetScheduleDaily = (employee_id: number | null, date: string) => {
+export const useGetScheduleDaily = (employee_id?: number | null, date?: string) => {
   return useQuery({
     queryKey: ['schedule'],
     queryFn: () => getScheduleDaily(employee_id, date),

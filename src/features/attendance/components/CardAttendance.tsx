@@ -183,7 +183,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
         </div>
       )}
 
-      <CardActivity isCheckedIn={isCheckedIn} />
+      {/* <CardActivity isCheckedIn={isCheckedIn} /> */}
     </>
   );
 };

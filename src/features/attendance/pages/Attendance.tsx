@@ -5,7 +5,7 @@ import { IconArrowBarToRight, IconMap2, IconPlus } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 // eslint-disable-next-line import/order
-import { Icon } from 'leaflet';
+import { Icon, LatLngTuple, icon } from 'leaflet';
 // eslint-disable-next-line import/order
 import { useEffect, useState } from 'react';
 // import withReactContent from 'sweetalert2-react-content';
@@ -46,9 +46,8 @@ export const Attendance: React.FC = () => {
 
   console.log('Data attendance : ', attendance);
   const [activities, setActivities] = useState<ActivityType[]>([]);
-  const { data: dataActivity } = useGetActivity(attendance?.id);
   const { data, error, isLoading } = useGetSchedule(employee_id, dateToday);
-  // console.log('adaaa;', dataschedule);
+  const { data: dataActivity, refetch } = useGetActivity(attendance?.id);
   useEffect(() => {
     if (dataActivity) {
       setActivities(dataActivity);
@@ -69,7 +68,7 @@ export const Attendance: React.FC = () => {
   });
 
   // [Add kegiatan]
-  const mutationAddOvertime = useCreateActivity();
+  const mutationAddActivity = useCreateActivity();
   const handleActivity = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -79,9 +78,10 @@ export const Attendance: React.FC = () => {
       description: form.values.activityDescription,
     };
 
-    await mutationAddOvertime.mutateAsync(activityData, {
+    await mutationAddActivity.mutateAsync(activityData, {
       onSuccess: (data) => {
         console.log('Success:', data);
+        refetch();
 
         close();
         // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
@@ -132,11 +132,37 @@ export const Attendance: React.FC = () => {
         2;
     return R * 2 * Math.asin(Math.sqrt(a));
   }
-  // [End Location]
-  const customIcon = new Icon({
-    iconUrl: 'https://cdn-icons-png.flaticon.com/128/684/684908.png',
-    iconSize: [30, 30],
+
+  const officeIcon: any = new Icon({
+    iconUrl: '/images/office-icon.png',
+    iconSize: [40, 40],
   });
+
+  const myIcon: any = new Icon({
+    iconUrl: '/images/my-icon.png',
+    iconSize: [60, 60],
+  });
+
+  interface Marker {
+    geocode: [number, number]; // Menggunakan tipe tuple langsung
+    popUp: string;
+    icon: any;
+  }
+
+  const markers: Marker[] = [
+    {
+      geocode: [-3.7529315029676833, 114.76686669474925],
+      popUp: 'Lokasi kantor',
+      icon: officeIcon,
+    },
+    {
+      geocode: [location.coordinates?.latitude ?? 0, location.coordinates?.longitude ?? 0],
+      popUp: 'Lokasi saya',
+      icon: myIcon,
+    },
+  ];
+
+  // [End Location]
 
   if (isLoading) {
     return (
@@ -179,17 +205,16 @@ export const Attendance: React.FC = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {location.loaded && !location.error ? (
-              <Marker
-                position={[location.coordinates?.latitude, location.coordinates?.longitude]}
-                icon={customIcon}
-              >
+            {!location.loaded && location.error ? (
+              <Marker position={[-3.753033208345266, 114.76683450763974]}>
                 <Popup>Lokasi anda</Popup>
               </Marker>
             ) : (
-              <Marker position={[-3.753033208345266, 114.76683450763974]} icon={customIcon}>
-                <Popup>Lokasi anda</Popup>
-              </Marker>
+              markers.map((marker, index) => (
+                <Marker key={index} position={marker.geocode} icon={marker.icon}>
+                  <Popup>{marker.popUp}</Popup>
+                </Marker>
+              ))
             )}
           </MapContainer>
         </div>
