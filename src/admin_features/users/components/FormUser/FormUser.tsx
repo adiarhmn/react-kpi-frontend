@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { Button, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';

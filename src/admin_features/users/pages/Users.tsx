@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { Button, Input, Select } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconPlus, IconSearch } from '@tabler/icons-react';

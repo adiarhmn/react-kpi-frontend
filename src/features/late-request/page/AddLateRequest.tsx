@@ -12,10 +12,12 @@ import { formatterDate } from '@/features/history';
 // eslint-disable-next-line no-restricted-imports
 import { useGetScheduleDaily } from '@/features/schedule/api';
 
+import { useCreateLateRequest } from '../api';
+
 export const AddLateRequest: React.FC = () => {
   const { creds } = useAuth();
   const navigate = useNavigate();
-
+  // const [lateRequest, setLateRequest] = useState<lateRequestType[]>([]);
   const [schedule, setSchedule] = useState<ScheduleType>();
   const { data } = useGetScheduleDaily(creds?.id, formatterDate(new Date(), 'yyyy-MM-dd'));
   useEffect(() => {
@@ -38,7 +40,6 @@ export const AddLateRequest: React.FC = () => {
     validateInputOnChange: true,
     initialValues: {
       nameShift: schedule?.shift.shift_name,
-      date: formatterDate(new Date(), 'EEEE, dd MMMM yyyy'),
       status: 'Terlambat',
       reason: '',
     },
@@ -49,10 +50,29 @@ export const AddLateRequest: React.FC = () => {
 
   // console.log(form.getInputProps('nameShift'));
   // [END FORM PENGAJUAN]
+
+  const mutationAddLateRequest = useCreateLateRequest();
+  const handleLateRequest = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const lateRequestData = {
+      employee_id: creds?.id,
+      reason: form.values.reason,
+    };
+
+    await mutationAddLateRequest.mutateAsync(lateRequestData, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        if (data.status == 201) {
+          navigate(-1);
+        }
+        close();
+      },
+    });
+  };
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
-
       <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 -mt-10">
         <div className="flex justify-between items-center text-blue-700 mb-1">
           <div className="flex items-center">
@@ -111,18 +131,10 @@ export const AddLateRequest: React.FC = () => {
         </div>
         <Divider size={'xs'} />
         <div className="w-full p-2">
-          <form>
-            <div className="mb-2">
-              <Input.Wrapper label="Tanggal" description="" error="">
-                <Input
-                  disabled
-                  value={form.getInputProps('date').value}
-                  {...form.getInputProps('date')}
-                />
-              </Input.Wrapper>
-            </div>
+          <form onSubmit={handleLateRequest}>
             <div className="mb-2">
               <Select
+                disabled
                 label="Status pengajuan"
                 name="jenjang"
                 data={['Terlambat', 'WFH']}

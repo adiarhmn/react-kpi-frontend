@@ -43,7 +43,7 @@ export const BiodataInfo: React.FC = () => {
           <div className="mt-2 gap-2 align-item-left">
             <Text size="xs">Pendidikan terakhir</Text>
             <Text size="xs" fw={700}>
-              SMKN 3 Boyolangu
+              -
             </Text>
           </div>
         </div>
@@ -51,13 +51,13 @@ export const BiodataInfo: React.FC = () => {
           <div className="gap-2 align-item-left">
             <Text size="xs">Gelar depan</Text>
             <Text size="xs" fw={700}>
-              -
+              {employee?.first_degree != null ? employee.first_degree : '-'}
             </Text>
           </div>
           <div className="ps-2 gap-2 align-item-left">
             <Text size="xs">Gelar belakang</Text>
             <Text size="xs" fw={700}>
-              -
+              {employee?.last_degree != null ? employee.last_degree : '-'}
             </Text>
           </div>
           <div className="mt-2 gap-2 align-item-left">

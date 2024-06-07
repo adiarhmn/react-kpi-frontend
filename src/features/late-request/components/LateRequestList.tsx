@@ -1,7 +1,11 @@
 import { Badge, Divider, Text } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@/features/auth';
+
 export const LateRequestList: React.FC = () => {
+  const { creds } = useAuth();
+
   const navigate = useNavigate();
   return (
     <div className="text-center">

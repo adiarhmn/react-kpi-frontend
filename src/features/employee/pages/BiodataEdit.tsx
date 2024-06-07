@@ -1,29 +1,43 @@
-import { formatBytes } from '@/utils/format';
-import { Button, Center, Select, TextInput } from '@mantine/core';
+import { Button, Select, TextInput } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft, IconMap2, IconUser } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { EmployeeType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
+
+import { useGetEmployee } from '../api/Profile';
+
 export const BiodataEdit: React.FC = () => {
+  const { creds } = useAuth();
+  const [employee, setEmployee] = useState<EmployeeType>();
+  const { data } = useGetEmployee(creds?.id);
+  useEffect(() => {
+    if (data) {
+      setEmployee(data);
+    }
+  }, [data]);
+
   const navigate = useNavigate();
   const formProfile = useForm({
     validateInputOnChange: true,
     initialValues: {
-      nomorPegawai: '',
-      namaLengkap: '',
+      nomorPegawai: employee?.nip,
+      namaLengkap: employee?.name,
       pendidikanTerakhir: '',
-      gelarDepan: '',
-      gelarBelakang: '',
-      jenisKelamin: '',
+      gelarDepan: employee?.first_degree,
+      gelarBelakang: employee?.last_degree,
+      jenisKelamin: employee?.sex,
       golDarah: '',
       tempatLahir: '',
-      tanggalLahir: '',
-      nomorTelepon: '',
-      email: '',
-      agama: '',
-      nomorKTP: '',
-      nomorBPJS: '',
+      tanggalLahir: employee?.birth_date,
+      nomorTelepon: employee?.phone,
+      email: employee?.email,
+      agama: employee?.religion,
+      nomorKTP: employee?.nik,
+      nomorBPJS: employee?.no_bpjs,
     },
     validate: {
       nomorPegawai: (value) =>

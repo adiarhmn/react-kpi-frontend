@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 export type UserType = {
   id: number;
   username: string;
@@ -26,9 +27,12 @@ export type EmployeeType = {
   nik: string;
   no_bpjs: string;
   name: string;
+  email: string;
   sex: string;
   birth_date: string;
   religion: string;
+  first_degree: string;
+  last_degree: string;
   address: string;
   rt: string;
   rw: string;

@@ -5,7 +5,7 @@ import { IconArrowBarToRight, IconMap2, IconPlus } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 // eslint-disable-next-line import/order
-import { Icon, LatLngTuple, icon } from 'leaflet';
+import { Icon } from 'leaflet';
 // eslint-disable-next-line import/order
 import { useEffect, useState } from 'react';
 // import withReactContent from 'sweetalert2-react-content';
