@@ -10,7 +10,10 @@ import { useAuth } from '@/features/auth';
 import { useGetEmployees } from '../../api';
 import { useDeleteEmployee } from '../../api/deleteEmployee';
 
-export const TableEmployee: React.FC = () => {
+interface TableEmployeeProps {
+  division_id: number;
+}
+export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   if (creds === null) navigate('/login');
@@ -18,7 +21,7 @@ export const TableEmployee: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [employeeToDelete, setEmployeeToDelete] = useState<EmployeeType>();
   const mutationDeleteEmployee = useDeleteEmployee();
-  const { data, error, isLoading } = useGetEmployees(creds?.company_id);
+  const { data, error, isLoading } = useGetEmployees(creds?.company_id, division_id);
 
   // Fungsi Delete Division
   const deleteEmployee = async (id: number) => {
@@ -68,7 +71,6 @@ export const TableEmployee: React.FC = () => {
         <Table.Thead>
           <Table.Tr>
             <Table.Th className="font-bold">Nama</Table.Th>
-            <Table.Th className="font-bold">Alamat</Table.Th>
             <Table.Th className="font-bold">Divisi</Table.Th>
             <Table.Th className="font-bold">Username</Table.Th>
             <Table.Th className="font-bold">Role</Table.Th>
@@ -80,7 +82,6 @@ export const TableEmployee: React.FC = () => {
             return (
               <Table.Tr key={index}>
                 <Table.Td>{employee?.name}</Table.Td>
-                <Table.Td>{employee?.address}</Table.Td>
                 <Table.Td>{employee?.division.division_name}</Table.Td>
                 <Table.Td>{employee?.user.username}</Table.Td>
                 <Table.Td>{employee?.user.role}</Table.Td>

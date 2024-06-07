@@ -1,6 +1,10 @@
 import { Button, Input, Select } from '@mantine/core';
 import { IconPlus, IconSearch } from '@tabler/icons-react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useGetDivisions } from '@/admin_features/division/api';
+import { useAuth } from '@/features/auth';
 
 import { TableEmployee } from '../components';
 
@@ -8,6 +12,27 @@ import { TableEmployee } from '../components';
 
 export const Employees: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  const [DivisionID, setDivisionID] = useState<number>(0);
+  if (creds === null) navigate('/login');
+
+  const {
+    data: dataDivisi,
+    isLoading: loadDivisi,
+    error: errorDivisi,
+  } = useGetDivisions(creds?.company_id);
+
+  if (loadDivisi) {
+    return <div>Loading...</div>;
+  }
+  if (errorDivisi) {
+    return <div className="text-red-600 text-center my-20 font-bold">{errorDivisi.message}</div>;
+  }
+
+  const optionDataDivision = dataDivisi.map((division: any) => ({
+    value: division.id.toString(),
+    label: division.division_name,
+  }));
 
   // Components
   return (
@@ -25,15 +50,15 @@ export const Employees: React.FC = () => {
           </Button>
         </div>
         <div className="flex gap-2">
-          <Input placeholder="Cari..." leftSection={<IconSearch size={14}></IconSearch>}></Input>
           <Select
             placeholder="Pilih Divisi"
-            data={['Semua Divisi', 'IT Support', 'HRD', 'Finance']}
-            defaultValue="Semua Divisi"
-            allowDeselect={false}
+            data={optionDataDivision}
+            required
+            defaultValue={optionDataDivision[0]?.value}
+            onChange={(e) => setDivisionID(parseInt(e ?? ''))}
           />
         </div>
-        <TableEmployee />
+        <TableEmployee division_id={DivisionID} />
       </section>
     </main>
   );
