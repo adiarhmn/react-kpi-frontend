@@ -1,5 +1,5 @@
-import { Button, Input, Select } from '@mantine/core';
-import { IconPlus, IconSearch } from '@tabler/icons-react';
+import { Button, Select } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -52,9 +52,9 @@ export const Employees: React.FC = () => {
         <div className="flex gap-2">
           <Select
             placeholder="Pilih Divisi"
-            data={optionDataDivision}
+            data={[{ value: '0', label: 'Semua Divisi' }, ...optionDataDivision]}
             required
-            defaultValue={optionDataDivision[0]?.value}
+            defaultValue={'0'}
             onChange={(e) => setDivisionID(parseInt(e ?? ''))}
           />
         </div>

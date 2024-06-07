@@ -3,15 +3,18 @@ import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
-export async function getEmployees(company_id?: number, division_id?: number) {
-  const BaseGetURL =
-    division_id !== undefined
-      ? `${BaseURL}/employee?company=${company_id}&division=${division_id}`
-      : `${BaseURL}/employee?company=${company_id}`;
+function BaseURLS(company_id?: number, division_id?: number) {
+  if (division_id === undefined) {
+    return `${BaseURL}/employee?company=${company_id}`;
+  } else if (division_id === 0) {
+    return `${BaseURL}/employee?company=${company_id}`;
+  }
+  return `${BaseURL}/employee?company=${company_id}&division=${division_id}`;
+}
 
-  console.log(`${BaseURL}/employee?company${company_id}`, BaseGetURL);
+export async function getEmployees(company_id?: number, division_id?: number) {
+  const BaseGetURL = BaseURLS(company_id, division_id);
   const res = await axios.get(BaseGetURL);
-  console.log(`${BaseURL}/employee?company${company_id}`, res.data);
   return res.data.data;
 }
 
