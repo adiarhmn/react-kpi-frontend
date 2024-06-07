@@ -10,12 +10,12 @@ import { Icon } from 'leaflet';
 import { useEffect, useState } from 'react';
 // import withReactContent from 'sweetalert2-react-content';
 
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
 import { useAuth } from '@/features/auth';
 
 import { useCreateActivity, useGeoLocation, useGetAttendance, useGetSchedule } from '../api';
-import { useGetActivity } from '../api/getActivity';
+import { useGetActivity, useGetActivityAlias } from '../api/getActivity';
 import { CardAttendance } from '../components';
 import { ActivityType, AttendanceType } from '../types';
 
@@ -45,8 +45,8 @@ export const Attendance: React.FC = () => {
   }, [dataAttendance]);
 
   console.log('Data attendance : ', attendance);
-  const [activities, setActivities] = useState<ActivityType[]>([]);
   const { data, error, isLoading } = useGetSchedule(employee_id, dateToday);
+  const [activities, setActivities] = useState<ActivityType[]>([]);
   const { data: dataActivity, refetch } = useGetActivity(attendance?.id);
   useEffect(() => {
     if (dataActivity) {
@@ -107,7 +107,7 @@ export const Attendance: React.FC = () => {
       );
 
       // [PENTING! 🥶🥶]
-      const radius: number = 2;
+      const radius: number = 0.12;
       // [!!!!!!!!!]
 
       if (distance <= radius) {
@@ -134,19 +134,33 @@ export const Attendance: React.FC = () => {
   }
 
   const officeIcon: any = new Icon({
-    iconUrl: '/images/office-icon.png',
-    iconSize: [40, 40],
+    iconUrl: '/images/office-icon.svg',
+    iconSize: [50, 50],
   });
 
   const myIcon: any = new Icon({
-    iconUrl: '/images/my-icon.png',
+    iconUrl: '/images/my-icon.svg',
     iconSize: [60, 60],
   });
+
+  const myCircle: any = {
+    color: '#CDE8E5',
+    fillColor: 'blue',
+    fillOpacity: 0.1,
+  };
+
+  const officeCircle: any = {
+    color: 'white',
+    fillColor: 'red',
+    fillOpacity: 0.2,
+  };
 
   interface Marker {
     geocode: [number, number]; // Menggunakan tipe tuple langsung
     popUp: string;
     icon: any;
+    option: any;
+    radius: number;
   }
 
   const markers: Marker[] = [
@@ -154,15 +168,67 @@ export const Attendance: React.FC = () => {
       geocode: [-3.7529315029676833, 114.76686669474925],
       popUp: 'Lokasi kantor',
       icon: officeIcon,
+      option: officeCircle,
+      radius: 120,
     },
     {
       geocode: [location.coordinates?.latitude ?? 0, location.coordinates?.longitude ?? 0],
       popUp: 'Lokasi saya',
       icon: myIcon,
+      option: myCircle,
+      radius: 70,
     },
   ];
 
   // [End Location]
+
+  // [ACTIVITY 🤔🤔]
+  const [activityAlias, setActivityAlias] = useState([]);
+  const { data: dataActivityAlias, isLoading: loadingActivityAlias } = useGetActivityAlias(
+    creds?.company_id
+  );
+  useEffect(() => {
+    if (dataActivityAlias) {
+      setActivityAlias(dataActivityAlias);
+    }
+  }, [dataActivityAlias]);
+
+  const formActivity = useForm({
+    validateInputOnChange: true,
+    initialValues: {
+      custom1: '',
+      custom2: '',
+      custom3: '',
+      custom4: '',
+      custom5: '',
+      custom6: '',
+      custom7: '',
+      custom8: '',
+      custom9: '',
+      custom10: '',
+    },
+    validate: {
+      custom1: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
+      custom2: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
+      custom3: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
+      custom4: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
+      custom5: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
+      custom6: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
+      custom7: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
+      custom8: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
+      custom9: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
+      custom10: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
+    },
+  });
+  // [END ACTIVITY]
+
+  if (loadingActivityAlias) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -179,6 +245,7 @@ export const Attendance: React.FC = () => {
   console.log('Data activity : ', activities);
   console.log('Data attendance : ', attendance);
   console.log('Data isCheckedIn : ', isCheckedIn);
+  console.log('Data alias : ', activityAlias);
 
   return (
     <main className="min-h-96 relative">
@@ -211,9 +278,16 @@ export const Attendance: React.FC = () => {
               </Marker>
             ) : (
               markers.map((marker, index) => (
-                <Marker key={index} position={marker.geocode} icon={marker.icon}>
-                  <Popup>{marker.popUp}</Popup>
-                </Marker>
+                <div key={index}>
+                  <Marker position={marker.geocode} icon={marker.icon}>
+                    <Popup>{marker.popUp}</Popup>
+                  </Marker>
+                  <Circle
+                    center={marker.geocode}
+                    radius={marker.radius}
+                    pathOptions={marker.option}
+                  />
+                </div>
               ))
             )}
           </MapContainer>
@@ -287,24 +361,27 @@ export const Attendance: React.FC = () => {
 
       <Modal opened={opened} onClose={close} title="Tambah kegiatan">
         <form onSubmit={handleActivity}>
-          <div className="mb-2">
-            <Input.Wrapper label="Judul kegiatan" description="" error="">
-              <Input
-                placeholder="masukkan judul kegiatan"
-                {...form.getInputProps('activityName')}
-              />
-            </Input.Wrapper>
-          </div>
-          <div className="mb-2">
-            <Textarea
-              label="Deskripsi kegiatan"
-              placeholder="masukkan deskripsi kegiatan"
-              autosize
-              minRows={5}
-              {...form.getInputProps('activityDescription')}
-            />
-          </div>
-          <div className="mb-2 mt-3">
+          {activityAlias[0] != null
+            ? Array.from(
+                { length: 10 },
+                (_, i) =>
+                  activityAlias[0][`cs${i + 1}_name`] != '' && (
+                    <div key={i} className="mb-2">
+                      <Input.Wrapper
+                        label={activityAlias[0][`cs${i + 1}_name`]}
+                        description=""
+                        error=""
+                      >
+                        <Input
+                          placeholder="masukkan judul kegiatan"
+                          {...form.getInputProps(`custom${i + 1}`)}
+                        />
+                      </Input.Wrapper>
+                    </div>
+                  )
+              )
+            : ''}
+          <div className="mb-2 mt-5">
             <Button type="submit" fullWidth rightSection={<IconArrowBarToRight />}>
               Simpan
             </Button>

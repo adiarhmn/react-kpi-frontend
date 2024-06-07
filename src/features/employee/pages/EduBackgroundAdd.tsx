@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { EducationBackground } from '../types';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://192.168.1.110:3000/api';
