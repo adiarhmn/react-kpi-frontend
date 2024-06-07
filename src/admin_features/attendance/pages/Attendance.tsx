@@ -1,16 +1,22 @@
 import { Button, Table } from '@mantine/core';
 import { IconArrowUpRight } from '@tabler/icons-react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@/features/auth';
 import { formatDateToString } from '@/utils/format';
 
 import { useGetAttendance } from '../api';
 
 export const Attendance: React.FC = () => {
+  const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (!creds) navigate('/login');
   const DateNow = new Date();
-  console.log(formatDateToString(DateNow.toString()));
+
   const { data: DataAttendances, isLoading: LoadingGetAttendance } = useGetAttendance(
-    formatDateToString(DateNow.toString())
+    formatDateToString(DateNow.toString()),
+    creds?.company_id
   );
 
   useEffect(() => {
