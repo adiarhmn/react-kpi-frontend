@@ -3,7 +3,7 @@ import { useForm } from '@mantine/form';
 import { IconChevronLeft, IconMailForward, IconMap2 } from '@tabler/icons-react';
 import { Icon } from 'leaflet';
 import React, { useEffect, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 
 import { ScheduleType, useGeoLocation } from '@/features/attendance';
@@ -30,7 +30,7 @@ export const AddLateRequest: React.FC = () => {
   // [All About Location 🤯]
   const location = useGeoLocation();
   const customIcon = new Icon({
-    iconUrl: '/images/my-icon.png',
+    iconUrl: '/images/my-icon.svg',
     iconSize: [50, 50],
   });
   // [End Location]
@@ -83,7 +83,7 @@ export const AddLateRequest: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
-            <h2 className="font-semibold ">Pengajuan absen terlambat</h2>
+            <h2 className="font-semibold ">Pengajuan absen</h2>
           </div>
         </div>
       </section>
@@ -108,12 +108,19 @@ export const AddLateRequest: React.FC = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {location.loaded && !location.error ? (
-              <Marker
-                position={[location.coordinates?.latitude, location.coordinates?.longitude]}
-                icon={customIcon}
-              >
-                <Popup>Lokasi anda</Popup>
-              </Marker>
+              <>
+                <Marker
+                  position={[location.coordinates?.latitude, location.coordinates?.longitude]}
+                  icon={customIcon}
+                >
+                  <Popup>Lokasi anda</Popup>
+                </Marker>
+                <Circle
+                  center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+                  radius={60}
+                  pathOptions={{ color: '#CDE8E5', fillColor: 'blue', fillOpacity: 0.1 }}
+                />
+              </>
             ) : (
               <Marker position={[-3.753033208345266, 114.76683450763974]} icon={customIcon}>
                 <Popup>Lokasi anda</Popup>
@@ -134,10 +141,10 @@ export const AddLateRequest: React.FC = () => {
           <form onSubmit={handleLateRequest}>
             <div className="mb-2">
               <Select
-                disabled
+                // disabled
                 label="Status pengajuan"
                 name="jenjang"
-                data={['Terlambat', 'WFH']}
+                data={['Diluar lokasi', 'WFH']}
                 {...form.getInputProps('status')}
               />
             </div>

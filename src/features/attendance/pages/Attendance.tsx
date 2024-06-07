@@ -1,7 +1,7 @@
-import { Button, Text, Loader, Modal, Input, Textarea, Divider } from '@mantine/core';
+import { Button, Text, Loader, Modal, Input, Divider } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { IconArrowBarToRight, IconMap2, IconPlus } from '@tabler/icons-react';
+import { IconMailForward, IconMap2, IconPlus } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 // eslint-disable-next-line import/order
@@ -13,11 +13,12 @@ import { useEffect, useState } from 'react';
 import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
 import { useAuth } from '@/features/auth';
+import { formatterDate } from '@/features/history';
 
 import { useCreateActivity, useGeoLocation, useGetAttendance, useGetSchedule } from '../api';
-import { useGetActivity, useGetActivityAlias } from '../api/getActivity';
+import { useGetActivityDetail, useGetActivityAlias } from '../api/getActivity';
 import { CardAttendance } from '../components';
-import { ActivityType, AttendanceType } from '../types';
+import { ActivityDetailType, AttendanceType } from '../types';
 
 export const Attendance: React.FC = () => {
   // const [schedule, setSchedule] = useState<ScheduleType[]>([]);
@@ -44,13 +45,15 @@ export const Attendance: React.FC = () => {
     }
   }, [dataAttendance]);
 
-  console.log('Data attendance : ', attendance);
   const { data, error, isLoading } = useGetSchedule(employee_id, dateToday);
-  const [activities, setActivities] = useState<ActivityType[]>([]);
-  const { data: dataActivity, refetch } = useGetActivity(attendance?.id);
+  const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
+  const { data: dataActivity, refetch } = useGetActivityDetail(
+    creds?.id,
+    formatterDate(new Date(), 'yyyy-MM-dd')
+  );
   useEffect(() => {
     if (dataActivity) {
-      setActivities(dataActivity);
+      setActivityDetail(dataActivity);
     }
   }, [dataActivity]);
   // console.log('Data schedule', data);
@@ -66,29 +69,6 @@ export const Attendance: React.FC = () => {
       activityDescription: (value) => (value === '' ? 'Deskripso kegiatan harus diisi' : null),
     },
   });
-
-  // [Add kegiatan]
-  const mutationAddActivity = useCreateActivity();
-  const handleActivity = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const activityData = {
-      attendance_id: attendance?.id,
-      name: form.values.activityName,
-      description: form.values.activityDescription,
-    };
-
-    await mutationAddActivity.mutateAsync(activityData, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
-        refetch();
-
-        close();
-        // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
-      },
-    });
-  };
-  // [End add kegiatan]
 
   // [All About Location 🤯]
   const location = useGeoLocation();
@@ -220,6 +200,40 @@ export const Attendance: React.FC = () => {
       custom10: (value) => (value === '' ? 'Field tidak boleh kosong' : null),
     },
   });
+
+  // [Add kegiatan]
+  const mutationAddActivity = useCreateActivity();
+  const handleActivity = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const activityData = {
+      attendance_id: attendance?.id,
+      custom1: formActivity.values.custom1,
+      custom2: formActivity.values.custom2,
+      custom3: formActivity.values.custom3,
+      custom4: formActivity.values.custom4,
+      custom5: formActivity.values.custom5,
+      custom6: formActivity.values.custom6,
+      custom7: formActivity.values.custom7,
+      custom8: formActivity.values.custom8,
+      custom9: formActivity.values.custom9,
+      custom10: formActivity.values.custom10,
+      activity_lon: location.coordinates?.longitude.toString(),
+      activity_lat: location.coordinates?.latitude.toString(),
+    };
+
+    await mutationAddActivity.mutateAsync(activityData, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        refetch();
+
+        close();
+        // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
+      },
+    });
+  };
+  // [End add kegiatan]
+
   // [END ACTIVITY]
 
   if (loadingActivityAlias) {
@@ -242,10 +256,10 @@ export const Attendance: React.FC = () => {
   }
 
   const dataSchedule = data;
-  console.log('Data activity : ', activities);
-  console.log('Data attendance : ', attendance);
-  console.log('Data isCheckedIn : ', isCheckedIn);
-  console.log('Data alias : ', activityAlias);
+  // console.log('Data activity : ', activities);
+  // console.log('Data attendance : ', attendance);
+  // console.log('Data isCheckedIn : ', isCheckedIn);
+  // console.log('Data alias : ', activityAlias);
 
   return (
     <main className="min-h-96 relative">
@@ -309,7 +323,7 @@ export const Attendance: React.FC = () => {
       {/* Tugas card */}
       <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="text-base font-bold text-blue-700">Kegiatan</span>
+          <span className="text-base font-bold text-blue-700">Kegiatan hari ini</span>
           <Button
             disabled={isCheckedIn == false}
             onClick={open}
@@ -319,29 +333,35 @@ export const Attendance: React.FC = () => {
             <IconPlus className="-ms-1" size={18} />
           </Button>
         </div>
-        <div className="w-full pb-2">
-          {activities.length > 0 ? (
-            activities.map((activity, index) => (
-              <div key={index}>
-                {' '}
-                <div className="-mt-2 p-2">
-                  <Text size="xs" fw={700}>
-                    Judul
-                  </Text>
-                  <Text style={{ textAlign: 'justify' }} size="sm">
-                    {activity?.name}
-                  </Text>
+        <Divider size={'sm'} />
+        <div className="w-full p-2">
+          {activityDetail.length > 0 ? (
+            activityDetail.map((activity, index) => (
+              <section
+                key={index}
+                className="bg-white mx-auto max-w-xs w-full z-50 relative p-2 px-2 text-slate-700 "
+              >
+                <div className="flex justify-between text-xs items-center p-2">
+                  <span className="text-base font-bold text-blue-700">Kegiatan {index + 1}</span>
+                  <IconMap2 className="opacity-80" size={20} />
                 </div>
-                <div className="mt-1 p-2">
-                  <Text size="xs" fw={700}>
-                    Deskripsi kegiatan
-                  </Text>
-                  <Text style={{ textAlign: 'justify' }} size="sm">
-                    {activity?.description}
-                  </Text>
-                </div>
-                <Divider my="md" />
-              </div>
+                {activityDetail != null && activityAlias[0] != null
+                  ? Array.from(
+                      { length: 10 },
+                      (_, i) =>
+                        activityAlias[0][`cs${i + 1}_name`] != '' && (
+                          <div key={i}>
+                            <Text size="xs" fw={700}>
+                              {activityAlias[0][`cs${i + 1}_name`]}
+                            </Text>
+                            <Text key={index} style={{ textAlign: 'justify' }} size="sm">
+                              {activity[`custom${i + 1}`]}
+                            </Text>
+                          </div>
+                        )
+                    )
+                  : ''}
+              </section>
             ))
           ) : (
             <div className="w-full col-span-12">
@@ -374,7 +394,7 @@ export const Attendance: React.FC = () => {
                       >
                         <Input
                           placeholder="masukkan judul kegiatan"
-                          {...form.getInputProps(`custom${i + 1}`)}
+                          {...formActivity.getInputProps(`custom${i + 1}`)}
                         />
                       </Input.Wrapper>
                     </div>
@@ -382,7 +402,7 @@ export const Attendance: React.FC = () => {
               )
             : ''}
           <div className="mb-2 mt-5">
-            <Button type="submit" fullWidth rightSection={<IconArrowBarToRight />}>
+            <Button type="submit" fullWidth rightSection={<IconMailForward size={'20px'} />}>
               Simpan
             </Button>
           </div>

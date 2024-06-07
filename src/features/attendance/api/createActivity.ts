@@ -5,13 +5,23 @@ const BaseURL = import.meta.env.VITE_API_URL;
 
 type ActivityDataPost = {
   attendance_id?: number;
-  name: string;
-  description: string;
+  custom1: string | null;
+  custom2: string | null;
+  custom3: string | null;
+  custom4: string | null;
+  custom5: string | null;
+  custom6: string | null;
+  custom7: string | null;
+  custom8: string | null;
+  custom9: string | null;
+  custom10: string | null;
+  activity_lon: string;
+  activity_lat: string;
 };
 
 export const postCreateActivity = async (activityDataPost: ActivityDataPost) => {
   console.log('Data yang dikirim : ', activityDataPost);
-  const response = await axios.post(`${BaseURL}/activity/`, activityDataPost);
+  const response = await axios.post(`${BaseURL}/activity-detail/`, activityDataPost);
   return response.data;
 };
 

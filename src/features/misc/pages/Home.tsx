@@ -110,7 +110,7 @@ export const Home: React.FC = () => {
               color: 'bg-blue-600',
             },
             {
-              title: 'Terlambat',
+              title: 'Pengajuan',
               href: '/late-request',
               icon: IconClockPin,
               color: 'bg-blue-600',

@@ -29,10 +29,21 @@ export type AttendanceType = {
   schedule_id: number;
 };
 
-export type ActivityType = {
+export type ActivityDetailType = {
   id: number;
-  name: string;
-  description: string;
-  time: string | Date;
   attendance_id: number;
+  activity_lon: number;
+  activity_lat: number;
+  custom1: any;
+  custom2: any;
+  custom3: any;
+  custom4: any;
+  custom5: any;
+  custom6: any;
+  custom7: any;
+  custom8: any;
+  custom9: any;
+  custom10: any;
+
+  [key: string]: any;
 };

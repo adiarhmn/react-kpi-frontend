@@ -8,16 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 
 import { useGetSchedule } from '../api';
-import { useGetActivity } from '../api/getActivity';
+import { useGetActivityDetail } from '../api/getActivity';
 import { useGetAttendance } from '../api/getAttendance';
-import { ActivityType, AttendanceType, ScheduleType } from '../types';
+import { ActivityDetailType, AttendanceType, ScheduleType } from '../types';
 
 export const AttendanceInfo: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   const [attendance, setAttendance] = useState<AttendanceType>();
   const [schedule, setSchedule] = useState<ScheduleType>();
-  const [activities, setActivities] = useState<ActivityType[]>([]);
+  const [activities, setActivities] = useState<ActivityDetailType[]>([]);
   const status = localStorage.getItem('isCheckedIn');
   const currentDate: Date = new Date();
   const dateSend = format(currentDate, 'yyyy-MM-dd', { locale: id });
@@ -45,7 +45,10 @@ export const AttendanceInfo: React.FC = () => {
     }
   }, [dataAttendance]);
 
-  const { data: dataActivities } = useGetActivity(attendance?.id);
+  const { data: dataActivities } = useGetActivityDetail(
+    creds?.id,
+    formatterDate(currentDate, 'yyyy-MM-dd')
+  );
   useEffect(() => {
     if (dataActivities) {
       setActivities(dataActivities);
@@ -143,7 +146,7 @@ export const AttendanceInfo: React.FC = () => {
                     Judul
                   </Text>
                   <Text style={{ textAlign: 'justify' }} size="sm">
-                    {activity?.name}
+                    {activity?.custom1}
                   </Text>
                 </div>
                 <div className="mt-1 p-2">
@@ -151,7 +154,7 @@ export const AttendanceInfo: React.FC = () => {
                     Deskripsi kegiatan
                   </Text>
                   <Text style={{ textAlign: 'justify' }} size="sm">
-                    {activity?.description}
+                    {activity?.custom2}
                   </Text>
                 </div>
                 <Divider my="md" />
