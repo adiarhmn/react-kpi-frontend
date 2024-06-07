@@ -1,16 +1,16 @@
 import { ActionIcon, Button, Group, MultiSelect, Select } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft, IconDeviceFloppy } from '@tabler/icons-react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { useGetDivisions } from '@/admin_features/division/api';
 import { useGetEmployees } from '@/admin_features/employees/api';
 import { useGetShift } from '@/admin_features/shift/api';
 import { useAuth } from '@/features/auth';
 import { formatDateToString, getStartAndEndOfMonth } from '@/utils/format';
 
 import { useCreateSchedule, useValidateSchedule } from '../api';
-import { useGetDivisions } from '@/admin_features/division/api';
-import { useState } from 'react';
 
 export const CreateSchedule: React.FC = () => {
   const navigate = useNavigate();

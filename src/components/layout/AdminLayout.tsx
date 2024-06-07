@@ -14,6 +14,8 @@ import {
   IconLuggage,
   IconAlarmPlus,
   IconFileAlert,
+  IconClockPin,
+  IconMap2,
 } from '@tabler/icons-react';
 import { Suspense, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
@@ -27,6 +29,7 @@ const MenuMain = [{ title: 'Beranda', href: '/beranda', icon: IconHome2 }];
 
 const MenuDataMaster = [
   { title: 'Divisi', href: '/division', icon: IconBuildingEstate },
+  { title: 'Lokasi', href: '/location', icon: IconMap2 },
   { title: 'Shift', href: '/shift', icon: IconClockHour1 },
   { title: 'User', href: '/users', icon: IconUsersGroup },
   { title: 'Karyawan', href: '/employees', icon: IconBriefcase },
@@ -39,6 +42,7 @@ const MenuAbsensi = [
 ];
 
 const MenuPengajuan = [
+  { title: 'Absensi', href: '/request-attendance', icon: IconClockPin },
   { title: 'Cuti', href: '/leave', icon: IconLuggage },
   { title: 'Izin', href: '/permission', icon: IconFileAlert },
   { title: 'Lembur', href: '/overtime', icon: IconAlarmPlus },
@@ -121,7 +125,7 @@ export const AdminLayout: React.FC = () => {
         </AppShell.Header>
         <AppShell.Navbar style={{ transition: 'all 0.3s ease' }}>
           <section className="overflow-x-auto min-h-screen pt-1 bar-scroll-blue">
-            <div className="p-2 flex flex-col">
+            <div className="p-2 flex flex-col pb-20">
               <SideNav
                 SideNavProps={MenuMain}
                 HeaderList={null}

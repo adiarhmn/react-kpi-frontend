@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { ActivitysType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
 
-import { useGetActivitys } from '../api';
+import { useGetActivityAlias, useGetActivitys } from '../api';
 
 export const Activitys: React.FC = () => {
   const navigate = useNavigate();
@@ -15,14 +15,20 @@ export const Activitys: React.FC = () => {
     data: DataActivity,
     error: errorActivity,
     isLoading: loadingActivity,
-  } = useGetActivitys();
+  } = useGetActivitys(creds?.company_id);
 
-  if (loadingActivity) {
+  const { data: DataActivityAlias, isLoading: LoadingActivityAlias } = useGetActivityAlias(
+    creds?.company_id
+  );
+
+  if (loadingActivity || LoadingActivityAlias) {
     return <div>Loading...</div>;
   }
-  if (errorActivity) {
-    return <div className="text-red-600 text-center my-20 font-bold">{errorActivity.message}</div>;
+  if (errorActivity || !DataActivity) {
+    return <div className="text-red-600 text-center my-20 font-bold">{errorActivity?.message}</div>;
   }
+
+  console.log(DataActivity);
   return (
     <main>
       {/* Menampilkan Data Divisi */}
@@ -42,19 +48,30 @@ export const Activitys: React.FC = () => {
           <Table withColumnBorders withTableBorder>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th className="font-bold">Nama</Table.Th>
-                <Table.Th className="font-bold">Aktivitas</Table.Th>
-                <Table.Th className="font-bold">Deskripsi</Table.Th>
-                {/* <Table.Th className="font-bold">Aksi</Table.Th> */}
+                {Array.from(
+                  { length: 10 },
+                  (_, i) =>
+                    DataActivityAlias[0][`cs${i + 1}_name`] != '' && (
+                      <Table.Th key={i} className="font-bold capitalize">
+                        {DataActivityAlias[0][`cs${i + 1}_name`]}
+                      </Table.Th>
+                    )
+                )}
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {DataActivity.map((activity: ActivitysType, index: number) => {
+              {DataActivity.map((activity: any, index: number) => {
                 return (
                   <Table.Tr key={index}>
-                    <Table.Td>{activity?.attendance.employee?.name}</Table.Td>
-                    <Table.Td>{activity?.name}</Table.Td>
-                    <Table.Td>{activity?.description}</Table.Td>
+                    {Array.from(
+                      { length: 10 },
+                      (_, i) =>
+                        activity[`custom${i + 1}`] != '' && (
+                          <Table.Th key={i} className="capitalize">
+                            {activity[`custom${i + 1}`]}
+                          </Table.Th>
+                        )
+                    )}
                   </Table.Tr>
                 );
               })}

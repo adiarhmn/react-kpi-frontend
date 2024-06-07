@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useGetEmployees } from '@/admin_features/employees/api';
 import { useGetShift } from '@/admin_features/shift/api';
+import { useAuth } from '@/features/auth';
 import { formatDateToString, getStartAndEndOfMonth } from '@/utils/format';
 
 import { useCreateSchedule, useValidateSchedule } from '../api';
@@ -16,6 +17,9 @@ type DataError = {
 };
 export const UpdateSchedule: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const month = query.get('month') || '';
@@ -82,8 +86,12 @@ export const UpdateSchedule: React.FC = () => {
   };
 
   // Mengisi Data Dari Inputan
-  const { data: DataEmployees, error, isLoading } = useGetEmployees();
-  const { data: DataShift, error: errorShift, isLoading: isLoadingShift } = useGetShift();
+  const { data: DataEmployees, error, isLoading } = useGetEmployees(creds?.company_id);
+  const {
+    data: DataShift,
+    error: errorShift,
+    isLoading: isLoadingShift,
+  } = useGetShift(creds?.company_id);
   if (isLoading || isLoadingShift) {
     return <div>Loading...</div>; // or your loading component
   }
