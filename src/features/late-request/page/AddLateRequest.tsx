@@ -5,8 +5,9 @@ import { Icon } from 'leaflet';
 import React, { useEffect, useState } from 'react';
 import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
-import { ScheduleType, useGeoLocation } from '@/features/attendance';
+import { ScheduleType, useCreateAttendance, useGeoLocation } from '@/features/attendance';
 import { useAuth } from '@/features/auth';
 import { formatterDate } from '@/features/history';
 // eslint-disable-next-line no-restricted-imports
@@ -25,7 +26,7 @@ export const AddLateRequest: React.FC = () => {
       setSchedule(data[0]);
     }
   }, [data]);
-  console.log('Data Schedule : ', schedule?.shift.shift_name);
+  // console.log('Data Schedule : ', schedule?.shift.shift_name);
 
   // [All About Location 🤯]
   const location = useGeoLocation();
@@ -40,7 +41,6 @@ export const AddLateRequest: React.FC = () => {
     validateInputOnChange: true,
     initialValues: {
       nameShift: schedule?.shift.shift_name,
-      status: 'Terlambat',
       reason: '',
     },
     validate: {
@@ -50,6 +50,47 @@ export const AddLateRequest: React.FC = () => {
 
   // console.log(form.getInputProps('nameShift'));
   // [END FORM PENGAJUAN]
+
+  // [SET LOCALSTORAGE STATUS CHECKIN]
+  const [isCheckedIn, setIsCheckedIn] = useState<boolean>(() => {
+    const savedState = localStorage.getItem('isCheckedIn');
+    return savedState ? JSON.parse(savedState) : false;
+  });
+  useEffect(() => {
+    localStorage.setItem('isCheckedIn', JSON.stringify(isCheckedIn));
+  }, [isCheckedIn]);
+  // [END SET LOCALSTORAGE]
+
+  // [ADD ATTENDANCE]
+  const mutationCheckIn = useCreateAttendance();
+  const createAttendance = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const attendanceCheckIn = {
+      schedule_id: schedule?.id,
+      employee_id: creds?.id,
+      attendance_lat: location.coordinates?.latitude.toString(),
+      attendance_lon: location.coordinates?.longitude.toString(),
+    };
+
+    await mutationCheckIn.mutateAsync(attendanceCheckIn, {
+      onSuccess: (data) => {
+        Swal.fire({
+          width: '80%',
+          title: 'Pengajuan absen berhasil!',
+          timer: 3000,
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        });
+        console.log('Success:', data);
+
+        // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
+      },
+    });
+  };
+  // [END ADD ATTENDANCE]
+
+  // [SUBMIT PENGAJUAN]
 
   const mutationAddLateRequest = useCreateLateRequest();
   const handleLateRequest = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -63,13 +104,19 @@ export const AddLateRequest: React.FC = () => {
     await mutationAddLateRequest.mutateAsync(lateRequestData, {
       onSuccess: (data) => {
         console.log('Success:', data);
-        if (data.status == 201) {
-          navigate(-1);
-        }
+        setIsCheckedIn(true);
+        createAttendance(event);
+        // if (data.status == 201) {
+        //   navigate(-1);
+        // }
         close();
       },
     });
   };
+
+  // [END SUBMIT PENGAJUAN]
+
+  console.log('status checkin : ', isCheckedIn);
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -140,17 +187,8 @@ export const AddLateRequest: React.FC = () => {
         <div className="w-full p-2">
           <form onSubmit={handleLateRequest}>
             <div className="mb-2">
-              <Select
-                // disabled
-                label="Status pengajuan"
-                name="jenjang"
-                data={['Diluar lokasi', 'WFH']}
-                {...form.getInputProps('status')}
-              />
-            </div>
-            <div className="mb-2">
               <Textarea
-                label="Alasan"
+                label="Alasan pengajuan"
                 placeholder="masukkan alasan pengajuan"
                 autosize
                 minRows={5}
@@ -158,7 +196,12 @@ export const AddLateRequest: React.FC = () => {
               />
             </div>
             <div className="mb-2 mt-3">
-              <Button type="submit" fullWidth rightSection={<IconMailForward size={'20px'} />}>
+              <Button
+                disabled={isCheckedIn}
+                type="submit"
+                fullWidth
+                rightSection={<IconMailForward size={'20px'} />}
+              >
                 Ajukan
               </Button>
             </div>

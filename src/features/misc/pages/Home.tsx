@@ -9,6 +9,7 @@ import {
   IconClock24,
   IconLuggage,
   IconClockPin,
+  IconUserPin,
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
@@ -16,8 +17,6 @@ import { MenuList } from '@/components/navigation';
 import { useAuth } from '@/features/auth';
 
 export const Home: React.FC = () => {
-  // const { creds, getRoleText } = useAuth();
-  // const { creds } = useCreds();
   const { creds } = useAuth();
 
   return (
@@ -31,7 +30,7 @@ export const Home: React.FC = () => {
         <div style={{ fontSize: '25px' }} className="text-white font-bold relative z-10">
           {creds?.username}
         </div>
-        <div className="text-sm= font-semibold text-white">{creds?.role}</div>
+        <div className="text-sm= font-semibold text-white">Pegawai</div>
 
         <div className="absolute right-5 top-5">
           <img src="/images/white-logo.png" alt="" className="w-14" />
@@ -112,7 +111,7 @@ export const Home: React.FC = () => {
             {
               title: 'Pengajuan',
               href: '/late-request',
-              icon: IconClockPin,
+              icon: IconUserPin,
               color: 'bg-blue-600',
             },
             {

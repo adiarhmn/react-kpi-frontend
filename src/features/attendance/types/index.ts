@@ -47,3 +47,19 @@ export type ActivityDetailType = {
 
   [key: string]: any;
 };
+
+export type AttendanceLocationType = {
+  id: number;
+  longitude: string;
+  latitude: string;
+  company_id: number;
+  name: string;
+};
+
+export type EmployeeLocationType = {
+  id: number;
+  employee_id: number;
+  employee: EmployeeType;
+  attendance_location_id: number;
+  attendance_location: AttendanceLocationType;
+};
