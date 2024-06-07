@@ -2,7 +2,6 @@ import { Input, Table } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
-import { ActivitysType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
 
 import { useGetActivityAlias, useGetActivitys } from '../api';

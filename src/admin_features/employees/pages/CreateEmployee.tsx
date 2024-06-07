@@ -1,20 +1,22 @@
-import { useGetDivisions } from '@/admin_features/division/api';
-import { UserType } from '@/admin_features/types';
-import { useGetUsers } from '@/admin_features/users/api';
 import { ActionIcon, Button, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+
+import { useGetDivisions } from '@/admin_features/division/api';
+import { useAuth } from '@/features/auth';
+
 import { useCreateEmployee } from '../api/createEmployee';
 
 export const CreateEmployee: React.FC = () => {
   const navigate = useNavigate();
-  const { data: DataUser, error: getUserError, isLoading: loadingUsers } = useGetUsers();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
   const {
     data: DataDivision,
-    error: getDivisionError,
+    // error: getDivisionError,
     isLoading: loadingDivisions,
-  } = useGetDivisions();
+  } = useGetDivisions(creds?.company_id);
   const mutationEmployeeCreate = useCreateEmployee();
 
   const NavBack = () => {
@@ -40,7 +42,8 @@ export const CreateEmployee: React.FC = () => {
       postal_code: '',
       phone: '',
       status: true,
-      user_id: '',
+      username: '',
+      password: '',
       division_id: '',
     },
   });
@@ -66,8 +69,10 @@ export const CreateEmployee: React.FC = () => {
       postal_code: form.values.postal_code,
       phone: form.values.phone,
       status: form.values.status,
-      user_id: parseInt(form.values.user_id),
+      username: form.values.username,
+      password: form.values.password,
       division_id: parseInt(form.values.division_id),
+      company_id: creds?.company_id,
     };
 
     await mutationEmployeeCreate.mutateAsync(employeeDataPost, {
@@ -76,18 +81,11 @@ export const CreateEmployee: React.FC = () => {
         navigate(-1);
       },
     });
-
-    console.log(employeeDataPost);
   };
 
-  if (loadingDivisions || loadingUsers) {
+  if (loadingDivisions) {
     return <div>Loading...</div>;
   }
-
-  const optionDataUser = DataUser.map((user: UserType) => ({
-    value: user.id.toString(),
-    label: user.username,
-  }));
 
   const optionDataDivision = DataDivision.map((division: any) => ({
     value: division.id.toString(),
@@ -123,6 +121,37 @@ export const CreateEmployee: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <TextInput
               className="mb-3"
+              label={
+                <span className="font-semibold">
+                  Username <span className="text-xs italic">(Akun Sistem)</span>
+                </span>
+              }
+              placeholder="Username"
+              required
+              {...form.getInputProps('username')}
+            />
+            <TextInput
+              className="mb-3"
+              label={
+                <span className="font-semibold">
+                  Password <span className="text-xs italic">(Password Akun Sistem)</span>
+                </span>
+              }
+              placeholder="Password"
+              required
+              {...form.getInputProps('password')}
+            />
+            <Select
+              label="Pilih Divisi"
+              className="col-span-2 lg:col-span-1 mb-3"
+              placeholder="Pilih Divisi"
+              data={optionDataDivision}
+              required
+              defaultValue={optionDataDivision[0]?.value}
+              {...form.getInputProps('division_id')}
+            ></Select>
+            <TextInput
+              className="mb-3"
               label="Nama Karyawan"
               placeholder="Nama Karyawan"
               required
@@ -137,16 +166,21 @@ export const CreateEmployee: React.FC = () => {
             />
             <TextInput
               className="mb-3"
+              label="Nomor Telepon"
+              placeholder="Nomor Telepon"
+              required
+              {...form.getInputProps('phone')}
+            />
+            <TextInput
+              className="mb-3"
               label="NIP"
               placeholder="NIP"
-              required
               {...form.getInputProps('nip')}
             />
             <TextInput
               className="mb-3"
               label="Nomor BPJS"
               placeholder="Nomor BPJS"
-              required
               {...form.getInputProps('no_bpjs')}
             />
             <Select
@@ -156,7 +190,12 @@ export const CreateEmployee: React.FC = () => {
               data={optionSex}
               {...form.getInputProps('sex')}
             />
-            <TextInput className="mb-3" label="Tempat Lahir" placeholder="Tempat Lahir" required {...form.getInputProps('birth_date')} />
+            <TextInput
+              className="mb-3"
+              label="Tempat Lahir"
+              placeholder="Tempat Lahir"
+              {...form.getInputProps('birth_date')}
+            />
             <Select
               className="mb-3"
               label="Agama"
@@ -164,37 +203,38 @@ export const CreateEmployee: React.FC = () => {
               data={['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Konghucu']}
               {...form.getInputProps('religion')}
             />
-            <TextInput className="mb-3" label="Alamat" placeholder="Alamat" required {...form.getInputProps('address')} />
-            <TextInput className="mb-3" label="RT" placeholder="RT" required {...form.getInputProps('rt')} />
-            <TextInput className="mb-3" label="RW" placeholder="RW" required {...form.getInputProps('rw')} />
-            <TextInput className="mb-3" label="Kelurahan" placeholder="Kelurahan" required {...form.getInputProps('village')} />
-            <TextInput className="mb-3" label="Kecamatan" placeholder="Kecamatan" required {...form.getInputProps('subdistrict')}/>
-            <TextInput className="mb-3" label="Kabupaten" placeholder="Kabupaten" required {...form.getInputProps('district')}/>
-            <TextInput className="mb-3" label="Provinsi" placeholder="Provinsi" required {...form.getInputProps('province')}/>
-            <TextInput className="mb-3" label="Kode Pos" placeholder="Kode Pos" required {...form.getInputProps('postal_code')}/>
+            <TextInput className="mb-3" label="RT" placeholder="RT" {...form.getInputProps('rt')} />
+            <TextInput className="mb-3" label="RW" placeholder="RW" {...form.getInputProps('rw')} />
             <TextInput
               className="mb-3"
-              label="Nomor Telepon"
-              placeholder="Nomor Telepon"
-              required
-              {...form.getInputProps('phone')}
+              label="Kelurahan"
+              placeholder="Kelurahan"
+              {...form.getInputProps('village')}
             />
-            <Select
-              label="Pilih User"
-              className="col-span-2 lg:col-span-1 mb-3"
-              placeholder="Pilih User"
-              data={optionDataUser}
-              defaultValue={optionDataUser[0]?.value}
-              {...form.getInputProps('user_id')}
-            ></Select>
-            <Select
-              label="Pilih Divisi"
-              className="col-span-2 lg:col-span-1 mb-3"
-              placeholder="Pilih Divisi"
-              data={optionDataDivision}
-              defaultValue={optionDataDivision[0]?.value}
-              {...form.getInputProps('division_id')}
-            ></Select>
+            <TextInput
+              className="mb-3"
+              label="Kecamatan"
+              placeholder="Kecamatan"
+              {...form.getInputProps('subdistrict')}
+            />
+            <TextInput
+              className="mb-3"
+              label="Kabupaten"
+              placeholder="Kabupaten"
+              {...form.getInputProps('district')}
+            />
+            <TextInput
+              className="mb-3"
+              label="Provinsi"
+              placeholder="Provinsi"
+              {...form.getInputProps('province')}
+            />
+            <TextInput
+              className="mb-3"
+              label="Kode Pos"
+              placeholder="Kode Pos"
+              {...form.getInputProps('postal_code')}
+            />
             <div className="flex gap-3">
               <Button type="submit" color="blue" className="mt-5">
                 Simpan
