@@ -6,6 +6,8 @@ const BaseURL = import.meta.env.VITE_API_URL;
 type lateRequestPost = {
   employee_id: number | undefined | null;
   reason: string;
+  attendance_request_lat: string;
+  attendance_request_lon: string;
 };
 
 export const postCreateLateRequest = async (lateRequestPost: lateRequestPost) => {

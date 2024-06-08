@@ -39,6 +39,7 @@ export const AddLateRequest: React.FC = () => {
   // [FORM PENGAJUAN]
   const form = useForm({
     validateInputOnChange: true,
+    validateInputOnBlur: true,
     initialValues: {
       nameShift: schedule?.shift.shift_name,
       reason: '',
@@ -71,6 +72,7 @@ export const AddLateRequest: React.FC = () => {
       employee_id: creds?.id,
       attendance_lat: location.coordinates?.latitude.toString(),
       attendance_lon: location.coordinates?.longitude.toString(),
+      attendance_location_id: null,
     };
 
     await mutationCheckIn.mutateAsync(attendanceCheckIn, {
@@ -99,16 +101,15 @@ export const AddLateRequest: React.FC = () => {
     const lateRequestData = {
       employee_id: creds?.id,
       reason: form.values.reason,
+      attendance_request_lat: location.coordinates?.latitude.toString(),
+      attendance_request_lon: location.coordinates?.longitude.toString(),
     };
 
     await mutationAddLateRequest.mutateAsync(lateRequestData, {
       onSuccess: (data) => {
         console.log('Success:', data);
         setIsCheckedIn(true);
-        createAttendance(event);
-        // if (data.status == 201) {
-        //   navigate(-1);
-        // }
+        navigate('/late-request', { state: { success: 'Absensi berhasil diajukan!' } });
         close();
       },
     });

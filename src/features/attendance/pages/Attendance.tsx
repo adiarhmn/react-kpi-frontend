@@ -5,7 +5,7 @@ import { IconCalendarEvent, IconMailForward, IconMap2, IconPlus } from '@tabler/
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 // eslint-disable-next-line import/order
-import { Icon, marker } from 'leaflet';
+import { Icon } from 'leaflet';
 // eslint-disable-next-line import/order
 import { useEffect, useState } from 'react';
 // import withReactContent from 'sweetalert2-react-content';
@@ -343,6 +343,7 @@ export const Attendance: React.FC = () => {
             long={location.coordinates?.longitude}
             lat={location.coordinates?.latitude}
             statusLocation={statusLocation}
+            attendance_location_id={attendanceLocationId}
           />
           {/* // End absen card */}
           {/* // Tugas card */}

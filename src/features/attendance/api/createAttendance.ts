@@ -8,6 +8,7 @@ type AttendanceDataPost = {
   employee_id?: number | null;
   attendance_lat: string;
   attendance_lon: string;
+  attendance_location_id: number | null;
 };
 
 export const postCreateAttendance = async (attendanceDataPost: AttendanceDataPost) => {

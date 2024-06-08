@@ -19,6 +19,7 @@ type ScheduleProps = {
   long: any;
   lat: any;
   statusLocation: boolean;
+  attendance_location_id: number;
 };
 
 export const CardAttendance: React.FC<ScheduleProps> = ({
@@ -28,6 +29,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
   long,
   lat,
   statusLocation,
+  attendance_location_id,
 }: ScheduleProps) => {
   // console.log('status checkin : ', isCheckedIn);
   const { creds } = useAuth();
@@ -49,6 +51,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
       employee_id: creds?.id,
       attendance_lat: lat.toString(),
       attendance_lon: long.toString(),
+      attendance_location_id: attendance_location_id,
     };
 
     await mutationCheckIn.mutateAsync(attendanceCheckIn, {
