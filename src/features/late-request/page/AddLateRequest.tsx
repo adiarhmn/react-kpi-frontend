@@ -62,8 +62,9 @@ export const AddLateRequest: React.FC = () => {
   }, [isCheckedIn]);
   // [END SET LOCALSTORAGE]
 
-  // [SUBMIT PENGAJUAN]
+  console.log('Status cekin sebelum submit : ', isCheckedIn);
 
+  // [SUBMIT PENGAJUAN]
   const mutationAddLateRequest = useCreateLateRequest();
   const handleLateRequest = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -77,15 +78,15 @@ export const AddLateRequest: React.FC = () => {
 
     await mutationAddLateRequest.mutateAsync(lateRequestData, {
       onSuccess: (data) => {
+        // setIsCheckedIn(true);
+        console.log('Status cekin sesudah : ', isCheckedIn);
         console.log('Success:', data);
-        setIsCheckedIn(true);
         localStorage.setItem('hasNotified', 'no');
         navigate('/late-request', { state: { success: 'Absensi berhasil diajukan!' } });
         close();
       },
     });
   };
-
   // [END SUBMIT PENGAJUAN]
 
   console.log('status checkin : ', isCheckedIn);

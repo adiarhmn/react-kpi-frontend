@@ -1,17 +1,22 @@
 import { Button } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconChevronLeft, IconPlus } from '@tabler/icons-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-import { useAuth } from '@/features/auth';
-
-import { useGetAttendanceRequest } from '../api/getAttendanceRequest';
 import { LateRequestList } from '../components';
-import { AttendanceRequestType } from '../types';
 
 export const LateRequest: React.FC = () => {
+  // [SET LOCALSTORAGE STATUS CHECKIN]
+  const [isCheckedIn, setIsCheckedIn] = useState<boolean>(() => {
+    const savedState = localStorage.getItem('isCheckedIn');
+    return savedState ? JSON.parse(savedState) : false;
+  });
+  useEffect(() => {
+    localStorage.setItem('isCheckedIn', JSON.stringify(isCheckedIn));
+  }, [isCheckedIn]);
+  // [END SET LOCALSTORAGE]
   const { state } = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
@@ -25,6 +30,7 @@ export const LateRequest: React.FC = () => {
         confirmButtonText: 'Ok',
       });
       localStorage.setItem('hasNotified', 'yes');
+      setIsCheckedIn(true);
     }
   }, [state, navigate]);
   const [opened, { open, close }] = useDisclosure(false);
