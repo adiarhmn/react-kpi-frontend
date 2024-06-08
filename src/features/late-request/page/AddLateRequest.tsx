@@ -62,36 +62,6 @@ export const AddLateRequest: React.FC = () => {
   }, [isCheckedIn]);
   // [END SET LOCALSTORAGE]
 
-  // [ADD ATTENDANCE]
-  const mutationCheckIn = useCreateAttendance();
-  const createAttendance = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const attendanceCheckIn = {
-      schedule_id: schedule?.id,
-      employee_id: creds?.id,
-      attendance_lat: location.coordinates?.latitude.toString(),
-      attendance_lon: location.coordinates?.longitude.toString(),
-      attendance_location_id: null,
-    };
-
-    await mutationCheckIn.mutateAsync(attendanceCheckIn, {
-      onSuccess: (data) => {
-        Swal.fire({
-          width: '80%',
-          title: 'Pengajuan absen berhasil!',
-          timer: 3000,
-          icon: 'success',
-          confirmButtonText: 'Ok',
-        });
-        console.log('Success:', data);
-
-        // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
-      },
-    });
-  };
-  // [END ADD ATTENDANCE]
-
   // [SUBMIT PENGAJUAN]
 
   const mutationAddLateRequest = useCreateLateRequest();
@@ -109,6 +79,7 @@ export const AddLateRequest: React.FC = () => {
       onSuccess: (data) => {
         console.log('Success:', data);
         setIsCheckedIn(true);
+        localStorage.setItem('hasNotified', 'no');
         navigate('/late-request', { state: { success: 'Absensi berhasil diajukan!' } });
         close();
       },

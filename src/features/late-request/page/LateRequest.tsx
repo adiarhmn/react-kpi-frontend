@@ -12,12 +12,11 @@ import { LateRequestList } from '../components';
 import { AttendanceRequestType } from '../types';
 
 export const LateRequest: React.FC = () => {
-  const { creds } = useAuth();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const hasNotifiedRef = useRef(false);
   useEffect(() => {
-    if (state?.success && !hasNotifiedRef.current) {
+    const hasNotified = localStorage.getItem('hasNotified');
+    if (state?.success && hasNotified != 'yes') {
       Swal.fire({
         width: '80%',
         title: state.success,
@@ -25,7 +24,7 @@ export const LateRequest: React.FC = () => {
         icon: 'success',
         confirmButtonText: 'Ok',
       });
-      hasNotifiedRef.current = true;
+      localStorage.setItem('hasNotified', 'yes');
     }
   }, [state, navigate]);
   const [opened, { open, close }] = useDisclosure(false);
@@ -34,7 +33,7 @@ export const LateRequest: React.FC = () => {
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
 
-      <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 -mt-10 mb-2">
+      <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 -mt-10 mb-1">
         <div className="flex justify-between items-center text-blue-700 mb-1">
           <div className="flex items-center">
             <IconChevronLeft
