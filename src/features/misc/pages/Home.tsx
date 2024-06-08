@@ -10,6 +10,9 @@ import {
   IconLuggage,
   IconClockPin,
   IconUserPin,
+  IconSend,
+  IconClipboardText,
+  IconFileDollar,
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
@@ -111,13 +114,13 @@ export const Home: React.FC = () => {
             {
               title: 'Pengajuan',
               href: '/late-request',
-              icon: IconUserPin,
+              icon: IconClipboardText,
               color: 'bg-blue-600',
             },
             {
               title: 'Slip Gaji',
               href: '/development',
-              icon: IconReportMoney,
+              icon: IconFileDollar,
               color: 'bg-blue-600',
             },
             {

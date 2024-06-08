@@ -8,6 +8,9 @@ import Swal from 'sweetalert2';
 import { LateRequestList } from '../components';
 
 export const LateRequest: React.FC = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+  const navigate = useNavigate();
+
   // [SET LOCALSTORAGE STATUS CHECKIN]
   const [isCheckedIn, setIsCheckedIn] = useState<boolean>(() => {
     const savedState = localStorage.getItem('isCheckedIn');
@@ -17,8 +20,9 @@ export const LateRequest: React.FC = () => {
     localStorage.setItem('isCheckedIn', JSON.stringify(isCheckedIn));
   }, [isCheckedIn]);
   // [END SET LOCALSTORAGE]
+
+  // [NOTIFICATION 🔔]
   const { state } = useLocation();
-  const navigate = useNavigate();
   useEffect(() => {
     const hasNotified = localStorage.getItem('hasNotified');
     if (state?.success && hasNotified != 'yes') {
@@ -33,8 +37,7 @@ export const LateRequest: React.FC = () => {
       setIsCheckedIn(true);
     }
   }, [state, navigate]);
-  const [opened, { open, close }] = useDisclosure(false);
-
+  // [END NOTIFICATION 🔔]
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>

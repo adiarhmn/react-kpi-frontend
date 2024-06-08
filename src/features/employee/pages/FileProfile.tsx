@@ -1,8 +1,9 @@
-import { FileInput, Modal, TextInput } from '@mantine/core';
+import { Button, FileInput, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+
 import { FileList } from '../components';
 
 export const FileProfile: React.FC = () => {
@@ -36,11 +37,11 @@ export const FileProfile: React.FC = () => {
             />
             <h2 className="font-semibold ">Kelengkapan berkas</h2>
           </div>
-          <div>
-            <button className="bg-transparent me-2" onClick={open}>
-              <IconPlus size={21} className="font-bold rounded-md" />
-            </button>
-          </div>
+          <span className="font-semibold">
+            <Button className="shadow-sm me-1" size="xs" onClick={open}>
+              <IconPlus className=" -ms-1" />
+            </Button>
+          </span>
         </div>
       </section>
 
