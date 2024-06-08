@@ -1,6 +1,5 @@
 import { Badge, Divider, Loader, Text } from '@mantine/core';
-import { differenceInDays, format } from 'date-fns';
-import { id } from 'date-fns/locale';
+import { differenceInDays } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -60,13 +59,6 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, s
 
     return differenceInDays(endDate, startDate);
   }
-
-  // function formatdate(date: string | Date) {
-  //   const dateToFormat: Date = new Date(date);
-  //   console.log('Date to format  :', dateToFormat);
-  //   const formattedDate = format(dateToFormat, 'EEEE, dd MMM yyyy', { locale: id });
-  //   return formattedDate;
-  // }
 
   console.log('Data sakit : ', absences);
   console.log('State Modal : ', modalState);

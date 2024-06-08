@@ -13,6 +13,8 @@ export const useAuth = () => {
         return 'superadmin';
       case 'admin':
         return 'admin';
+      case 'supervisor':
+        return 'supervisor';
       default:
         return 'employee';
     }
