@@ -28,6 +28,7 @@ export const CreateUser: React.FC = () => {
       company_id: creds?.company_id,
     };
 
+    console.log('Simpan Data User', userData);
     await mutationUser.mutateAsync(userData, {
       onSuccess: (data) => {
         console.log('Success:', data);
