@@ -36,6 +36,7 @@ export const AddOvertime: React.FC = () => {
   // const checkInStatus;
   const { creds } = useAuth();
   const [overtime, setOvertime] = useState<OvertimeType>();
+  // const {data : DataOvertime } = ;
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
@@ -67,48 +68,6 @@ export const AddOvertime: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  // [Button start overtime]
-  const mutationAddOvertime = useCreateOvertime();
-  const handleOvertime = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const overtimeData = {
-      attendance_id: attendance?.id,
-      detail: form.values.detail,
-    };
-
-    await mutationAddOvertime.mutateAsync(overtimeData, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
-
-        setOvertime(data.data);
-        setOvertimeStatus(true);
-        close();
-        // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
-      },
-    });
-  };
-  // [End Button start overtime]
-
-  // [Button Stop Overtime]
-  const mutationEndOvertime = useUpdateOvertime();
-
-  const handleEndOvertime = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const attendanceCheckOut = {
-      overtime_id: overtime?.id,
-    };
-
-    await mutationEndOvertime.mutateAsync(attendanceCheckOut, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
-        setOvertimeStatus(false);
-        // console.log('Sesudah update  :', localStorage.getItem('isCheckIn'));
-      },
-    });
-  };
-  // [End Button Stop Overtime]
-
   //[GET LOCATION OUTLETS]
   const [employeeLocation, setEmployeeLocation] = useState<EmployeeLocationType[]>([]);
   const { data: DataEmployeeLocation } = useGetEmployeeLocation(creds?.employee_id);
@@ -135,7 +94,7 @@ export const AddOvertime: React.FC = () => {
     return R * 2 * Math.asin(Math.sqrt(a));
   }
   const [markers, setMarkers] = useState<any[]>([]);
-  const [attendanceLocationId, setAttendanceLocationId] = useState<number>();
+  // const [attendanceLocationId, setAttendanceLocationId] = useState<number>();
   useEffect(() => {
     if (location.loaded && !location.error) {
       const officeIcon = new Icon({
@@ -186,7 +145,7 @@ export const AddOvertime: React.FC = () => {
           setStatusLocation(false);
         }
 
-        setAttendanceLocationId(closestMarker.attendance_location_id);
+        // setAttendanceLocationId(closestMarker.attendance_location_id);
       } else {
         if (markers[0].distance <= radius) {
           setStatusLocation(true);
@@ -208,6 +167,49 @@ export const AddOvertime: React.FC = () => {
     fillOpacity: 0.1,
   };
   // [END ALL ABOUT LOCATION]
+
+  // [Button start overtime]
+  const mutationAddOvertime = useCreateOvertime();
+  const handleOvertime = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const overtimeData = {
+      attendance_id: attendance?.id,
+      detail: form.values.detail,
+      overtime_lat: location.coordinates?.latitude.toString(),
+      overtime_lon: location.coordinates?.longitude.toString(),
+    };
+
+    await mutationAddOvertime.mutateAsync(overtimeData, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+
+        setOvertime(data.data);
+        setOvertimeStatus(true);
+        close();
+      },
+    });
+  };
+  // [End Button start overtime]
+
+  // [Button Stop Overtime]
+  const mutationEndOvertime = useUpdateOvertime();
+
+  const handleEndOvertime = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const attendanceCheckOut = {
+      overtime_id: overtime?.id,
+    };
+
+    await mutationEndOvertime.mutateAsync(attendanceCheckOut, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        setOvertimeStatus(false);
+        // console.log('Sesudah update  :', localStorage.getItem('isCheckIn'));
+      },
+    });
+  };
+  // [End Button Stop Overtime]
 
   return (
     <main className="min-h-96 relative">
@@ -362,7 +364,9 @@ export const AddOvertime: React.FC = () => {
             <div className="ms-2 -mb-2">
               <Text size="xs">Lembur mulai</Text>
               <Text size="sm" fw={700}>
-                {overtime != undefined ? formatterDate(overtime.start_time, 'HH:mm') : '-- -- '}
+                {overtime != undefined
+                  ? formatterDate(new Date(overtime.start_time), 'HH:mm')
+                  : '-- -- '}
               </Text>
             </div>
             <Divider my="sm" />
@@ -371,7 +375,9 @@ export const AddOvertime: React.FC = () => {
                 <Text size="xs">Lembur selesai</Text>
                 <Text size="sm" fw={700}>
                   {/* {formattedTime} */}
-                  {overtime != undefined ? formatterDate(overtime.end_time, 'HH:mm') : '-- -- '}
+                  {overtime?.end_time != undefined
+                    ? formatterDate(new Date(overtime.end_time), 'HH:mm')
+                    : '-- -- '}
                 </Text>
               </div>
               <div className="col-span-6 text-right -mt-1"></div>

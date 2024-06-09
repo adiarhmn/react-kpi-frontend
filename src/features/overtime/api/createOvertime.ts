@@ -6,6 +6,8 @@ const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 type overtimeDataPost = {
   attendance_id: number | undefined;
   detail: string;
+  overtime_lat: string;
+  overtime_lon: string;
 };
 
 export const postCreateOvertime = async (overtimeDataPost: overtimeDataPost) => {
