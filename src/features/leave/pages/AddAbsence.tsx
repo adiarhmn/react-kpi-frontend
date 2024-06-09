@@ -2,26 +2,18 @@ import { Button, Select, Textarea } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft } from '@tabler/icons-react';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
+import { formatterDate } from '@/features/history';
 
-import { AbsenceType } from '../types';
-
-const BaseURL = import.meta.env.VITE_API_URL ?? 'http://192.168.1.110:3000/api';
+import { useCreateRequest } from '../api';
 
 export const AddAbsence: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
-  function formatdate(date: string | number | Date) {
-    const dateToFormat: Date = new Date(date);
-    const formattedDate = format(dateToFormat, 'yyyy-MM-dd', { locale: id });
-    return formattedDate;
-  }
 
   const form = useForm({
     validateInputOnChange: true,
@@ -39,36 +31,29 @@ export const AddAbsence: React.FC = () => {
     },
   });
 
-  const createAbsence = async (absenceDataPost: AbsenceType) => {
-    const response = await axios.post(`${BaseURL}/request`, absenceDataPost);
-    return response.data;
-  };
-
-  const mutation = useMutation({
-    mutationFn: createAbsence,
-    onSuccess: (data) => {
-      console.log(data);
-      if (data.status == 201) {
-        navigate(-1);
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const mutationCreateRequest = useCreateRequest();
+  const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const absenceData = {
-      id: null,
-      date_start: formatdate(form.values.date_start).toString(),
-      date_end: formatdate(form.values.date_end).toString(),
-      status: 'belum disetujui',
+
+    const requestData = {
+      date_start: formatterDate(form.values.date_start, 'yyyy-MM-dd'),
+      date_end: formatterDate(form.values.date_end, 'yyyy-MM-dd'),
       type: form.values.type,
       description: form.values.description,
       employee_id: creds?.employee_id,
     };
-    mutation.mutateAsync(absenceData);
+
+    await mutationCreateRequest.mutateAsync(requestData, {
+      onSuccess: (data) => {
+        console.log(data);
+        localStorage.setItem('hasNotifiedRequest', 'no');
+        // navigate('/late-request', { state: { success: 'Absensi berhasil diajukan!' } });
+        navigate('/absence', {
+          state: { success: `Pengajuan ${data.data.type} berhasil ditambahkan` },
+        });
+        close();
+      },
+    });
   };
   return (
     <main>
@@ -88,7 +73,7 @@ export const AddAbsence: React.FC = () => {
           </div>
         </div>
         <div className="p-2 -mt-2">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitForm}>
             <div>
               <Select
                 label="Tipe izin"
@@ -127,15 +112,9 @@ export const AddAbsence: React.FC = () => {
           </div> */}
             <div className="w-full mt-7 grid grid-cols-12 text-center">
               <div className="col-span-6 pe-1">
-                {mutation.isPending ? (
-                  <Button fullWidth color="blue" disabled>
-                    Loading...
-                  </Button>
-                ) : (
-                  <Button fullWidth type="submit" color="blue">
-                    Ajukan
-                  </Button>
-                )}
+                <Button fullWidth type="submit" color="blue">
+                  Ajukan
+                </Button>
               </div>
               <div className="col-span-6 ps-1">
                 <Button

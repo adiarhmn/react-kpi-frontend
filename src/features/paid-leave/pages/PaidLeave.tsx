@@ -1,12 +1,30 @@
 import { Button } from '@mantine/core';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
-// eslint-disable-next-line no-restricted-imports
-import { PaidLeaveList } from '@/features/history/component/PaidLeaveList';
+import { PaidLeaveList } from '@/features/history';
 
 export const PaidLeave: React.FC = () => {
+  // [NOTIFICATION 🔔]
   const navigate = useNavigate();
+  const { state } = useLocation();
+  useEffect(() => {
+    const hasNotified = localStorage.getItem('hasNotifiedPaidLeave');
+    if (state?.success && hasNotified != 'yes') {
+      Swal.fire({
+        width: '80%',
+        title: state.success,
+        timer: 3000,
+        icon: 'success',
+        confirmButtonText: 'Ok',
+      });
+      localStorage.setItem('hasNotifiedPaidLeave', 'yes');
+    }
+  }, [state, navigate]);
+  // [END NOTIFICATION 🔔]
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>

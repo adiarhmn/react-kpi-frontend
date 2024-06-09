@@ -1,73 +1,57 @@
-import { Button, FileInput, JsonInput, Textarea } from '@mantine/core';
+import { Button, Textarea } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft } from '@tabler/icons-react';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AbsenceType } from '@/features/history';
-
-const BaseURL = import.meta.env.VITE_API_URL;
+import { useAuth } from '@/features/auth';
+import { formatterDate } from '@/features/history';
+// eslint-disable-next-line no-restricted-imports
+import { useCreateRequest } from '@/features/leave/api';
 
 export const AddPaidLeave: React.FC = () => {
   const navigate = useNavigate();
-
-  function formatdate(date: string | number | Date) {
-    const dateToFormat: Date = new Date(date);
-    const formattedDate = format(dateToFormat, 'yyyy-MM-dd', { locale: id });
-    return formattedDate;
-  }
+  const { creds } = useAuth();
 
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
       date_start: '',
       date_end: '',
-      type: '',
       description: '',
     },
     validate: {
       date_start: (value) => (value === '' ? 'tanggal mulai tidak boleh kosong' : null),
       date_end: (value) => (value === '' ? 'tanggal selesai tidak boleh kosong' : null),
-      type: (value) => (value === '' ? 'Tipe izin tidak boleh kosong' : null),
       description: (value) => (value === '' ? 'Keterangan tidak boleh kosong' : null),
     },
   });
 
-  const createAbsence = async (absenceDataPost: AbsenceType) => {
-    const response = await axios.post(`${BaseURL}/request`, absenceDataPost);
-    return response.data;
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const mutationCreatePaidLeave = useCreateRequest();
+  const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const absenceData = {
-      id: null,
-      date_start: formatdate(form.values.date_start).toString(),
-      date_end: formatdate(form.values.date_end).toString(),
-      type: 'Cuti',
-      description: form.values.description,
-      created_at: null,
-      employee_id: 1,
-    };
-    mutation.mutateAsync(absenceData);
-  };
 
-  const mutation = useMutation({
-    mutationFn: createAbsence,
-    onSuccess: (data) => {
-      console.log(data);
-      if (data.status == 201) {
-        navigate(-1);
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+    const paidLeaveData = {
+      date_start: formatterDate(form.values.date_start, 'yyyy-MM-dd'),
+      date_end: formatterDate(form.values.date_end, 'yyyy-MM-dd'),
+      type: 'cuti',
+      description: form.values.description,
+      employee_id: creds?.employee_id,
+    };
+
+    await mutationCreatePaidLeave.mutateAsync(paidLeaveData, {
+      onSuccess: (data) => {
+        localStorage.setItem('hasNotifiedPaidLeave', 'no');
+        navigate('/paid-leave', {
+          state: { success: `Pengajuan ${data.data.type} berhasil ditambahkan` },
+        });
+        close();
+      },
+    });
+  };
 
   return (
     <main>
@@ -87,7 +71,7 @@ export const AddPaidLeave: React.FC = () => {
           </div>
         </div>
         <div className="p-2 -mt-2">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitForm}>
             <div>
               <DatePickerInput
                 valueFormat="dddd, DD MMM YYYY"
@@ -116,15 +100,9 @@ export const AddPaidLeave: React.FC = () => {
             </div>
             <div className="w-full mt-5 grid grid-cols-12 text-center">
               <div className="col-span-6 pe-1">
-                {mutation.isPending ? (
-                  <Button fullWidth color="blue" disabled>
-                    Loading...
-                  </Button>
-                ) : (
-                  <Button fullWidth type="submit" color="blue">
-                    Ajukan
-                  </Button>
-                )}
+                <Button fullWidth type="submit" color="blue">
+                  Ajukan
+                </Button>
               </div>
               <div className="col-span-6 ps-1">
                 <Button

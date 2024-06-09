@@ -78,7 +78,6 @@ export const Attendance: React.FC = () => {
 
   // [All About Location 🤯]
   const location = useGeoLocation();
-  console.log('Tipe data coordinates : ', typeof location.coordinates?.longitude);
   const [statusLocation, setStatusLocation] = useState(false);
 
   function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -129,14 +128,14 @@ export const Attendance: React.FC = () => {
 
       setMarkers(markers);
 
+      // [PENTING! 🥶🥶]
+      const radius = 120; // Jarak dalam meter
+      // [!!!!!!!!!]
+
       if (markers.length > 0) {
         const closestMarker = markers.reduce((prev, current) => {
           return prev.distance < current.distance ? prev : current;
         });
-
-        // [PENTING! 🥶🥶]
-        const radius = 120; // Jarak dalam meter
-        // [!!!!!!!!!]
 
         if (closestMarker.distance <= radius) {
           setStatusLocation(true);
@@ -150,8 +149,11 @@ export const Attendance: React.FC = () => {
           `Closest marker is at ${closestMarker.popUp} with a distance of ${closestMarker.distance} meters`
         );
       } else {
-        console.error('Array markers kosong.');
-        setStatusLocation(false);
+        if (markers[0].distance <= radius) {
+          setStatusLocation(true);
+        } else {
+          setStatusLocation(false);
+        }
       }
 
       console.log('Markers : ', markers);
@@ -169,6 +171,7 @@ export const Attendance: React.FC = () => {
     fillColor: 'blue',
     fillOpacity: 0.1,
   };
+  // [END ALL ABOUT LOCATION]
 
   // [ACTIVITY 🤔🤔]
   const [activityAlias, setActivityAlias] = useState([]);
@@ -240,7 +243,6 @@ export const Attendance: React.FC = () => {
     });
   };
   // [End add kegiatan]
-
   // [END ACTIVITY]
 
   if (loadingActivityAlias) {

@@ -78,9 +78,6 @@ export const AddLateRequest: React.FC = () => {
 
     await mutationAddLateRequest.mutateAsync(lateRequestData, {
       onSuccess: (data) => {
-        // setIsCheckedIn(true);
-        console.log('Status cekin sesudah : ', isCheckedIn);
-        console.log('Success:', data);
         localStorage.setItem('hasNotified', 'no');
         navigate('/late-request', { state: { success: 'Absensi berhasil diajukan!' } });
         close();

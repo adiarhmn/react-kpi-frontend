@@ -2,16 +2,35 @@
 import { Button, Drawer, Fieldset, Select } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconPlus, IconChevronLeft } from '@tabler/icons-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
-// eslint-disable-next-line no-restricted-imports
-import { AbsenceList } from '@/features/history/component/AbsenceList';
+import { AbsenceList } from '@/features/history';
+
 //
 export const Absence: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectType, setSelectType] = useState('');
+
+  // [NOTIFICATION 🔔]
   const navigate = useNavigate();
+  const { state } = useLocation();
+  useEffect(() => {
+    const hasNotified = localStorage.getItem('hasNotifiedPaidLeave');
+    if (state?.success && hasNotified != 'yes') {
+      Swal.fire({
+        width: '80%',
+        title: state.success,
+        timer: 3000,
+        icon: 'success',
+        confirmButtonText: 'Ok',
+      });
+      localStorage.setItem('hasNotifiedPaidLeave', 'yes');
+    }
+  }, [state, navigate]);
+  // [END NOTIFICATION 🔔]
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>

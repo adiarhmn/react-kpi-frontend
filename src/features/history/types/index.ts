@@ -6,5 +6,5 @@ export type AbsenceType = {
   status?: string;
   created_at: any;
   description: string;
-  employee_id: number;
+  employee_id?: number;
 };
