@@ -10,11 +10,10 @@ import { AbsenceType } from '../types';
 
 type AbsenceProps = {
   typeAbsence: string;
-  modalState: boolean;
   status: string;
 };
 
-export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, status }) => {
+export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, status }) => {
   const { creds } = useAuth();
   const navigate = useNavigate();
   const [absences, setAbsence] = useState<AbsenceType[]>([]);
@@ -28,6 +27,7 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, s
     params.typeAbsence,
     status
   );
+
   useEffect(() => {
     if (data) {
       setAbsence(data);
@@ -41,7 +41,8 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, s
       typeAbsence,
     };
     setParams(newParams);
-  }, [modalState]);
+  }, [typeAbsence]);
+
   if (isLoading) {
     return (
       <div className="flex justify-center my-20">
@@ -60,9 +61,6 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, s
     return differenceInDays(endDate, startDate);
   }
 
-  console.log('Data sakit : ', absences);
-  console.log('State Modal : ', modalState);
-  console.log('Type absence : ', typeAbsence);
   return (
     <>
       <div className="text-center">
