@@ -1,7 +1,7 @@
 import { ActionIcon, Button, Group, MultiSelect, Select } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft, IconDeviceFloppy } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useGetDivisions } from '@/admin_features/division/api';
@@ -25,6 +25,7 @@ export const CreateSchedule: React.FC = () => {
     navigate('/schedule');
   }
 
+  // const [optDivision, setOptDivision] = useState<OptOpsion[]>([]);
   const mutationSchedule = useCreateSchedule();
   const mutationValidateSchedule = useValidateSchedule();
   const handleBack = () => {
@@ -39,12 +40,21 @@ export const CreateSchedule: React.FC = () => {
     },
   });
 
+  useEffect(() => {
+    if (form.values.division_id !== undefined) {
+      // Clear Employees
+      form.setFieldValue('employees', []);
+      setDivision(form.values.division_id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.values.division_id]);
+
   const { startOfMonth, endOfMonth } = getStartAndEndOfMonth(month);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Membuat Format sesuai backend api
-    const dataPostSchedule = form.values.employees.map((employee: string) => ({
+    const dataPostSchedule = (form.values.employees as never[]).map((employee: string) => ({
       date_start: formatDateToString(startOfMonth.toString()),
       date_end: formatDateToString(endOfMonth.toString()),
       employee_id: parseInt(employee),
@@ -59,24 +69,23 @@ export const CreateSchedule: React.FC = () => {
             default_shift: parseInt(form.values.shift_id),
           }));
           mutationValidateSchedule.mutateAsync(dataValidateSchedule, {
-            onSuccess: (data) => {
-              console.log('Success:', data);
+            onSuccess: () => {
               navigate(-1);
             },
-            onError: (error) => {
-              console.log('Gagal Insert Data:', error);
-            },
+            onError: () => {},
           });
         }
       },
-      onError: (error) => {
-        console.log('Gagal Insert Data:', error);
-      },
+      onError: () => {},
     });
   };
 
   // Mengisi Data Dari Inputan
-  const { data: DataEmployees, error, isLoading } = useGetEmployees(creds?.company_id);
+  const {
+    data: DataEmployees,
+    error,
+    isLoading,
+  } = useGetEmployees(creds?.company_id, parseInt(division));
   const {
     data: DataShift,
     error: errorShift,
@@ -107,6 +116,11 @@ export const CreateSchedule: React.FC = () => {
     label: shift.shift_name,
   }));
 
+  const handleSelectAll = () => {
+    const allEmployees = DataEmployees.map((employee: any) => employee.id.toString());
+    form.setFieldValue('employees', allEmployees);
+  };
+  console.log('Data Divisi:', division);
   return (
     <main>
       {/* Header */}
@@ -132,12 +146,8 @@ export const CreateSchedule: React.FC = () => {
               className="col-span-2 lg:col-span-1"
               placeholder="Pilih Divisi"
               data={[...optionsDivision, { value: '0', label: 'Semua Divisi' }]}
-              defaultValue="Semua Divisi"
-              {...form.getInputProps('division_id', {
-                onChange: (value: any) => {
-                  setDivision(value);
-                },
-              })}
+              defaultValue="0"
+              {...form.getInputProps('division_id')}
             ></Select>
 
             {/* Shift Selection */}
@@ -150,13 +160,27 @@ export const CreateSchedule: React.FC = () => {
               {...form.getInputProps('shift_id')}
             ></Select>
 
-            <MultiSelect
-              className="col-span-2"
-              label="Pilih Karyawan"
-              placeholder="Pilih Karyawan"
-              data={optionsMultiselect}
-              {...form.getInputProps('employees')}
-            ></MultiSelect>
+            <Group className="col-span-2">
+              <MultiSelect
+                className="flex-grow"
+                label="Pilih Karyawan"
+                placeholder="Pilih Karyawan"
+                data={optionsMultiselect}
+                {...form.getInputProps('employees')}
+              ></MultiSelect>
+              <Button className="mt-6" onClick={handleSelectAll}>
+                Pilih Semua Karyawan
+              </Button>
+              <Button
+                className="mt-6"
+                color="red"
+                onClick={() => {
+                  form.setFieldValue('employees', []);
+                }}
+              >
+                Batal
+              </Button>
+            </Group>
           </div>
 
           <Button className="mt-4" type="submit" leftSection={<IconDeviceFloppy size={17} />}>
