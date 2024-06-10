@@ -1,11 +1,56 @@
-======== Fitur Yang Harus Dikerjakan ========
+ADMIN FEATURES :
+===> Dashboard
+    - Data Karywan (Done)
+    - Data Rekap Absensi (-)
+    - Data Pengajuan (-)
 
-1. User > Validasi User Already Exist (Tidak muncul)
-2. Dashboard > Data Masih Statis (Karyawan Sudah Dinamis)
-3. Karyawan > Fitur Edit Belum
-4. Karyawan > Fitur Detail Belum
+===> Divisi
+    - CRUD (Done)
+    - Validasi From (-)
+    - Detail (-)
 
-======= Fitur Yang Sudah Dikerjakan =======
-1. User > 80%
-2. Divisi > 100%
-3. Shift > 100%
+===> Shift
+    - CR (Done)
+    - Validasi Form (-)
+
+===> User
+    - CRUD (Done)
+    - Validasi Form (-)
+    - Search By Divisi (Done)
+
+===> Karyawan
+    - CRUD (Done)
+    - Create User When Create Employee (Done)
+
+===> Lokasi
+    - Create With Map (Done)
+    - Read (Done)
+
+===> Jadwal
+    - CRUD (Done)
+    - Search By Month (Done)
+    - CopyPaste Jadwal / Bulan (Done)
+    - CopyPaste Jadwal / Employee (Done)
+    - Select All Employee (Done)
+
+===> Presensi
+    - R (Done)
+    - Search By Day (-)
+
+===> Aktifitas
+    - R (Done)
+
+===> Aktifitas Variabel / Alias
+    - Create (Done)
+
+===> Absensi
+    - Read (Done)
+
+===> Cuti
+    - Read (Done)
+
+===> Izin
+    - Read (Done)
+
+===> Lembur
+    - Read (Done)
