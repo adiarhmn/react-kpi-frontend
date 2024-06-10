@@ -1,7 +1,7 @@
 ======== Fitur Yang Harus Dikerjakan ========
 
 1. User > Validasi User Already Exist (Tidak muncul)
-2. Dashboard > Data Masih Statis
+2. Dashboard > Data Masih Statis (Karyawan Sudah Dinamis)
 3. Karyawan > Fitur Edit Belum
 4. Karyawan > Fitur Detail Belum
 
