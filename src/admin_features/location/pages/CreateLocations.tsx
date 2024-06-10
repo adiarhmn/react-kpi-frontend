@@ -3,6 +3,7 @@ import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { CreateAttendanceLocationType, useCreateLocations } from '../api';
+import { FormLocations } from '../components';
 
 export const CreateLocations: React.FC = () => {
   const navigate = useNavigate();
@@ -22,14 +23,14 @@ export const CreateLocations: React.FC = () => {
             <IconChevronLeft size={20} />
           </ActionIcon>
           <div>
-            <h2 className="font-bold">Tambah Divisi</h2>
+            <h2 className="font-bold">Tambah Lokasi Absensi Kehadiran</h2>
             <div className="-mt-1 text-xs text-slate-400">
-              Berikut form untuk menambahkan divisi
+              Berikut form untuk menambahkan Lokasi Absensi
             </div>
           </div>
         </div>
         <div className="mt-5">
-          <FormDivision loading={mutation.isPending} onSubmit={handleSubmit} />
+          <FormLocations onSubmit={handleSubmit} loading={mutation.isPending} />
         </div>
       </section>
     </main>

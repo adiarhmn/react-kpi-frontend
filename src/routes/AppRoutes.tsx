@@ -69,6 +69,10 @@ const { Overtime: OvertimeAdmin } = lazyImport(
   'Overtime'
 );
 const { Locations } = lazyImport(() => import('@/admin_features/location'), 'Locations');
+const { CreateLocations } = lazyImport(
+  () => import('@/admin_features/location/pages'),
+  'CreateLocations'
+);
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -163,6 +167,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="permission" element={<Permission />} />
             <Route path="overtime" element={<OvertimeAdmin />} />
             <Route path="locations" element={<Locations />} />
+            <Route path="locations/create" element={<CreateLocations />} />
           </Route>
         )}
 

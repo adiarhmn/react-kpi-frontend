@@ -4,8 +4,8 @@ import axios from 'axios';
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 export type CreateAttendanceLocationType = {
   name: string;
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
   company_id: number;
 };
 export async function createLocations(data: CreateAttendanceLocationType) {
