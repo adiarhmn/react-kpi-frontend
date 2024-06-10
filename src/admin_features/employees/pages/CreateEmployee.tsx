@@ -29,7 +29,7 @@ export const CreateEmployee: React.FC = () => {
       nik: '',
       no_bpjs: '',
       name: '',
-      sex: '',
+      sex: 'male',
       birth_date: '',
       religion: '',
       address: '',

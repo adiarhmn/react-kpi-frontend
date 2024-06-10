@@ -1,0 +1,11 @@
+======== Fitur Yang Harus Dikerjakan ========
+
+1. User > Validasi User Already Exist (Tidak muncul)
+2. Dashboard > Data Masih Statis
+3. Karyawan > Fitur Edit Belum
+4. Karyawan > Fitur Detail Belum
+
+======= Fitur Yang Sudah Dikerjakan =======
+1. User > 80%
+2. Divisi > 100%
+3. Shift > 100%
