@@ -1,4 +1,4 @@
-import { Badge, Divider, Loader, Text } from '@mantine/core';
+import { Badge, Divider, Loader, Text, Transition } from '@mantine/core';
 import { differenceInDays } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ type AbsenceProps = {
 export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, status }) => {
   const { creds } = useAuth();
   const navigate = useNavigate();
+  const [opened, setOpened] = useState(false);
   const [absences, setAbsence] = useState<AbsenceType[]>([]);
   const [params, setParams] = useState({
     employeeId: creds?.employee_id,

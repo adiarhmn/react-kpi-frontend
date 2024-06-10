@@ -10,7 +10,29 @@ export async function getAttendance(employee_id: number | undefined, date: strin
 
 export const useGetAttendance = (employee_id: number | undefined, date: string) => {
   return useQuery({
-    queryKey: ['schedule', employee_id, date],
+    queryKey: ['attendance', employee_id, date],
     queryFn: () => getAttendance(employee_id, date),
+  });
+};
+
+export async function getAttendanceMonthly(
+  employee_id: number | undefined,
+  month: string,
+  year: string
+) {
+  const res = await axios.get(
+    `${BaseURL}/attendance?employee=${employee_id}&month=${month}&year=${year}`
+  );
+  return res.data.data;
+}
+
+export const useGetAttendanceMonthly = (
+  employee_id: number | undefined,
+  month: string,
+  year: string
+) => {
+  return useQuery({
+    queryKey: ['attendance', employee_id, month, year],
+    queryFn: () => getAttendanceMonthly(employee_id, month, year),
   });
 };

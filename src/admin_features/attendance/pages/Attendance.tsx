@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { Button, Table } from '@mantine/core';
 import { IconArrowUpRight } from '@tabler/icons-react';
 import { useEffect } from 'react';

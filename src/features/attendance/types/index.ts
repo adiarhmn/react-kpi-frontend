@@ -14,6 +14,8 @@ export type ScheduleType = {
   status: string;
   employee_schedule_id: number;
   employee_schedule: EmployeeScheduleType;
+  attendance_place: string;
+  attendance_status: string;
   shift_id: number;
   shift: ShiftType;
 };

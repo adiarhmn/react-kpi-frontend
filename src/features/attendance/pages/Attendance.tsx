@@ -51,6 +51,8 @@ export const Attendance: React.FC = () => {
     }
   }, [dataAttendance]);
 
+  console.log('Data Attendance : ', attendance);
+
   const { data, error, isLoading } = useGetSchedule(employee_id, dateToday);
   const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
   const { data: dataActivity, refetch } = useGetActivityDetail(
@@ -66,7 +68,9 @@ export const Attendance: React.FC = () => {
 
   //[GET LOCATION OUTLETS]
   const [employeeLocation, setEmployeeLocation] = useState<EmployeeLocationType[]>([]);
-  const { data: DataEmployeeLocation } = useGetEmployeeLocation(creds?.employee_id);
+  const { data: DataEmployeeLocation, isLoading: LoadingEmployeeLocation } = useGetEmployeeLocation(
+    creds?.employee_id
+  );
   useEffect(() => {
     if (DataEmployeeLocation) {
       setEmployeeLocation(DataEmployeeLocation);
@@ -127,6 +131,7 @@ export const Attendance: React.FC = () => {
       }));
 
       setMarkers(markers);
+      console.log('Lokasi', markers);
 
       // [PENTING! 🥶🥶]
       const radius = 120; // Jarak dalam meter
@@ -148,12 +153,16 @@ export const Attendance: React.FC = () => {
         console.log(
           `Closest marker is at ${closestMarker.popUp} with a distance of ${closestMarker.distance} meters`
         );
-      } else {
+      }
+
+      if (markers.length == 1) {
         if (markers[0].distance <= radius) {
           setStatusLocation(true);
         } else {
           setStatusLocation(false);
         }
+      } else {
+        console.log('Error');
       }
 
       console.log('Markers : ', markers);
@@ -266,6 +275,18 @@ export const Attendance: React.FC = () => {
       </div>
     );
   }
+
+  if (LoadingEmployeeLocation) {
+    return (
+      <div className="w-full col-span-12">
+        <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+          <Loader size={50} />
+          <span className="font-bold text-slate-400 text-xl mt-10">Memuat lokasi absen...</span>
+        </section>
+      </div>
+    );
+  }
+
   if (error) {
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }

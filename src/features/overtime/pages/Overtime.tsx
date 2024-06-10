@@ -2,7 +2,10 @@ import { Button } from '@mantine/core';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@/features/auth';
+
 export const Overtime: React.FC = () => {
+  const { creds } = useAuth();
   const navigate = useNavigate();
   return (
     <main>
