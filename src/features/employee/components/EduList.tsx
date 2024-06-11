@@ -3,6 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconPencil, IconTrash } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 import { useAuth } from '@/features/auth';
 
@@ -22,7 +23,6 @@ export const EduList: React.FC = () => {
   console.log('Data education : ', educations);
 
   const [educationToDelete, setEducationToDelete] = useState<EducationBackground>();
-  const deleteEducationMutation = useDeleteEducation();
   const navigate = useNavigate();
 
   const openDeleteModal = (education: EducationBackground) => {
@@ -30,13 +30,7 @@ export const EduList: React.FC = () => {
     open();
   };
 
-  // const confirmDeleteEducation = async () => {
-  //   if (educationToDelete) {
-  //     deleteEducation(educationToDelete.id!);
-  //     close();
-  //   }
-  // };
-
+  const deleteEducationMutation = useDeleteEducation();
   const deleteEducation = async () => {
     deleteEducationMutation.mutateAsync(educationToDelete?.id, {
       onSuccess: (data) => {
@@ -44,20 +38,16 @@ export const EduList: React.FC = () => {
         const newEducation = educations.filter((edu) => edu.id !== educationToDelete?.id);
         setEducations(newEducation);
         close();
-
-        // notifications.show({
-        //   message: 'Berhasil Menghapus Data',
-        //   color: 'green',
-        // });
+        Swal.fire({
+          width: '80%',
+          title: 'Data pendidikan berhasil dihapus!',
+          timer: 3000,
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        });
       },
     });
   };
-
-  // const deleteEducation = async (id: number) => {
-  //   deleteEducationMutation.mutateAsync(id);
-  //   const newEducation = educations.filter((edu) => edu.id !== id);
-  //   setEducations(newEducation);
-  // };
 
   return (
     <main>

@@ -1,12 +1,24 @@
 import { Button } from '@mantine/core';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
+import { OvertimeList } from '@/features/history';
+
+import { useGetOvertime } from '../api/getOvertime';
+import { OvertimeType } from '../types';
 
 export const Overtime: React.FC = () => {
   const { creds } = useAuth();
   const navigate = useNavigate();
+  const [overtimeData, setOvertimes] = useState<OvertimeType[]>([]);
+  const { data: DataOvertime } = useGetOvertime(creds?.employee_id);
+  useEffect(() => {
+    if (DataOvertime) {
+      setOvertimes(DataOvertime);
+    }
+  }, [DataOvertime]);
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -37,14 +49,7 @@ export const Overtime: React.FC = () => {
         </div>
       </section>
 
-      <section className="min-h-96 flex flex-col items-center justify-center mt-10">
-        <img
-          className="w-40 mb-2 bg-slate-200 rounded-full p-2"
-          src="/images/blank-canvas.svg"
-          alt=""
-        />
-        <span className="font-bold text-slate-400 text-xl">Belum ada data lembur</span>
-      </section>
+      <OvertimeList overtimes={overtimeData} />
     </main>
   );
 };

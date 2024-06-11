@@ -33,6 +33,7 @@ export type EmployeeType = {
   religion: string;
   first_degree: string;
   last_degree: string;
+  last_education: string;
   address: string;
   rt: string;
   rw: string;

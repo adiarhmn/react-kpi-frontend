@@ -28,6 +28,7 @@ export const EditEduBackground: React.FC = () => {
       major: (value) => (value.length < 2 ? 'Name must have at least 2 letters' : null),
     },
   });
+
   // [SUBMIT EDUCATION BACKGROUND]
   const mutationUpdateEduBackground = useUpdateEducationBackground();
   const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {

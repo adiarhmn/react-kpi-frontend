@@ -1,14 +1,27 @@
 import { MonthPickerInput } from '@mantine/dates';
 import { IconChevronLeft } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useAuth } from '@/features/auth';
+// eslint-disable-next-line no-restricted-imports
+import { useGetOvertime } from '@/features/overtime/api/getOvertime';
+// eslint-disable-next-line no-restricted-imports
+import { OvertimeType } from '@/features/overtime/types';
 
 import { OvertimeList } from '../component/OvertimeList';
 
 export const DataOvertime: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
   const [month, setMonth] = useState<Date | null>(new Date());
-
+  const [overtimeData, setOvertime] = useState<OvertimeType[]>([]);
+  const { data: DataOvertime } = useGetOvertime(creds?.employee_id);
+  useEffect(() => {
+    if (DataOvertime) {
+      setOvertime(DataOvertime);
+    }
+  }, [DataOvertime]);
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -37,7 +50,7 @@ export const DataOvertime: React.FC = () => {
         </div>
       </section>
 
-      <OvertimeList />
+      <OvertimeList overtimes={overtimeData} />
     </main>
   );
 };

@@ -1,10 +1,42 @@
+/* eslint-disable import/order */
 import { IconChevronLeft, IconPencil } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { BiodataInfo } from '../components';
 
+import { EmployeeType } from '@/admin_features/types';
+import { useEffect, useState } from 'react';
+import { useGetEmployee } from '../api/Profile';
+import { useAuth } from '@/features/auth';
+import Swal from 'sweetalert2';
+
 export const Biodata: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  const [biodata, setBiodata] = useState<EmployeeType>();
+  const { data: DataEmployee } = useGetEmployee(creds?.employee_id);
+  useEffect(() => {
+    if (DataEmployee) {
+      setBiodata(DataEmployee);
+    }
+  }, [DataEmployee]);
+
+  // [NOTIFICATION 🔔]
+  const { state } = useLocation();
+  useEffect(() => {
+    const hasNotified = localStorage.getItem('hasNotifiedBiodata');
+    if (state?.success && hasNotified != 'yes') {
+      Swal.fire({
+        width: '80%',
+        title: state.success,
+        timer: 3000,
+        icon: 'success',
+        confirmButtonText: 'Ok',
+      });
+      localStorage.setItem('hasNotifiedBiodata', 'yes');
+    }
+  }, [state, navigate]);
+  // [END NOTIFICATION 🔔]
 
   return (
     <main>
@@ -24,7 +56,7 @@ export const Biodata: React.FC = () => {
           </div>
           <div>
             <button
-              onClick={() => navigate('/profile/biodata/edit')}
+              onClick={() => navigate('/profile/biodata/edit', { state: { biodata } })}
               className="bg-transparent pe-3"
             >
               <IconPencil size={21} />
@@ -33,7 +65,7 @@ export const Biodata: React.FC = () => {
         </div>
       </section>
 
-      <BiodataInfo />
+      <BiodataInfo employee={biodata} />
     </main>
   );
 };
