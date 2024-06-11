@@ -1,8 +1,8 @@
 ADMIN FEATURES :
 ===> Dashboard
     - Data Karywan (Done)
-    - Data Rekap Absensi (-)
-    - Data Pengajuan (-)
+    - TODO: Data Rekap Absensi (-)
+    - TODO: Data Pengajuan (-)
 
 ===> Divisi
     - CRUD (Done)

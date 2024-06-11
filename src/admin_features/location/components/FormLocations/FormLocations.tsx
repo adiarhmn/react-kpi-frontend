@@ -63,9 +63,9 @@ export const FormLocations: React.FC<FormLocationsProps> = ({
       latitude: position[0].toString(),
       longitude: position[1].toString(),
       company_id: creds?.company_id ?? 0,
+      id: initialValues?.id,
     };
 
-    console.log('Data Lokasi', data);
     onSubmit(data);
   };
   return (

@@ -1,10 +1,12 @@
-import { Table } from '@mantine/core';
+import { ActionIcon, Table } from '@mantine/core';
+import { IconPencil } from '@tabler/icons-react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 
+import { AttendanceLocationsType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
 
-import { CreateAttendanceLocationType, useGetLocations } from '../../api';
+import { useGetLocations } from '../../api';
 
 export const TableLocations: React.FC = () => {
   const navigate = useNavigate();
@@ -20,6 +22,10 @@ export const TableLocations: React.FC = () => {
     return <div>Error</div>;
   }
 
+  const NavigateUpdate = (location: AttendanceLocationsType) => {
+    navigate('/locations/update', { state: location });
+  };
+
   console.log(data);
   return (
     <main>
@@ -31,17 +37,22 @@ export const TableLocations: React.FC = () => {
               <Table.Th className="font-bold">Nama Lokasi</Table.Th>
               <Table.Th className="font-bold">Latitude</Table.Th>
               <Table.Th className="font-bold">Longitude</Table.Th>
-              {/* <Table.Th className="flex gap-2 items-center justify-center font-bold">Aksi</Table.Th> */}
+              <Table.Th className="flex gap-2 items-center justify-center font-bold">Aksi</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
-            {data.map((Locations: CreateAttendanceLocationType, index: number) => {
+            {data.map((Locations: AttendanceLocationsType, index: number) => {
               return (
                 <Table.Tr key={index}>
                   <Table.Td>{index + 1}</Table.Td>
                   <Table.Td>{Locations?.name}</Table.Td>
                   <Table.Td>{Locations?.latitude}</Table.Td>
                   <Table.Td>{Locations?.longitude}</Table.Td>
+                  <Table.Td className="flex gap-2 items-center justify-center">
+                    <ActionIcon onClick={() => NavigateUpdate(Locations)} color="yellow">
+                      <IconPencil size={14} />
+                    </ActionIcon>
+                  </Table.Td>
                 </Table.Tr>
               );
             })}

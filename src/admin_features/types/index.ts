@@ -81,9 +81,10 @@ export type RequestsType = {
   employee: EmployeeType;
 };
 
-
 export type AttendanceLocationsType = {
-  id: number;
   name: string;
-  
-}
+  latitude: string;
+  longitude: string;
+  company_id: number;
+  id?: number;
+};

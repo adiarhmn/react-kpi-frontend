@@ -7,6 +7,7 @@ export type CreateAttendanceLocationType = {
   latitude: string;
   longitude: string;
   company_id: number;
+  id?: number;
 };
 export async function createLocations(data: CreateAttendanceLocationType) {
   const url = `${BaseURL}/attendance-location`;

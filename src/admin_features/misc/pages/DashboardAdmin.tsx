@@ -3,7 +3,7 @@ import { IconChevronRight, IconEye } from '@tabler/icons-react';
 import { useState } from 'react';
 
 import { AllEmployeeCard, FemaleEmployeeCard, MaleEmployeeCard } from '../components';
-
+// TODO: Membuat Data Rekap Absensi Dinamis
 export const DashboardAdmin: React.FC = () => {
   const [ringHovered, setRingHovered] = useState<string | null>('Hadir 40');
   return (
