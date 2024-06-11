@@ -39,6 +39,7 @@ const { DetailLateRequest } = lazyImport(
 const { Schedule } = lazyImport(() => import('@/features/schedule'), 'Schedule');
 const { EduBackground } = lazyImport(() => import('@/features/employee'), 'EduBackground');
 const { EduBackgroundAdd } = lazyImport(() => import('@/features/employee'), 'EduBackgroundAdd');
+const { EditEduBackground } = lazyImport(() => import('@/features/employee'), 'EditEduBackground');
 const { Biodata } = lazyImport(() => import('@/features/employee'), 'Biodata');
 const { BiodataEdit } = lazyImport(() => import('@/features/employee'), 'BiodataEdit');
 const { FileProfile } = lazyImport(() => import('@/features/employee'), 'FileProfile');
@@ -116,6 +117,7 @@ export const AppRoutes: React.FC = () => {
               <Route path="edu-background">
                 <Route index element={<EduBackground />} />
                 <Route path="add" element={<EduBackgroundAdd />} />
+                <Route path="edit" element={<EditEduBackground />} />
               </Route>
             </Route>
 

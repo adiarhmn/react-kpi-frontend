@@ -61,7 +61,7 @@ export const EduList: React.FC = () => {
               <div>
                 <button
                   className=" bg-transparent me-2"
-                  onClick={() => navigate('/profile/edu-background/add')}
+                  onClick={() => navigate('/profile/edit', { state: { edu } })}
                 >
                   <IconPencil color="#FAB005" size={20} className="font-bold rounded-md" />
                 </button>
