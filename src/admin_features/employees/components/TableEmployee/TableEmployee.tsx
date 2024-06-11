@@ -1,6 +1,6 @@
-import { ActionIcon, Button, Loader, Modal, Table, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconMapPin, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,8 @@ import { useAuth } from '@/features/auth';
 
 import { useGetEmployees } from '../../api';
 import { useDeleteEmployee } from '../../api/deleteEmployee';
+
+import { ModalEmployeeLocation } from './ModalEmployeeLocation';
 
 interface TableEmployeeProps {
   division_id: number;
@@ -19,7 +21,8 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
   if (creds === null) navigate('/login');
   const [employees, setEmployees] = useState<EmployeeType[]>([]);
   const [opened, { open, close }] = useDisclosure(false);
-  const [employeeToDelete, setEmployeeToDelete] = useState<EmployeeType>();
+  const [openedMap, { open: MapOpen, close: MapClose }] = useDisclosure(false);
+  const [employeePick, setEmployeePick] = useState<EmployeeType>();
   const mutationDeleteEmployee = useDeleteEmployee();
   const { data, error, isLoading } = useGetEmployees(creds?.company_id, division_id);
 
@@ -35,13 +38,18 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
   };
 
   const openDeleteModal = (Employee: EmployeeType) => {
-    setEmployeeToDelete(Employee);
+    setEmployeePick(Employee);
     open();
   };
 
+  const handleClickMap = (employee: EmployeeType) => {
+    setEmployeePick(employee);
+    MapOpen();
+  };
+
   const confirmDeleteDivision = async () => {
-    if (employeeToDelete) {
-      deleteEmployee(employeeToDelete?.id);
+    if (employeePick) {
+      deleteEmployee(employeePick?.id);
       close();
     }
   };
@@ -92,9 +100,12 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
                   <ActionIcon onClick={() => openDeleteModal(employee)} color="red">
                     <IconTrash size={14} />
                   </ActionIcon>
-                  <UnstyledButton>
+                  <ActionIcon onClick={() => handleClickMap(employee)} color="green">
+                    <IconMapPin size={14} />
+                  </ActionIcon>
+                  {/* <UnstyledButton>
                     <IconInfoCircle className="text-blue-600" size={20} />
-                  </UnstyledButton>
+                  </UnstyledButton> */}
                 </Table.Td>
               </Table.Tr>
             );
@@ -102,6 +113,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
         </Table.Tbody>
       </Table>
 
+      {/* Delete Employee */}
       <Modal
         opened={opened}
         onClose={close}
@@ -110,7 +122,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
       >
         <div>
           <span>Yakin hapus karyawan </span>
-          <span className="font-semibold text-blue-600"> {employeeToDelete?.name}</span>
+          <span className="font-semibold text-blue-600"> {employeePick?.name}</span>
         </div>
         <div className="pt-10 flex gap-2 justify-end">
           <Button onClick={confirmDeleteDivision} disabled={mutationDeleteEmployee.isPending}>
@@ -122,6 +134,14 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
           </Button>
         </div>
       </Modal>
+
+      {/* Modal Add Location */}
+      <ModalEmployeeLocation
+        opened={openedMap}
+        close={MapClose}
+        open={MapOpen}
+        employee={employeePick}
+      />
     </div>
   );
 };
