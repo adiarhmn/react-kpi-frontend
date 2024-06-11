@@ -28,15 +28,15 @@ export const AddOvertime: React.FC = () => {
     const savedState = localStorage.getItem('overtimeStatus');
     return savedState ? JSON.parse(savedState) : false;
   });
-  // console.log('status lembur : ', overtimeStatus);
+
   useEffect(() => {
     localStorage.setItem('overtimeStatus', JSON.stringify(overtimeStatus));
   }, [overtimeStatus]);
   const status = localStorage.getItem('isCheckedIn');
-  // const checkInStatus;
+
   const { creds } = useAuth();
   const [overtime, setOvertime] = useState<OvertimeType>();
-  // const {data : DataOvertime } = ;
+
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
