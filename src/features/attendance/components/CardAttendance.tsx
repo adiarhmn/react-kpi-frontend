@@ -1,4 +1,4 @@
-import { Badge, Button, Divider, Text } from '@mantine/core';
+import { Badge, Button, Divider, Text, em } from '@mantine/core';
 import { IconBan, IconCircleCheck, IconDoorEnter, IconDoorExit } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
@@ -8,7 +8,7 @@ import { useAuth } from '@/features/auth';
 
 import { useCreateAttendance } from '../api';
 import { useUpdateAttendance } from '../api/updateAttendance';
-import { AttendanceType, ScheduleType } from '../types';
+import { AttendanceType, EmployeeLocationType, ScheduleType } from '../types';
 
 type ScheduleProps = {
   schedule: ScheduleType;
@@ -18,6 +18,7 @@ type ScheduleProps = {
   lat: any;
   statusLocation: boolean;
   attendance_location_id?: number;
+  employee_location: EmployeeLocationType[] | undefined;
 };
 
 export const CardAttendance: React.FC<ScheduleProps> = ({
@@ -28,6 +29,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
   lat,
   statusLocation,
   attendance_location_id,
+  employee_location,
 }: ScheduleProps) => {
   const { creds } = useAuth();
 
@@ -150,12 +152,12 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
             {attendance?.check_in == null ? (
               <form onSubmit={handleCheckIn}>
                 <Button
-                  disabled={statusLocation == false}
+                  disabled={statusLocation == false || employee_location == null}
                   type="submit"
                   fullWidth
                   rightSection={statusLocation == false ? <IconBan /> : <IconDoorEnter />}
                 >
-                  {attendance_location_id == null
+                  {employee_location == null
                     ? 'Lokasi anda belum ditentukan'
                     : statusLocation == false
                       ? 'Anda berada diluar kantor'

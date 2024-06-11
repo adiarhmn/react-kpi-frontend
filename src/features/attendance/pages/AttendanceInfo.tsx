@@ -17,7 +17,7 @@ export const AttendanceInfo: React.FC = () => {
   const { creds } = useAuth();
 
   const [attendance, setAttendance] = useState<AttendanceType>();
-  const { data: dataAttendance, error: errorAttendance } = useGetAttendance(
+  const { data: dataAttendance } = useGetAttendance(
     creds?.employee_id,
     formatterDate(new Date(), 'yyyy-MM-dd')
   );
@@ -60,12 +60,6 @@ export const AttendanceInfo: React.FC = () => {
     }
   }, [dataActivity]);
   // [End Activity Detail]
-
-  if (errorAttendance) {
-    return (
-      <div className="text-red-600 text-center my-20 font-bold">{errorAttendance.message}</div>
-    );
-  }
 
   return (
     <main>
@@ -176,7 +170,7 @@ export const AttendanceInfo: React.FC = () => {
                               <Text size="xs" fw={700}>
                                 {activityAlias[0][`cs${i + 1}_name`]}
                               </Text>
-                              <Text style={{ textAlign: 'justify' }} truncate="end" size="xs">
+                              <Text style={{ textAlign: 'left' }} size="xs">
                                 {activity[`custom${i + 1}`]}
                               </Text>
                             </div>

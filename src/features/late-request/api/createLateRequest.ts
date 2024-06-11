@@ -11,7 +11,6 @@ type lateRequestPost = {
 };
 
 export const postCreateLateRequest = async (lateRequestPost: lateRequestPost) => {
-  console.log('Data yang dikirim : ', lateRequestPost);
   const response = await axios.post(`${BaseURL}/attendance-request`, lateRequestPost);
   return response.data;
 };

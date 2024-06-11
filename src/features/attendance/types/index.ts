@@ -31,6 +31,21 @@ export type AttendanceType = {
   schedule_id: number;
 };
 
+export type ActivityAliasType = {
+  id: number;
+  cs1_name: string;
+  cs2_name: string;
+  cs3_name: string;
+  cs4_name: string;
+  cs5_name: string;
+  cs6_name: string;
+  cs7_name: string;
+  cs8_name: string;
+  cs9_name: string;
+  cs10_name: string;
+  company_id: number;
+};
+
 export type ActivityDetailType = {
   id: number;
   attendance_id: number;

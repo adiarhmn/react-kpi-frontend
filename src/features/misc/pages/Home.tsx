@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import { MenuList } from '@/components/navigation';
 import { AttendanceType, ScheduleType, useGetAttendanceMonthly } from '@/features/attendance';
 import { useAuth } from '@/features/auth';
+import { ActivityCard } from '@/features/components';
 import { formatterDate } from '@/features/history';
 // eslint-disable-next-line no-restricted-imports
 import { useGetScheduleDaily } from '@/features/schedule/api';
@@ -246,6 +247,8 @@ export const Home: React.FC = () => {
           </div>
         </div>
       </section>
+
+      <ActivityCard />
     </main>
   );
 };

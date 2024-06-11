@@ -3,8 +3,6 @@ import { Button, Text, Loader, Modal, Input, Divider } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCalendarEvent, IconMailForward, IconMap2, IconPlus } from '@tabler/icons-react';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
 import { Icon } from 'leaflet';
 import { useEffect, useState } from 'react';
 import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
@@ -38,8 +36,6 @@ export const Attendance: React.FC = () => {
     }
   }, [dataAttendance]);
 
-  console.log('Data attendanceeeeeeeeee : ', attendance);
-
   const { data, error, isLoading } = useGetSchedule(
     employee_id,
     formatterDate(new Date(), 'yyyy-MM-dd')
@@ -55,7 +51,6 @@ export const Attendance: React.FC = () => {
       setActivityDetail(dataActivity);
     }
   }, [dataActivity]);
-  // console.log('Data schedule', data);
 
   //[GET LOCATION OUTLETS]
   const [employeeLocation, setEmployeeLocation] = useState<EmployeeLocationType[]>([]);
@@ -68,7 +63,6 @@ export const Attendance: React.FC = () => {
     }
   }, [DataEmployeeLocation]);
 
-  console.log('Data employee_location : ', employeeLocation);
   // [END GET LOCATION OUTLETS]
 
   // [All About Location 🤯]
@@ -122,7 +116,6 @@ export const Attendance: React.FC = () => {
       }));
 
       setMarkers(markers);
-      console.log('Lokasi', markers);
 
       // [PENTING! 🥶🥶]
       const radius = 120; // Jarak dalam meter
@@ -140,10 +133,6 @@ export const Attendance: React.FC = () => {
         }
 
         setAttendanceLocationId(closestMarker.attendance_location_id);
-
-        console.log(
-          `Closest marker is at ${closestMarker.popUp} with a distance of ${closestMarker.distance} meters`
-        );
       }
 
       if (markers.length == 1) {
@@ -155,11 +144,8 @@ export const Attendance: React.FC = () => {
       } else {
         console.log('Error');
       }
-
-      console.log('Markers : ', markers);
     }
   }, [location, employeeLocation]);
-  console.log('Id lokasi terdekat : ', attendanceLocationId);
 
   const myIcon: any = new Icon({
     iconUrl: '/images/my-icon.svg',
@@ -256,6 +242,17 @@ export const Attendance: React.FC = () => {
     );
   }
 
+  if (LoadingEmployeeLocation) {
+    return (
+      <div className="w-full col-span-12">
+        <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+          <Loader size={50} />
+          <span className="font-bold text-slate-400 text-xl mt-10">Memuat lokasi absen...</span>
+        </section>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="w-full col-span-12">
@@ -273,7 +270,6 @@ export const Attendance: React.FC = () => {
 
   const dataSchedule = data;
 
-  console.log('Data schedule :', dataSchedule);
   return (
     <main className="min-h-96 relative">
       {employeeLocation.length == 0 ? (
@@ -359,6 +355,7 @@ export const Attendance: React.FC = () => {
             lat={location.coordinates?.latitude}
             statusLocation={statusLocation}
             attendance_location_id={attendanceLocationId}
+            employee_location={employeeLocation}
           />
           {/* // End absen card */}
 
@@ -397,7 +394,7 @@ export const Attendance: React.FC = () => {
                                   <Text size="xs" fw={700}>
                                     {activityAlias[0][`cs${i + 1}_name`]}
                                   </Text>
-                                  <Text style={{ textAlign: 'justify' }} truncate="end" size="xs">
+                                  <Text style={{ textAlign: 'left' }} size="xs">
                                     {activity[`custom${i + 1}`]}
                                   </Text>
                                 </div>
