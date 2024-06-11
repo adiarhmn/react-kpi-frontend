@@ -61,7 +61,7 @@ export const AttendanceInfo: React.FC = () => {
 
   const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
   const { data: dataActivity } = useGetActivityDetail(
-    creds?.id,
+    creds?.employee_id,
     formatterDate(new Date(), 'yyyy-MM-dd')
   );
   useEffect(() => {

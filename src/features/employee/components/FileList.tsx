@@ -10,7 +10,7 @@ import { EmployeeFilesType } from '../types';
 export const FileList: React.FC = () => {
   const { creds } = useAuth();
   const [files, setFiles] = useState<EmployeeFilesType[]>([]);
-  const { data, error, isLoading } = useGetEmployeeFiles(creds?.id);
+  const { data, error, isLoading } = useGetEmployeeFiles(creds?.employee_id);
 
   useEffect(() => {
     if (data) {

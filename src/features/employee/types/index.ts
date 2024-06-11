@@ -35,14 +35,14 @@ export type Attendance = {
 };
 
 export type EducationBackground = {
-  id: number | null;
+  id: number | null | undefined;
   type: string;
   name: string;
   major: string;
   graduate_from: string;
   entry_year: string;
   graduation_year: string;
-  employee_id: number;
+  employee_id: number | undefined;
 };
 
 export type EmployeeFilesType = {

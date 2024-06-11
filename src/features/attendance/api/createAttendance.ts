@@ -9,11 +9,11 @@ type AttendanceDataPost = {
   attendance_lat: string;
   attendance_lon: string;
   attendance_location_id: number | null;
+  company_id?: number;
 };
 
 export const postCreateAttendance = async (attendanceDataPost: AttendanceDataPost) => {
   console.log('Data yang dikirim : ', attendanceDataPost);
-  console.log('Data yang akan dikirim : ', attendanceDataPost);
   const response = await axios.post(`${BaseURL}/attendance/in`, attendanceDataPost);
   return response.data;
 };

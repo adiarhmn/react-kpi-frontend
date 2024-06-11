@@ -48,10 +48,11 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
 
     const attendanceCheckIn = {
       schedule_id: schedule.id,
-      employee_id: creds?.id,
+      employee_id: creds?.employee_id,
       attendance_lat: lat.toString(),
       attendance_lon: long.toString(),
       attendance_location_id: attendance_location_id,
+      company_id: creds?.company_id,
     };
 
     await mutationCheckIn.mutateAsync(attendanceCheckIn, {

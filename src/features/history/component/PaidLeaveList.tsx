@@ -15,7 +15,7 @@ type PaidLeaveProps = {
 export const PaidLeaveList: React.FC<PaidLeaveProps> = ({ status }) => {
   const { creds } = useAuth();
   const [paidLeave, setPaidLeave] = useState<AbsenceType[]>([]);
-  const { data, error, isLoading } = useGetAbsenceByType(creds?.id, 'Cuti', status);
+  const { data, error, isLoading } = useGetAbsenceByType(creds?.employee_id, 'Cuti', status);
 
   const navigate = useNavigate();
   useEffect(() => {

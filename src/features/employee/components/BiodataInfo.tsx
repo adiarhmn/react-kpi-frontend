@@ -12,7 +12,7 @@ import { useGetEmployee } from '../api/Profile';
 export const BiodataInfo: React.FC = () => {
   const { creds } = useAuth();
   const [employee, setEmployee] = useState<EmployeeType>();
-  const { data } = useGetEmployee(creds?.id);
+  const { data } = useGetEmployee(creds?.employee_id);
   useEffect(() => {
     if (data) {
       setEmployee(data);

@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 

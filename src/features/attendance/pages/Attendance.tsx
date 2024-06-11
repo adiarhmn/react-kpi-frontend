@@ -24,7 +24,7 @@ import {
 } from '../api';
 import { useGetActivityDetail, useGetActivityAlias } from '../api/getActivity';
 import { CardAttendance } from '../components';
-import { ActivityDetailType, AttendanceType, EmployeeLocationType } from '../types';
+import { ActivityDetailType, AttendanceType, EmployeeLocationType, ScheduleType } from '../types';
 
 export const Attendance: React.FC = () => {
   // const [schedule, setSchedule] = useState<ScheduleType[]>([]);
@@ -56,7 +56,7 @@ export const Attendance: React.FC = () => {
   const { data, error, isLoading } = useGetSchedule(employee_id, dateToday);
   const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
   const { data: dataActivity, refetch } = useGetActivityDetail(
-    creds?.id,
+    creds?.employee_id,
     formatterDate(new Date(), 'yyyy-MM-dd')
   );
   useEffect(() => {
@@ -292,6 +292,8 @@ export const Attendance: React.FC = () => {
   }
 
   const dataSchedule = data;
+
+  console.log('Data schedule :', dataSchedule);
   return (
     <main className="min-h-96 relative">
       {attendanceLocationId == undefined ? (

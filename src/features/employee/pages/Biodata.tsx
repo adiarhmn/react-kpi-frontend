@@ -1,5 +1,6 @@
 import { IconChevronLeft, IconPencil } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+
 import { BiodataInfo } from '../components';
 
 export const Biodata: React.FC = () => {

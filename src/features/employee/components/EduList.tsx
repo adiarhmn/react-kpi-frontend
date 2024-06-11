@@ -30,19 +30,34 @@ export const EduList: React.FC = () => {
     open();
   };
 
-  const confirmDeleteEducation = async () => {
-    if (educationToDelete) {
-      deleteEducation(educationToDelete.id!);
-      close();
-    }
+  // const confirmDeleteEducation = async () => {
+  //   if (educationToDelete) {
+  //     deleteEducation(educationToDelete.id!);
+  //     close();
+  //   }
+  // };
+
+  const deleteEducation = async () => {
+    deleteEducationMutation.mutateAsync(educationToDelete?.id, {
+      onSuccess: (data) => {
+        console.log('Success Delete:', data);
+        const newEducation = educations.filter((edu) => edu.id !== educationToDelete?.id);
+        setEducations(newEducation);
+        close();
+
+        // notifications.show({
+        //   message: 'Berhasil Menghapus Data',
+        //   color: 'green',
+        // });
+      },
+    });
   };
 
-  const deleteEducation = async (id: number) => {
-    deleteEducationMutation.mutateAsync(id);
-    // Update Division Data
-    const newDivision = educations.filter((edu) => edu.id !== id);
-    setEducations(newDivision);
-  };
+  // const deleteEducation = async (id: number) => {
+  //   deleteEducationMutation.mutateAsync(id);
+  //   const newEducation = educations.filter((edu) => edu.id !== id);
+  //   setEducations(newEducation);
+  // };
 
   return (
     <main>
@@ -61,7 +76,7 @@ export const EduList: React.FC = () => {
               <div>
                 <button
                   className=" bg-transparent me-2"
-                  onClick={() => navigate('/profile/edit', { state: { edu } })}
+                  onClick={() => navigate('/profile/edu-background/edit', { state: { edu } })}
                 >
                   <IconPencil color="#FAB005" size={20} className="font-bold rounded-md" />
                 </button>
@@ -137,7 +152,7 @@ export const EduList: React.FC = () => {
               Loading...
             </Button>
           ) : (
-            <Button onClick={confirmDeleteEducation}>Yakin</Button>
+            <Button onClick={deleteEducation}>Yakin</Button>
           )}
 
           <Button color="red" onClick={close}>

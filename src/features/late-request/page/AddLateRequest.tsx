@@ -20,7 +20,7 @@ export const AddLateRequest: React.FC = () => {
   const navigate = useNavigate();
   // const [lateRequest, setLateRequest] = useState<lateRequestType[]>([]);
   const [schedule, setSchedule] = useState<ScheduleType>();
-  const { data } = useGetScheduleDaily(creds?.id, formatterDate(new Date(), 'yyyy-MM-dd'));
+  const { data } = useGetScheduleDaily(creds?.employee_id, formatterDate(new Date(), 'yyyy-MM-dd'));
   useEffect(() => {
     if (data) {
       setSchedule(data[0]);
