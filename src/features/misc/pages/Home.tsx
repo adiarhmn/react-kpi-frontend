@@ -11,6 +11,7 @@ import {
   IconClipboardText,
   IconFileDollar,
   IconUsersGroup,
+  IconClock,
 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -47,8 +48,6 @@ export const Home: React.FC = () => {
       setAttendance(DataAttendance);
     }
   }, [DataAttendance]);
-
-  console.log('Data attendance : ', attendance);
 
   return (
     <main>
@@ -101,7 +100,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Menu List => Berisi daftar menu pada sistem */}
-      <section className="px-7 mt-4 mb-4">
+      <section className="px-7 mt-5 mb-7">
         <MenuList
           navigations={[
             {
@@ -136,9 +135,9 @@ export const Home: React.FC = () => {
               color: 'bg-blue-600',
             },
             {
-              title: '',
-              href: '/',
-              icon: IconClock24,
+              title: 'Testing',
+              href: '/test',
+              icon: IconClock,
               color: 'bg-blue-600',
             },
             {

@@ -21,7 +21,7 @@ export const Attendance: React.FC = () => {
   );
 
   useEffect(() => {
-    console.log(DataAttendances);
+    console.log('data attendance', DataAttendances);
   }, [DataAttendances]);
 
   if (LoadingGetAttendance) return <div>Loading...</div>;

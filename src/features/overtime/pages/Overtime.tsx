@@ -3,8 +3,9 @@ import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { AttendanceType, useGetAttendance } from '@/features/attendance';
 import { useAuth } from '@/features/auth';
-import { OvertimeList } from '@/features/history';
+import { OvertimeList, formatterDate } from '@/features/history';
 
 import { useGetOvertime } from '../api/getOvertime';
 import { OvertimeType } from '../types';
@@ -19,6 +20,7 @@ export const Overtime: React.FC = () => {
       setOvertimes(DataOvertime);
     }
   }, [DataOvertime]);
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>

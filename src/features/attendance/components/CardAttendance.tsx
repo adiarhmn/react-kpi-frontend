@@ -1,41 +1,35 @@
 import { Badge, Button, Divider, Text } from '@mantine/core';
-import { IconArrowBarToLeft, IconArrowBarToRight, IconBan } from '@tabler/icons-react';
+import { IconBan, IconCircleCheck, IconDoorEnter, IconDoorExit } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
 import { useAuth } from '@/features/auth';
 
 import { useCreateAttendance } from '../api';
-import { useGetAttendance } from '../api/getAttendance';
 import { useUpdateAttendance } from '../api/updateAttendance';
 import { AttendanceType, ScheduleType } from '../types';
 
 type ScheduleProps = {
   schedule: ScheduleType;
-  isCheckedIn: boolean;
-  setIsCheckIn: (value: boolean) => void;
+  refetchAttendance: () => any;
+  attendance: AttendanceType | undefined;
   long: any;
   lat: any;
   statusLocation: boolean;
-  attendance_location_id: number;
+  attendance_location_id?: number;
 };
 
 export const CardAttendance: React.FC<ScheduleProps> = ({
   schedule,
-  isCheckedIn,
-  setIsCheckIn,
+  refetchAttendance,
+  attendance,
   long,
   lat,
   statusLocation,
   attendance_location_id,
 }: ScheduleProps) => {
-  // console.log('status checkin : ', isCheckedIn);
   const { creds } = useAuth();
-  const [attendance, setAttendance] = useState<AttendanceType>();
-  console.log(schedule);
-  // const navigate = useNavigate();
 
   function formatDate(date: string, formatType: string) {
     return format(date, formatType, { locale: id });
@@ -65,10 +59,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
           confirmButtonText: 'Ok',
         });
         console.log('Success:', data);
-        setAttendance(data.data);
-        setIsCheckIn(true);
-
-        // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
+        refetchAttendance();
       },
     });
   };
@@ -76,13 +67,6 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
 
   // {BUTTON CHECK-OUT}
   const mutationCheckOut = useUpdateAttendance();
-
-  const { data } = useGetAttendance(schedule.employee_schedule.employee_id, schedule.date);
-  useEffect(() => {
-    if (data) {
-      setAttendance(data[0]);
-    }
-  }, [data]);
 
   const handleCheckOut = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -100,8 +84,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
           confirmButtonText: 'Ok',
         });
         console.log('Success:', data);
-        setIsCheckIn(false);
-        // console.log('Sesudah update  :', localStorage.getItem('isCheckIn'));
+        refetchAttendance();
       },
     });
   };
@@ -120,9 +103,19 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
                 marginLeft: '4px',
                 borderRadius: '2px',
               }}
-              color={isCheckedIn == false ? 'red' : 'yellow'}
+              color={
+                attendance?.check_in == null
+                  ? 'red'
+                  : attendance?.check_out == null
+                    ? 'yellow'
+                    : 'green'
+              }
             >
-              {isCheckedIn == false ? 'Belum check-in' : 'Sedang bekerja'}
+              {attendance?.check_in == null
+                ? 'Belum check-in'
+                : attendance?.check_out == null
+                  ? 'Sedang bekerja'
+                  : 'Selesai bekerja'}
             </Badge>
           </div>
           <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
@@ -154,23 +147,31 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
             </div>
           </div>
           <div className="p-2 mt-2">
-            {isCheckedIn == false ? (
+            {attendance?.check_in == null ? (
               <form onSubmit={handleCheckIn}>
                 <Button
                   disabled={statusLocation == false}
                   type="submit"
                   fullWidth
-                  rightSection={statusLocation == false ? <IconBan /> : <IconArrowBarToRight />}
+                  rightSection={statusLocation == false ? <IconBan /> : <IconDoorEnter />}
                 >
-                  {statusLocation == false ? 'Anda berada diluar kantor' : 'Check-in'}
+                  {attendance_location_id == null
+                    ? 'Lokasi anda belum ditentukan'
+                    : statusLocation == false
+                      ? 'Anda berada diluar kantor'
+                      : 'Check-in'}
                 </Button>
               </form>
-            ) : (
+            ) : attendance?.check_out == null ? (
               <form onSubmit={handleCheckOut}>
-                <Button type="submit" color="red" fullWidth rightSection={<IconArrowBarToLeft />}>
+                <Button type="submit" color="red" fullWidth rightSection={<IconDoorExit />}>
                   Check-out
                 </Button>
               </form>
+            ) : (
+              <Button disabled fullWidth rightSection={<IconCircleCheck />}>
+                Anda sudah absen hari ini
+              </Button>
             )}
           </div>
         </section>

@@ -5,9 +5,8 @@ import { Icon } from 'leaflet';
 import React, { useEffect, useState } from 'react';
 import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 
-import { ScheduleType, useCreateAttendance, useGeoLocation } from '@/features/attendance';
+import { ScheduleType, useGeoLocation } from '@/features/attendance';
 import { useAuth } from '@/features/auth';
 import { formatterDate } from '@/features/history';
 // eslint-disable-next-line no-restricted-imports
@@ -70,7 +69,7 @@ export const AddLateRequest: React.FC = () => {
     event.preventDefault();
 
     const lateRequestData = {
-      employee_id: creds?.id,
+      employee_id: creds?.employee_id,
       reason: form.values.reason,
       attendance_request_lat: location.coordinates?.latitude.toString(),
       attendance_request_lon: location.coordinates?.longitude.toString(),
