@@ -1,18 +1,17 @@
-import { Button, FileInput, Select, TextInput } from '@mantine/core';
+import { Button, Select, TextInput } from '@mantine/core';
 import { YearPickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft, IconSchool } from '@tabler/icons-react';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { EducationBackground } from '../types';
 
-const BaseURL = import.meta.env.VITE_API_URL ?? 'http://192.168.1.110:3000/api';
+import { useAuth } from '@/features/auth';
+import { formatterDate } from '@/features/history';
+
+import { useCreateEduBackground } from '../api';
 
 export const EduBackgroundAdd: React.FC = () => {
   const navigate = useNavigate();
-  const [alert, setAlert] = useState(false);
+  const { creds } = useAuth();
 
   const form = useForm({
     validateInputOnChange: true,
@@ -31,41 +30,35 @@ export const EduBackgroundAdd: React.FC = () => {
     },
   });
 
-  const createEduBackground = async (educationDataPost: EducationBackground) => {
-    const response = await axios.post(`${BaseURL}/employee-education`, educationDataPost);
-    return response.data;
-  };
-
-  const mutation = useMutation({
-    mutationFn: createEduBackground,
-    onSuccess: (data) => {
-      console.log(data);
-      if (data.status == 201) {
-        navigate(-1);
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  // [SUBMIT EDUCATION BACKGROUND]
+  const mutationAddLateRequest = useCreateEduBackground();
+  const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const entryYear = new Date(form.values.tahunMasuk);
-    const graduateYear = new Date(form.values.tahunLulus);
-    console.log(graduateYear.getFullYear());
+
     const educationData = {
       id: null,
       type: form.values.jenjang,
       major: form.values.jurusan,
       name: form.values.namaSekolah,
-      entry_year: entryYear.getFullYear().toString(),
-      graduation_year: graduateYear.getFullYear().toString(),
+      entry_year: formatterDate(form.values.tahunMasuk, 'yyyy'),
+      graduation_year: formatterDate(form.values.tahunLulus, 'yyyy'),
       graduate_from: form.values.lulusanAsal,
-      employee_id: 1,
+      employee_id: creds?.employee_id,
     };
-    mutation.mutateAsync(educationData);
+
+    await mutationAddLateRequest.mutateAsync(educationData, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        localStorage.setItem('hasNotifiedEduBackground', 'no');
+        navigate('/profile/edu-background', {
+          state: { success: 'Data pendidikan berhasil ditambahkan!' },
+        });
+        close();
+      },
+    });
   };
+  // [END SUBMIT EDUCATION BACKGROUND]
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -84,7 +77,7 @@ export const EduBackgroundAdd: React.FC = () => {
           <IconSchool className="opacity-80" size={25} />
         </div>
         <div className="mx-auto p-2 w-80 text-slate-700 px-2">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitForm}>
             <Select
               label="Jenjang pendidikan"
               name="jenjang"
@@ -119,15 +112,9 @@ export const EduBackgroundAdd: React.FC = () => {
             />
             <div className="w-full mt-4 grid grid-cols-12 text-center">
               <div className="col-span-6 pe-1">
-                {mutation.isPending ? (
-                  <Button fullWidth color="blue" disabled>
-                    Loading...
-                  </Button>
-                ) : (
-                  <Button fullWidth type="submit" color="blue">
-                    Simpan
-                  </Button>
-                )}
+                <Button fullWidth type="submit" color="blue">
+                  Simpan
+                </Button>
               </div>
               <div className="col-span-6 ps-1">
                 <Button

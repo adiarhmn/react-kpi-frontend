@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { ActionIcon } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';

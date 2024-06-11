@@ -1,29 +1,32 @@
 import { Button, Modal, Text } from '@mantine/core';
-import { IconChevronRight, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
+import { IconPencil, IconTrash } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getEduBackground, useDeleteEducation } from '../api/EduBackground/';
+
+import { useAuth } from '@/features/auth';
+
+import { useDeleteEducation, useGetEduBackground } from '../api/EduBackground/';
 import { EducationBackground } from '../types';
-import { useDisclosure } from '@mantine/hooks';
 
 export const EduList: React.FC = () => {
-  const [educations, setEducations] = useState<EducationBackground[]>([]);
+  const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
+  const [educations, setEducations] = useState<EducationBackground[]>([]);
+  const { data: DataEduBackground } = useGetEduBackground(creds?.employee_id);
+  useEffect(() => {
+    if (DataEduBackground) {
+      setEducations(DataEduBackground);
+    }
+  }, [DataEduBackground]);
+  console.log('Data education : ', educations);
+
   const [educationToDelete, setEducationToDelete] = useState<EducationBackground>();
   const deleteEducationMutation = useDeleteEducation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function fetchEducations() {
-      const data = await getEduBackground();
-      setEducations(Array.isArray(data) ? data : []);
-    }
-    fetchEducations();
-  }, []);
-
   const openDeleteModal = (education: EducationBackground) => {
     setEducationToDelete(education);
-    console.log(educationToDelete);
     open();
   };
 
@@ -47,7 +50,7 @@ export const EduList: React.FC = () => {
         educations.map((edu, index) => (
           <section
             key={index}
-            className="bg-white mx-auto max-w-xs w-full mt-4 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700"
+            className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700"
           >
             <div className="flex justify-between text-xs items-center p-2">
               <div>

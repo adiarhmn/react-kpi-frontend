@@ -1,14 +1,16 @@
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-const BaseURL = import.meta.env.VITE_API_URL ?? 'http://192.168.1.110:3000/api';
+const BaseURL = import.meta.env.VITE_API_URL;
 
-export async function getEduBackground() {
-  try {
-    const res = await axios.get(`${BaseURL}/employee-education`);
-    console.log(res.data.data);
-    return res.data.data;
-  } catch (error) {
-    console.error('Error fetching education background:', error);
-    return [];
-  }
+export async function getEduBackground(employee: number | undefined) {
+  const res = await axios.get(`${BaseURL}/employee-education?employee=${employee}`);
+  return res.data.message;
 }
+
+export const useGetEduBackground = (employee: number | undefined) => {
+  return useQuery({
+    queryKey: ['employee-education', employee],
+    queryFn: () => getEduBackground(employee),
+  });
+};

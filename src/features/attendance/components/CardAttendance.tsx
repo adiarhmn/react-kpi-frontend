@@ -5,12 +5,12 @@ import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
+import { useAuth } from '@/features/auth';
+
 import { useCreateAttendance } from '../api';
 import { useGetAttendance } from '../api/getAttendance';
 import { useUpdateAttendance } from '../api/updateAttendance';
 import { AttendanceType, ScheduleType } from '../types';
-
-import { CardActivity } from './CardActivity';
 
 type ScheduleProps = {
   schedule: ScheduleType;
@@ -19,6 +19,7 @@ type ScheduleProps = {
   long: any;
   lat: any;
   statusLocation: boolean;
+  attendance_location_id: number;
 };
 
 export const CardAttendance: React.FC<ScheduleProps> = ({
@@ -28,9 +29,10 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
   long,
   lat,
   statusLocation,
+  attendance_location_id,
 }: ScheduleProps) => {
-  console.log('status checkin : ', isCheckedIn);
-
+  // console.log('status checkin : ', isCheckedIn);
+  const { creds } = useAuth();
   const [attendance, setAttendance] = useState<AttendanceType>();
   console.log(schedule);
   // const navigate = useNavigate();
@@ -46,9 +48,10 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
 
     const attendanceCheckIn = {
       schedule_id: schedule.id,
-      employee_id: schedule.employee_schedule.employee_id,
+      employee_id: creds?.id,
       attendance_lat: lat.toString(),
       attendance_lon: long.toString(),
+      attendance_location_id: attendance_location_id,
     };
 
     await mutationCheckIn.mutateAsync(attendanceCheckIn, {
@@ -182,8 +185,6 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
           </section>
         </div>
       )}
-
-      {/* <CardActivity isCheckedIn={isCheckedIn} /> */}
     </>
   );
 };

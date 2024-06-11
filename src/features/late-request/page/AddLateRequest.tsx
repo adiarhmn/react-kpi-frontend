@@ -3,10 +3,11 @@ import { useForm } from '@mantine/form';
 import { IconChevronLeft, IconMailForward, IconMap2 } from '@tabler/icons-react';
 import { Icon } from 'leaflet';
 import React, { useEffect, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
-import { ScheduleType, useGeoLocation } from '@/features/attendance';
+import { ScheduleType, useCreateAttendance, useGeoLocation } from '@/features/attendance';
 import { useAuth } from '@/features/auth';
 import { formatterDate } from '@/features/history';
 // eslint-disable-next-line no-restricted-imports
@@ -25,12 +26,12 @@ export const AddLateRequest: React.FC = () => {
       setSchedule(data[0]);
     }
   }, [data]);
-  console.log('Data Schedule : ', schedule?.shift.shift_name);
+  // console.log('Data Schedule : ', schedule?.shift.shift_name);
 
   // [All About Location 🤯]
   const location = useGeoLocation();
   const customIcon = new Icon({
-    iconUrl: '/images/my-icon.png',
+    iconUrl: '/images/my-icon.svg',
     iconSize: [50, 50],
   });
   // [End Location]
@@ -38,9 +39,9 @@ export const AddLateRequest: React.FC = () => {
   // [FORM PENGAJUAN]
   const form = useForm({
     validateInputOnChange: true,
+    validateInputOnBlur: true,
     initialValues: {
       nameShift: schedule?.shift.shift_name,
-      status: 'Terlambat',
       reason: '',
     },
     validate: {
@@ -51,6 +52,19 @@ export const AddLateRequest: React.FC = () => {
   // console.log(form.getInputProps('nameShift'));
   // [END FORM PENGAJUAN]
 
+  // [SET LOCALSTORAGE STATUS CHECKIN]
+  const [isCheckedIn, setIsCheckedIn] = useState<boolean>(() => {
+    const savedState = localStorage.getItem('isCheckedIn');
+    return savedState ? JSON.parse(savedState) : false;
+  });
+  useEffect(() => {
+    localStorage.setItem('isCheckedIn', JSON.stringify(isCheckedIn));
+  }, [isCheckedIn]);
+  // [END SET LOCALSTORAGE]
+
+  console.log('Status cekin sebelum submit : ', isCheckedIn);
+
+  // [SUBMIT PENGAJUAN]
   const mutationAddLateRequest = useCreateLateRequest();
   const handleLateRequest = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -58,18 +72,21 @@ export const AddLateRequest: React.FC = () => {
     const lateRequestData = {
       employee_id: creds?.id,
       reason: form.values.reason,
+      attendance_request_lat: location.coordinates?.latitude.toString(),
+      attendance_request_lon: location.coordinates?.longitude.toString(),
     };
 
     await mutationAddLateRequest.mutateAsync(lateRequestData, {
       onSuccess: (data) => {
-        console.log('Success:', data);
-        if (data.status == 201) {
-          navigate(-1);
-        }
+        localStorage.setItem('hasNotified', 'no');
+        navigate('/late-request', { state: { success: 'Absensi berhasil diajukan!' } });
         close();
       },
     });
   };
+  // [END SUBMIT PENGAJUAN]
+
+  console.log('status checkin : ', isCheckedIn);
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -83,7 +100,7 @@ export const AddLateRequest: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
-            <h2 className="font-semibold ">Pengajuan absen terlambat</h2>
+            <h2 className="font-semibold ">Pengajuan absen</h2>
           </div>
         </div>
       </section>
@@ -108,12 +125,19 @@ export const AddLateRequest: React.FC = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {location.loaded && !location.error ? (
-              <Marker
-                position={[location.coordinates?.latitude, location.coordinates?.longitude]}
-                icon={customIcon}
-              >
-                <Popup>Lokasi anda</Popup>
-              </Marker>
+              <>
+                <Marker
+                  position={[location.coordinates?.latitude, location.coordinates?.longitude]}
+                  icon={customIcon}
+                >
+                  <Popup>Lokasi anda</Popup>
+                </Marker>
+                <Circle
+                  center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+                  radius={60}
+                  pathOptions={{ color: '#CDE8E5', fillColor: 'blue', fillOpacity: 0.1 }}
+                />
+              </>
             ) : (
               <Marker position={[-3.753033208345266, 114.76683450763974]} icon={customIcon}>
                 <Popup>Lokasi anda</Popup>
@@ -133,17 +157,8 @@ export const AddLateRequest: React.FC = () => {
         <div className="w-full p-2">
           <form onSubmit={handleLateRequest}>
             <div className="mb-2">
-              <Select
-                disabled
-                label="Status pengajuan"
-                name="jenjang"
-                data={['Terlambat', 'WFH']}
-                {...form.getInputProps('status')}
-              />
-            </div>
-            <div className="mb-2">
               <Textarea
-                label="Alasan"
+                label="Alasan pengajuan"
                 placeholder="masukkan alasan pengajuan"
                 autosize
                 minRows={5}
@@ -151,7 +166,12 @@ export const AddLateRequest: React.FC = () => {
               />
             </div>
             <div className="mb-2 mt-3">
-              <Button type="submit" fullWidth rightSection={<IconMailForward size={'20px'} />}>
+              <Button
+                disabled={isCheckedIn}
+                type="submit"
+                fullWidth
+                rightSection={<IconMailForward size={'20px'} />}
+              >
                 Ajukan
               </Button>
             </div>

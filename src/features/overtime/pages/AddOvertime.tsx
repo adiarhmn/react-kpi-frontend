@@ -4,10 +4,15 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconChevronLeft, IconClock24, IconDeviceTablet, IconMap2 } from '@tabler/icons-react';
 import { Icon } from 'leaflet';
 import { useEffect, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 
-import { AttendanceType, useGeoLocation } from '@/features/attendance';
+import {
+  AttendanceType,
+  EmployeeLocationType,
+  useGeoLocation,
+  useGetEmployeeLocation,
+} from '@/features/attendance';
 // eslint-disable-next-line no-restricted-imports
 import { useGetAttendance } from '@/features/attendance/api/getAttendance';
 import { useAuth } from '@/features/auth';
@@ -31,6 +36,7 @@ export const AddOvertime: React.FC = () => {
   // const checkInStatus;
   const { creds } = useAuth();
   const [overtime, setOvertime] = useState<OvertimeType>();
+  // const {data : DataOvertime } = ;
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
@@ -62,6 +68,106 @@ export const AddOvertime: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  //[GET LOCATION OUTLETS]
+  const [employeeLocation, setEmployeeLocation] = useState<EmployeeLocationType[]>([]);
+  const { data: DataEmployeeLocation } = useGetEmployeeLocation(creds?.employee_id);
+  useEffect(() => {
+    if (DataEmployeeLocation) {
+      setEmployeeLocation(DataEmployeeLocation);
+    }
+  }, [DataEmployeeLocation]);
+  // [END GET LOCATION OUTLETS]
+
+  // [All About Location 🤯]
+  const location = useGeoLocation();
+  const [statusLocation, setStatusLocation] = useState(false);
+
+  function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      0.5 -
+      Math.cos(dLat) / 2 +
+      (Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * (1 - Math.cos(dLon))) /
+        2;
+    return R * 2 * Math.asin(Math.sqrt(a));
+  }
+  const [markers, setMarkers] = useState<any[]>([]);
+  // const [attendanceLocationId, setAttendanceLocationId] = useState<number>();
+  useEffect(() => {
+    if (location.loaded && !location.error) {
+      const officeIcon = new Icon({
+        iconUrl: '/images/office-icon.svg',
+        iconSize: [50, 50],
+      });
+
+      const officeCircle = {
+        color: 'white',
+        fillColor: 'red',
+        fillOpacity: 0.2,
+      };
+
+      const markers = employeeLocation.map((emp_loc) => ({
+        geocode: [
+          parseFloat(emp_loc.attendance_location.latitude),
+          parseFloat(emp_loc.attendance_location.longitude),
+        ],
+        distance: Math.round(
+          calculateDistance(
+            location.coordinates?.latitude,
+            location.coordinates?.longitude,
+            parseFloat(emp_loc.attendance_location.latitude),
+            parseFloat(emp_loc.attendance_location.longitude)
+          ) * 1000
+        ),
+        popUp: emp_loc.attendance_location.name,
+        icon: officeIcon,
+        option: officeCircle,
+        radius: 120,
+        attendance_location_id: emp_loc.attendance_location_id,
+      }));
+
+      setMarkers(markers);
+
+      // [PENTING! 🥶🥶]
+      const radius = 120; // Jarak dalam meter
+      // [!!!!!!!!!]
+
+      if (markers.length > 0) {
+        const closestMarker = markers.reduce((prev, current) => {
+          return prev.distance < current.distance ? prev : current;
+        });
+
+        if (closestMarker.distance <= radius) {
+          setStatusLocation(true);
+        } else {
+          setStatusLocation(false);
+        }
+
+        // setAttendanceLocationId(closestMarker.attendance_location_id);
+      } else {
+        if (markers[0].distance <= radius) {
+          setStatusLocation(true);
+        } else {
+          setStatusLocation(false);
+        }
+      }
+    }
+  }, [location, employeeLocation]);
+
+  const myIcon: any = new Icon({
+    iconUrl: '/images/my-icon.svg',
+    iconSize: [60, 60],
+  });
+
+  const myCircle: any = {
+    color: '#CDE8E5',
+    fillColor: 'blue',
+    fillOpacity: 0.1,
+  };
+  // [END ALL ABOUT LOCATION]
+
   // [Button start overtime]
   const mutationAddOvertime = useCreateOvertime();
   const handleOvertime = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -70,6 +176,8 @@ export const AddOvertime: React.FC = () => {
     const overtimeData = {
       attendance_id: attendance?.id,
       detail: form.values.detail,
+      overtime_lat: location.coordinates?.latitude.toString(),
+      overtime_lon: location.coordinates?.longitude.toString(),
     };
 
     await mutationAddOvertime.mutateAsync(overtimeData, {
@@ -79,7 +187,6 @@ export const AddOvertime: React.FC = () => {
         setOvertime(data.data);
         setOvertimeStatus(true);
         close();
-        // console.log('Apakah sudah checkin :', localStorage.getItem('isCheckIn'));
       },
     });
   };
@@ -103,79 +210,6 @@ export const AddOvertime: React.FC = () => {
     });
   };
   // [End Button Stop Overtime]
-
-  // [All About Location 🤯]
-  const location = useGeoLocation();
-  console.log('Tipe data coordinates : ', typeof location.coordinates?.longitude);
-  const [statusLocation, setStatusLocation] = useState(false);
-  console.log('UseGeoLocation : ', location);
-  useEffect(() => {
-    if (location.loaded && !location.error) {
-      const latOffice: number = -3.7529315029676833;
-      const lonOffice: number = 114.76686669474925;
-      const distance = calculateDistance(
-        location.coordinates?.latitude,
-        location.coordinates?.longitude,
-        latOffice,
-        lonOffice
-      );
-
-      // [PENTING! 🥶🥶]
-      const radius: number = 2;
-      // [!!!!!!!!!]
-
-      if (distance <= radius) {
-        setStatusLocation(true);
-      } else {
-        setStatusLocation(false);
-      }
-      console.log('Distance : ', distance);
-    }
-  }, [location]);
-
-  console.log('Jarak status : ', statusLocation);
-
-  function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const R = 6371; // Radius bumi dalam kilometer
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
-    const a =
-      0.5 -
-      Math.cos(dLat) / 2 +
-      (Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * (1 - Math.cos(dLon))) /
-        2;
-    return R * 2 * Math.asin(Math.sqrt(a));
-  }
-
-  const officeIcon: any = new Icon({
-    iconUrl: '/images/office-icon.png',
-    iconSize: [40, 40],
-  });
-
-  const myIcon: any = new Icon({
-    iconUrl: '/images/my-icon.png',
-    iconSize: [60, 60],
-  });
-
-  interface Marker {
-    geocode: [number, number]; // Menggunakan tipe tuple langsung
-    popUp: string;
-    icon: any;
-  }
-
-  const markers: Marker[] = [
-    {
-      geocode: [-3.7529315029676833, 114.76686669474925],
-      popUp: 'Lokasi kantor',
-      icon: officeIcon,
-    },
-    {
-      geocode: [location.coordinates?.latitude ?? 0, location.coordinates?.longitude ?? 0],
-      popUp: 'Lokasi saya',
-      icon: myIcon,
-    },
-  ];
-  // [End Location]
 
   return (
     <main className="min-h-96 relative">
@@ -203,8 +237,6 @@ export const AddOvertime: React.FC = () => {
           <IconMap2 className="opacity-80" size={20} />
         </div>
         <div className="w-full pb-2">
-          {/* <Image src="/images/map.png" height={160} alt="Map" />
-           */}
           <MapContainer
             key={location.loaded ? 'loaded' : 'notLoaded'}
             style={{ height: '33vh' }}
@@ -223,11 +255,31 @@ export const AddOvertime: React.FC = () => {
               </Marker>
             ) : (
               markers.map((marker, index) => (
-                <Marker key={index} position={marker.geocode} icon={marker.icon}>
-                  <Popup>{marker.popUp}</Popup>
-                </Marker>
+                <div key={index}>
+                  <Marker position={marker.geocode} icon={marker.icon}>
+                    <Popup>
+                      {marker.popUp} <h1>({marker.distance} Meter)</h1>
+                    </Popup>
+                  </Marker>
+                  <Circle
+                    center={marker.geocode}
+                    radius={marker.radius}
+                    pathOptions={marker.option}
+                  />
+                </div>
               ))
             )}
+            <Marker
+              position={[location.coordinates?.latitude, location.coordinates?.longitude]}
+              icon={myIcon}
+            >
+              <Popup>Lokasi saya</Popup>
+            </Marker>
+            <Circle
+              center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+              radius={70}
+              pathOptions={myCircle}
+            />
           </MapContainer>
         </div>
       </section>
@@ -312,7 +364,9 @@ export const AddOvertime: React.FC = () => {
             <div className="ms-2 -mb-2">
               <Text size="xs">Lembur mulai</Text>
               <Text size="sm" fw={700}>
-                {overtime != undefined ? formatterDate(overtime.start_time, 'HH:mm') : '-- -- '}
+                {overtime != undefined
+                  ? formatterDate(new Date(overtime.start_time), 'HH:mm')
+                  : '-- -- '}
               </Text>
             </div>
             <Divider my="sm" />
@@ -321,7 +375,9 @@ export const AddOvertime: React.FC = () => {
                 <Text size="xs">Lembur selesai</Text>
                 <Text size="sm" fw={700}>
                   {/* {formattedTime} */}
-                  {overtime != undefined ? formatterDate(overtime.end_time, 'HH:mm') : '-- -- '}
+                  {overtime?.end_time != undefined
+                    ? formatterDate(new Date(overtime.end_time), 'HH:mm')
+                    : '-- -- '}
                 </Text>
               </div>
               <div className="col-span-6 text-right -mt-1"></div>

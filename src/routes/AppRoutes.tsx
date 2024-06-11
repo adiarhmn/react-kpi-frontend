@@ -32,6 +32,10 @@ const { Overtime } = lazyImport(() => import('@/features/overtime'), 'Overtime')
 const { AddOvertime } = lazyImport(() => import('@/features/overtime'), 'AddOvertime');
 const { LateRequest } = lazyImport(() => import('@/features/late-request'), 'LateRequest');
 const { AddLateRequest } = lazyImport(() => import('@/features/late-request'), 'AddLateRequest');
+const { DetailLateRequest } = lazyImport(
+  () => import('@/features/late-request'),
+  'DetailLateRequest'
+);
 const { Schedule } = lazyImport(() => import('@/features/schedule'), 'Schedule');
 const { EduBackground } = lazyImport(() => import('@/features/employee'), 'EduBackground');
 const { EduBackgroundAdd } = lazyImport(() => import('@/features/employee'), 'EduBackgroundAdd');
@@ -100,7 +104,7 @@ export const AppRoutes: React.FC = () => {
     <Routes>
       <Route path="/" element={<AppLayout />}>
         {/* Routes for Employee or Mobile APP ======================>*/}
-        {creds?.role === 'employee' && (
+        {creds?.role === 'employee' || creds?.role === 'supervisor' ? (
           <Route element={<HomeLayout />}>
             <Route index element={<Home />} />
             <Route path="attendance" element={<Attendance />} />
@@ -148,11 +152,14 @@ export const AppRoutes: React.FC = () => {
             <Route path="late-request">
               <Route index element={<LateRequest />} />
               <Route path="add" element={<AddLateRequest />} />
+              <Route path="detail" element={<DetailLateRequest />} />
             </Route>
 
             <Route path="schedule" element={<Schedule />} />
             <Route path="attendances" element={<Attendances />} />
           </Route>
+        ) : (
+          ''
         )}
 
         {/* Routes for Admin with Desktop View ======================>*/}

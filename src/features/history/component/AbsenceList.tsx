@@ -1,6 +1,5 @@
-import { Badge, Divider, Loader, Text } from '@mantine/core';
-import { differenceInDays, format } from 'date-fns';
-import { id } from 'date-fns/locale';
+import { Badge, Divider, Loader, Text, Transition } from '@mantine/core';
+import { differenceInDays } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,13 +10,13 @@ import { AbsenceType } from '../types';
 
 type AbsenceProps = {
   typeAbsence: string;
-  modalState: boolean;
   status: string;
 };
 
-export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, status }) => {
+export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, status }) => {
   const { creds } = useAuth();
   const navigate = useNavigate();
+  const [opened, setOpened] = useState(false);
   const [absences, setAbsence] = useState<AbsenceType[]>([]);
   const [params, setParams] = useState({
     employeeId: creds?.employee_id,
@@ -29,6 +28,7 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, s
     params.typeAbsence,
     status
   );
+
   useEffect(() => {
     if (data) {
       setAbsence(data);
@@ -42,7 +42,8 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, s
       typeAbsence,
     };
     setParams(newParams);
-  }, [modalState]);
+  }, [typeAbsence]);
+
   if (isLoading) {
     return (
       <div className="flex justify-center my-20">
@@ -61,16 +62,6 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, s
     return differenceInDays(endDate, startDate);
   }
 
-  // function formatdate(date: string | Date) {
-  //   const dateToFormat: Date = new Date(date);
-  //   console.log('Date to format  :', dateToFormat);
-  //   const formattedDate = format(dateToFormat, 'EEEE, dd MMM yyyy', { locale: id });
-  //   return formattedDate;
-  // }
-
-  console.log('Data sakit : ', absences);
-  console.log('State Modal : ', modalState);
-  console.log('Type absence : ', typeAbsence);
   return (
     <>
       <div className="text-center">
@@ -79,7 +70,7 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, modalState, s
             <button
               key={index}
               onClick={() => navigate(`/history/data-absence/${absence.id}`)}
-              className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
+              className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
             >
               <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
                 {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}

@@ -1,22 +1,40 @@
 /* eslint-disable linebreak-style */
-import { Button, Drawer, Fieldset, Select } from '@mantine/core';
+import { Button, Drawer, Fieldset, Select, Tabs } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconPlus, IconChevronLeft } from '@tabler/icons-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
-// eslint-disable-next-line no-restricted-imports
-import { AbsenceList } from '@/features/history/component/AbsenceList';
+import { AbsenceList } from '@/features/history';
+
 //
 export const Absence: React.FC = () => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const [selectType, setSelectType] = useState('');
+  const [selectType, setSelectType] = useState('sakit');
+
+  // [NOTIFICATION 🔔]
   const navigate = useNavigate();
+  const { state } = useLocation();
+  useEffect(() => {
+    const hasNotified = localStorage.getItem('hasNotifiedPaidLeave');
+    if (state?.success && hasNotified != 'yes') {
+      Swal.fire({
+        width: '80%',
+        title: state.success,
+        timer: 3000,
+        icon: 'success',
+        confirmButtonText: 'Ok',
+      });
+      localStorage.setItem('hasNotifiedPaidLeave', 'yes');
+    }
+  }, [state, navigate]);
+  // [END NOTIFICATION 🔔]
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
 
-      <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 -mt-10 mb-3">
+      <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 -mt-10">
         <div className="flex justify-between items-center text-blue-700 mb-1">
           <div className="flex items-center">
             <IconChevronLeft
@@ -26,7 +44,7 @@ export const Absence: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
-            <h2 className="font-semibold ">Pengajuan izin</h2>
+            <h2 className="font-semibold ">Pengajuan {selectType}</h2>
           </div>
           <span className="font-semibold">
             <Button
@@ -38,43 +56,40 @@ export const Absence: React.FC = () => {
             >
               <IconPlus className=" -ms-1" />
             </Button>
-            <Button className="shadow-sm" size="xs" onClick={open}>
-              <IconAdjustmentsHorizontal className=" -ms-1" />
-            </Button>
           </span>
         </div>
       </section>
 
-      <AbsenceList status={'Belum%20Disetujui'} typeAbsence={selectType} modalState={opened} />
+      <Tabs color="#51CF66" variant="pills" defaultValue="sakit">
+        <section className="w-full mx-auto p-1 py-3 -mt-1">
+          <Tabs.List className="w-full grid grid-cols-12 text-center">
+            <div className="w-full grid grid-cols-12 text-center px-5 gap-x-2">
+              <div className="col-span-6 bg-white shadow-md rounded-lg">
+                <Tabs.Tab
+                  style={{ width: '100%' }}
+                  color="yellow"
+                  value="sakit"
+                  onClick={() => setSelectType('sakit')}
+                >
+                  Sakit
+                </Tabs.Tab>
+              </div>
+              <div className="col-span-6 bg-white shadow-md rounded-lg">
+                <Tabs.Tab
+                  style={{ width: '100%' }}
+                  color="blue"
+                  value="izin"
+                  onClick={() => setSelectType('izin')}
+                >
+                  Izin
+                </Tabs.Tab>
+              </div>
+            </div>
+          </Tabs.List>
+        </section>
+      </Tabs>
 
-      <Drawer
-        position="right"
-        offset={3}
-        size="80%"
-        radius="sm"
-        opened={opened}
-        onClose={close}
-        title="Filter"
-      >
-        <div>
-          <Fieldset className="mb-2" legend="Status">
-            <Select
-              className="-m-3"
-              placeholder="Pilih tipe"
-              data={['Sakit', 'Izin']}
-              searchValue={selectType}
-              onSearchChange={setSelectType}
-              allowDeselect
-              clearable
-            />
-          </Fieldset>
-        </div>
-        <div className="text-right mt-3">
-          <Button onClick={close} style={{ width: '160px' }}>
-            Cari
-          </Button>
-        </div>
-      </Drawer>
+      <AbsenceList status={'Belum%20Disetujui'} typeAbsence={selectType} />
     </main>
   );
 };

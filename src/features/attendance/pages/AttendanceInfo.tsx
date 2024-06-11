@@ -1,5 +1,5 @@
 import { Badge, Divider, Text } from '@mantine/core';
-import { IconChevronLeft } from '@tabler/icons-react';
+import { IconCalendarEvent, IconChevronLeft } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
@@ -8,16 +8,15 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 
 import { useGetSchedule } from '../api';
-import { useGetActivity } from '../api/getActivity';
+import { useGetActivityAlias, useGetActivityDetail } from '../api/getActivity';
 import { useGetAttendance } from '../api/getAttendance';
-import { ActivityType, AttendanceType, ScheduleType } from '../types';
+import { ActivityDetailType, AttendanceType, ScheduleType } from '../types';
 
 export const AttendanceInfo: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   const [attendance, setAttendance] = useState<AttendanceType>();
   const [schedule, setSchedule] = useState<ScheduleType>();
-  const [activities, setActivities] = useState<ActivityType[]>([]);
   const status = localStorage.getItem('isCheckedIn');
   const currentDate: Date = new Date();
   const dateSend = format(currentDate, 'yyyy-MM-dd', { locale: id });
@@ -45,12 +44,34 @@ export const AttendanceInfo: React.FC = () => {
     }
   }, [dataAttendance]);
 
-  const { data: dataActivities } = useGetActivity(attendance?.id);
+  // [All about  Activity Alias]
+  const [activityAlias, setActivityAlias] = useState([]);
+  const { data: dataActivityAlias, isLoading: loadingActivityAlias } = useGetActivityAlias(
+    creds?.company_id
+  );
   useEffect(() => {
-    if (dataActivities) {
-      setActivities(dataActivities);
+    if (dataActivityAlias) {
+      setActivityAlias(dataActivityAlias);
     }
-  }, [dataActivities]);
+  }, [dataActivityAlias]);
+
+  // [End Activity Alias]
+
+  // [All about Activity Detail]
+
+  const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
+  const { data: dataActivity } = useGetActivityDetail(
+    creds?.id,
+    formatterDate(new Date(), 'yyyy-MM-dd')
+  );
+  useEffect(() => {
+    if (dataActivity) {
+      setActivityDetail(dataActivity);
+    }
+  }, [dataActivity]);
+
+  // [End Activity Detail]
+
   if (errorAttendance) {
     return (
       <div className="text-red-600 text-center my-20 font-bold">{errorAttendance.message}</div>
@@ -102,8 +123,8 @@ export const AttendanceInfo: React.FC = () => {
           <div className="col-span-9 ms-2 text-left">
             <div className="ms-2">
               <Text size="xs">Tanggal</Text>
-              <Text size="sm" fw={700}>
-                {formatterDate(currentDate, 'EEEE, dd MMM yyyy')}
+              <Text size="auto" fw={700}>
+                {formatterDate(currentDate, 'EEEE, dd MMMM yyyy')}
               </Text>
             </div>
             <Divider my="sm" />
@@ -129,33 +150,43 @@ export const AttendanceInfo: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-white mx-auto max-w-xs w-full mt-3 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
-        <div className="flex justify-between text-base items-center p-2">
-          <span className="font-bold text-blue-700">Kegiatan</span>
+      {/* Tugas card */}
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
+        <div className="flex justify-between text-xs items-center p-2">
+          <span className="text-base font-bold text-blue-700">Kegiatan hari ini</span>
         </div>
-        <div className="w-full pb-2">
-          {activities.length > 0 ? (
-            activities.map((activity, index) => (
-              <div key={index}>
-                {' '}
-                <div className="-mt-2 p-2">
-                  <Text size="xs" fw={700}>
-                    Judul
-                  </Text>
-                  <Text style={{ textAlign: 'justify' }} size="sm">
-                    {activity?.name}
-                  </Text>
+        <Divider size={'sm'} />
+        <div className="w-full p-2">
+          {activityDetail.length > 0 ? (
+            activityDetail.map((activity, index) => (
+              <section
+                key={index}
+                className="bg-white mx-auto max-w-xs w-full z-50 relative p-2 px-2 text-slate-700 "
+              >
+                <div className="flex justify-between text-xs items-center mb-2">
+                  <span className="text-sm font-bold text-blue-700">Kegiatan {index + 1}</span>
+                  <IconCalendarEvent className="opacity-80" size={20} />
                 </div>
-                <div className="mt-1 p-2">
-                  <Text size="xs" fw={700}>
-                    Deskripsi kegiatan
-                  </Text>
-                  <Text style={{ textAlign: 'justify' }} size="sm">
-                    {activity?.description}
-                  </Text>
+                <div className="grid grid-cols-12">
+                  {activityDetail != null && activityAlias[0] != null
+                    ? Array.from(
+                        { length: 10 },
+                        (_, i) =>
+                          activityAlias[0][`cs${i + 1}_name`] != '' && (
+                            <div key={i} className="mb-1 col-span-6 w-full px-1">
+                              <Text size="xs" fw={700}>
+                                {activityAlias[0][`cs${i + 1}_name`]}
+                              </Text>
+                              <Text style={{ textAlign: 'justify' }} truncate="end" size="sm">
+                                {activity[`custom${i + 1}`]}
+                              </Text>
+                            </div>
+                          )
+                      )
+                    : ''}
                 </div>
-                <Divider my="md" />
-              </div>
+                <Divider size={'xs'} className="mt-7" />
+              </section>
             ))
           ) : (
             <div className="w-full col-span-12">
@@ -171,6 +202,7 @@ export const AttendanceInfo: React.FC = () => {
           )}
         </div>
       </section>
+      {/* End tugas card */}
     </main>
   );
 };
