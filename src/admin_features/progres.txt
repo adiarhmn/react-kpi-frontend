@@ -1,0 +1,56 @@
+ADMIN FEATURES :
+===> Dashboard
+    - Data Karywan (Done)
+    - TODO: Data Rekap Absensi (-)
+    - TODO: Data Pengajuan (-)
+
+===> Divisi
+    - CRUD (Done)
+    - Validasi From (-)
+    - Detail (-)
+
+===> Shift
+    - CR (Done)
+    - Validasi Form (-)
+
+===> User
+    - CRUD (Done)
+    - Validasi Form (-)
+    - Search By Divisi (Done)
+
+===> Karyawan
+    - CRUD (Done)
+    - Create User When Create Employee (Done)
+
+===> Lokasi
+    - Create With Map (Done)
+    - Read (Done)
+
+===> Jadwal
+    - CRUD (Done)
+    - Search By Month (Done)
+    - CopyPaste Jadwal / Bulan (Done)
+    - CopyPaste Jadwal / Employee (Done)
+    - Select All Employee (Done)
+
+===> Presensi
+    - R (Done)
+    - Search By Day (-)
+
+===> Aktifitas
+    - R (Done)
+
+===> Aktifitas Variabel / Alias
+    - Create (Done)
+
+===> Absensi
+    - Read (Done)
+
+===> Cuti
+    - Read (Done)
+
+===> Izin
+    - Read (Done)
+
+===> Lembur
+    - Read (Done)

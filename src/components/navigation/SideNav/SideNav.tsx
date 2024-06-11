@@ -1,7 +1,7 @@
 import { NavLink } from '@mantine/core';
-import { Icon, IconGauge } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Icon } from '@tabler/icons-react';
+import { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export type SideNavProps = {
   title: string;
@@ -16,7 +16,12 @@ interface Props {
   TitleSetting: (title: string) => void;
 }
 
-export const SideNav: React.FC<Props> = ({ SideNavProps, HeaderList, ToggleButton, TitleSetting }) => {
+export const SideNav: React.FC<Props> = ({
+  SideNavProps,
+  HeaderList,
+  ToggleButton,
+  TitleSetting,
+}) => {
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -24,6 +29,7 @@ export const SideNav: React.FC<Props> = ({ SideNavProps, HeaderList, ToggleButto
     if (currentNav) {
       TitleSetting(currentNav.title);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const isActive = (path: string) => {
@@ -33,7 +39,9 @@ export const SideNav: React.FC<Props> = ({ SideNavProps, HeaderList, ToggleButto
   return (
     <>
       {HeaderList && (
-        <div className="text-xs text-slate-400 font-semibold uppercase mb-2 pt-4 px-3">{HeaderList}</div>
+        <div className="text-xs text-slate-400 font-semibold uppercase mb-2 pt-4 px-3">
+          {HeaderList}
+        </div>
       )}
       {SideNavProps.map((SideNavProps, index) => {
         return (

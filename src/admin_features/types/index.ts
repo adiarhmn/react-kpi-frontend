@@ -80,3 +80,11 @@ export type RequestsType = {
   created_at: string;
   employee: EmployeeType;
 };
+
+export type AttendanceLocationsType = {
+  name: string;
+  latitude: string;
+  longitude: string;
+  company_id: number;
+  id?: number;
+};

@@ -4,7 +4,11 @@ import axios from 'axios';
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://192.168.1.110:3000/api';
 
 const getUsers = async (id_company?: number) => {
-  const res = await axios.get(`${BaseURL}/user?company=${id_company}`);
+  let url = `${BaseURL}/user`;
+  if (id_company) url += `?company=${id_company}`;
+
+  console.log('Url:', url);
+  const res = await axios.get(url);
   return res.data;
 };
 

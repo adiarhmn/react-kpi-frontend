@@ -1,7 +1,9 @@
 import { Button, RingProgress, Select, Table, UnstyledButton } from '@mantine/core';
-import { IconChevronRight, IconEye, IconUsers } from '@tabler/icons-react';
+import { IconChevronRight, IconEye } from '@tabler/icons-react';
 import { useState } from 'react';
 
+import { AllEmployeeCard, FemaleEmployeeCard, MaleEmployeeCard } from '../components';
+// TODO: Membuat Data Rekap Absensi Dinamis
 export const DashboardAdmin: React.FC = () => {
   const [ringHovered, setRingHovered] = useState<string | null>('Hadir 40');
   return (
@@ -114,32 +116,14 @@ export const DashboardAdmin: React.FC = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 ">
-            <div className="bg-slate-500 rounded-lg p-2 px-4 text-white shadow-md">
-              <div className="text-sm mb-1">Total Karyawan</div>
-              <div className="flex justify-between">
-                <IconUsers size={25} className="" />
-                <div className="text-xl font-black">200</div>
-              </div>
-            </div>
-            <div className="bg-rose-500 rounded-lg p-2 px-4 text-white shadow-md">
-              <div className="text-sm mb-1">Total Perempuan</div>
-              <div className="flex justify-between">
-                <IconUsers size={25} className="" />
-                <div className="text-xl font-black">200</div>
-              </div>
-            </div>
-            <div className="bg-blue-500 rounded-lg p-2 px-4 text-white shadow-md">
-              <div className="text-sm mb-1">Total Pria</div>
-              <div className="flex justify-between">
-                <IconUsers size={25} className="" />
-                <div className="text-xl font-black">200</div>
-              </div>
-            </div>
+            <AllEmployeeCard></AllEmployeeCard>
+            <MaleEmployeeCard></MaleEmployeeCard>
+            <FemaleEmployeeCard></FemaleEmployeeCard>
           </div>
         </section>
 
         <section className="bg-white shadow-lg p-3 rounded-lg">
-        <div className="grid lg:grid-cols-2">
+          <div className="grid lg:grid-cols-2">
             <div>
               <h2 className="font-bold">Daftar Pengajuan</h2>
               <div className="-mt-1 text-xs text-slate-400">
@@ -153,7 +137,7 @@ export const DashboardAdmin: React.FC = () => {
               defaultValue="Semua Pengajuan"
             />
           </div>
-          <div className='mt-3'>
+          <div className="mt-3">
             <Table withColumnBorders withTableBorder>
               <Table.Thead>
                 <Table.Tr>
@@ -170,8 +154,10 @@ export const DashboardAdmin: React.FC = () => {
                   <Table.Td>12-12-2021</Table.Td>
                   <Table.Td>Cuti</Table.Td>
                   <Table.Td>Menunggu Persetujuan</Table.Td>
-                  <Table.Td className='text-center'>
-                    <UnstyledButton><IconEye size={20} className='text-blue-600' /></UnstyledButton>
+                  <Table.Td className="text-center">
+                    <UnstyledButton>
+                      <IconEye size={20} className="text-blue-600" />
+                    </UnstyledButton>
                   </Table.Td>
                 </Table.Tr>
               </Table.Tbody>

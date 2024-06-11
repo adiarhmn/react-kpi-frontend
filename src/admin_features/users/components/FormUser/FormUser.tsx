@@ -76,10 +76,10 @@ export const FormUser: React.FC<FormUserProps> = ({ currentUser, loading, onSubm
             value: 'employee',
             label: 'Employee',
           },
-          {
-            value: 'superadmin',
-            label: 'Superadmin',
-          },
+          // {
+          //   value: 'superadmin',
+          //   label: 'Superadmin',
+          // },
           {
             value: 'supervisor',
             label: 'Supervisor',

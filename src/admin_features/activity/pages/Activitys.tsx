@@ -1,28 +1,40 @@
-import { Input, Table } from '@mantine/core';
-import { IconSearch } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { Button, Input } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconPencil, IconSearch } from '@tabler/icons-react';
+import { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { ActivitysType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
 
-import { useGetActivitys } from '../api';
+import { useGetActivityAlias } from '../api';
+import { TableActivitys } from '../components';
 
 export const Activitys: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
+  const { state } = useLocation();
   if (creds === null) navigate('/login');
-  const {
-    data: DataActivity,
-    error: errorActivity,
-    isLoading: loadingActivity,
-  } = useGetActivitys();
 
-  if (loadingActivity) {
+  const hasNotifiedRef = useRef(false);
+
+  useEffect(() => {
+    if (state?.success && !hasNotifiedRef.current) {
+      notifications.show({
+        message: state.success,
+        color: 'green',
+      });
+      hasNotifiedRef.current = true;
+    }
+  });
+
+  const { data: DataActivityAlias, isLoading: LoadingActivityAlias } = useGetActivityAlias(
+    creds?.company_id
+  );
+
+  if (LoadingActivityAlias) {
     return <div>Loading...</div>;
   }
-  if (errorActivity) {
-    return <div className="text-red-600 text-center my-20 font-bold">{errorActivity.message}</div>;
-  }
+
   return (
     <main>
       {/* Menampilkan Data Divisi */}
@@ -34,32 +46,20 @@ export const Activitys: React.FC = () => {
               Berikut daftar aktivitas karyawan pada hari ini
             </div>
           </div>
+          {DataActivityAlias.length > 0 && (
+            <Button
+              onClick={() => navigate('update')}
+              leftSection={<IconPencil size={14}></IconPencil>}
+            >
+              Update Aktivitas
+            </Button>
+          )}
         </div>
         <div className="flex gap-2">
           <Input placeholder="Cari..." leftSection={<IconSearch size={14}></IconSearch>}></Input>
         </div>
         <div className="mt-7">
-          <Table withColumnBorders withTableBorder>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th className="font-bold">Nama</Table.Th>
-                <Table.Th className="font-bold">Aktivitas</Table.Th>
-                <Table.Th className="font-bold">Deskripsi</Table.Th>
-                {/* <Table.Th className="font-bold">Aksi</Table.Th> */}
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {DataActivity.map((activity: ActivitysType, index: number) => {
-                return (
-                  <Table.Tr key={index}>
-                    <Table.Td>{activity?.attendance.employee?.name}</Table.Td>
-                    <Table.Td>{activity?.name}</Table.Td>
-                    <Table.Td>{activity?.description}</Table.Td>
-                  </Table.Tr>
-                );
-              })}
-            </Table.Tbody>
-          </Table>
+          <TableActivitys />
         </div>
       </section>
     </main>
