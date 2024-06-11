@@ -19,6 +19,7 @@ export const Division: React.FC = () => {
         color: 'green',
       });
       hasNotifiedRef.current = true;
+      navigate('.', { state: undefined });
     }
   }, [state, navigate]);
 
