@@ -2,24 +2,13 @@ import { Text } from '@mantine/core';
 import { IconMap2, IconUser } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { useEffect, useState } from 'react';
 
 import { EmployeeType } from '@/admin_features/types';
-import { useAuth } from '@/features/auth';
+type BiodataProps = {
+  employee: EmployeeType | undefined;
+};
 
-import { useGetEmployee } from '../api/Profile';
-
-export const BiodataInfo: React.FC = () => {
-  const { creds } = useAuth();
-  const [employee, setEmployee] = useState<EmployeeType>();
-  const { data } = useGetEmployee(creds?.employee_id);
-  useEffect(() => {
-    if (data) {
-      setEmployee(data);
-    }
-  }, [data]);
-
-  console.log('data employee : ', employee);
+export const BiodataInfo: React.FC<BiodataProps> = ({ employee }) => {
   return (
     <>
       <section className="bg-white mx-auto max-w-xs w-full mt-4 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
@@ -43,7 +32,7 @@ export const BiodataInfo: React.FC = () => {
           <div className="mt-2 gap-2 align-item-left">
             <Text size="xs">Pendidikan terakhir</Text>
             <Text size="xs" fw={700}>
-              -
+              {employee?.last_education != null ? employee?.last_education : '-'}
             </Text>
           </div>
         </div>

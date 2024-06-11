@@ -19,14 +19,12 @@ export const EduBackgroundAdd: React.FC = () => {
       jenjang: '',
       jurusan: '',
       namaSekolah: '',
-      tahunLulus: '',
-      tahunMasuk: '',
+      tahunLulus: new Date(),
+      tahunMasuk: new Date(),
       lulusanAsal: '',
     },
     validate: {
-      jenjang: (value) => (value === '' ? 'Jenjang tidak boleh kosong' : null),
-      tahunMasuk: (value) => (value === '' ? 'Tahun masuk tidak boleh kosong' : null),
-      tahunLulus: (value) => (value === '' ? 'Tahun lulus tidak boleh kosong' : null),
+      jenjang: (value) => (value == '' ? 'Jenjang tidak boleh kosong' : null),
     },
   });
 
@@ -81,10 +79,11 @@ export const EduBackgroundAdd: React.FC = () => {
             <Select
               label="Jenjang pendidikan"
               name="jenjang"
+              required
               data={['S2', 'S1/D4', 'D3', 'D2', 'D1', 'SMA/SMK', 'SMP', 'SD']}
               {...form.getInputProps('jenjang')}
             />
-            <TextInput label="Jurusan" name="jurusan" {...form.getInputProps('jurusan')} />
+            <TextInput required label="Jurusan" name="jurusan" {...form.getInputProps('jurusan')} />
             <TextInput
               label="Nama sekolah / Universitas"
               name="namaSekolah"

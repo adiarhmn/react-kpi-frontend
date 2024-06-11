@@ -4,7 +4,7 @@ import axios from 'axios';
 const BaseURL = import.meta.env.VITE_API_URL;
 
 const deleteEduBackground = async (id: number | undefined | null) => {
-  const response = await axios.delete(`${BaseURL}/employee_education/${id}`);
+  const response = await axios.delete(`${BaseURL}/employee-education/${id}`);
   return response.data;
 };
 
