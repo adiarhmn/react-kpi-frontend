@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import { Badge, Divider, Text } from '@mantine/core';
 import {
   IconCalendar,
@@ -20,9 +21,12 @@ import { MenuList } from '@/components/navigation';
 import { AttendanceType, ScheduleType, useGetAttendanceMonthly } from '@/features/attendance';
 import { useAuth } from '@/features/auth';
 import { ActivityCard } from '@/features/components';
+// eslint-disable-next-line no-restricted-imports
+import { useGetEmployee } from '@/features/employee/api/Profile';
 import { formatterDate } from '@/features/history';
 // eslint-disable-next-line no-restricted-imports
 import { useGetScheduleDaily } from '@/features/schedule/api';
+import { EmployeeType } from '@/admin_features/types';
 
 export const Home: React.FC = () => {
   const { creds } = useAuth();
@@ -48,9 +52,15 @@ export const Home: React.FC = () => {
     if (DataAttendance) {
       setAttendance(DataAttendance);
     }
-  }, [DataAttendance]);'
-  
-  
+  }, [DataAttendance]);
+
+  const [employee, setEmployee] = useState<EmployeeType>();
+  const { data: DataEmployee } = useGetEmployee(creds?.employee_id);
+  useEffect(() => {
+    if (DataEmployee) {
+      setEmployee(DataEmployee);
+    }
+  }, [DataEmployee]);
 
   return (
     <main>
@@ -61,7 +71,7 @@ export const Home: React.FC = () => {
           alt=""
         />
         <div style={{ fontSize: '25px' }} className="text-white font-bold relative z-10">
-          {creds?.username}
+          {employee?.name}
         </div>
         <div className="text-sm= font-semibold text-white">{creds?.role}</div>
 

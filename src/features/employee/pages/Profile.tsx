@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import {
   IconChevronRight,
   IconLogout,
@@ -9,10 +10,21 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
+import { EmployeeType } from '@/admin_features/types';
+import { useGetEmployee } from '../api/Profile';
+import { useEffect, useState } from 'react';
 
 export const Profile: React.FC = () => {
   const { creds, logout } = useAuth();
   const navigate = useNavigate();
+
+  const [employee, setEmployee] = useState<EmployeeType>();
+  const { data: DataEmployee } = useGetEmployee(creds?.employee_id);
+  useEffect(() => {
+    if (DataEmployee) {
+      setEmployee(DataEmployee);
+    }
+  }, [DataEmployee]);
 
   return (
     <main className="py-12">
@@ -22,7 +34,7 @@ export const Profile: React.FC = () => {
           <IconUser className="w-10 h-10" />
         </div>
         <div className="font-bold text-lg">
-          {creds?.username}
+          {employee?.name}
           <div className="text-sm text-gray-600 flex gap-1 items-center">
             <IconBriefcase size={20} /> <span className="font-semibold">{creds?.role}</span>
           </div>
