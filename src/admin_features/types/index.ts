@@ -48,6 +48,7 @@ export type EmployeeType = {
   division_id: number;
   user: UserType;
   division: DivisionType;
+  EmployeeLocation: EmployeeLocation[];
 };
 
 export type AttendanceType = {
@@ -88,4 +89,23 @@ export type AttendanceLocationsType = {
   longitude: string;
   company_id: number;
   id?: number;
+};
+
+export type ScheduleAttendanceType = {
+  id: number;
+  Attendance: AttendanceType[];
+  attendance_place: string;
+  attendance_status: string;
+  date: string;
+  employee_schedule: EmployeeScheduleType;
+};
+
+type EmployeeScheduleType = {
+  id: number;
+  employee: EmployeeType;
+};
+
+type EmployeeLocation = {
+  id: number;
+  emplpoyee_id: number;
 };

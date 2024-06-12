@@ -1,9 +1,11 @@
 /* eslint-disable linebreak-style */
-import { Button, Table } from '@mantine/core';
+import { Badge, Button, Table } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 import { IconArrowUpRight } from '@tabler/icons-react';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { ScheduleAttendanceType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
 import { formatDateToString } from '@/utils/format';
 
@@ -13,26 +15,33 @@ export const Attendance: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   if (!creds) navigate('/login');
-  const DateNow = new Date();
+
+  const [date, setDate] = useState<Date>(new Date());
 
   const { data: DataAttendances, isLoading: LoadingGetAttendance } = useGetAttendance(
-    formatDateToString(DateNow.toString()),
+    formatDateToString(date.toString()),
     creds?.company_id
   );
-
-  useEffect(() => {
-    console.log(DataAttendances);
-  }, [DataAttendances]);
 
   if (LoadingGetAttendance) return <div>Loading...</div>;
   console.log(DataAttendances);
   return (
     <main>
       <section className="bg-white rounded-lg shadow-lg p-5">
-        <div className="grid lg:grid-cols-2">
-          <div>
-            <h1 className="font-semibold">Presensi Karyawan</h1>
-            <div className="-mt-1 text-xs text-slate-400 mb-2">Berikut data presensi karyawan</div>
+        <div className="grid lg:grid-cols-2 mb-5">
+          <div className="mb-2">
+            <div>
+              <h1 className="font-semibold">Presensi Karyawan</h1>
+              <div className="-mt-1 text-xs text-slate-400 mb-2">
+                Berikut data presensi karyawan
+              </div>
+            </div>
+            <DatePickerInput
+              className="max-w-56"
+              placeholder="Pick date"
+              value={date}
+              onChange={(value) => setDate(value as Date)}
+            />
           </div>
           <div>
             <Button
@@ -52,10 +61,11 @@ export const Attendance: React.FC = () => {
                 <Table.Th className="font-semibold">Check Out</Table.Th>
                 <Table.Th className="font-semibold">Shift</Table.Th> */}
                 <Table.Th className="font-semibold">Status Kehadiran</Table.Th>
+                <Table.Th className="font-semibold">Keterangan</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {DataAttendances?.map((item: any) => (
+              {DataAttendances?.map((item: ScheduleAttendanceType) => (
                 <Table.Tr key={item.id}>
                   <Table.Td>{item.employee_schedule.employee.name}</Table.Td>
                   {/* <Table.Td>
@@ -71,7 +81,16 @@ export const Attendance: React.FC = () => {
                     })}
                   </Table.Td>
                   <Table.Td>{item.shift_in + '-' + item.shift_out}</Table.Td> */}
-                  <Table.Td>{item.attendance_status}</Table.Td>
+                  <Table.Td>
+                    {item.Attendance.length > 0 ? 'Hadir' : item.attendance_status}
+                  </Table.Td>
+                  <Table.Td>
+                    {item.Attendance.length > 0 ? (
+                      <Badge color="red">{item.Attendance[0].status}</Badge>
+                    ) : (
+                      '-'
+                    )}
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

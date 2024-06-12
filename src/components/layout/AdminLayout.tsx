@@ -31,8 +31,8 @@ const MenuDataMaster = [
   { title: 'Divisi', href: '/division', icon: IconBuildingEstate },
   { title: 'Shift', href: '/shift', icon: IconClockHour1 },
   { title: 'User', href: '/users', icon: IconUsersGroup },
-  { title: 'Karyawan', href: '/employees', icon: IconBriefcase },
   { title: 'Lokasi', href: '/locations', icon: IconMap2 },
+  { title: 'Karyawan', href: '/employees', icon: IconBriefcase },
 ];
 
 const MenuAbsensi = [

@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
+import { ActionIcon, Button, Indicator, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconMapPin, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -93,19 +93,27 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
                 <Table.Td>{employee?.division.division_name}</Table.Td>
                 <Table.Td>{employee?.user.username}</Table.Td>
                 <Table.Td>{employee?.user.role}</Table.Td>
-                <Table.Td className="flex gap-2 items-center justify-center">
-                  <ActionIcon color="yellow">
-                    <IconPencil size={14} />
-                  </ActionIcon>
-                  <ActionIcon onClick={() => openDeleteModal(employee)} color="red">
-                    <IconTrash size={14} />
-                  </ActionIcon>
-                  <ActionIcon onClick={() => handleClickMap(employee)} color="green">
-                    <IconMapPin size={14} />
-                  </ActionIcon>
-                  {/* <UnstyledButton>
-                    <IconInfoCircle className="text-blue-600" size={20} />
-                  </UnstyledButton> */}
+                <Table.Td>
+                  <div className="flex gap-2 items-center justify-center pt-1">
+                    <ActionIcon color="yellow">
+                      <IconPencil size={14} />
+                    </ActionIcon>
+                    <ActionIcon onClick={() => openDeleteModal(employee)} color="red">
+                      <IconTrash size={14} />
+                    </ActionIcon>
+                    <Indicator
+                      processing={employee.EmployeeLocation.length < 1}
+                      label={
+                        <div style={{ paddingTop: 2 }}>{employee.EmployeeLocation.length}</div>
+                      }
+                      color={employee.EmployeeLocation.length < 1 ? 'red' : 'blue'}
+                      size={14}
+                    >
+                      <ActionIcon onClick={() => handleClickMap(employee)} color="green">
+                        <IconMapPin size={14} />
+                      </ActionIcon>
+                    </Indicator>
+                  </div>
                 </Table.Td>
               </Table.Tr>
             );
