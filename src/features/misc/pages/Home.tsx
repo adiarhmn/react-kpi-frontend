@@ -48,7 +48,9 @@ export const Home: React.FC = () => {
     if (DataAttendance) {
       setAttendance(DataAttendance);
     }
-  }, [DataAttendance]);
+  }, [DataAttendance]);'
+  
+  
 
   return (
     <main>
