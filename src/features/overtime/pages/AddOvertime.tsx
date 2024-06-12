@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-imports */
+/* eslint-disable import/order */
 import { Badge, Button, Divider, Image, Modal, Text, Textarea, Tooltip } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
@@ -13,29 +15,29 @@ import {
   useGeoLocation,
   useGetEmployeeLocation,
 } from '@/features/attendance';
-// eslint-disable-next-line no-restricted-imports
 import { useGetAttendance } from '@/features/attendance/api/getAttendance';
 import { useAuth } from '@/features/auth';
-// eslint-disable-next-line no-restricted-imports
 import { formatterDate } from '@/features/history/api/getAbsence';
 
 import { useCreateOvertime } from '../api/createOvertime';
 import { useUpdateOvertime } from '../api/updateOvertime';
 import { OvertimeType } from '../types';
+import { useGetOvertimeDaily } from '../api/getOvertime';
 
 export const AddOvertime: React.FC = () => {
-  const [overtimeStatus, setOvertimeStatus] = useState<boolean>(() => {
-    const savedState = localStorage.getItem('overtimeStatus');
-    return savedState ? JSON.parse(savedState) : false;
-  });
-
-  useEffect(() => {
-    localStorage.setItem('overtimeStatus', JSON.stringify(overtimeStatus));
-  }, [overtimeStatus]);
-  const status = localStorage.getItem('isCheckedIn');
-
   const { creds } = useAuth();
   const [overtime, setOvertime] = useState<OvertimeType>();
+  const { data: DataOvertime, refetch: RefetchOvertime } = useGetOvertimeDaily(
+    creds?.employee_id,
+    formatterDate(new Date(), 'yyyy-MM-dd')
+  );
+  useEffect(() => {
+    if (DataOvertime) {
+      setOvertime(DataOvertime);
+    }
+  }, [DataOvertime]);
+
+  console.log('data overtimeeeeeeeeee : ', overtime);
 
   const form = useForm({
     validateInputOnChange: true,
@@ -69,6 +71,7 @@ export const AddOvertime: React.FC = () => {
   }, []);
 
   //[GET LOCATION OUTLETS]
+  // const [locationOutlet, setLocationOutlet] = useState(true);
   const [employeeLocation, setEmployeeLocation] = useState<EmployeeLocationType[]>([]);
   const { data: DataEmployeeLocation } = useGetEmployeeLocation(creds?.employee_id);
   useEffect(() => {
@@ -79,9 +82,8 @@ export const AddOvertime: React.FC = () => {
   // [END GET LOCATION OUTLETS]
 
   // [All About Location 🤯]
-  const location = useGeoLocation();
   const [statusLocation, setStatusLocation] = useState(false);
-
+  const location = useGeoLocation();
   function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const R = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -133,8 +135,7 @@ export const AddOvertime: React.FC = () => {
       // [PENTING! 🥶🥶]
       const radius = 120; // Jarak dalam meter
       // [!!!!!!!!!]
-
-      if (markers.length > 0) {
+      if (markers.length > 1) {
         const closestMarker = markers.reduce((prev, current) => {
           return prev.distance < current.distance ? prev : current;
         });
@@ -144,15 +145,16 @@ export const AddOvertime: React.FC = () => {
         } else {
           setStatusLocation(false);
         }
-
         // setAttendanceLocationId(closestMarker.attendance_location_id);
-      } else {
+      } else if (markers.length == 1) {
         if (markers[0].distance <= radius) {
           setStatusLocation(true);
         } else {
           setStatusLocation(false);
         }
       }
+    } else {
+      // setLocationOutlet(false);
     }
   }, [location, employeeLocation]);
 
@@ -182,10 +184,8 @@ export const AddOvertime: React.FC = () => {
 
     await mutationAddOvertime.mutateAsync(overtimeData, {
       onSuccess: (data) => {
-        console.log('Success:', data);
-
-        setOvertime(data.data);
-        setOvertimeStatus(true);
+        console.log('Sukses : ', data);
+        RefetchOvertime();
         close();
       },
     });
@@ -203,14 +203,11 @@ export const AddOvertime: React.FC = () => {
 
     await mutationEndOvertime.mutateAsync(attendanceCheckOut, {
       onSuccess: (data) => {
-        console.log('Success:', data);
-        setOvertimeStatus(false);
-        // console.log('Sesudah update  :', localStorage.getItem('isCheckIn'));
+        console.log('Sukses : ', data);
+        RefetchOvertime();
       },
     });
   };
-  // [End Button Stop Overtime]
-
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -241,7 +238,6 @@ export const AddOvertime: React.FC = () => {
             key={location.loaded ? 'loaded' : 'notLoaded'}
             style={{ height: '33vh' }}
             center={[location.coordinates?.latitude, location.coordinates?.longitude]}
-            // center={[-3.753033208345266, 114.76683450763974]}
             zoom={15}
             scrollWheelZoom={true}
           >
@@ -304,22 +300,23 @@ export const AddOvertime: React.FC = () => {
                 </Text>
               </div>
               <div className=" col-span-6 text-right -mt-6">
-                {overtimeStatus != true ? (
+                {overtime?.start_time == null ? (
                   <Button
                     onClick={open}
                     disabled={
-                      status == 'true' || attendance == undefined || statusLocation == false
+                      attendance == undefined ||
+                      statusLocation == false ||
+                      overtime?.end_time != null
                     }
                     className="shadow-lg"
                     style={{ borderRadius: '15px', width: '110px' }}
                     size="sm"
-                    color={status != 'true' ? 'green' : 'grey'}
+                    color={attendance != undefined ? 'green' : 'grey'}
                   >
                     Mulai
                   </Button>
-                ) : (
+                ) : overtime?.end_time == null ? (
                   <form onSubmit={handleEndOvertime}>
-                    {' '}
                     <Button
                       type="submit"
                       className="shadow-lg"
@@ -330,6 +327,16 @@ export const AddOvertime: React.FC = () => {
                       Selesai
                     </Button>
                   </form>
+                ) : (
+                  <Button
+                    disabled
+                    className="shadow-lg"
+                    style={{ borderRadius: '15px', width: '140px' }}
+                    size="sm"
+                    color="red"
+                  >
+                    Sudah lembur
+                  </Button>
                 )}
               </div>
             </div>
@@ -364,7 +371,7 @@ export const AddOvertime: React.FC = () => {
             <div className="ms-2 -mb-2">
               <Text size="xs">Lembur mulai</Text>
               <Text size="sm" fw={700}>
-                {overtime != undefined
+                {overtime?.start_time != undefined
                   ? formatterDate(new Date(overtime.start_time), 'HH:mm')
                   : '-- -- '}
               </Text>

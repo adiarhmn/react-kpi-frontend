@@ -39,7 +39,7 @@ export const MenuList: React.FC<Props> = ({ navigations }) => {
   const id = useId();
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto overflow-y-hidden pb-3">
       <div className="w-screen grid grid-cols-5 grid-rows-2 mx-2 gap-y-4">
         {navigations.map((nav, i) => (
           <MenuItem key={`${id}_${i}`} {...nav} />

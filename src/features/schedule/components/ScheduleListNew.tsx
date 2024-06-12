@@ -34,14 +34,12 @@ export const ScheduleListNew: React.FC<ScheduleProps> = ({ month, shift, status,
   );
 
   useEffect(() => {
-    // console.log('effect jalan');
     if (data) {
       setSchedule(data);
     }
   }, [data]);
 
   useEffect(() => {
-    // console.log('effect jalan');
     const newParams = {
       employeeId: creds?.employee_id,
       month: month.getMonth() + 1,
@@ -53,8 +51,6 @@ export const ScheduleListNew: React.FC<ScheduleProps> = ({ month, shift, status,
   }, [modalState, month]);
 
   const elements = [schedules];
-
-  console.log('data schedules : ', schedules);
 
   const rows = schedules.map((element) => (
     <Table.Tr key={element.id}>

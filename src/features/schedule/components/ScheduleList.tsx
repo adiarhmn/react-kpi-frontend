@@ -36,14 +36,12 @@ export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, mo
   );
 
   useEffect(() => {
-    // console.log('effect jalan');
     if (data) {
       setSchedule(data);
     }
   }, [data]);
 
   useEffect(() => {
-    // console.log('effect jalan');
     const newParams = {
       employeeId: creds?.employee_id,
       month: month.getMonth() + 1,
@@ -70,12 +68,6 @@ export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, mo
   if (error) {
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
-
-  // console.log('Data schedule :', schedules);
-  // console.log('Data month :', month);
-  // console.log('Data shift :', shift);
-  // console.log('Data status :', status);
-  // console.log('Modal condition : ', modalState);
 
   return (
     <div className="text-center">

@@ -5,9 +5,13 @@ import { Icon } from 'leaflet';
 import React, { useEffect, useState } from 'react';
 import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 
-import { ScheduleType, useCreateAttendance, useGeoLocation } from '@/features/attendance';
+import {
+  AttendanceType,
+  ScheduleType,
+  useGeoLocation,
+  useGetAttendance,
+} from '@/features/attendance';
 import { useAuth } from '@/features/auth';
 import { formatterDate } from '@/features/history';
 // eslint-disable-next-line no-restricted-imports
@@ -26,7 +30,17 @@ export const AddLateRequest: React.FC = () => {
       setSchedule(data[0]);
     }
   }, [data]);
-  // console.log('Data Schedule : ', schedule?.shift.shift_name);
+
+  const [attendance, setAttendance] = useState<AttendanceType>();
+  const { data: DataAttendance } = useGetAttendance(
+    creds?.employee_id,
+    formatterDate(new Date(), 'yyyy-MM-dd')
+  );
+  useEffect(() => {
+    if (DataAttendance) {
+      setAttendance(DataAttendance);
+    }
+  }, [DataAttendance]);
 
   // [All About Location 🤯]
   const location = useGeoLocation();
@@ -48,21 +62,7 @@ export const AddLateRequest: React.FC = () => {
       reason: (value) => (value === '' ? 'Alasan pengajuan harus diisi' : null),
     },
   });
-
-  // console.log(form.getInputProps('nameShift'));
   // [END FORM PENGAJUAN]
-
-  // [SET LOCALSTORAGE STATUS CHECKIN]
-  const [isCheckedIn, setIsCheckedIn] = useState<boolean>(() => {
-    const savedState = localStorage.getItem('isCheckedIn');
-    return savedState ? JSON.parse(savedState) : false;
-  });
-  useEffect(() => {
-    localStorage.setItem('isCheckedIn', JSON.stringify(isCheckedIn));
-  }, [isCheckedIn]);
-  // [END SET LOCALSTORAGE]
-
-  console.log('Status cekin sebelum submit : ', isCheckedIn);
 
   // [SUBMIT PENGAJUAN]
   const mutationAddLateRequest = useCreateLateRequest();
@@ -70,7 +70,7 @@ export const AddLateRequest: React.FC = () => {
     event.preventDefault();
 
     const lateRequestData = {
-      employee_id: creds?.id,
+      employee_id: creds?.employee_id,
       reason: form.values.reason,
       attendance_request_lat: location.coordinates?.latitude.toString(),
       attendance_request_lon: location.coordinates?.longitude.toString(),
@@ -86,7 +86,6 @@ export const AddLateRequest: React.FC = () => {
   };
   // [END SUBMIT PENGAJUAN]
 
-  console.log('status checkin : ', isCheckedIn);
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -167,12 +166,16 @@ export const AddLateRequest: React.FC = () => {
             </div>
             <div className="mb-2 mt-3">
               <Button
-                disabled={isCheckedIn}
+                disabled={attendance?.check_in != null}
                 type="submit"
                 fullWidth
                 rightSection={<IconMailForward size={'20px'} />}
               >
-                Ajukan
+                {attendance?.check_in == null
+                  ? 'Ajukan'
+                  : attendance?.check_out == null
+                    ? 'Anda sudah Check-In'
+                    : 'Anda sudah absen'}
               </Button>
             </div>
           </form>

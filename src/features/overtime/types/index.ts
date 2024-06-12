@@ -7,4 +7,5 @@ export type OvertimeType = {
   attendance_id: number;
   detail: string;
   attendance: AttendanceType;
+  status: string;
 };

@@ -20,12 +20,33 @@
   }
 
   .bar-scroll-blue::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Warna track scrollbar */
+    background: #f1f1f1;
+    width: 20%; /* Warna track scrollbar */
   }
 
   .bar-scroll-blue::-webkit-scrollbar-thumb {
     background: #3b82f6; /* Warna thumb scrollbar */
     border-radius: 6px;
+  }
+
+  .bar-scroll-menu {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 20px 0px;
+  }
+  .bar-scroll-menu::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  .bar-scroll-menu::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    margin-top: 10px; /* Menambahkan margin atas */
+    margin-bottom: 10px; /* Menambahkan margin bawah */
+  }
+
+  .bar-scroll-menu::-webkit-scrollbar-thumb {
+    background: #3b82f6;
+    border-radius: 10px;
   }
 
   body {

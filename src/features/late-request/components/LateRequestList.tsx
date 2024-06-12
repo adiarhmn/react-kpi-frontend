@@ -20,8 +20,6 @@ export const LateRequestList: React.FC = () => {
     }
   }, [DataAttendanceRequest]);
 
-  console.log('Data attendanceRequest : ', attendanceRequest);
-
   if (LoadingAttendanceRequest) {
     return (
       <div className="w-full col-span-12">

@@ -1,20 +1,13 @@
+/* eslint-disable import/order */
 import { Button, Text, Loader, Modal, Input, Divider } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCalendarEvent, IconMailForward, IconMap2, IconPlus } from '@tabler/icons-react';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
-// eslint-disable-next-line import/order
 import { Icon } from 'leaflet';
-// eslint-disable-next-line import/order
 import { useEffect, useState } from 'react';
-// import withReactContent from 'sweetalert2-react-content';
-
 import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-
 import { useAuth } from '@/features/auth';
 import { formatterDate } from '@/features/history';
-
 import {
   useCreateActivity,
   useGeoLocation,
@@ -24,36 +17,30 @@ import {
 } from '../api';
 import { useGetActivityDetail, useGetActivityAlias } from '../api/getActivity';
 import { CardAttendance } from '../components';
-import { ActivityDetailType, AttendanceType, EmployeeLocationType, ScheduleType } from '../types';
+import { ActivityDetailType, AttendanceType, EmployeeLocationType } from '../types';
 
 export const Attendance: React.FC = () => {
-  // const [schedule, setSchedule] = useState<ScheduleType[]>([]);
   const { creds } = useAuth();
   const employee_id = creds?.employee_id;
-  const [isCheckedIn, setIsCheckedIn] = useState<boolean>(() => {
-    const savedState = localStorage.getItem('isCheckedIn');
-    return savedState ? JSON.parse(savedState) : false;
-  });
-  useEffect(() => {
-    localStorage.setItem('isCheckedIn', JSON.stringify(isCheckedIn));
-  }, [isCheckedIn]);
-  // const [status, setStatus] = useState<string | null>(localStorage.getItem('isCheckedIn'));
 
   const [opened, { open, close }] = useDisclosure(false);
-  const date = new Date();
-  const dateToday = format(date, 'yyyy-MM-dd', { locale: id });
 
   const [attendance, setAttendance] = useState<AttendanceType>();
-  const { data: dataAttendance } = useGetAttendance(employee_id, dateToday);
+  const { data: dataAttendance, refetch: RefetchAttendance } = useGetAttendance(
+    employee_id,
+    formatterDate(new Date(), 'yyyy-MM-dd')
+  );
   useEffect(() => {
     if (dataAttendance) {
-      setAttendance(dataAttendance[0]);
+      setAttendance(dataAttendance);
     }
   }, [dataAttendance]);
 
-  console.log('Data Attendance : ', attendance);
+  const { data, error, isLoading } = useGetSchedule(
+    employee_id,
+    formatterDate(new Date(), 'yyyy-MM-dd')
+  );
 
-  const { data, error, isLoading } = useGetSchedule(employee_id, dateToday);
   const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
   const { data: dataActivity, refetch } = useGetActivityDetail(
     creds?.employee_id,
@@ -64,7 +51,6 @@ export const Attendance: React.FC = () => {
       setActivityDetail(dataActivity);
     }
   }, [dataActivity]);
-  // console.log('Data schedule', data);
 
   //[GET LOCATION OUTLETS]
   const [employeeLocation, setEmployeeLocation] = useState<EmployeeLocationType[]>([]);
@@ -77,7 +63,6 @@ export const Attendance: React.FC = () => {
     }
   }, [DataEmployeeLocation]);
 
-  console.log('Data employee_location : ', employeeLocation);
   // [END GET LOCATION OUTLETS]
 
   // [All About Location 🤯]
@@ -131,13 +116,12 @@ export const Attendance: React.FC = () => {
       }));
 
       setMarkers(markers);
-      console.log('Lokasi', markers);
 
       // [PENTING! 🥶🥶]
       const radius = 120; // Jarak dalam meter
       // [!!!!!!!!!]
 
-      if (markers.length > 0) {
+      if (markers.length > 1) {
         const closestMarker = markers.reduce((prev, current) => {
           return prev.distance < current.distance ? prev : current;
         });
@@ -149,10 +133,6 @@ export const Attendance: React.FC = () => {
         }
 
         setAttendanceLocationId(closestMarker.attendance_location_id);
-
-        console.log(
-          `Closest marker is at ${closestMarker.popUp} with a distance of ${closestMarker.distance} meters`
-        );
       }
 
       if (markers.length == 1) {
@@ -164,11 +144,8 @@ export const Attendance: React.FC = () => {
       } else {
         console.log('Error');
       }
-
-      console.log('Markers : ', markers);
     }
   }, [location, employeeLocation]);
-  console.log('Id lokasi terdekat : ', attendanceLocationId);
 
   const myIcon: any = new Icon({
     iconUrl: '/images/my-icon.svg',
@@ -265,7 +242,7 @@ export const Attendance: React.FC = () => {
     );
   }
 
-  if (isLoading) {
+  if (LoadingEmployeeLocation) {
     return (
       <div className="w-full col-span-12">
         <section className="min-h-96 flex flex-col items-center justify-center mt-10">
@@ -276,7 +253,7 @@ export const Attendance: React.FC = () => {
     );
   }
 
-  if (LoadingEmployeeLocation) {
+  if (isLoading) {
     return (
       <div className="w-full col-span-12">
         <section className="min-h-96 flex flex-col items-center justify-center mt-10">
@@ -293,14 +270,23 @@ export const Attendance: React.FC = () => {
 
   const dataSchedule = data;
 
-  console.log('Data schedule :', dataSchedule);
   return (
     <main className="min-h-96 relative">
-      {attendanceLocationId == undefined ? (
+      {employeeLocation.length == 0 ? (
         <div className="w-full col-span-12">
+          <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
+
           <section className="min-h-96 flex flex-col items-center justify-center mt-10">
-            <Loader size={50} />
-            <span className="font-bold text-slate-400 text-xl mt-10">Memuat lokasi absen...</span>
+            <img
+              className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+              src="/images/blank-canvas.svg"
+              alt=""
+            />
+            <span className="font-bold text-slate-400 text-2xl mt-3">Oops!</span>
+            <span className="font-bold text-slate-400 text-base">
+              Lokasi absen anda belum ditentukan
+            </span>
+            <span className="text-slate-400 text-sm">Harap hubungi admin</span>
           </section>
         </div>
       ) : (
@@ -363,20 +349,22 @@ export const Attendance: React.FC = () => {
           {/* // Absen card */}
           <CardAttendance
             schedule={dataSchedule[0]}
-            setIsCheckIn={setIsCheckedIn}
-            isCheckedIn={isCheckedIn}
+            refetchAttendance={RefetchAttendance}
+            attendance={attendance}
             long={location.coordinates?.longitude}
             lat={location.coordinates?.latitude}
             statusLocation={statusLocation}
             attendance_location_id={attendanceLocationId}
+            employee_location={employeeLocation}
           />
           {/* // End absen card */}
+
           {/* // Tugas card */}
           <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
             <div className="flex justify-between text-xs items-center p-2">
               <span className="text-base font-bold text-blue-700">Kegiatan hari ini</span>
               <Button
-                disabled={isCheckedIn == false}
+                disabled={attendance?.check_in == null || attendance?.check_out != null}
                 onClick={open}
                 className="shadow-sm me-1"
                 size="xs"
@@ -406,7 +394,7 @@ export const Attendance: React.FC = () => {
                                   <Text size="xs" fw={700}>
                                     {activityAlias[0][`cs${i + 1}_name`]}
                                   </Text>
-                                  <Text style={{ textAlign: 'justify' }} truncate="end" size="sm">
+                                  <Text style={{ textAlign: 'left' }} size="xs">
                                     {activity[`custom${i + 1}`]}
                                   </Text>
                                 </div>
@@ -414,7 +402,7 @@ export const Attendance: React.FC = () => {
                           )
                         : ''}
                     </div>
-                    <Divider size={'xs'} className="mt-7" />
+                    <Divider size={'xs'} className="mt-4" />
                   </section>
                 ))
               ) : (

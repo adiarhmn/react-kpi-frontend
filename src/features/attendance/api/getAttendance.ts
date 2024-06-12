@@ -5,7 +5,7 @@ const BaseURL = import.meta.env.VITE_API_URL;
 
 export async function getAttendance(employee_id: number | undefined, date: string) {
   const res = await axios.get(`${BaseURL}/attendance?employee=${employee_id}&date=${date}`);
-  return res.data.data;
+  return res.data.data[0] || {};
 }
 
 export const useGetAttendance = (employee_id: number | undefined, date: string) => {

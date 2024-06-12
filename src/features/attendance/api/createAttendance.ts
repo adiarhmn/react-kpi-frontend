@@ -8,7 +8,7 @@ type AttendanceDataPost = {
   employee_id?: number | null;
   attendance_lat: string;
   attendance_lon: string;
-  attendance_location_id: number | null;
+  attendance_location_id?: number | null;
   company_id?: number;
 };
 
