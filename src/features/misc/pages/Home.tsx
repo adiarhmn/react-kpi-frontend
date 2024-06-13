@@ -13,6 +13,7 @@ import {
   IconFileDollar,
   IconUsersGroup,
   IconClock,
+  IconFileText,
 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -114,71 +115,125 @@ export const Home: React.FC = () => {
 
       {/* Menu List => Berisi daftar menu pada sistem */}
       <section className="px-7 mt-5 mb-7">
-        <MenuList
-          navigations={[
-            {
-              title: 'Kehadiran',
-              href: '/info-attendance',
-              icon: IconFingerprint,
-              color: 'bg-blue-600',
-            },
-            {
-              title: 'Jadwal',
-              href: '/schedule',
-              icon: IconCalendar,
-              color: 'bg-blue-600',
-            },
-            creds?.role == 'supervisor'
-              ? {
-                  title: 'Divisi',
-                  href: '/absence',
-                  icon: IconUsersGroup,
-                  color: 'bg-blue-600',
-                }
-              : {
-                  title: 'Izin',
-                  href: '/absence',
-                  icon: IconFileTime,
-                  color: 'bg-blue-600',
-                },
-            {
-              title: 'Cuti',
-              href: '/paid-leave',
-              icon: IconLuggage,
-              color: 'bg-blue-600',
-            },
-            {
-              title: 'Testing',
-              href: '/test',
-              icon: IconClock,
-              color: 'bg-blue-600',
-            },
-            {
-              title: 'Pengajuan',
-              href: '/late-request',
-              icon: IconClipboardText,
-              color: 'bg-blue-600',
-            },
-            {
-              title: 'Lembur',
-              href: '/overtime',
-              icon: IconClock24,
-              color: 'bg-blue-600',
-            },
-            {
-              title: 'Slip Gaji',
-              href: '/development',
-              icon: IconFileDollar,
-              color: 'bg-blue-600',
-            },
-            {
-              title: 'Berita',
-              href: '/development',
-              icon: IconNews,
-              color: 'bg-blue-600',
-            },
-          ]}
-        />
+        {creds?.role == 'supervisor' ? (
+          <MenuList
+            navigations={[
+              {
+                title: 'Kehadiran',
+                href: '/info-attendance',
+                icon: IconFingerprint,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Jadwal',
+                href: '/schedule',
+                icon: IconCalendar,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Izin',
+                href: '/absence',
+                icon: IconFileTime,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Cuti',
+                href: '/paid-leave',
+                icon: IconLuggage,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Testing',
+                href: '/test',
+                icon: IconClock,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Pengajuan',
+                href: '/late-request',
+                icon: IconClipboardText,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Lembur',
+                href: '/overtime',
+                icon: IconClock24,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Permintaan',
+                href: '/employee-request',
+                icon: IconFileText,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Berita',
+                href: '/development',
+                icon: IconNews,
+                color: 'bg-blue-600',
+              },
+            ]}
+          />
+        ) : (
+          <MenuList
+            navigations={[
+              {
+                title: 'Kehadiran',
+                href: '/info-attendance',
+                icon: IconFingerprint,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Jadwal',
+                href: '/schedule',
+                icon: IconCalendar,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Izin',
+                href: '/absence',
+                icon: IconFileTime,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Cuti',
+                href: '/paid-leave',
+                icon: IconLuggage,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Testing',
+                href: '/test',
+                icon: IconClock,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Pengajuan',
+                href: '/late-request',
+                icon: IconClipboardText,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Lembur',
+                href: '/overtime',
+                icon: IconClock24,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Slip Gaji',
+                href: '/development',
+                icon: IconFileDollar,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Berita',
+                href: '/development',
+                icon: IconNews,
+                color: 'bg-blue-600',
+              },
+            ]}
+          />
+        )}
       </section>
 
       <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-5">
