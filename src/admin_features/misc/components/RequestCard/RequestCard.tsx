@@ -1,9 +1,12 @@
-import { Table, UnstyledButton } from '@mantine/core';
-import { IconEye } from '@tabler/icons-react';
+import { ActionIcon, Button, Table, UnstyledButton, Modal } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconEye, IconCheck } from '@tabler/icons-react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetAttendanceReq } from '@/admin_features/attendance/api';
-import { useGetRequest } from '@/admin_features/permission/api';
+import { useGetRequest, usePutRequest } from '@/admin_features/permission/api';
+import { RequestsType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
 import { formatDateToString } from '@/utils/format';
 
@@ -16,20 +19,41 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
   if (!creds) navigate('/login');
 
   const date = formatDateToString(new Date().toDateString());
-
-  console.log(date);
+  const MutationUpdateRequest = usePutRequest();
+  const [opened, { open, close }] = useDisclosure(false);
+  const [DataRequest, setDataRequest] = useState<RequestsType>();
 
   const typeReq = typeRequest === 'Semua Pengajuan' ? undefined : typeRequest;
-  const { data: DataRequest, isLoading: LoadRequest } = useGetRequest(
-    typeReq,
-    date,
-    creds?.company_id
-  );
+  const {
+    data: DataRequestList,
+    isLoading: LoadRequest,
+    refetch,
+  } = useGetRequest(typeReq, date, creds?.company_id);
 
   const { data: AttendanceReq, isLoading: LoadAttendance } = useGetAttendanceReq(
     date,
     creds?.company_id
   );
+
+  const HandleUpdateRequest = async () => {
+    if (!DataRequest) return console.log('Data Request Not Found');
+
+    const DataPut = {
+      ...DataRequest,
+      status: 'Disetujui',
+    };
+
+    await MutationUpdateRequest.mutateAsync(DataPut, {
+      onSuccess: () => {
+        console.log('Success');
+        refetch();
+      },
+      onError: (error) => {
+        console.log('Error :', error);
+      },
+    });
+    close();
+  };
 
   if (LoadRequest || LoadAttendance) return <div>Loading...</div>;
   console.log('DataRequest -->', AttendanceReq);
@@ -48,7 +72,7 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
         </Table.Thead>
         <Table.Tbody>
           {typeReq == 'Cuti' || typeReq == 'Izin' || typeReq == 'Sakit'
-            ? DataRequest.map((request: any, index: number) => (
+            ? DataRequestList.map((request: any, index: number) => (
                 <Table.Tr key={index}>
                   <Table.Td>{request.employee.name}</Table.Td>
                   <Table.Td>{formatDateToString(request.created_at)}</Table.Td>
@@ -56,14 +80,22 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
                   <Table.Td>{request.description}</Table.Td>
                   <Table.Td>{request.status}</Table.Td>
                   <Table.Td className="text-center">
-                    <UnstyledButton>
-                      <IconEye size={20} className="text-blue-600" />
-                    </UnstyledButton>
+                    <ActionIcon
+                      onClick={() => {
+                        setDataRequest(request);
+                        open();
+                      }}
+                      color="green"
+                      disabled={request.status == 'Belum Disetujui' ? false : true}
+                    >
+                      <IconCheck size={14} />
+                    </ActionIcon>
                   </Table.Td>
                 </Table.Tr>
               ))
             : ''}
 
+          {/* TODO: APROVAL UNTUK ABSENSI DAN LEMBUR */}
           {typeReq == 'Absensi'
             ? AttendanceReq.map((request: any, index: number) => (
                 <Table.Tr key={index}>
@@ -82,6 +114,35 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
             : ''}
         </Table.Tbody>
       </Table>
+
+      <Modal opened={opened} onClose={close} title="Konfirmasi">
+        <div>
+          <p className="text-sm font-semibold">Apakah anda yakin ingin menyetujui pengajuan :</p>
+          <table className="text-sm">
+            <tbody>
+              <tr>
+                <td>Nama Karyawan</td>
+                <td className="w-5 text-center">:</td>
+                <td>{DataRequest?.employee.name}</td>
+              </tr>
+              <tr>
+                <td>Keterangan</td>
+                <td className="w-5 text-center">:</td>
+                <td>{DataRequest?.description}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div className="flex gap-2 justify-end mt-4">
+            <Button color="green" onClick={HandleUpdateRequest}>
+              Ya
+            </Button>
+            <Button color="red" onClick={close}>
+              Tidak
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
