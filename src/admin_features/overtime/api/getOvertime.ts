@@ -3,12 +3,17 @@ import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
-export async function getOvertime(month?: number, year?: number) {
-  const res = await axios.get(`${BaseURL}/overtime?month=${month}&year=${year}`);
-  console.log('Data Overtime :', res.data);
+export async function getOvertime(company?: number, month?: number, year?: number) {
+  const URL = `${BaseURL}/overtime?company=${company}`;
+
+  console.log('URL -->', URL);
+  const res = await axios.get(`${URL}`);
   return res.data;
 }
 
-export const useGetOvertime = (month?: number, year?: number) => {
-  return useQuery({ queryKey: ['overtime', month, year], queryFn: () => getOvertime(month, year) });
+export const useGetOvertime = (company?: number, month?: number, year?: number) => {
+  return useQuery({
+    queryKey: ['overtime', company, month, year],
+    queryFn: () => getOvertime(company, month, year),
+  });
 };

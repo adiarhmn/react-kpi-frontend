@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetAttendanceReq } from '@/admin_features/attendance/api';
+import { useGetOvertime } from '@/admin_features/overtime';
 import { useGetRequest, usePutRequest } from '@/admin_features/permission/api';
 import { RequestsType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
@@ -35,6 +36,8 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
     creds?.company_id
   );
 
+  const { data: DataOvertime, isLoading: loadOvertime } = useGetOvertime(creds?.company_id);
+
   const HandleUpdateRequest = async () => {
     if (!DataRequest) return console.log('Data Request Not Found');
 
@@ -55,8 +58,8 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
     close();
   };
 
-  if (LoadRequest || LoadAttendance) return <div>Loading...</div>;
-  console.log('DataRequest -->', AttendanceReq);
+  if (LoadRequest || LoadAttendance || loadOvertime) return <div>Loading...</div>;
+  console.log('DataRequest -->', DataOvertime);
   return (
     <div>
       <Table withColumnBorders withTableBorder>
@@ -103,6 +106,23 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
                   <Table.Td>{formatDateToString(request.date)}</Table.Td>
                   <Table.Td>{typeReq}</Table.Td>
                   <Table.Td>{request.reason}</Table.Td>
+                  <Table.Td>{request.status}</Table.Td>
+                  <Table.Td className="text-center">
+                    <UnstyledButton>
+                      <IconEye size={20} className="text-blue-600" />
+                    </UnstyledButton>
+                  </Table.Td>
+                </Table.Tr>
+              ))
+            : ''}
+
+          {typeReq == 'Lembur'
+            ? DataOvertime.data.map((request: any, index: number) => (
+                <Table.Tr key={index}>
+                  <Table.Td>{request.attendance.employee.name}</Table.Td>
+                  <Table.Td>{formatDateToString(request.start_time)}</Table.Td>
+                  <Table.Td>{typeReq}</Table.Td>
+                  <Table.Td>{request.detail}</Table.Td>
                   <Table.Td>{request.status}</Table.Td>
                   <Table.Td className="text-center">
                     <UnstyledButton>
