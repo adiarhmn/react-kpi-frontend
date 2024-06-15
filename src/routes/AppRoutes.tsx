@@ -45,7 +45,7 @@ const { BiodataEdit } = lazyImport(() => import('@/features/employee'), 'Biodata
 const { FileProfile } = lazyImport(() => import('@/features/employee'), 'FileProfile');
 
 // Admin Role Pages
-const { DashboardAdmin } = lazyImport(() => import('@/admin_features/misc'), 'DashboardAdmin');
+const { DinamicDashboard } = lazyImport(() => import('@/components/misc'), 'DinamicDashboard');
 const { Schedule: AdminSchedule } = lazyImport(
   () => import('@/admin_features/schedule'),
   'Schedule'
@@ -165,10 +165,10 @@ export const AppRoutes: React.FC = () => {
         )}
 
         {/* Routes for Admin with Desktop View ======================>*/}
-        {creds?.role === 'admin' && (
+        {creds?.role === 'admin' || creds?.role === 'superadmin' ? (
           <Route element={<AdminLayout />}>
             <Route index path="/" element={<RedirectToBeranda />} />
-            <Route path="beranda" element={<DashboardAdmin />} />
+            <Route path="beranda" element={<DinamicDashboard />} />
             <Route path="schedule" element={<AdminSchedule />} />
             <Route path="schedule/create" element={<CreateSchedule />} />
             <Route path="schedule/update" element={<UpdateSchedule />} />
@@ -193,6 +193,8 @@ export const AppRoutes: React.FC = () => {
             <Route path="locations/create" element={<CreateLocations />} />
             <Route path="locations/update" element={<UpdateLocations />} />
           </Route>
+        ) : (
+          <Route path="development" element={<Development />} />
         )}
 
         {/* Route For Development */}

@@ -13,7 +13,10 @@ const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export async function getCreds() {
   const res = await axios.get<AuthMeType>(`${BaseURL}/auth/me`);
-  console.log('Creds Data:', res.data.creds);
+
+  // Cek Local Storage id company
+  console.log(localStorage.getItem('id_company'));
+
   return res.data.creds;
 }
 

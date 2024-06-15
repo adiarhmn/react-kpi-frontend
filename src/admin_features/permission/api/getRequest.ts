@@ -3,11 +3,21 @@ import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
-export async function getRequest(type?: string) {
-  const res = await axios.get(`${BaseURL}/request?types=${type}`);
+export async function getRequest(type?: string, date?: string, company_id?: number) {
+  let URL = `${BaseURL}/request?company_id=${company_id}`;
+  if (date) URL = `${BaseURL}/request?company_id=${company_id}&date=${date}`;
+  if (type) URL = `${BaseURL}/request?types=${type}`;
+  if (type && date) URL = `${BaseURL}/request?company_id=${company_id}&date=${date}&types=${type}`;
+
+  console.log('URL -->', URL);
+
+  const res = await axios.get(URL);
   return res.data.data;
 }
 
-export const useGetRequest = (type?: string) => {
-  return useQuery({ queryKey: ['Request'], queryFn: () => getRequest(type) });
+export const useGetRequest = (type?: string, date?: string, company_id?: number) => {
+  return useQuery({
+    queryKey: ['Request', type, date, company_id],
+    queryFn: () => getRequest(type, date, company_id),
+  });
 };
