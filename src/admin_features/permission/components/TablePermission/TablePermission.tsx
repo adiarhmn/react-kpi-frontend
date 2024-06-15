@@ -8,9 +8,12 @@ import { RequestsType } from '@/admin_features/types';
 import { useGetRequest } from '../../api';
 import { usePutRequest } from '../../api/putRequest';
 
-export const TablePermission = () => {
+interface TablePermissionProps {
+  typeRequest?: string;
+}
+export const TablePermission: React.FC<TablePermissionProps> = ({ typeRequest }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { data, isLoading, error, refetch } = useGetRequest('izin');
+  const { data, isLoading, error, refetch } = useGetRequest(typeRequest ?? 'izin');
   const [DataRequest, setDataRequest] = useState<RequestsType>();
   const MutationUpdateRequest = usePutRequest();
 
@@ -55,6 +58,7 @@ export const TablePermission = () => {
           <Table.Tr>
             <Table.Th className="font-bold">No</Table.Th>
             <Table.Th className="font-bold">Nama Karyawan</Table.Th>
+            <Table.Th className="font-bold">Jenis Izin</Table.Th>
             <Table.Th className="font-bold">Status</Table.Th>
             <Table.Th className="font-bold">Keterangan</Table.Th>
             <Table.Th className="flex gap-2 items-center justify-center font-bold">Aksi</Table.Th>
@@ -66,6 +70,7 @@ export const TablePermission = () => {
               <Table.Tr key={index}>
                 <Table.Td>{index + 1}</Table.Td>
                 <Table.Td>{request?.employee.name}</Table.Td>
+                <Table.Td>{request?.type}</Table.Td>
                 <Table.Td>{request?.status}</Table.Td>
                 <Table.Td>{request?.description}</Table.Td>
                 <Table.Td className="flex gap-2 items-center justify-center">
