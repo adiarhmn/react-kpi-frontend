@@ -16,7 +16,6 @@ type AbsenceProps = {
 export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, status }) => {
   const { creds } = useAuth();
   const navigate = useNavigate();
-  const [opened, setOpened] = useState(false);
   const [absences, setAbsence] = useState<AbsenceType[]>([]);
   const [params, setParams] = useState({
     employeeId: creds?.employee_id,

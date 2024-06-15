@@ -143,9 +143,9 @@ export const Home: React.FC = () => {
                 color: 'bg-blue-600',
               },
               {
-                title: 'Testing',
-                href: '/test',
-                icon: IconClock,
+                title: 'Slip Gaji',
+                href: '/development',
+                icon: IconFileDollar,
                 color: 'bg-blue-600',
               },
               {
@@ -164,6 +164,12 @@ export const Home: React.FC = () => {
                 title: 'Permintaan',
                 href: '/employee-request',
                 icon: IconFileText,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Divisi',
+                href: '/employee-division',
+                icon: IconUsersGroup,
                 color: 'bg-blue-600',
               },
               {

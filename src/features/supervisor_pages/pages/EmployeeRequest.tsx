@@ -32,8 +32,8 @@ export const EmployeeRequest: React.FC = () => {
       </section>
 
       <Tabs color="#51CF66" variant="pills" defaultValue="sakit">
-        <Tabs.List className="w-screen text-center py-3 overflow-x-auto overflow-y-hidden">
-          <div className="flex w-max justify-start gap-x-3 px-6">
+        <Tabs.List className="sm:w-screen w-full mx-5 text-center py-3 overflow-x-auto overflow-y-hidden mb-1">
+          <div className="flex w-max justify-start gap-x-2 px-6">
             <div className="bg-white min-w-[8rem] shadow-md rounded-2xl">
               <Tabs.Tab
                 style={{ width: '100%', borderRadius: '20px' }}
@@ -68,7 +68,7 @@ export const EmployeeRequest: React.FC = () => {
         </Tabs.List>
       </Tabs>
 
-      <EmployeeRequestList />
+      <EmployeeRequestList type={selectType} />
     </main>
   );
 };
