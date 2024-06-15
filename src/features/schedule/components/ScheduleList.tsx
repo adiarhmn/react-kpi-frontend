@@ -13,9 +13,16 @@ type ScheduleProps = {
   shift: string;
   status: string;
   modalState: boolean;
+  employee_id: number | null;
 };
 
-export const ScheduleList: React.FC<ScheduleProps> = ({ month, shift, status, modalState }) => {
+export const ScheduleList: React.FC<ScheduleProps> = ({
+  month,
+  shift,
+  status,
+  modalState,
+  employee_id,
+}: ScheduleProps) => {
   // const [month, setMonth] = useState<Date>(new Date());
   const { creds } = useAuth();
   const [schedules, setSchedule] = useState<ScheduleType[]>([]);

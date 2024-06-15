@@ -14,3 +14,17 @@ export const useGetEmployee = (employee_id?: number | null) => {
     queryFn: () => getEmployee(employee_id),
   });
 };
+
+export async function getEmployeeByDivision(division_id?: number) {
+  const res = await axios.get(`${BaseURL}/employee?division=${division_id}`);
+  console.log(`${BaseURL}/employee?division=${division_id}`);
+  console.log(res.data.data);
+  return res.data.data;
+}
+
+export const useGetEmployeeByDivision = (division_id?: number) => {
+  return useQuery({
+    queryKey: ['employee', division_id],
+    queryFn: () => getEmployeeByDivision(division_id),
+  });
+};

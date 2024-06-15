@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
-import { Badge, Button, Divider, Image, Modal, Text, Textarea, Tooltip } from '@mantine/core';
+import { Badge, Button, Divider, Modal, Text, Textarea } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronLeft, IconClock24, IconDeviceTablet, IconMap2 } from '@tabler/icons-react';
@@ -52,13 +52,16 @@ export const AddOvertime: React.FC = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [opened, { open, close }] = useDisclosure(false);
   const [attendance, setAttendance] = useState<AttendanceType>();
-  const { data } = useGetAttendance(creds?.employee_id, formatterDate(currentDate, 'yyyy-MM-dd'));
+  const { data: DataAttendanceToday } = useGetAttendance(
+    creds?.employee_id,
+    formatterDate(currentDate, 'yyyy-MM-dd')
+  );
 
   useEffect(() => {
-    if (data) {
-      setAttendance(data[0]);
+    if (DataAttendanceToday) {
+      setAttendance(DataAttendanceToday);
     }
-  }, [data]);
+  }, [DataAttendanceToday]);
 
   const navigate = useNavigate();
 
@@ -208,6 +211,8 @@ export const AddOvertime: React.FC = () => {
       },
     });
   };
+
+  console.log('Data attendance : ', attendance);
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>

@@ -12,13 +12,20 @@ type ScheduleProps = {
   shift: string;
   status: string;
   modalState: boolean;
+  employee_id: number | string | undefined;
 };
 
-export const ScheduleListNew: React.FC<ScheduleProps> = ({ month, shift, status, modalState }) => {
-  const { creds } = useAuth();
+export const ScheduleListNew: React.FC<ScheduleProps> = ({
+  month,
+  shift,
+  status,
+  modalState,
+  employee_id,
+}: ScheduleProps) => {
+  // const { creds } = useAuth();
   const [schedules, setSchedule] = useState<ScheduleType[]>([]);
   const [params, setParams] = useState({
-    employeeId: creds?.employee_id,
+    employeeId: employee_id,
     month: month.getMonth() + 1,
     year: month.getFullYear(),
     shift,
@@ -41,7 +48,7 @@ export const ScheduleListNew: React.FC<ScheduleProps> = ({ month, shift, status,
 
   useEffect(() => {
     const newParams = {
-      employeeId: creds?.employee_id,
+      employeeId: employee_id,
       month: month.getMonth() + 1,
       year: month.getFullYear(),
       shift,
@@ -51,7 +58,7 @@ export const ScheduleListNew: React.FC<ScheduleProps> = ({ month, shift, status,
   }, [modalState, month]);
 
   const elements = [schedules];
-
+  console.log(employee_id);
   const rows = schedules.map((element) => (
     <Table.Tr key={element.id}>
       <Table.Td>{formatterDate(element.date, 'dd MMMM')}</Table.Td>

@@ -121,7 +121,7 @@ export const Attendance: React.FC = () => {
       const radius = 120; // Jarak dalam meter
       // [!!!!!!!!!]
 
-      if (markers.length > 1) {
+      if (markers.length > 0) {
         const closestMarker = markers.reduce((prev, current) => {
           return prev.distance < current.distance ? prev : current;
         });
@@ -146,6 +146,8 @@ export const Attendance: React.FC = () => {
       }
     }
   }, [location, employeeLocation]);
+
+  console.log(attendanceLocationId);
 
   const myIcon: any = new Icon({
     iconUrl: '/images/my-icon.svg',

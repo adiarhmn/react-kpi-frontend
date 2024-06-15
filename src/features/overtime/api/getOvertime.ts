@@ -14,7 +14,7 @@ export const useGetOvertime = (employee_id?: number) => {
 
 export async function getOvertimeDaily(employee_id?: number, date?: string) {
   const res = await axios.get(`${BaseURL}/overtime?employee=${employee_id}&date=${date}`);
-  return res.data.data[0];
+  return res.data.data[0] || {};
 }
 
 export const useGetOvertimeDaily = (employee_id?: number, date?: string) => {

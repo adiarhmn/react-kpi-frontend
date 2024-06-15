@@ -17,7 +17,6 @@ export const MenuItem: React.FC<Navigation> = ({
 }) => {
   const Icon = icon;
   return (
-    // Test
     <Link to={href}>
       <div className="cursor-pointer flex flex-col items-center justify-center">
         <div
@@ -40,7 +39,7 @@ export const MenuList: React.FC<Props> = ({ navigations }) => {
 
   return (
     <div className="overflow-x-auto overflow-y-hidden pb-3">
-      <div className="w-screen grid grid-cols-5 grid-rows-2 mx-2 gap-y-4">
+      <div className="lg:w-full w-screen  grid grid-cols-5 grid-rows-2 mx-2 gap-y-4">
         {navigations.map((nav, i) => (
           <MenuItem key={`${id}_${i}`} {...nav} />
         ))}

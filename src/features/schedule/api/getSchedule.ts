@@ -14,7 +14,7 @@ export async function getSchedule(employee_id: number, date?: string) {
 }
 
 export async function getScheduleMonthly(
-  employee_id: number | null | undefined,
+  employee_id: number | null | undefined | string,
   month: number,
   year: number,
   shift: string | null,
@@ -65,7 +65,7 @@ export const useGetSchedule = (employee_id: number, date?: string) => {
 };
 
 export const useGetScheduleMonthly = (
-  employee_id: number | null | undefined,
+  employee_id: number | null | undefined | string,
   month: number,
   year: number,
   shift: string | null,

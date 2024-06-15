@@ -1,34 +1,34 @@
 /* eslint-disable linebreak-style */
-import {
-  Button,
-  Chip,
-  ChipGroup,
-  Drawer,
-  Fieldset,
-  Group,
-  Modal,
-  Select,
-  TextInput,
-} from '@mantine/core';
+/* eslint-disable import/order */
+/* eslint-disable linebreak-style */
+import { Button, Drawer, Fieldset, Select } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react';
-import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ShiftType } from '@/admin_features/types';
 
 import { useGetShift } from '../api';
-import { ScheduleList, ScheduleListNew } from '../components';
+import { ScheduleListNew } from '../components';
+import { useAuth } from '@/features/auth';
 
 export const Schedule: React.FC = () => {
+  const location = useLocation();
+  const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const [month, setMonth] = useState<Date>(new Date());
   const [selectShift, setSelectShift] = useState('');
   const [selectStatus, setSelectStatus] = useState('');
   const [shifts, setShifts] = useState<ShiftType[]>([]);
   const { data } = useGetShift();
+  let employeeID: number | string | undefined = '';
+  if (location.state != null) {
+    employeeID = location.state.employee_id;
+  } else {
+    employeeID = creds?.employee_id;
+  }
   useEffect(() => {
     if (data) {
       setShifts(data);
@@ -85,6 +85,7 @@ export const Schedule: React.FC = () => {
           shift={selectShift}
           status={selectStatus}
           modalState={opened}
+          employee_id={employeeID}
         />
       </section>
 
@@ -128,37 +129,6 @@ export const Schedule: React.FC = () => {
           </Button>
         </div>
       </Drawer>
-
-      {/* <Modal opened={opened} title="Filter" onClose={close} withCloseButton={false}>
-        <div>
-          {' '}
-          <Fieldset className="mb-2" legend="Shift">
-            <Select
-              className="-m-3"
-              placeholder="Pilih shift"
-              data={['pagi', 'siang', 'malam']}
-              searchValue={selectShift}
-              onSearchChange={setSelectShift}
-              allowDeselect
-            />
-          </Fieldset>
-          <Fieldset className="mb-2" legend="Status">
-            <Select
-              className="-m-3"
-              placeholder="Pilih status"
-              data={['on', 'off']}
-              searchValue={selectStatus}
-              onSearchChange={setSelectStatus}
-              allowDeselect
-            />
-          </Fieldset>
-        </div>
-        <div className="text-right mt-3">
-          <Button onClick={close} style={{ width: '160px' }}>
-            Cari
-          </Button>
-        </div>
-      </Modal> */}
     </main>
   );
 };

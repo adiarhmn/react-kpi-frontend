@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
-import { Button, Drawer, Fieldset, Select, Tabs } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { IconAdjustmentsHorizontal, IconPlus, IconChevronLeft } from '@tabler/icons-react';
+import { Button, Tabs } from '@mantine/core';
+import { IconPlus, IconChevronLeft } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
