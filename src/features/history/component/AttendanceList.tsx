@@ -1,29 +1,30 @@
-import { Badge, Loader, Text } from '@mantine/core';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
+/* eslint-disable import/order */
+/* eslint-disable no-restricted-imports */
 import { useEffect, useState } from 'react';
 
 import { ScheduleType } from '@/features/attendance';
+import { formatterDate } from '@/features/history';
+import { useGetScheduleMonthly } from '@/features/schedule/api';
+import { useNavigate } from 'react-router-dom';
+import { Badge, Text } from '@mantine/core';
 
-import { useGetScheduleMonthly } from '../api';
-
-type ScheduleProps = {
+type AttendanceProps = {
   month: Date;
   shift: string;
   status: string;
   modalState: boolean;
-  employee_id: number | null;
+  employee_id: number | string | undefined;
 };
 
-export const ScheduleList: React.FC<ScheduleProps> = ({
+export const AttendanceList: React.FC<AttendanceProps> = ({
   month,
   shift,
   status,
   modalState,
   employee_id,
-}: ScheduleProps) => {
-  // const [month, setMonth] = useState<Date>(new Date());
+}: AttendanceProps) => {
   // const { creds } = useAuth();
+  const navigate = useNavigate();
   const [schedules, setSchedule] = useState<ScheduleType[]>([]);
   const [params, setParams] = useState({
     employeeId: employee_id,
@@ -33,7 +34,7 @@ export const ScheduleList: React.FC<ScheduleProps> = ({
     status,
   });
 
-  const { data, error, isLoading } = useGetScheduleMonthly(
+  const { data } = useGetScheduleMonthly(
     params.employeeId,
     params.month,
     params.year,
@@ -58,38 +59,30 @@ export const ScheduleList: React.FC<ScheduleProps> = ({
     setParams(newParams);
   }, [modalState, month]);
 
-  function formatDate(date: string, formatType: string) {
-    const dateToFormat: Date = new Date(date);
-    const formattedDate = format(dateToFormat, formatType, { locale: id });
-    return formattedDate;
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center my-20">
-        <Loader size="sm" />
-      </div>
-    );
-  }
-  if (error) {
-    return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
-  }
-
+  console.log(employee_id);
+  console.log('Data schedule :', schedules);
   return (
     <div className="text-center">
       <div className="w-full grid grid-cols-12 px-6">
         {schedules.length > 0 ? (
           schedules.map((schedule, index) => (
             <div key={index} className="col-span-6 px-1">
-              <button className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700">
+              <button
+                onClick={() =>
+                  navigate(`/employee-division/attendance/detail`, {
+                    state: { schedule: schedule },
+                  })
+                }
+                className={`${schedule.attendance_status == 'Hadir' ? `bg-white` : `bg-gray-100`} mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700`}
+              >
                 <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
                   {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
                   <div className="col-span-4 text-center -ms-5 mt-4">
                     <Text size="30px" fw={700}>
-                      {formatDate(schedule?.date, 'dd')}
+                      {formatterDate(schedule?.date, 'dd')}
                     </Text>
                     <Text style={{ marginTop: '-5px' }} size="xs">
-                      {formatDate(schedule?.date, 'MMM')}
+                      {formatterDate(schedule?.date, 'MMM')}
                     </Text>
                   </div>
                   <div className="col-span-8">
@@ -102,23 +95,10 @@ export const ScheduleList: React.FC<ScheduleProps> = ({
                           marginLeft: '4px',
                           borderRadius: '2px',
                         }}
-                        // color={absence?.type == 'Sakit' ? 'yellow' : 'blue  '}
-                        color="blue"
-                      >
-                        {schedule?.shift.shift_name}
-                      </Badge>
-                      <Badge
-                        size="xs"
-                        style={{
-                          fontSize: '7px',
-                          marginTop: '7px',
-                          marginLeft: '4px',
-                          borderRadius: '2px',
-                        }}
                         // color={absence?.status == 'Disetujui' ? 'green' : 'red'}
-                        color={schedule?.status == 'on' ? 'green' : 'red'}
+                        color={schedule?.attendance_status == 'Hadir' ? 'green' : 'red'}
                       >
-                        {schedule?.status}
+                        {schedule?.attendance_status}
                       </Badge>
                     </div>
                     <div className="my-auto ms-4 mt-1">
@@ -135,7 +115,7 @@ export const ScheduleList: React.FC<ScheduleProps> = ({
                 </div>
                 <div className="text-left -mb-2">
                   <Text style={{ marginLeft: '0px', padding: '8px' }} size="9px" fw={500}>
-                    Hari : {formatDate(schedule?.date, 'EEEE, dd MMM yyyy')}
+                    Hari : {formatterDate(schedule?.date, 'EEEE, dd MMM yyyy')}
                   </Text>
                 </div>
               </button>
@@ -155,5 +135,23 @@ export const ScheduleList: React.FC<ScheduleProps> = ({
         )}
       </div>
     </div>
+    // <Table
+    //   horizontalSpacing="xs"
+    //   className="text-center"
+    //   striped
+    //   stickyHeader
+    //   stickyHeaderOffset={60}
+    // >
+    //   <Table.Thead>
+    //     <Table.Tr className="text-center">
+    //       <Table.Th className="font-bold">Tanggal</Table.Th>
+    //       <Table.Th className="font-bold text-center">Kode</Table.Th>
+    //       <Table.Th className="font-bold text-center">Status</Table.Th>
+    //       <Table.Th className="font-bold text-center">Aksi</Table.Th>
+    //     </Table.Tr>
+    //   </Table.Thead>
+    //   <Table.Tbody>{rows}</Table.Tbody>
+    //   {/* <Table.Caption>Scroll page to see sticky thead</Table.Caption> */}
+    // </Table>
   );
 };

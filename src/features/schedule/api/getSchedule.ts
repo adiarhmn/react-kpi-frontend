@@ -13,6 +13,18 @@ export async function getSchedule(employee_id: number, date?: string) {
   }
 }
 
+export async function getScheduleByStatus(employee_id: number | null, status: string) {
+  const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&status=${status}`);
+  return res.data.data;
+}
+
+export const useGetSchedule = (employee_id: number, date?: string) => {
+  return useQuery({
+    queryKey: ['schedule', employee_id, date],
+    queryFn: () => getSchedule(employee_id, date),
+  });
+};
+
 export async function getScheduleMonthly(
   employee_id: number | null | undefined | string,
   month: number,
@@ -51,18 +63,6 @@ export async function getScheduleMonthly(
     return res.data.data;
   }
 }
-
-export async function getScheduleByStatus(employee_id: number | null, status: string) {
-  const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&status=${status}`);
-  return res.data.data;
-}
-
-export const useGetSchedule = (employee_id: number, date?: string) => {
-  return useQuery({
-    queryKey: ['schedule', employee_id, date],
-    queryFn: () => getSchedule(employee_id, date),
-  });
-};
 
 export const useGetScheduleMonthly = (
   employee_id: number | null | undefined | string,

@@ -2,7 +2,6 @@ import { Table } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 import { ScheduleType } from '@/features/attendance';
-import { useAuth } from '@/features/auth';
 import { formatterDate } from '@/features/history';
 
 import { useGetScheduleMonthly } from '../api';
@@ -57,7 +56,6 @@ export const ScheduleListNew: React.FC<ScheduleProps> = ({
     setParams(newParams);
   }, [modalState, month]);
 
-  const elements = [schedules];
   console.log(employee_id);
   const rows = schedules.map((element) => (
     <Table.Tr key={element.id}>
@@ -67,7 +65,7 @@ export const ScheduleListNew: React.FC<ScheduleProps> = ({
       <Table.Td>{element.status}</Table.Td>
     </Table.Tr>
   ));
-
+  console.log('Data schedule :', schedules);
   return (
     <Table className="text-center" striped stickyHeader stickyHeaderOffset={60}>
       <Table.Thead>

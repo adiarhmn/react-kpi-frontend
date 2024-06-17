@@ -42,6 +42,14 @@ const { DetailEmployeeDivision } = lazyImport(
   () => import('@/features/supervisor_pages'),
   'DetailEmployeeDivision'
 );
+const { EmployeeAttendance } = lazyImport(
+  () => import('@/features/supervisor_pages'),
+  'EmployeeAttendance'
+);
+const { DetailEmployeeAttendance } = lazyImport(
+  () => import('@/features/supervisor_pages'),
+  'DetailEmployeeAttendance'
+);
 const { PaidLeave } = lazyImport(() => import('@/features/paid-leave'), 'PaidLeave');
 const { AddPaidLeave } = lazyImport(() => import('@/features/paid-leave'), 'AddPaidLeave');
 const { Overtime } = lazyImport(() => import('@/features/overtime'), 'Overtime');
@@ -150,6 +158,10 @@ export const AppRoutes: React.FC = () => {
               <Route index element={<EmployeeDivision />} />
               <Route path="detail" element={<DetailEmployeeDivision />} />
               <Route path="schedule" element={<Schedule />} />
+              <Route path="attendance">
+                <Route index element={<EmployeeAttendance />} />
+                <Route path="detail" element={<DetailEmployeeAttendance />} />
+              </Route>
             </Route>
             <Route path="profile">
               <Route index element={<Profile />} />

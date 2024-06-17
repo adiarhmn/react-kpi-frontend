@@ -1,7 +1,8 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
 import { EmployeeType } from '@/admin_features/types';
-import { ScheduleType } from '@/features/attendance';
+import { AttendanceType, ScheduleType, useGetAttendance } from '@/features/attendance';
+import { ActivityCard } from '@/features/components';
 import { formatterDate } from '@/features/history';
 import { useGetScheduleDaily } from '@/features/schedule/api';
 import { Anchor, Badge, Divider, Group, Text } from '@mantine/core';
@@ -24,7 +25,18 @@ export const DetailEmployeeDivision: React.FC = () => {
       setSchedule(DataSchedule[0]);
     }
   }, [DataSchedule]);
-  console.log(schedule);
+
+  const [attendance, setAttendance] = useState<AttendanceType>();
+  const { data: DataAttendance } = useGetAttendance(
+    employee?.id,
+    formatterDate(new Date(), 'yyyy-MM-dd')
+  );
+  useEffect(() => {
+    if (DataAttendance) {
+      setAttendance(DataAttendance);
+    }
+  }, [DataAttendance]);
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -107,7 +119,7 @@ export const DetailEmployeeDivision: React.FC = () => {
         </div>
       </section>
 
-      <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-5 mt-2">
+      <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2 mt-2">
         <div className="flex justify-between text-xs items-center p-2 -mt-1 -mb-1">
           <div>
             <Text fw={700} c="blue">
@@ -193,6 +205,86 @@ export const DetailEmployeeDivision: React.FC = () => {
           </div>
         </div>
       </section>
+
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2">
+        <div className="flex justify-between text-base items-center p-2">
+          <span className="font-bold text-blue-700">Absensi</span>
+          <Badge
+            size="xs"
+            style={{
+              marginLeft: '4px',
+              borderRadius: '2px',
+            }}
+            color={
+              attendance?.check_in == null
+                ? 'red'
+                : attendance?.check_out == null
+                  ? 'yellow'
+                  : 'green'
+            }
+          >
+            {attendance?.check_in == null
+              ? 'Belum CheckIn'
+              : attendance?.check_out == null
+                ? 'Sedang Bekerja'
+                : 'Selesai bekerja'}
+          </Badge>
+        </div>
+        <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
+          <div className="col-span-3 text-center m-auto ">
+            <Text size="27px" fw={700}>
+              {schedule?.shift.shift_code}
+            </Text>
+            <Text style={{ marginTop: '-5px' }} size="sm">
+              {schedule?.shift.shift_name}
+            </Text>
+          </div>
+          <div className="col-span-9 ms-2 text-left">
+            <div className="ms-2">
+              <Text size="xs">Tanggal</Text>
+              <Text size="auto" fw={700}>
+                {formatterDate(new Date(), 'EEEE, dd MMMM yyyy')}
+              </Text>
+            </div>
+            <Divider my="sm" />
+            <div className="-mt-2 w-full grid grid-cols-12 pb-2">
+              <div className="col-span-6 text-left mt-1 ms-2">
+                <Text size="xs">Check-in</Text>
+                <Text size="sm" fw={700}>
+                  {attendance?.check_in != undefined
+                    ? formatterDate(attendance?.check_in, 'HH:mm')
+                    : '-- --'}
+                </Text>
+              </div>
+              <div className="col-span-6 text-left mt-1">
+                <Text size="xs">Check-out</Text>
+                <Text size="sm" fw={700}>
+                  {attendance?.check_out != undefined
+                    ? formatterDate(attendance?.check_out, 'HH:mm')
+                    : '-- --'}
+                </Text>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="text-center text-xs divide-x divide-gray-300 p-2">
+          <Group justify="center">
+            <Anchor
+              size="sm"
+              onClick={() =>
+                navigate(`/employee-division/attendance`, { state: { employee_id: employee.id } })
+              }
+              target="_blank"
+              underline="always"
+            >
+              Lihat riwayat absen
+            </Anchor>
+            {/* <IconCalendar color="blue" className="-ms-2" /> */}
+          </Group>
+        </div>
+      </section>
+
+      <ActivityCard employee={employee} />
     </main>
   );
 };

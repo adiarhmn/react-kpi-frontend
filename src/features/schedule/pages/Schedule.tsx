@@ -22,7 +22,7 @@ export const Schedule: React.FC = () => {
   const [selectShift, setSelectShift] = useState('');
   const [selectStatus, setSelectStatus] = useState('');
   const [shifts, setShifts] = useState<ShiftType[]>([]);
-  const { data } = useGetShift();
+  const { data: DataShift } = useGetShift();
   let employeeID: number | string | undefined = '';
   if (location.state != null) {
     employeeID = location.state.employee_id;
@@ -30,10 +30,10 @@ export const Schedule: React.FC = () => {
     employeeID = creds?.employee_id;
   }
   useEffect(() => {
-    if (data) {
-      setShifts(data);
+    if (DataShift) {
+      setShifts(DataShift);
     }
-  }, [data]);
+  }, [DataShift]);
 
   const navigate = useNavigate();
   return (
@@ -88,8 +88,6 @@ export const Schedule: React.FC = () => {
           employee_id={employeeID}
         />
       </section>
-
-      {/* <ScheduleList month={month} shift={selectShift} status={selectStatus} modalState={opened} /> */}
 
       <Drawer
         position="right"

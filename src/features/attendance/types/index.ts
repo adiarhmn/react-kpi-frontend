@@ -17,6 +17,7 @@ export type ScheduleType = {
   attendance_place: string;
   attendance_status: string;
   shift_id: number;
+  attendance: AttendanceType;
   shift: ShiftType;
 };
 
@@ -27,6 +28,7 @@ export type AttendanceType = {
   shift_in: string;
   shift_out: string;
   status: string;
+  attendance_status: string;
   employee_id: number;
   schedule_id: number;
 };

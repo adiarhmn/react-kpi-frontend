@@ -1,12 +1,10 @@
 /* eslint-disable import/order */
 import { Button, Divider, Input, Modal, Text } from '@mantine/core';
 import { IconCalendarEvent, IconMailForward, IconPlus } from '@tabler/icons-react';
-import { useAuth } from '../auth';
 import { useEffect, useState } from 'react';
 import { useGetActivityAlias, useGetActivityDetail } from '../attendance/api/getActivity';
 import {
   ActivityDetailType,
-  ActivityAliasType,
   AttendanceType,
   useGetAttendance,
   useCreateActivity,
@@ -15,14 +13,19 @@ import {
 import { formatterDate } from '../history';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import { EmployeeType } from '@/admin_features/types';
 
-export const ActivityCard: React.FC = () => {
-  const { creds } = useAuth();
+type ActivityProps = {
+  employee: EmployeeType | undefined;
+};
+
+export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProps) => {
+  // const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
 
   const [attendance, setAttendance] = useState<AttendanceType>();
   const { data: DataAttendance } = useGetAttendance(
-    creds?.employee_id,
+    employee?.id,
     formatterDate(new Date(), 'yyyy-MM-dd')
   );
   useEffect(() => {
@@ -33,7 +36,7 @@ export const ActivityCard: React.FC = () => {
 
   // [All about  Activity Alias]
   const [activityAlias, setActivityAlias] = useState([]);
-  const { data: dataActivityAlias } = useGetActivityAlias(creds?.company_id);
+  const { data: dataActivityAlias } = useGetActivityAlias(employee?.user.company_id);
   useEffect(() => {
     if (dataActivityAlias) {
       setActivityAlias(dataActivityAlias);
@@ -44,7 +47,7 @@ export const ActivityCard: React.FC = () => {
   // [All about Activity Detail]
   const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
   const { data: dataActivity, refetch: RefetchActivityDetail } = useGetActivityDetail(
-    creds?.employee_id,
+    employee?.id,
     formatterDate(new Date(), 'yyyy-MM-dd')
   );
   useEffect(() => {
