@@ -1,3 +1,4 @@
+import { em } from '@mantine/core';
 /* eslint-disable linebreak-style */
 export type UserType = {
   id: number;
@@ -108,4 +109,13 @@ type EmployeeScheduleType = {
 type EmployeeLocation = {
   id: number;
   emplpoyee_id: number;
+};
+
+export type AttendanceReqType = {
+  employee_id: number;
+  employee: EmployeeType;
+  reason: string;
+  status: string;
+  attendance_request_lon: string;
+  attendance_request_lat: string;
 };

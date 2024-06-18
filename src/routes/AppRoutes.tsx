@@ -107,6 +107,11 @@ const { UpdateLocations } = lazyImport(
   'UpdateLocations'
 );
 
+const { AttendanceRequest } = lazyImport(
+  () => import('@/admin_features/attendance/pages'),
+  'AttendanceRequest'
+);
+
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
   const navigate = useNavigate();
@@ -199,6 +204,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="schedule/update" element={<UpdateSchedule />} />
             <Route path="shift" element={<ShiftAdmin />} />
             <Route path="attendance" element={<AdminAttendance />} />
+            <Route path="request-attendance" element={<AttendanceRequest />} />
             <Route path="employees" element={<Employees />} />
             <Route path="division" element={<Division />} />
             <Route path="division/create" element={<CreateDivision />} />
