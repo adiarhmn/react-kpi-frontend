@@ -22,8 +22,6 @@ export const ModalEmployeeLocation: React.FC<ModalEmployeeLocationProps> = (prop
 
   const mutationCreate = useCreateLocationEmployee();
 
-  console.log('Employee', props.employee?.id);
-
   const form = useForm({
     initialValues: {
       attendance_location_id: '',
@@ -40,7 +38,7 @@ export const ModalEmployeeLocation: React.FC<ModalEmployeeLocationProps> = (prop
   if (isLoading || LoadEmployeeLocation) {
     return <div className="w-full min-h-20 flex items-center justify-center">Loading...</div>;
   }
-  if (error) return null;
+  if (error || DataLocations.length < 1) return null;
 
   const OptionsLocatios = DataLocations?.map((location: AttendanceLocationsType) => {
     return {

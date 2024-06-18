@@ -61,7 +61,12 @@ export const TableLocations: React.FC = () => {
       </div>
 
       <div className="text-xs mb-2 italic">Click Pada Marker untuk melihat Nama Lokasi</div>
-      {data.length === 0 && <div>Data Lokasi Tidak Ditemukan</div>}
+      {data.length === 0 && (
+        <div className="flex flex-col justify-center min-h-52 items-center text-red-500">
+          <div className="font-semibold"> Data Lokasi Tidak Ditemukan</div>
+          <div className="text-xs">Tambahkan Data Lokasi Agar Bisa Menambahkan Data Lainnya</div>
+        </div>
+      )}
       {data.length > 0 && (
         <MapContainer
           style={{ height: '33vh' }}

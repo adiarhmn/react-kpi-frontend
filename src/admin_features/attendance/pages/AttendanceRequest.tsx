@@ -61,8 +61,6 @@ export const AttendanceRequest: React.FC = () => {
               })}
             </Table.Tbody>
           </Table>
-
-         
         </div>
       </section>
     </main>

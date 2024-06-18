@@ -15,8 +15,13 @@ export async function getCreds() {
   const res = await axios.get<AuthMeType>(`${BaseURL}/auth/me`);
 
   // Cek Local Storage id company
-  console.log(localStorage.getItem('id_company'));
-
+  const id_company = localStorage.getItem('id_company');
+  if (id_company != null) {
+    res.data.creds = {
+      ...res.data.creds,
+      company_id: parseInt(id_company),
+    };
+  }
   return res.data.creds;
 }
 
