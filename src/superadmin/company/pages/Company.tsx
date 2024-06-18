@@ -4,7 +4,6 @@ import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { useCreateCompany } from '../api';
 import { TableCompany } from '../components';

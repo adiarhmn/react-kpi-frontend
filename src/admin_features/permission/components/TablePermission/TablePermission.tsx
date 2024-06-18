@@ -2,8 +2,10 @@ import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { RequestsType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
 
 import { useGetRequest } from '../../api';
 import { usePutRequest } from '../../api/putRequest';
@@ -12,8 +14,16 @@ interface TablePermissionProps {
   typeRequest?: string;
 }
 export const TablePermission: React.FC<TablePermissionProps> = ({ typeRequest }) => {
+  const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
   const [opened, { open, close }] = useDisclosure(false);
-  const { data, isLoading, error, refetch } = useGetRequest(typeRequest ?? 'izin');
+  const { data, isLoading, error, refetch } = useGetRequest(
+    typeRequest ?? 'izin',
+    undefined,
+    creds?.company_id
+  );
   const [DataRequest, setDataRequest] = useState<RequestsType>();
   const MutationUpdateRequest = usePutRequest();
 

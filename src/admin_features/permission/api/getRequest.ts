@@ -7,6 +7,7 @@ export async function getRequest(type?: string, date?: string, company_id?: numb
   let URL = `${BaseURL}/request?company_id=${company_id}`;
   if (date) URL = `${BaseURL}/request?company_id=${company_id}&date=${date}`;
   if (type) URL = `${BaseURL}/request?types=${type}`;
+  if (type && company_id) URL = `${BaseURL}/request?company=${company_id}&types=${type}`;
   if (type && date) URL = `${BaseURL}/request?company_id=${company_id}&date=${date}&types=${type}`;
 
   console.log('URL -->', URL);
@@ -17,7 +18,7 @@ export async function getRequest(type?: string, date?: string, company_id?: numb
 
 export const useGetRequest = (type?: string, date?: string, company_id?: number) => {
   return useQuery({
-    queryKey: ['Request', type, date, company_id],
+    queryKey: ['RequestData', type, date, company_id],
     queryFn: () => getRequest(type, date, company_id),
   });
 };
