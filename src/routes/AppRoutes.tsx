@@ -106,11 +106,11 @@ const { UpdateLocations } = lazyImport(
   () => import('@/admin_features/location/pages'),
   'UpdateLocations'
 );
-
 const { AttendanceRequest } = lazyImport(
   () => import('@/admin_features/attendance/pages'),
   'AttendanceRequest'
 );
+const { Company } = lazyImport(() => import('@/superadmin/company'), 'Company');
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -223,6 +223,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="locations" element={<Locations />} />
             <Route path="locations/create" element={<CreateLocations />} />
             <Route path="locations/update" element={<UpdateLocations />} />
+            {creds?.role == 'superadmin' && <Route path="company" element={<Company />} />}
           </Route>
         ) : (
           <Route path="development" element={<Development />} />

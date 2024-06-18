@@ -18,8 +18,8 @@ export type User = {
 };
 
 export type Companys = {
-  company_logo: string;
-  id: number;
+  company_logo?: string;
+  id?: number;
   name: string;
   shift_active: boolean;
 };
