@@ -3,12 +3,18 @@ import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
-export async function getRequest(type?: string, date?: string, company_id?: number) {
-  let URL = `${BaseURL}/request?company_id=${company_id}`;
-  if (date) URL = `${BaseURL}/request?company_id=${company_id}&date=${date}`;
-  if (type) URL = `${BaseURL}/request?types=${type}`;
+export async function getRequest(
+  type?: string,
+  date?: string,
+  company_id?: number,
+  status?: string
+) {
+  let URL = `${BaseURL}/request?company=${company_id}`;
+  if (status && company_id) URL = `${BaseURL}/request?company=${company_id}&status=${status}`;
   if (type && company_id) URL = `${BaseURL}/request?company=${company_id}&types=${type}`;
-  if (type && date) URL = `${BaseURL}/request?company_id=${company_id}&date=${date}&types=${type}`;
+  if (type && date) URL = `${BaseURL}/request?company=${company_id}&date=${date}&types=${type}`;
+  if (type && date && company_id)
+    URL = `${BaseURL}/request?company=${company_id}&date=${date}&types=${type}`;
 
   console.log('URL -->', URL);
 
@@ -16,9 +22,14 @@ export async function getRequest(type?: string, date?: string, company_id?: numb
   return res.data.data;
 }
 
-export const useGetRequest = (type?: string, date?: string, company_id?: number) => {
+export const useGetRequest = (
+  type?: string,
+  date?: string,
+  company_id?: number,
+  status?: string
+) => {
   return useQuery({
-    queryKey: ['RequestData', type, date, company_id],
-    queryFn: () => getRequest(type, date, company_id),
+    queryKey: ['RequestData', type, date, company_id, status],
+    queryFn: () => getRequest(type, date, company_id, status),
   });
 };

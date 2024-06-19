@@ -1,11 +1,15 @@
-import { Input, Select } from '@mantine/core';
-import { IconSearch } from '@tabler/icons-react';
+import { Select } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 import { useState } from 'react';
+
+import { formatDateToString } from '@/utils/format';
 
 import { TablePermission } from '../components';
 
 export const Permission: React.FC = () => {
-  const [typeRequest, setTypeRequest] = useState<string>('izin');
+  const [typeRequest, setTypeRequest] = useState<string>('Semua Jenis');
+  const [date, setDate] = useState<Date>(new Date());
+  const [status, setStatus] = useState<string>('Semua Status');
   return (
     <main>
       {/* Menampilkan Data Divisi */}
@@ -19,17 +23,33 @@ export const Permission: React.FC = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          <Input placeholder="Cari..." leftSection={<IconSearch size={14}></IconSearch>}></Input>
+          <DatePickerInput
+            className="max-w-56 mt-2 lg:mt-0"
+            placeholder="Pick date"
+            value={date}
+            onChange={(value) => setDate(value as Date)}
+          />
           <Select
             className="mt-2 lg:mt-0 max-w-xs"
             placeholder="Pilih Pengajuan"
-            data={['sakit', 'izin']}
-            defaultValue="izin"
-            onChange={(e) => setTypeRequest(e ?? 'izin')}
+            data={['Semua Jenis', 'sakit', 'izin', 'cuti']}
+            defaultValue="Semua Jenis"
+            onChange={(e) => setTypeRequest(e ?? 'Semua Jenis')}
+          />
+          <Select
+            className="mt-2 lg:mt-0 max-w-xs"
+            placeholder="Pilih Pengajuan"
+            data={['Semua Status', 'Disetujui', 'Ditolak']}
+            defaultValue="Semua Status"
+            onChange={(e) => setStatus(e ?? 'Semua Status')}
           />
         </div>
         <div className="mt-7">
-          <TablePermission typeRequest={typeRequest} />
+          <TablePermission
+            typeRequest={typeRequest}
+            date={formatDateToString(date.toDateString())}
+            status={status}
+          />
         </div>
       </section>
     </main>

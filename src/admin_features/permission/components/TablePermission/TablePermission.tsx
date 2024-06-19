@@ -1,7 +1,7 @@
 import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { RequestsType } from '@/admin_features/types';
@@ -12,24 +12,23 @@ import { usePutRequest } from '../../api/putRequest';
 
 interface TablePermissionProps {
   typeRequest?: string;
+  date?: string;
+  status?: string;
 }
-export const TablePermission: React.FC<TablePermissionProps> = ({ typeRequest }) => {
+export const TablePermission: React.FC<TablePermissionProps> = ({ typeRequest, date, status }) => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   if (creds === null) navigate('/login');
 
   const [opened, { open, close }] = useDisclosure(false);
   const { data, isLoading, error, refetch } = useGetRequest(
-    typeRequest ?? 'izin',
-    undefined,
-    creds?.company_id
+    typeRequest == 'Semua Jenis' ? undefined : typeRequest,
+    date,
+    creds?.company_id,
+    status == 'Semua Status' ? undefined : status
   );
-  const [DataRequest, setDataRequest] = useState<RequestsType>();
   const MutationUpdateRequest = usePutRequest();
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  const [DataRequest, setDataRequest] = useState<RequestsType>();
 
   const HandleUpdateRequest = async (status: string) => {
     if (!DataRequest) return console.log('Data Request Not Found');

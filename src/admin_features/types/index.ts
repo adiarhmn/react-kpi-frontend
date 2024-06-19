@@ -111,6 +111,7 @@ type EmployeeLocation = {
 };
 
 export type AttendanceReqType = {
+  id?: number;
   employee_id: number;
   employee: EmployeeType;
   reason: string;
