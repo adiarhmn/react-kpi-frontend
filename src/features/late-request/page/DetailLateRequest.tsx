@@ -46,7 +46,7 @@ export const DetailLateRequest: React.FC = () => {
               marginLeft: '4px',
               borderRadius: '2px',
             }}
-            color={attendanceRequest?.status == 'Disetujui' ? 'blue' : 'red'}
+            color={attendanceRequest?.status == 'Disetujui' ? 'green' : 'red'}
           >
             {attendanceRequest?.status}
           </Badge>

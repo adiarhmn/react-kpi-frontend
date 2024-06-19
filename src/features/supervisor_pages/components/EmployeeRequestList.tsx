@@ -1,81 +1,110 @@
+/* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
+import { EmployeeType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
+import { useGetEmployee } from '@/features/employee/api/Profile';
+import { AbsenceType, getDaysBetweenDates, useGetAbsenceByDivision } from '@/features/history';
 import { Badge, Divider, Text } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type EmployeeRequestListProps = {
-  type: string;
+  typeRequest: string;
 };
 
 export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
-  type,
+  typeRequest,
 }: EmployeeRequestListProps) => {
   const navigate = useNavigate();
   const { creds } = useAuth();
+  const [employee, setEmployee] = useState<EmployeeType>();
+  const { data: DataEmployee } = useGetEmployee(creds?.employee_id);
+  useEffect(() => {
+    if (DataEmployee) {
+      setEmployee(DataEmployee);
+    }
+  }, [DataEmployee]);
   const [params, setParams] = useState({
-    companyID: creds?.company_id,
-    typeRequest: type,
+    companyID: employee?.division_id,
+    typeRequest: typeRequest,
   });
+  useEffect(() => {
+    const newParams = {
+      companyID: employee?.division_id,
+      typeRequest,
+    };
+    setParams(newParams);
+  }, [typeRequest, DataEmployee]);
+  const [request, setRequest] = useState<AbsenceType[]>();
+  const { data: DataAbsence } = useGetAbsenceByDivision(params.companyID, params.typeRequest);
+  useEffect(() => {
+    if (DataAbsence) {
+      setRequest(DataAbsence);
+    }
+  }, [DataAbsence, DataEmployee]);
+
+  console.log(request);
   return (
     <div className="text-center">
-      {/* {absences.length > 0 ? (
-        absences.map((absence, index) => ( */}
-      <button
-        onClick={() => navigate(`/employee-request/detail`)}
-        className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
-      >
-        <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
-          {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
-          <div className="col-span-2 text-center -ms-3">
-            <Text size="30px" fw={700}>
-              12
-            </Text>
-            <Text style={{ marginTop: '-5px' }} size="xs">
-              Hari
-            </Text>
-          </div>
-          <div className="col-span-10">
-            <div className="my-auto text-right -mt-3 -me-3">
-              <Badge
-                size="xs"
-                style={{
-                  marginTop: '7px',
-                  marginLeft: '4px',
-                  borderRadius: '2px',
-                }}
-                color="blue"
-              >
-                Sakit
-              </Badge>
-              <Badge
-                size="xs"
-                style={{
-                  marginTop: '7px',
-                  marginLeft: '4px',
-                  borderRadius: '2px',
-                }}
-                color="red"
-              >
-                Belum disetujui
-              </Badge>
+      {request != undefined ? (
+        request.map((req, index) => (
+          <button
+            key={index}
+            onClick={() => navigate(`/employee-request/detail`)}
+            className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
+          >
+            <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
+              {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
+              <div className="col-span-2 text-center -ms-3">
+                <Text size="30px" fw={700}>
+                  {req?.date_start != undefined || req?.date_end != null
+                    ? getDaysBetweenDates(req?.date_start, req?.date_end) + 1
+                    : '-- --'}
+                </Text>
+                <Text style={{ marginTop: '-5px' }} size="xs">
+                  Hari
+                </Text>
+              </div>
+              <div className="col-span-10">
+                <div className="my-auto text-right -mt-3 -me-3">
+                  <Badge
+                    size="xs"
+                    style={{
+                      marginTop: '7px',
+                      marginLeft: '4px',
+                      borderRadius: '2px',
+                    }}
+                    color="blue"
+                  >
+                    {req?.type}
+                  </Badge>
+                  <Badge
+                    size="xs"
+                    style={{
+                      marginTop: '7px',
+                      marginLeft: '4px',
+                      borderRadius: '2px',
+                    }}
+                    color={req?.status == 'Disetujui' ? 'green' : 'red'}
+                  >
+                    {req?.status}
+                  </Badge>
+                </div>
+                <div className="my-auto text-center mt-2">
+                  <Divider orientation="vertical" />
+                  <Text size="18px" fw={700}>
+                    {req.employee.name}
+                  </Text>
+                </div>
+              </div>
             </div>
-            <div className="my-auto text-center mt-2">
-              <Divider orientation="vertical" />
-              <Text size="18px" fw={700}>
-                {' '}
-                Hendy Nur Sholeh
+            <div className="text-left">
+              <Text style={{ marginLeft: '0px', padding: '8px' }} size="11px" fw={500}>
+                Tanggal pengajuan : {req?.created_at}
               </Text>
             </div>
-          </div>
-        </div>
-        <div className="text-left">
-          <Text style={{ marginLeft: '0px', padding: '8px' }} size="11px" fw={500}>
-            Tanggal pengajuan : 21 Januari 2025
-          </Text>
-        </div>
-      </button>
-      {/* ))
+          </button>
+        ))
       ) : (
         <section className="min-h-96 flex flex-col items-center justify-center mt-10">
           <img
@@ -85,7 +114,7 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
           />
           <span className="font-bold text-slate-400 text-xl">Belum ada data izin</span>
         </section>
-      )} */}
+      )}
     </div>
   );
 };

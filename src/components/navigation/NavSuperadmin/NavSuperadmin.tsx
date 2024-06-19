@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { Modal, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsCog, IconAlertCircle } from '@tabler/icons-react';
@@ -80,7 +81,7 @@ export const NavSuperadmin: React.FC = () => {
                       <span>{company.name}</span>
                     </div>
                   }
-                  onClick={() => store_idCompany(company.id, company.name)}
+                  onClick={() => store_idCompany(company.id ?? 1, company.name)}
                   active={company.id == ID_COMPANY}
                 />
               );
