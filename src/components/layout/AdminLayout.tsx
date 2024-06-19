@@ -1,4 +1,4 @@
-import { AppShell, Avatar, Burger, Group, Menu, UnstyledButton } from '@mantine/core';
+import { AppShell, Avatar, Burger, Group, Menu, NavLink, UnstyledButton } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
   IconCalendar,
@@ -16,6 +16,8 @@ import {
   IconFileAlert,
   IconClockPin,
   IconMap2,
+  IconAlertCircle,
+  IconBuildingBank,
 } from '@tabler/icons-react';
 import { Suspense, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
@@ -23,9 +25,10 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 
 import { LoadingScreen } from '../elements';
-import { SideNav } from '../navigation';
+import { NavSuperadmin, SideNav } from '../navigation';
 
 const MenuMain = [{ title: 'Beranda', href: '/beranda', icon: IconHome2 }];
+const MenuDataMasterSuperadmin = [{ title: 'Company', href: '/company', icon: IconBuildingBank }];
 
 const MenuDataMaster = [
   { title: 'Divisi', href: '/division', icon: IconBuildingEstate },
@@ -48,13 +51,20 @@ const MenuPengajuan = [
   { title: 'Lembur', href: '/overtime', icon: IconAlarmPlus },
 ];
 
+// ================================================================================
+// ================== THIS LAYOUT FOR SUPERADMIN & ADMIN ==========================
+// ================================================================================
 export const AdminLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
   const [title, setTitle] = useState('Beranda');
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const { creds, logout } = useAuth();
+  const ID_COMPANY = localStorage.getItem('id_company');
+  const NAME_COMPANY = localStorage.getItem('name_company');
+
   if (!creds) return <Navigate to="/login" replace />;
+
   return (
     <Suspense fallback={<LoadingScreen />}>
       <AppShell
@@ -84,6 +94,7 @@ export const AdminLayout: React.FC = () => {
             {!isMobile && (
               <Group className="grow h-full" justify="space-between">
                 <h1 className="px-3 py-2 font-semibold text-center">{title}</h1>
+                {NAME_COMPANY && <div className="text-sm font-semibold">{NAME_COMPANY}</div>}
                 <Menu shadow="md" width={200}>
                   <Menu.Target>
                     <UnstyledButton>
@@ -126,30 +137,51 @@ export const AdminLayout: React.FC = () => {
         <AppShell.Navbar style={{ transition: 'all 0.3s ease' }}>
           <section className="overflow-x-auto min-h-screen pt-1 bar-scroll-blue">
             <div className="p-2 flex flex-col pb-20">
+              {creds?.role == 'superadmin' && <NavSuperadmin />}
               <SideNav
                 SideNavProps={MenuMain}
                 HeaderList={null}
                 ToggleButton={() => toggle()}
                 TitleSetting={setTitle}
               />
-              <SideNav
-                SideNavProps={MenuDataMaster}
-                HeaderList={'Data Master'}
-                ToggleButton={() => toggle()}
-                TitleSetting={setTitle}
-              />
-              <SideNav
-                SideNavProps={MenuAbsensi}
-                HeaderList={'Absensi'}
-                ToggleButton={() => toggle()}
-                TitleSetting={setTitle}
-              />
-              <SideNav
-                SideNavProps={MenuPengajuan}
-                HeaderList={'Pengajuan'}
-                ToggleButton={() => toggle()}
-                TitleSetting={setTitle}
-              />
+              {creds?.role == 'superadmin' && (
+                <SideNav
+                  SideNavProps={MenuDataMasterSuperadmin}
+                  HeaderList={'Data Master'}
+                  ToggleButton={() => toggle()}
+                  TitleSetting={setTitle}
+                />
+              )}
+              {creds?.role == 'admin' || ID_COMPANY !== null ? (
+                <>
+                  <SideNav
+                    SideNavProps={MenuDataMaster}
+                    HeaderList={'Data Master'}
+                    ToggleButton={() => toggle()}
+                    TitleSetting={setTitle}
+                  />
+                  <SideNav
+                    SideNavProps={MenuAbsensi}
+                    HeaderList={'Absensi'}
+                    ToggleButton={() => toggle()}
+                    TitleSetting={setTitle}
+                  />
+                  <SideNav
+                    SideNavProps={MenuPengajuan}
+                    HeaderList={'Pengajuan'}
+                    ToggleButton={() => toggle()}
+                    TitleSetting={setTitle}
+                  />
+                </>
+              ) : (
+                <NavLink
+                  className="rounded-xl mt-5"
+                  label={<span className="text-red-500">Pilih Company</span>}
+                  leftSection={<IconAlertCircle className="text-red-500" size={22} />}
+                  active={false}
+                  disabled
+                />
+              )}
             </div>
           </section>
         </AppShell.Navbar>

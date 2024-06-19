@@ -1,5 +1,6 @@
 import { ActionIcon, Button, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -76,8 +77,12 @@ export const CreateEmployee: React.FC = () => {
     };
 
     await mutationEmployeeCreate.mutateAsync(employeeDataPost, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
+      onSuccess: () => {
+        notifications.show({
+          title: 'Berhasil',
+          message: 'Karyawan berhasil ditambahkan',
+          color: 'teal',
+        });
         navigate(-1);
       },
     });

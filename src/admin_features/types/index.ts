@@ -27,13 +27,12 @@ export type EmployeeType = {
   nik: string;
   no_bpjs: string;
   name: string;
-  email: string;
+  last_education: string;
+  first_degree: string;
+  last_degree: string;
   sex: string;
   birth_date: string;
   religion: string;
-  first_degree: string;
-  last_degree: string;
-  last_education: string;
   address: string;
   rt: string;
   rw: string;
@@ -43,6 +42,7 @@ export type EmployeeType = {
   province: string;
   postal_code: string;
   phone: string;
+  email: string;
   status: boolean;
   user_id: number;
   division_id: number;
@@ -108,4 +108,13 @@ type EmployeeScheduleType = {
 type EmployeeLocation = {
   id: number;
   emplpoyee_id: number;
+};
+
+export type AttendanceReqType = {
+  employee_id: number;
+  employee: EmployeeType;
+  reason: string;
+  status: string;
+  attendance_request_lon: string;
+  attendance_request_lat: string;
 };

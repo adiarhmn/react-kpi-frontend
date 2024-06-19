@@ -69,7 +69,7 @@ const { BiodataEdit } = lazyImport(() => import('@/features/employee'), 'Biodata
 const { FileProfile } = lazyImport(() => import('@/features/employee'), 'FileProfile');
 
 // Admin Role Pages
-const { DashboardAdmin } = lazyImport(() => import('@/admin_features/misc'), 'DashboardAdmin');
+const { DinamicDashboard } = lazyImport(() => import('@/components/misc'), 'DinamicDashboard');
 const { Schedule: AdminSchedule } = lazyImport(
   () => import('@/admin_features/schedule'),
   'Schedule'
@@ -87,6 +87,7 @@ const { CreateDivision } = lazyImport(() => import('@/admin_features/division'),
 const { UpdateDivision } = lazyImport(() => import('@/admin_features/division'), 'UpdateDivision');
 const { CreateShift } = lazyImport(() => import('@/admin_features/shift'), 'CreateShift');
 const { CreateEmployee } = lazyImport(() => import('@/admin_features/employees'), 'CreateEmployee');
+const { UpdateEmployee } = lazyImport(() => import('@/admin_features/employees'), 'UpdateEmployee');
 const { Users } = lazyImport(() => import('@/admin_features/users'), 'Users');
 const { CreateUser } = lazyImport(() => import('@/admin_features/users'), 'CreateUser');
 const { UpdateUser } = lazyImport(() => import('@/admin_features/users'), 'UpdateUser');
@@ -114,6 +115,11 @@ const { UpdateLocations } = lazyImport(
   () => import('@/admin_features/location/pages'),
   'UpdateLocations'
 );
+const { AttendanceRequest } = lazyImport(
+  () => import('@/admin_features/attendance/pages'),
+  'AttendanceRequest'
+);
+const { Company } = lazyImport(() => import('@/superadmin/company'), 'Company');
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -202,21 +208,23 @@ export const AppRoutes: React.FC = () => {
         )}
 
         {/* Routes for Admin with Desktop View ======================>*/}
-        {creds?.role === 'admin' && (
+        {creds?.role === 'admin' || creds?.role === 'superadmin' ? (
           <Route element={<AdminLayout />}>
             <Route index path="/" element={<RedirectToBeranda />} />
-            <Route path="beranda" element={<DashboardAdmin />} />
+            <Route path="beranda" element={<DinamicDashboard />} />
             <Route path="schedule" element={<AdminSchedule />} />
             <Route path="schedule/create" element={<CreateSchedule />} />
             <Route path="schedule/update" element={<UpdateSchedule />} />
             <Route path="shift" element={<ShiftAdmin />} />
             <Route path="attendance" element={<AdminAttendance />} />
+            <Route path="request-attendance" element={<AttendanceRequest />} />
             <Route path="employees" element={<Employees />} />
             <Route path="division" element={<Division />} />
             <Route path="division/create" element={<CreateDivision />} />
             <Route path="division/update" element={<UpdateDivision />} />
             <Route path="shift/create" element={<CreateShift />} />
             <Route path="employees/create" element={<CreateEmployee />} />
+            <Route path="employees/update" element={<UpdateEmployee />} />
             <Route path="users" element={<Users />} />
             <Route path="users/create" element={<CreateUser />} />
             <Route path="users/update" element={<UpdateUser />} />
@@ -229,7 +237,10 @@ export const AppRoutes: React.FC = () => {
             <Route path="locations" element={<Locations />} />
             <Route path="locations/create" element={<CreateLocations />} />
             <Route path="locations/update" element={<UpdateLocations />} />
+            {creds?.role == 'superadmin' && <Route path="company" element={<Company />} />}
           </Route>
+        ) : (
+          <Route path="development" element={<Development />} />
         )}
 
         {/* Route For Development */}

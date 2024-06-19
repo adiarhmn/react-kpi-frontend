@@ -16,3 +16,10 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type Companys = {
+  company_logo?: string;
+  id?: number;
+  name: string;
+  shift_active: boolean;
+};

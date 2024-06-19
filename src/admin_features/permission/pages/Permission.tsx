@@ -1,9 +1,11 @@
-import { Input } from '@mantine/core';
+import { Input, Select } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
+import { useState } from 'react';
 
 import { TablePermission } from '../components';
 
 export const Permission: React.FC = () => {
+  const [typeRequest, setTypeRequest] = useState<string>('izin');
   return (
     <main>
       {/* Menampilkan Data Divisi */}
@@ -18,9 +20,16 @@ export const Permission: React.FC = () => {
         </div>
         <div className="flex gap-2">
           <Input placeholder="Cari..." leftSection={<IconSearch size={14}></IconSearch>}></Input>
+          <Select
+            className="mt-2 lg:mt-0 max-w-xs"
+            placeholder="Pilih Pengajuan"
+            data={['sakit', 'izin']}
+            defaultValue="izin"
+            onChange={(e) => setTypeRequest(e ?? 'izin')}
+          />
         </div>
         <div className="mt-7">
-          <TablePermission />
+          <TablePermission typeRequest={typeRequest} />
         </div>
       </section>
     </main>

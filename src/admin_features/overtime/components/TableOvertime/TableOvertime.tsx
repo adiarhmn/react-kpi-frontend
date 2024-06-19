@@ -14,7 +14,11 @@ export const TableOvertime: React.FC<TableOvertimeProps> = ({ month }) => {
   const { creds } = useAuth();
   if (creds === null) navigate('/login');
 
-  const { data, isLoading, error } = useGetOvertime(month.getMonth() + 1, month.getFullYear());
+  const { data, isLoading, error } = useGetOvertime(
+    creds?.company_id,
+    month.getMonth() + 1,
+    month.getFullYear()
+  );
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
   return (

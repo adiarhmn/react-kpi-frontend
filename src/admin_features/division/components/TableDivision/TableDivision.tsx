@@ -1,8 +1,8 @@
 /* eslint-disable linebreak-style */
-import { ActionIcon, Button, Loader, Modal, Table, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconInfoCircle, IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -95,9 +95,6 @@ export const TableDivision: React.FC = () => {
                   <ActionIcon onClick={() => openDeleteModal(divisi)} color="red">
                     <IconTrash size={14} />
                   </ActionIcon>
-                  <UnstyledButton>
-                    <IconInfoCircle className="text-blue-600" size={20} />
-                  </UnstyledButton>
                 </Table.Td>
               </Table.Tr>
             );

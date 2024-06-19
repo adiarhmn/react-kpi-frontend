@@ -9,5 +9,5 @@ export async function getDivisions(id_company?: number) {
 }
 
 export const useGetDivisions = (id_company?: number) => {
-  return useQuery({ queryKey: ['division'], queryFn: () => getDivisions(id_company) });
+  return useQuery({ queryKey: ['division', id_company], queryFn: () => getDivisions(id_company) });
 };

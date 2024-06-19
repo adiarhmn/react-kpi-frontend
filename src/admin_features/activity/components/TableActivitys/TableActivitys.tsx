@@ -6,7 +6,10 @@ import { useAuth } from '@/features/auth';
 
 import { useGetActivityAlias, useGetActivitys } from '../../api';
 
-export const TableActivitys: React.FC = () => {
+interface TableActivitysProps {
+  date: string;
+}
+export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   if (creds === null) navigate('/login');
@@ -14,7 +17,7 @@ export const TableActivitys: React.FC = () => {
     data: DataActivity,
     error: errorActivity,
     isLoading: loadingActivity,
-  } = useGetActivitys(creds?.company_id);
+  } = useGetActivitys(creds?.company_id, date);
 
   const { data: DataActivityAlias, isLoading: LoadingActivityAlias } = useGetActivityAlias(
     creds?.company_id
@@ -27,6 +30,7 @@ export const TableActivitys: React.FC = () => {
     return <div className="text-red-600 text-center my-20 font-bold">{errorActivity?.message}</div>;
   }
 
+  console.log('Data Acti', DataActivity);
   if (DataActivityAlias.length === 0) {
     return (
       <div className="min-h-52 flex justify-center items-center">
@@ -47,6 +51,7 @@ export const TableActivitys: React.FC = () => {
     <Table withColumnBorders withTableBorder>
       <Table.Thead>
         <Table.Tr>
+          <Table.Th className="font-bold">Nama Karyawan</Table.Th>
           {Array.from(
             { length: 10 },
             (_, i) =>
@@ -62,6 +67,7 @@ export const TableActivitys: React.FC = () => {
         {DataActivity.map((activity: any, index: number) => {
           return (
             <Table.Tr key={index}>
+              <Table.Td>{activity.attendance.employee.name}</Table.Td>
               {Array.from(
                 { length: 10 },
                 (_, i) =>

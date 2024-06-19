@@ -2,15 +2,28 @@ import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { RequestsType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
 
 import { useGetRequest } from '../../api';
 import { usePutRequest } from '../../api/putRequest';
 
-export const TablePermission = () => {
+interface TablePermissionProps {
+  typeRequest?: string;
+}
+export const TablePermission: React.FC<TablePermissionProps> = ({ typeRequest }) => {
+  const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
+
   const [opened, { open, close }] = useDisclosure(false);
-  const { data, isLoading, error, refetch } = useGetRequest('izin');
+  const { data, isLoading, error, refetch } = useGetRequest(
+    typeRequest ?? 'izin',
+    undefined,
+    creds?.company_id
+  );
   const [DataRequest, setDataRequest] = useState<RequestsType>();
   const MutationUpdateRequest = usePutRequest();
 
@@ -18,12 +31,12 @@ export const TablePermission = () => {
     console.log(data);
   }, [data]);
 
-  const HandleUpdateRequest = async () => {
+  const HandleUpdateRequest = async (status: string) => {
     if (!DataRequest) return console.log('Data Request Not Found');
 
     const DataPut = {
       ...DataRequest,
-      status: 'Disetujui',
+      status: status,
     };
 
     await MutationUpdateRequest.mutateAsync(DataPut, {
@@ -55,6 +68,7 @@ export const TablePermission = () => {
           <Table.Tr>
             <Table.Th className="font-bold">No</Table.Th>
             <Table.Th className="font-bold">Nama Karyawan</Table.Th>
+            <Table.Th className="font-bold">Jenis Izin</Table.Th>
             <Table.Th className="font-bold">Status</Table.Th>
             <Table.Th className="font-bold">Keterangan</Table.Th>
             <Table.Th className="flex gap-2 items-center justify-center font-bold">Aksi</Table.Th>
@@ -66,6 +80,7 @@ export const TablePermission = () => {
               <Table.Tr key={index}>
                 <Table.Td>{index + 1}</Table.Td>
                 <Table.Td>{request?.employee.name}</Table.Td>
+                <Table.Td>{request?.type}</Table.Td>
                 <Table.Td>{request?.status}</Table.Td>
                 <Table.Td>{request?.description}</Table.Td>
                 <Table.Td className="flex gap-2 items-center justify-center">
@@ -104,11 +119,14 @@ export const TablePermission = () => {
           </table>
 
           <div className="flex gap-2 justify-end mt-4">
-            <Button color="green" onClick={HandleUpdateRequest}>
-              Ya
+            <Button color="red" onClick={() => HandleUpdateRequest('Ditolak')}>
+              Tolak
             </Button>
-            <Button color="red" onClick={close}>
-              Tidak
+            <Button color="green" onClick={() => HandleUpdateRequest('Disetujui')}>
+              Terima
+            </Button>
+            <Button color="gray" onClick={close}>
+              Tutup
             </Button>
           </div>
         </div>

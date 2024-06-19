@@ -2,13 +2,18 @@ import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useGetRequest, usePutRequest } from '@/admin_features/permission/api';
 import { RequestsType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
 
 export const TableLeave = () => {
+  const navigate = useNavigate();
+  const { creds } = useAuth();
+  if (creds === null) navigate('/login');
   const [opened, { open, close }] = useDisclosure(false);
-  const { data, isLoading, error, refetch } = useGetRequest('cuti');
+  const { data, isLoading, error, refetch } = useGetRequest('cuti', undefined, creds?.company_id);
   const [DataRequest, setDataRequest] = useState<RequestsType>();
   const MutationUpdateRequest = usePutRequest();
 
@@ -16,12 +21,12 @@ export const TableLeave = () => {
     console.log(data);
   }, [data]);
 
-  const HandleUpdateRequest = async () => {
+  const HandleUpdateRequest = async (status: string) => {
     if (!DataRequest) return console.log('Data Request Not Found');
 
     const DataPut = {
       ...DataRequest,
-      status: 'Disetujui',
+      status: status,
     };
 
     await MutationUpdateRequest.mutateAsync(DataPut, {
@@ -102,11 +107,14 @@ export const TableLeave = () => {
           </table>
 
           <div className="flex gap-2 justify-end mt-4">
-            <Button color="green" onClick={HandleUpdateRequest}>
-              Ya
+            <Button color="red" onClick={() => HandleUpdateRequest('Ditolak')}>
+              Tolak
             </Button>
-            <Button color="red" onClick={close}>
-              Tidak
+            <Button color="green" onClick={() => HandleUpdateRequest('Disetujui')}>
+              Terima
+            </Button>
+            <Button color="gray" onClick={close}>
+              Tutup
             </Button>
           </div>
         </div>

@@ -57,9 +57,6 @@ export const Attendance: React.FC = () => {
             <Table.Thead>
               <Table.Tr>
                 <Table.Th className="font-semibold">Nama</Table.Th>
-                {/* <Table.Th className="font-semibold">Check In</Table.Th>
-                <Table.Th className="font-semibold">Check Out</Table.Th>
-                <Table.Th className="font-semibold">Shift</Table.Th> */}
                 <Table.Th className="font-semibold">Status Kehadiran</Table.Th>
                 <Table.Th className="font-semibold">Keterangan</Table.Th>
               </Table.Tr>
@@ -68,25 +65,14 @@ export const Attendance: React.FC = () => {
               {DataAttendances?.map((item: ScheduleAttendanceType) => (
                 <Table.Tr key={item.id}>
                   <Table.Td>{item.employee_schedule.employee.name}</Table.Td>
-                  {/* <Table.Td>
-                    {new Date(item?.check_in).toLocaleTimeString('id-ID', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </Table.Td>
-                  <Table.Td>
-                    {new Date(item?.check_out).toLocaleTimeString('id-ID', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </Table.Td>
-                  <Table.Td>{item.shift_in + '-' + item.shift_out}</Table.Td> */}
-                  <Table.Td>
+                  <Table.Td className="uppercase">
                     {item.Attendance.length > 0 ? 'Hadir' : item.attendance_status}
                   </Table.Td>
                   <Table.Td>
                     {item.Attendance.length > 0 ? (
-                      <Badge color="red">{item.Attendance[0].status}</Badge>
+                      <Badge color={item.Attendance[0].status == 'present' ? 'green' : 'red'}>
+                        {item.Attendance[0].status}
+                      </Badge>
                     ) : (
                       '-'
                     )}
