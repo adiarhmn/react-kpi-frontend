@@ -62,6 +62,11 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
     }
   }, [data]);
 
+  // Edit Employee
+  const editEmployee = (employee: EmployeeType) => {
+    navigate(`/employees/update`, { state: { employee } });
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center my-20">
@@ -95,7 +100,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
                 <Table.Td>{employee?.user.role}</Table.Td>
                 <Table.Td>
                   <div className="flex gap-2 items-center justify-center pt-1">
-                    <ActionIcon color="yellow">
+                    <ActionIcon onClick={() => editEmployee(employee)} color="yellow">
                       <IconPencil size={14} />
                     </ActionIcon>
                     <ActionIcon onClick={() => openDeleteModal(employee)} color="red">
