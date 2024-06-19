@@ -1,3 +1,5 @@
+import { EmployeeType } from '@/admin_features/types';
+
 export type AbsenceType = {
   id?: number | null | string;
   date_start: string;
@@ -7,4 +9,5 @@ export type AbsenceType = {
   created_at: any;
   description: string;
   employee_id?: number;
+  employee: EmployeeType;
 };

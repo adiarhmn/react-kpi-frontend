@@ -66,7 +66,7 @@ export const EmployeeRequest: React.FC = () => {
         </Tabs.List>
       </Tabs>
 
-      <EmployeeRequestList type={selectType} />
+      <EmployeeRequestList typeRequest={selectType} />
     </main>
   );
 };

@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable import/order */
+/* eslint-disable linebreak-style */
 import { Button, Drawer, Fieldset, Modal, Select, Table } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
@@ -11,9 +13,11 @@ import { ShiftType } from '@/admin_features/types';
 import { useGetShift } from '@/features/schedule/api';
 // eslint-disable-next-line no-restricted-imports
 import { ScheduleList, ScheduleListNew } from '@/features/schedule/components';
+import { useAuth } from '@/features/auth';
 
 export const DataAttendance: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const { creds } = useAuth();
   const [month, setMonth] = useState<Date>(new Date());
   const [selectShift, setSelectShift] = useState('');
   const [selectStatus, setSelectStatus] = useState('');
@@ -76,6 +80,7 @@ export const DataAttendance: React.FC = () => {
           shift={selectShift}
           status={selectStatus}
           modalState={opened}
+          employee_id={creds?.employee_id}
         />
       </section>
 

@@ -61,9 +61,9 @@ export const LateRequestList: React.FC = () => {
                       marginRight: '5px',
                       borderRadius: '2px',
                     }}
-                    color="red"
+                    color={request.status == 'Disetujui' ? 'green' : 'red'}
                   >
-                    Belum disetujui
+                    {request.status}
                   </Badge>
                 </div>
                 <div className="w-full grid grid-cols-12 mb-3">

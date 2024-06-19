@@ -35,7 +35,6 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, status }) => 
   }, [data]);
 
   useEffect(() => {
-    console.log('effect jalan');
     const newParams = {
       employeeId: creds?.employee_id,
       typeAbsence,

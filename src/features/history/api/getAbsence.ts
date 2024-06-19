@@ -5,15 +5,23 @@ import { id } from 'date-fns/locale';
 
 const BaseURL = import.meta.env.VITE_API_URL;
 
+export async function getAbsenceById(id?: number | null | string) {
+  const res = await axios.get(`${BaseURL}/request/${id}`);
+  return res.data.data;
+}
+
+export const useGetAbsenceById = (id?: number | null | string) => {
+  return useQuery({ queryKey: ['absence', id], queryFn: () => getAbsenceById(id) });
+};
+
 export async function getAbsence(id?: number | null) {
   const res = await axios.get(`${BaseURL}/request?employee=${id}`);
   return res.data.data;
 }
 
-export async function getAbsenceById(id?: number | null | string) {
-  const res = await axios.get(`${BaseURL}/request/${id}`);
-  return res.data.data;
-}
+export const useGetAbsence = (id?: number | null) => {
+  return useQuery({ queryKey: ['absence'], queryFn: () => getAbsence(id) });
+};
 
 export async function getAbsenceByType(id?: number | null, type?: string, status?: string) {
   const res = await axios.get(`${BaseURL}/request?employee=${id}&types=${type}&status=${status}`);
@@ -22,18 +30,23 @@ export async function getAbsenceByType(id?: number | null, type?: string, status
   return res.data.data;
 }
 
-export const useGetAbsenceById = (id?: number | null | string) => {
-  return useQuery({ queryKey: ['absence', id], queryFn: () => getAbsenceById(id) });
-};
-
-export const useGetAbsence = (id?: number | null) => {
-  return useQuery({ queryKey: ['absence'], queryFn: () => getAbsence(id) });
-};
-
 export const useGetAbsenceByType = (id?: number | null, type?: string, status?: string) => {
   return useQuery({
     queryKey: ['absence', id, type, status],
     queryFn: () => getAbsenceByType(id, type, status),
+  });
+};
+
+export async function getAbsenceByDivision(division_id?: number, type?: string) {
+  const res = await axios.get(`${BaseURL}/request?division=${division_id}&types=${type}`);
+  console.log('URL : ', `${BaseURL}/request?division=${division_id}&types=${type}`);
+  return res.data.data;
+}
+
+export const useGetAbsenceByDivision = (division_id?: number, type?: string) => {
+  return useQuery({
+    queryKey: ['absence', division_id, type],
+    queryFn: () => getAbsenceByDivision(division_id, type),
   });
 };
 
