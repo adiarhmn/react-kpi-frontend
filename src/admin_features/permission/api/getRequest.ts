@@ -16,6 +16,9 @@ export async function getRequest(
   if (type && date && company_id)
     URL = `${BaseURL}/request?company=${company_id}&date=${date}&types=${type}`;
 
+  if (type && date && company_id && status)
+    URL = `${BaseURL}/request?company=${company_id}&date=${date}&types=${type}&status=${status}`;
+
   console.log('URL -->', URL);
 
   const res = await axios.get(URL);
