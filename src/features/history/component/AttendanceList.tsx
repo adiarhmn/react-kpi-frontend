@@ -59,8 +59,6 @@ export const AttendanceList: React.FC<AttendanceProps> = ({
     setParams(newParams);
   }, [modalState, month]);
 
-  console.log(employee_id);
-  console.log('Data schedule :', schedules);
   return (
     <div className="text-center">
       <div className="w-full grid grid-cols-12 px-6">
@@ -135,23 +133,5 @@ export const AttendanceList: React.FC<AttendanceProps> = ({
         )}
       </div>
     </div>
-    // <Table
-    //   horizontalSpacing="xs"
-    //   className="text-center"
-    //   striped
-    //   stickyHeader
-    //   stickyHeaderOffset={60}
-    // >
-    //   <Table.Thead>
-    //     <Table.Tr className="text-center">
-    //       <Table.Th className="font-bold">Tanggal</Table.Th>
-    //       <Table.Th className="font-bold text-center">Kode</Table.Th>
-    //       <Table.Th className="font-bold text-center">Status</Table.Th>
-    //       <Table.Th className="font-bold text-center">Aksi</Table.Th>
-    //     </Table.Tr>
-    //   </Table.Thead>
-    //   <Table.Tbody>{rows}</Table.Tbody>
-    //   {/* <Table.Caption>Scroll page to see sticky thead</Table.Caption> */}
-    // </Table>
   );
 };

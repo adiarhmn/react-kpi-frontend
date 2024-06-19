@@ -27,17 +27,12 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
           <button
             key={index}
             onClick={() => navigate(`/employee-division/detail`, { state: { employee: emp } })}
-            className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
+            className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700 mt-1"
           >
-            <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
+            <div className="w-full grid grid-cols-12 -mb-2 pt-2 p-4">
               {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
               <div className="col-span-2 text-center -ms-3">
-                <Text size="30px" fw={700}>
-                  12
-                </Text>
-                <Text style={{ marginTop: '-5px' }} size="xs">
-                  Hari
-                </Text>
+                <img className="w-full rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
               </div>
               <div className="col-span-10">
                 <div className="my-auto text-right -mt-3 -me-3">
@@ -53,7 +48,7 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
                     {emp?.user.role}
                   </Badge>
                 </div>
-                <div className="my-auto text-center mt-2">
+                <div className="my-auto text-left mt-2 ms-4">
                   <Divider orientation="vertical" />
                   <Text size="18px" fw={700}>
                     {emp?.name}
@@ -75,7 +70,7 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
             src="/images/blank-canvas.svg"
             alt=""
           />
-          <span className="font-bold text-slate-400 text-xl">Belum ada data izin</span>
+          <span className="font-bold text-slate-400 text-xl">Belum ada data anggota</span>
         </section>
       )}
     </div>

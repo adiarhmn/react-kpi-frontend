@@ -1,5 +1,4 @@
 /* eslint-disable import/order */
-import { useAuth } from '@/features/auth';
 import { Tabs } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -8,7 +7,6 @@ import { EmployeeRequestList } from '../components';
 
 export const EmployeeRequest: React.FC = () => {
   const navigate = useNavigate();
-  const { creds } = useAuth();
   const [selectType, setSelectType] = useState('sakit');
 
   return (

@@ -68,11 +68,7 @@ export const DetailEmployeeDivision: React.FC = () => {
         </div>
         <div className="grid grid-cols-12 px-2">
           <div className="col-span-6 px-2 flex items-left">
-            <img
-              className="w-2/3 mb-2 bg-slate-200 rounded-lg p-2"
-              src="/images/blank-canvas.svg"
-              alt=""
-            />
+            <img className="w-2/3 mb-2 rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
           </div>
           <div className="col-span-6">
             <div>
@@ -272,7 +268,7 @@ export const DetailEmployeeDivision: React.FC = () => {
             <Anchor
               size="sm"
               onClick={() =>
-                navigate(`/employee-division/attendance`, { state: { employee_id: employee.id } })
+                navigate(`/employee-division/attendance`, { state: { employee: employee } })
               }
               target="_blank"
               underline="always"

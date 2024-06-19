@@ -1,4 +1,7 @@
+/* eslint-disable import/order */
+import { useAuth } from '@/features/auth';
 import { Badge, Divider, Text } from '@mantine/core';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type EmployeeRequestListProps = {
@@ -9,6 +12,11 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
   type,
 }: EmployeeRequestListProps) => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
+  const [params, setParams] = useState({
+    companyID: creds?.company_id,
+    typeRequest: type,
+  });
   return (
     <div className="text-center">
       {/* {absences.length > 0 ? (

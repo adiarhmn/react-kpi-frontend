@@ -1,5 +1,6 @@
 /* eslint-disable import/order */
 /* eslint-disable no-restricted-imports */
+import { EmployeeType } from '@/admin_features/types';
 import { AttendanceList } from '@/features/history/component/AttendanceList';
 import { Button, Drawer, Fieldset, Select } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
@@ -10,7 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 export const EmployeeAttendance: React.FC = () => {
   const location = useLocation();
-  const employee_id = location.state.employee_id as number;
+  const employee = location.state.employee as EmployeeType;
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const [month, setMonth] = useState<Date>(new Date());
@@ -30,7 +31,7 @@ export const EmployeeAttendance: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
-            <h2 className="font-semibold ">Data Jadwal</h2>
+            <h2 className="font-semibold ">Riwayat absensi</h2>
           </div>
           <span className="font-semibold">
             <Button className="shadow-sm" size="xs" onClick={open}>
@@ -42,9 +43,17 @@ export const EmployeeAttendance: React.FC = () => {
 
         {/* Month Picker or Input Date */}
         <div>
-          <div className="w-full grid grid-cols-12">
+          <div className="w-full">
             <div className="col-span-12">
-              <p className="text-xs text-slate-400 mb-1">Rekap jadwal bulan :</p>
+              <div className="w-full grid grid-cols-12">
+                <div className="col-span-6">
+                  <p className="text-xs text-slate-400 mb-1">Rekap absensi bulan :</p>
+                </div>
+                <div className="col-span-6">
+                  <p className="text-xs text-right text-slate-400 mb-1">{employee?.name}</p>
+                </div>
+              </div>
+
               <MonthPickerInput
                 size="xs"
                 placeholder="Pick date"
@@ -68,7 +77,7 @@ export const EmployeeAttendance: React.FC = () => {
         shift={selectShift}
         status={selectStatus}
         modalState={opened}
-        employee_id={employee_id}
+        employee_id={employee?.id}
       />
 
       <Drawer

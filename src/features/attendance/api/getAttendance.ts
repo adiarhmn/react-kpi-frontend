@@ -38,3 +38,17 @@ export const useGetAttendanceMonthly = (
     queryFn: () => getAttendanceMonthly(employee_id, month, year),
   });
 };
+
+export async function getAttendanceBySchedule(employee_id?: number, schedule_id?: number) {
+  const res = await axios.get(
+    `${BaseURL}/attendance?employee=${employee_id}&schedule=${schedule_id}`
+  );
+  return res.data.data;
+}
+
+export const useGetAttendanceBySchedule = (employee_id?: number, schedule_id?: number) => {
+  return useQuery({
+    queryKey: ['attendance', employee_id, schedule_id],
+    queryFn: () => getAttendanceBySchedule(employee_id, schedule_id),
+  });
+};
