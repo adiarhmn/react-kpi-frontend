@@ -31,12 +31,12 @@ export const TablePermission: React.FC<TablePermissionProps> = ({ typeRequest })
     console.log(data);
   }, [data]);
 
-  const HandleUpdateRequest = async () => {
+  const HandleUpdateRequest = async (status: string) => {
     if (!DataRequest) return console.log('Data Request Not Found');
 
     const DataPut = {
       ...DataRequest,
-      status: 'Disetujui',
+      status: status,
     };
 
     await MutationUpdateRequest.mutateAsync(DataPut, {
@@ -119,11 +119,14 @@ export const TablePermission: React.FC<TablePermissionProps> = ({ typeRequest })
           </table>
 
           <div className="flex gap-2 justify-end mt-4">
-            <Button color="green" onClick={HandleUpdateRequest}>
-              Ya
+            <Button color="red" onClick={() => HandleUpdateRequest('Ditolak')}>
+              Tolak
             </Button>
-            <Button color="red" onClick={close}>
-              Tidak
+            <Button color="green" onClick={() => HandleUpdateRequest('Disetujui')}>
+              Terima
+            </Button>
+            <Button color="gray" onClick={close}>
+              Tutup
             </Button>
           </div>
         </div>

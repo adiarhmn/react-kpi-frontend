@@ -1,10 +1,12 @@
-import { Button, Input } from '@mantine/core';
+import { Button } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 import { notifications } from '@mantine/notifications';
-import { IconPencil, IconSearch } from '@tabler/icons-react';
-import { useEffect, useRef } from 'react';
+import { IconPencil } from '@tabler/icons-react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
+import { formatDateToString } from '@/utils/format';
 
 import { useGetActivityAlias } from '../api';
 import { TableActivitys } from '../components';
@@ -16,6 +18,7 @@ export const Activitys: React.FC = () => {
   if (creds === null) navigate('/login');
 
   const hasNotifiedRef = useRef(false);
+  const [date, setDate] = useState<Date>(new Date());
 
   useEffect(() => {
     if (state?.success && !hasNotifiedRef.current) {
@@ -56,10 +59,15 @@ export const Activitys: React.FC = () => {
           )}
         </div>
         <div className="flex gap-2">
-          <Input placeholder="Cari..." leftSection={<IconSearch size={14}></IconSearch>}></Input>
+          <DatePickerInput
+            className="max-w-56"
+            placeholder="Pick date"
+            value={date}
+            onChange={(value) => setDate(value as Date)}
+          />
         </div>
         <div className="mt-7">
-          <TableActivitys />
+          <TableActivitys date={formatDateToString(date.toString())} />
         </div>
       </section>
     </main>
