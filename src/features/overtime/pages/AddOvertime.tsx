@@ -87,14 +87,21 @@ export const AddOvertime: React.FC = () => {
   // [All About Location 🤯]
   const [statusLocation, setStatusLocation] = useState(false);
   const location = useGeoLocation();
-  function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  function calculateDistance(
+    lat1: number | undefined,
+    lon1: number | undefined,
+    lat2: number | undefined,
+    lon2: number | undefined
+  ): number {
     const R = 6371;
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const dLat = (((lat2 ?? 0) - (lat1 ?? 0)) * Math.PI) / 180;
+    const dLon = (((lon2 ?? 0) - (lon1 ?? 0)) * Math.PI) / 180;
     const a =
       0.5 -
       Math.cos(dLat) / 2 +
-      (Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * (1 - Math.cos(dLon))) /
+      (Math.cos(((lat1 ?? 0) * Math.PI) / 180) *
+        Math.cos(((lat2 ?? 0) * Math.PI) / 180) *
+        (1 - Math.cos(dLon))) /
         2;
     return R * 2 * Math.asin(Math.sqrt(a));
   }
@@ -181,8 +188,8 @@ export const AddOvertime: React.FC = () => {
     const overtimeData = {
       attendance_id: attendance?.id,
       detail: form.values.detail,
-      overtime_lat: location.coordinates?.latitude.toString(),
-      overtime_lon: location.coordinates?.longitude.toString(),
+      overtime_lat: (location.coordinates?.latitude ?? 0).toString(),
+      overtime_lon: (location.coordinates?.longitude ?? 0).toString(),
     };
 
     await mutationAddOvertime.mutateAsync(overtimeData, {
@@ -242,7 +249,7 @@ export const AddOvertime: React.FC = () => {
           <MapContainer
             key={location.loaded ? 'loaded' : 'notLoaded'}
             style={{ height: '33vh' }}
-            center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+            center={[location.coordinates?.latitude ?? 0, location.coordinates?.longitude ?? 0]}
             zoom={15}
             scrollWheelZoom={true}
           >
@@ -271,13 +278,13 @@ export const AddOvertime: React.FC = () => {
               ))
             )}
             <Marker
-              position={[location.coordinates?.latitude, location.coordinates?.longitude]}
+              position={[location.coordinates?.latitude ?? 0, location.coordinates?.longitude ?? 0]}
               icon={myIcon}
             >
               <Popup>Lokasi saya</Popup>
             </Marker>
             <Circle
-              center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+              center={[location.coordinates?.latitude ?? 0, location.coordinates?.longitude ?? 0]}
               radius={70}
               pathOptions={myCircle}
             />

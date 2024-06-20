@@ -104,8 +104,8 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProp
       custom8: formActivity.values.custom8,
       custom9: formActivity.values.custom9,
       custom10: formActivity.values.custom10,
-      activity_lon: location.coordinates?.longitude.toString(),
-      activity_lat: location.coordinates?.latitude.toString(),
+      activity_lon: (location.coordinates?.longitude ?? 0).toString(),
+      activity_lat: (location.coordinates?.latitude ?? 0).toString(),
     };
 
     await mutationAddActivity.mutateAsync(activityData, {

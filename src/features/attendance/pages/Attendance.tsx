@@ -2,7 +2,7 @@
 import { Button, Text, Loader, Modal, Input, Divider } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { IconCalendarEvent, IconMailForward, IconMap2, IconPlus } from '@tabler/icons-react';
+import { IconMailForward, IconMap2, IconPlus } from '@tabler/icons-react';
 import { Icon } from 'leaflet';
 import { useEffect, useState } from 'react';
 import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
@@ -18,9 +18,12 @@ import {
 import { useGetActivityDetail, useGetActivityAlias } from '../api/getActivity';
 import { CardAttendance } from '../components';
 import { ActivityDetailType, AttendanceType, EmployeeLocationType } from '../types';
+import { IconInfoCircle } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 
 export const Attendance: React.FC = () => {
   const { creds } = useAuth();
+  const navigate = useNavigate();
   const employee_id = creds?.employee_id;
 
   const [opened, { open, close }] = useDisclosure(false);
@@ -68,15 +71,25 @@ export const Attendance: React.FC = () => {
   // [All About Location 🤯]
   const location = useGeoLocation();
   const [statusLocation, setStatusLocation] = useState(false);
-
-  function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const customIcon = new Icon({
+    iconUrl: '/images/my-icon.svg',
+    iconSize: [50, 50],
+  });
+  function calculateDistance(
+    lat1: number | undefined,
+    lon1: number | undefined,
+    lat2: number | undefined,
+    lon2: number | undefined
+  ): number {
     const R = 6371; // Radius bumi dalam kilometer
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const dLat = (((lat2 ?? 0) - (lat1 ?? 0)) * Math.PI) / 180;
+    const dLon = (((lon2 ?? 0) - (lon1 ?? 0)) * Math.PI) / 180;
     const a =
       0.5 -
       Math.cos(dLat) / 2 +
-      (Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * (1 - Math.cos(dLon))) /
+      (Math.cos(((lat1 ?? 0) * Math.PI) / 180) *
+        Math.cos(((lat2 ?? 0) * Math.PI) / 180) *
+        (1 - Math.cos(dLon))) /
         2;
     return R * 2 * Math.asin(Math.sqrt(a));
   }
@@ -217,8 +230,8 @@ export const Attendance: React.FC = () => {
       custom8: formActivity.values.custom8,
       custom9: formActivity.values.custom9,
       custom10: formActivity.values.custom10,
-      activity_lon: location.coordinates?.longitude.toString(),
-      activity_lat: location.coordinates?.latitude.toString(),
+      activity_lon: (location.coordinates?.longitude ?? 0).toString(),
+      activity_lat: (location.coordinates?.latitude ?? 0).toString(),
     };
 
     await mutationAddActivity.mutateAsync(activityData, {
@@ -304,7 +317,7 @@ export const Attendance: React.FC = () => {
               <MapContainer
                 key={location.loaded ? 'loaded' : 'notLoaded'}
                 style={{ height: '33vh' }}
-                center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+                center={[location.coordinates?.latitude ?? 0, location.coordinates?.longitude ?? 0]}
                 // center={[-3.753033208345266, 114.76683450763974]}
                 zoom={15}
                 scrollWheelZoom={true}
@@ -334,13 +347,19 @@ export const Attendance: React.FC = () => {
                   ))
                 )}
                 <Marker
-                  position={[location.coordinates?.latitude, location.coordinates?.longitude]}
+                  position={[
+                    location.coordinates?.latitude ?? 0,
+                    location.coordinates?.longitude ?? 0,
+                  ]}
                   icon={myIcon}
                 >
                   <Popup>Lokasi saya</Popup>
                 </Marker>
                 <Circle
-                  center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+                  center={[
+                    location.coordinates?.latitude ?? 0,
+                    location.coordinates?.longitude ?? 0,
+                  ]}
                   radius={70}
                   pathOptions={myCircle}
                 />
@@ -384,7 +403,23 @@ export const Attendance: React.FC = () => {
                   >
                     <div className="flex justify-between text-xs items-center mb-2">
                       <span className="text-sm font-bold text-blue-700">Kegiatan {index + 1}</span>
-                      <IconCalendarEvent className="opacity-80" size={20} />
+                      <Button
+                        disabled={attendance?.check_in == null || attendance?.check_out != null}
+                        onClick={() =>
+                          navigate(`/activity/detail/`, {
+                            state: {
+                              activity: activity,
+                              alias: activityAlias,
+                              index: index,
+                            },
+                          })
+                        }
+                        variant="transparent"
+                        className="shadow-md me-1"
+                        size="xs"
+                      >
+                        <IconInfoCircle size={18} />
+                      </Button>
                     </div>
                     <div className="grid grid-cols-12">
                       {activityDetail != null && activityAlias[0] != null
@@ -396,7 +431,7 @@ export const Attendance: React.FC = () => {
                                   <Text size="xs" fw={700}>
                                     {activityAlias[0][`cs${i + 1}_name`]}
                                   </Text>
-                                  <Text style={{ textAlign: 'left' }} size="xs">
+                                  <Text truncate="end" style={{ textAlign: 'left' }} size="xs">
                                     {activity[`custom${i + 1}`]}
                                   </Text>
                                 </div>
@@ -429,6 +464,43 @@ export const Attendance: React.FC = () => {
 
       <Modal opened={opened} onClose={close} title="Tambah kegiatan">
         <form onSubmit={handleActivity}>
+          <MapContainer
+            key={location.loaded ? 'loaded' : 'notLoaded'}
+            style={{ height: '33vh' }}
+            center={[location.coordinates?.latitude ?? 0, location.coordinates?.longitude ?? 0]}
+            zoom={15}
+            scrollWheelZoom={true}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {location.loaded && !location.error ? (
+              <>
+                <Marker
+                  position={[
+                    location.coordinates?.latitude ?? 0,
+                    location.coordinates?.longitude ?? 0,
+                  ]}
+                  icon={customIcon}
+                >
+                  <Popup>Lokasi anda</Popup>
+                </Marker>
+                <Circle
+                  center={[
+                    location.coordinates?.latitude ?? 0,
+                    location.coordinates?.longitude ?? 0,
+                  ]}
+                  radius={60}
+                  pathOptions={{ color: '#CDE8E5', fillColor: 'blue', fillOpacity: 0.1 }}
+                />
+              </>
+            ) : (
+              <Marker position={[-3.753033208345266, 114.76683450763974]} icon={customIcon}>
+                <Popup>Lokasi anda</Popup>
+              </Marker>
+            )}
+          </MapContainer>
           {activityAlias[0] != null
             ? Array.from(
                 { length: 10 },

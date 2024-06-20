@@ -1,8 +1,10 @@
+/* eslint-disable import/order */
 import { useState, useEffect } from 'react';
+import { Geolocation } from '@capacitor/geolocation';
 
 interface Coordinates {
-  latitude: any; //adi pak ai
-  longitude: any; // ini adi jua pak ai
+  latitude: number | undefined;
+  longitude: number | undefined;
 }
 
 interface ErrorData {
@@ -22,35 +24,29 @@ export const useGeoLocation = (): LocationData => {
     coordinates: { latitude: 0, longitude: 0 },
   });
 
-  const onSuccess = (location: { coords: Coordinates }): void => {
-    setLocation({
-      loaded: true,
-      coordinates: {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      },
-    });
-  };
-
-  const onError = (error: GeolocationPositionError): void => {
-    setLocation({
-      loaded: true,
-      error: {
-        code: error.code,
-        message: error.message,
-      },
-    });
+  const getCurrentLocation = async () => {
+    try {
+      const position = await Geolocation.getCurrentPosition();
+      setLocation({
+        loaded: true,
+        coordinates: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        },
+      });
+    } catch (error: any) {
+      setLocation({
+        loaded: true,
+        error: {
+          code: error.code,
+          message: error.message,
+        },
+      });
+    }
   };
 
   useEffect(() => {
-    if (!('geolocation' in navigator)) {
-      onError({
-        code: 0,
-        message: 'Geolocation not supported',
-      } as GeolocationPositionError);
-    }
-
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    getCurrentLocation();
   }, []);
 
   return location;
