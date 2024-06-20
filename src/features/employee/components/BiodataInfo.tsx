@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 
 import { EmployeeType } from '@/admin_features/types';
+import { formatterDate } from '@/features/history';
 type BiodataProps = {
   employee: EmployeeType | undefined;
 };
@@ -59,7 +60,7 @@ export const BiodataInfo: React.FC<BiodataProps> = ({ employee }) => {
             <Text size="xs">Tanggal lahir</Text>
             <Text size="xs" fw={700}>
               {employee?.birth_date != null
-                ? format(employee.birth_date, 'dd MMM yyyy', { locale: id })
+                ? formatterDate(employee.birth_date, 'dd MMM yyyy')
                 : '-'}
             </Text>
           </div>

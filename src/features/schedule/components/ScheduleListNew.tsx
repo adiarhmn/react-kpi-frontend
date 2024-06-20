@@ -31,6 +31,17 @@ export const ScheduleListNew: React.FC<ScheduleProps> = ({
     status,
   });
 
+  useEffect(() => {
+    const newParams = {
+      employeeId: employee_id,
+      month: month.getMonth() + 1,
+      year: month.getFullYear(),
+      shift,
+      status,
+    };
+    setParams(newParams);
+  }, [modalState, month]);
+
   const { data } = useGetScheduleMonthly(
     params.employeeId,
     params.month,
@@ -44,17 +55,6 @@ export const ScheduleListNew: React.FC<ScheduleProps> = ({
       setSchedule(data);
     }
   }, [data]);
-
-  useEffect(() => {
-    const newParams = {
-      employeeId: employee_id,
-      month: month.getMonth() + 1,
-      year: month.getFullYear(),
-      shift,
-      status,
-    };
-    setParams(newParams);
-  }, [modalState, month]);
 
   console.log(employee_id);
   const rows = schedules.map((element) => (
