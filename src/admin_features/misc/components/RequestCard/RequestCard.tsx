@@ -75,7 +75,7 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
         </Table.Thead>
         <Table.Tbody>
           {typeReq == 'Cuti' || typeReq == 'Izin' || typeReq == 'Sakit'
-            ? DataRequestList.map((request: any, index: number) => (
+            ? DataRequestList?.map((request: any, index: number) => (
                 <Table.Tr key={index}>
                   <Table.Td>{request.employee.name}</Table.Td>
                   <Table.Td>{formatDateToString(request.created_at)}</Table.Td>
@@ -100,7 +100,7 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
 
           {/* TODO: APROVAL UNTUK ABSENSI DAN LEMBUR */}
           {typeReq == 'Absensi'
-            ? AttendanceReq.map((request: any, index: number) => (
+            ? AttendanceReq?.map((request: any, index: number) => (
                 <Table.Tr key={index}>
                   <Table.Td>{request.employee.name}</Table.Td>
                   <Table.Td>{formatDateToString(request.date)}</Table.Td>
@@ -117,7 +117,7 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
             : ''}
 
           {typeReq == 'Lembur'
-            ? DataOvertime.data.map((request: any, index: number) => (
+            ? DataOvertime?.data.map((request: any, index: number) => (
                 <Table.Tr key={index}>
                   <Table.Td>{request.attendance.employee.name}</Table.Td>
                   <Table.Td>{formatDateToString(request.start_time)}</Table.Td>

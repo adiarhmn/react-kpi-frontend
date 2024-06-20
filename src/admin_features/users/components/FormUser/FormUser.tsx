@@ -84,6 +84,14 @@ export const FormUser: React.FC<FormUserProps> = ({ currentUser, loading, onSubm
             value: 'supervisor',
             label: 'Supervisor',
           },
+          ...(creds?.role === 'superadmin'
+            ? [
+                {
+                  value: 'superadmin',
+                  label: 'Superadmin',
+                },
+              ]
+            : []),
         ]}
         value={form.values.role}
         allowDeselect={false}
