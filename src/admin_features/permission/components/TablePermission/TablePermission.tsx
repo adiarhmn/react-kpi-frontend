@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { RequestsType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
+import { formatDateToString } from '@/utils/format';
 
 import { useGetRequest } from '../../api';
 import { usePutRequest } from '../../api/putRequest';
@@ -67,6 +68,7 @@ export const TablePermission: React.FC<TablePermissionProps> = ({ typeRequest, d
           <Table.Tr>
             <Table.Th className="font-bold">No</Table.Th>
             <Table.Th className="font-bold">Nama Karyawan</Table.Th>
+            <Table.Th className="font-bold">Dibuat</Table.Th>
             <Table.Th className="font-bold">Jenis Izin</Table.Th>
             <Table.Th className="font-bold">Status</Table.Th>
             <Table.Th className="font-bold">Keterangan</Table.Th>
@@ -79,6 +81,7 @@ export const TablePermission: React.FC<TablePermissionProps> = ({ typeRequest, d
               <Table.Tr key={index}>
                 <Table.Td>{index + 1}</Table.Td>
                 <Table.Td>{request?.employee.name}</Table.Td>
+                <Table.Td>{formatDateToString(request?.created_at)}</Table.Td>
                 <Table.Td>{request?.type}</Table.Td>
                 <Table.Td>{request?.status}</Table.Td>
                 <Table.Td>{request?.description}</Table.Td>

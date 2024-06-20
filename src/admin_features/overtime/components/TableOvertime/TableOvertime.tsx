@@ -27,7 +27,9 @@ export const TableOvertime: React.FC<TableOvertimeProps> = ({ month }) => {
         <Table.Tr>
           <Table.Th className="font-bold">No</Table.Th>
           <Table.Th className="font-bold">Nama Karyawan</Table.Th>
+          <Table.Th className="font-bold">Dibuat</Table.Th>
           <Table.Th className="font-bold">Keterangan</Table.Th>
+          <Table.Th className="font-bold">Status</Table.Th>
           <Table.Th className="flex gap-2 items-center justify-center font-bold">Aksi</Table.Th>
         </Table.Tr>
       </Table.Thead>
@@ -37,7 +39,9 @@ export const TableOvertime: React.FC<TableOvertimeProps> = ({ month }) => {
             <Table.Tr key={index}>
               <Table.Td>{index + 1}</Table.Td>
               <Table.Td>{item?.attendance.employee.name}</Table.Td>
+              <Table.Td>{item?.created_at}</Table.Td>
               <Table.Td>{item?.detail}</Table.Td>
+              <Table.Td>{item?.status}</Table.Td>
               <Table.Td className="flex gap-2 items-center justify-center">
                 <ActionIcon disabled={item?.status == 'Disetujui'} color="green">
                   <IconCheck size={14} />

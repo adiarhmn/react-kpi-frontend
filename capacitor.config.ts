@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.tpaz.kpi',
-  appName: 'KPI APP',
+  appName: 'KPI TEFA',
   webDir: 'dist',
   bundledWebRuntime: false,
   server: {

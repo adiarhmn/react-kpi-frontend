@@ -39,7 +39,7 @@ export const Permission: React.FC = () => {
           <Select
             className="mt-2 lg:mt-0 max-w-xs"
             placeholder="Pilih Pengajuan"
-            data={['Semua Status', 'Disetujui', 'Ditolak']}
+            data={['Semua Status', 'Disetujui', 'Ditolak', 'Belum Disetujui']}
             defaultValue="Semua Status"
             onChange={(e) => setStatus(e ?? 'Semua Status')}
           />

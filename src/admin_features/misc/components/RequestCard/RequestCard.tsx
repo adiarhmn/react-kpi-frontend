@@ -59,7 +59,7 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
   };
 
   if (LoadRequest || LoadAttendance || loadOvertime) return <div>Loading...</div>;
-  console.log('DataRequest -->', DataOvertime);
+  console.log('DataRequest -->', DataRequestList);
   return (
     <div>
       <Table withColumnBorders withTableBorder>
