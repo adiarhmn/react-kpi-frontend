@@ -77,7 +77,7 @@ export const FormLocations: React.FC<FormLocationsProps> = ({
         required
         {...form.getInputProps('name')}
       />
-      <MapContainer style={{ height: '33vh' }} center={position} zoom={15} scrollWheelZoom={true}>
+      <MapContainer style={{ height: '55vh' }} center={position} zoom={15} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

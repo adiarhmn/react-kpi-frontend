@@ -1,6 +1,7 @@
 import { Button, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
@@ -16,6 +17,7 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
   if (creds === null) navigate('/login');
 
   const [opened, { open, close }] = useDisclosure(false);
+  const [DataActivityToShow, setDataActivityToShow] = useState<any>(undefined);
   const {
     data: DataActivity,
     error: errorActivity,
@@ -82,7 +84,13 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
                     )
                 )}
                 <Table.Td>
-                  <Button size="xs" onClick={open}>
+                  <Button
+                    size="xs"
+                    onClick={() => {
+                      setDataActivityToShow(activity);
+                      open();
+                    }}
+                  >
                     Detail
                   </Button>
                 </Table.Td>
@@ -96,9 +104,8 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
         {/* Modal content */}
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, itaque.</p>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, itaque.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, itaque.</p>
 
-        <div className="text-center py-20">INI NANTI MAP</div>
+        <div className="text-center py-20"></div>
       </Modal>
     </>
   );
