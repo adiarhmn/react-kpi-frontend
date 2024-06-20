@@ -119,3 +119,15 @@ export type AttendanceReqType = {
   attendance_request_lon: string;
   attendance_request_lat: string;
 };
+
+export type OvertimeType = {
+  id: number;
+  start_time: string;
+  end_time: string;
+  detail: string;
+  status: string;
+  overtime_lon: string;
+  overtime_lat: string;
+  attendance_id: number;
+  attendance: AttendanceType;
+};
