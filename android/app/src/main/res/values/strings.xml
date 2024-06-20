@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abude Outlet</string>
-    <string name="title_activity_main">Abude Outlet</string>
-    <string name="package_name">com.tpaz.abude.outlet</string>
-    <string name="custom_url_scheme">com.tpaz.abude.outlet</string>
+    <string name="app_name">KPI TEFA</string>
+    <string name="title_activity_main">KPI TEFA</string>
+    <string name="package_name">kpi.tefa-it.politala.ac.id</string>
+    <string name="custom_url_scheme">com.tpaz.kpi</string>
 </resources>

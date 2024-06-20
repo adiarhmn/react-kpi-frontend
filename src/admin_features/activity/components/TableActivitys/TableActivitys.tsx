@@ -1,4 +1,5 @@
-import { Button, Table } from '@mantine/core';
+import { Button, Modal, Table } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +14,8 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   if (creds === null) navigate('/login');
+
+  const [opened, { open, close }] = useDisclosure(false);
   const {
     data: DataActivity,
     error: errorActivity,
@@ -30,7 +33,6 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
     return <div className="text-red-600 text-center my-20 font-bold">{errorActivity?.message}</div>;
   }
 
-  console.log('Data Acti', DataActivity);
   if (DataActivityAlias.length === 0) {
     return (
       <div className="min-h-52 flex justify-center items-center">
@@ -48,39 +50,56 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
   }
 
   return (
-    <Table withColumnBorders withTableBorder>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th className="font-bold">Nama Karyawan</Table.Th>
-          {Array.from(
-            { length: 10 },
-            (_, i) =>
-              DataActivityAlias[0][`cs${i + 1}_name`] != '' && (
-                <Table.Th key={i} className="font-bold capitalize">
-                  {DataActivityAlias[0][`cs${i + 1}_name`]}
-                </Table.Th>
-              )
-          )}
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {DataActivity.map((activity: any, index: number) => {
-          return (
-            <Table.Tr key={index}>
-              <Table.Td>{activity.attendance.employee.name}</Table.Td>
-              {Array.from(
-                { length: 10 },
-                (_, i) =>
-                  activity[`custom${i + 1}`] != '' && (
-                    <Table.Th key={i} className="capitalize">
-                      {activity[`custom${i + 1}`]}
-                    </Table.Th>
-                  )
-              )}
-            </Table.Tr>
-          );
-        })}
-      </Table.Tbody>
-    </Table>
+    <>
+      <Table withColumnBorders withTableBorder>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th className="font-bold">Nama Karyawan</Table.Th>
+            {Array.from(
+              { length: 10 },
+              (_, i) =>
+                DataActivityAlias[0][`cs${i + 1}_name`] != '' && (
+                  <Table.Th key={i} className="font-bold capitalize">
+                    {DataActivityAlias[0][`cs${i + 1}_name`]}
+                  </Table.Th>
+                )
+            )}
+            <Table.Th className="font-bold">Detail</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {DataActivity.map((activity: any, index: number) => {
+            return (
+              <Table.Tr key={index}>
+                <Table.Td>{activity.attendance.employee.name}</Table.Td>
+                {Array.from(
+                  { length: 10 },
+                  (_, i) =>
+                    activity[`custom${i + 1}`] != '' && (
+                      <Table.Th key={i} className="capitalize">
+                        {activity[`custom${i + 1}`]}
+                      </Table.Th>
+                    )
+                )}
+                <Table.Td>
+                  <Button size="xs" onClick={open}>
+                    Detail
+                  </Button>
+                </Table.Td>
+              </Table.Tr>
+            );
+          })}
+        </Table.Tbody>
+      </Table>
+
+      <Modal size={'lg'} opened={opened} onClose={close} title="Detail Aktifitas">
+        {/* Modal content */}
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, itaque.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, itaque.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, itaque.</p>
+
+        <div className="text-center py-20">INI NANTI MAP</div>
+      </Modal>
+    </>
   );
 };
