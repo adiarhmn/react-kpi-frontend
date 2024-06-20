@@ -6,6 +6,7 @@ import { ActivityCard } from '@/features/components';
 import { formatterDate } from '@/features/history';
 import { useGetScheduleDaily } from '@/features/schedule/api';
 import { Anchor, Badge, Divider, Group, Text } from '@mantine/core';
+import { IconBriefcase, IconUser } from '@tabler/icons-react';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -58,7 +59,7 @@ export const DetailEmployeeDivision: React.FC = () => {
       </section>
 
       <section className="bg-white mx-auto max-w-xs p-3 shadow-md rounded-lg flex flex-col gap-2 mt-2 ">
-        <div className="flex justify-between items-center text-blue-700 mb-1">
+        <div className="flex justify-between items-center text-blue-700">
           <div className="flex items-center">
             <Text fw={700} c="blue">
               Biodata
@@ -67,50 +68,20 @@ export const DetailEmployeeDivision: React.FC = () => {
           <span className="font-semibold"></span>
         </div>
         <div className="grid grid-cols-12 px-2">
-          <div className="col-span-6 px-2 flex items-left">
-            <img className="w-2/3 mb-2 rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
+          <div className="col-span-4 px-2 flex items-left">
+            <img className="w-full mb-2 rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
           </div>
-          <div className="col-span-6">
-            <div>
-              <Text size="xs">Nomor Induk Pegawai</Text>
-              <Text size="xs" fw={700}>
-                {employee.nip}
-              </Text>
-            </div>
+          <div className="col-span-8">
             <div className="mt-2">
-              <Text size="xs">Nama lengkap</Text>
-              <Text size="xs" fw={700}>
+              <Text size="md" fw={700}>
                 {employee.name}
               </Text>
             </div>
-          </div>
-        </div>
-        <div className="grid grid-cols-12 px-2 gap-1 mb-4">
-          <div className="col-span-6">
-            <Text size="xs">Jenis kelamin</Text>
-            <Text size="xs" fw={700}>
-              {employee.sex}
-            </Text>
-          </div>
-          <div className="col-span-6">
-            <Text size="xs">Tanggal lahir</Text>
-            <Text size="xs" fw={700}>
-              {employee.birth_date != null
-                ? formatterDate(employee.birth_date, 'dd MMMM yyyy')
-                : '- '}
-            </Text>
-          </div>
-          <div className="col-span-6">
-            <Text size="xs">Nomor Hp</Text>
-            <Text size="xs" fw={700}>
-              08132147717238
-            </Text>
-          </div>
-          <div className="col-span-6">
-            <Text size="xs">Nomor BPJS</Text>
-            <Text size="xs" fw={700}>
-              {employee.no_bpjs}
-            </Text>
+            <div>
+              <Text size="md" c="grey" fw={700}>
+                {employee.user.role}
+              </Text>
+            </div>
           </div>
         </div>
       </section>

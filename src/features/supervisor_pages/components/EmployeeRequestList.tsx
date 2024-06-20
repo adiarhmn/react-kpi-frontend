@@ -3,7 +3,12 @@
 import { EmployeeType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
 import { useGetEmployee } from '@/features/employee/api/Profile';
-import { AbsenceType, getDaysBetweenDates, useGetAbsenceByDivision } from '@/features/history';
+import {
+  AbsenceType,
+  formatterDate,
+  getDaysBetweenDates,
+  useGetAbsenceByDivision,
+} from '@/features/history';
 import { Badge, Divider, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +48,6 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
     }
   }, [DataAbsence, DataEmployee]);
 
-  console.log(request);
   return (
     <div className="text-center">
       {request != undefined ? (
@@ -90,7 +94,7 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
                     {req?.status}
                   </Badge>
                 </div>
-                <div className="my-auto text-center mt-2">
+                <div className="my-auto text-left ms-3 mt-1">
                   <Divider orientation="vertical" />
                   <Text size="18px" fw={700}>
                     {req.employee.name}
@@ -100,7 +104,7 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
             </div>
             <div className="text-left">
               <Text style={{ marginLeft: '0px', padding: '8px' }} size="11px" fw={500}>
-                Tanggal pengajuan : {req?.created_at}
+                Tanggal pengajuan : {formatterDate(new Date(req?.created_at), 'EEEE, dd MMM yyyy')}
               </Text>
             </div>
           </button>

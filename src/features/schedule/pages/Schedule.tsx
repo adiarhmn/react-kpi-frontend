@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ShiftType } from '@/admin_features/types';
 
 import { useGetShift } from '../api';
-import { ScheduleListNew } from '../components';
+import { ScheduleList, ScheduleListNew } from '../components';
 import { useAuth } from '@/features/auth';
 
 export const Schedule: React.FC = () => {
@@ -59,7 +59,7 @@ export const Schedule: React.FC = () => {
           </span>
         </div>
 
-        {/* Month Picker or Input Date */}
+        {/* Month Picker or Input Date
         <div>
           <div className="w-full grid grid-cols-12">
             <div className="col-span-12">
@@ -79,15 +79,17 @@ export const Schedule: React.FC = () => {
             </div>
             <div className="col-span-0"></div>
           </div>
-        </div>
-        <ScheduleListNew
+        </div> */}
+        {/* <ScheduleListNew
           month={month}
           shift={selectShift}
           status={selectStatus}
           modalState={opened}
           employee_id={employeeID}
-        />
+        /> */}
       </section>
+
+      <ScheduleList />
 
       <Drawer
         position="right"
