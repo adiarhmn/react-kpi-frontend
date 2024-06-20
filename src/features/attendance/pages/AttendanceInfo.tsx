@@ -160,23 +160,28 @@ export const AttendanceInfo: React.FC = () => {
                   <span className="text-sm font-bold text-blue-700">Kegiatan {index + 1}</span>
                   <IconCalendarEvent className="opacity-80" size={20} />
                 </div>
-                <div className="grid grid-cols-12">
+                <div className="grid grid-cols-12 gap-x-2">
                   {activityDetail != null && activityAlias[0] != null
                     ? Array.from(
                         { length: 10 },
                         (_, i) =>
                           activityAlias[0][`cs${i + 1}_name`] != '' && (
-                            <div key={i} className="mb-1 col-span-6 w-full px-1">
+                            <div key={i} className="mb-1 col-span-6 w-full">
                               <Text size="xs" fw={700}>
                                 {activityAlias[0][`cs${i + 1}_name`]}
                               </Text>
-                              <Text style={{ textAlign: 'left' }} size="xs">
+                              <Text truncate="end" style={{ textAlign: 'left' }} size="xs">
                                 {activity[`custom${i + 1}`]}
                               </Text>
                             </div>
                           )
                       )
                     : ''}
+                </div>
+                <div className="text-right mt-2 me-2">
+                  <Text truncate="end" size="xs">
+                    {formatterDate(new Date(activity['created_at'] ?? 0), 'HH:mm')}
+                  </Text>
                 </div>
                 <Divider size={'xs'} className="mt-4" />
               </section>

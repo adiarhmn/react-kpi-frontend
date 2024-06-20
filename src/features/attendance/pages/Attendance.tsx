@@ -409,19 +409,19 @@ export const Attendance: React.FC = () => {
                           navigate(`/activity/detail/`, {
                             state: {
                               activity: activity,
-                              alias: activityAlias,
+                              alias: activityAlias[0],
                               index: index,
                             },
                           })
                         }
                         variant="transparent"
-                        className="shadow-md me-1"
+                        className="shadow-xs "
                         size="xs"
                       >
                         <IconInfoCircle size={18} />
                       </Button>
                     </div>
-                    <div className="grid grid-cols-12">
+                    <div className="grid grid-cols-12 gap-x-2">
                       {activityDetail != null && activityAlias[0] != null
                         ? Array.from(
                             { length: 10 },
@@ -439,7 +439,12 @@ export const Attendance: React.FC = () => {
                           )
                         : ''}
                     </div>
-                    <Divider size={'xs'} className="mt-4" />
+                    <div className="text-right mt-2 me-2">
+                      <Text truncate="end" size="xs">
+                        {formatterDate(new Date(activity['created_at'] ?? 0), 'HH:mm')}
+                      </Text>
+                    </div>
+                    <Divider size={'xs'} className="  " />
                   </section>
                 ))
               ) : (
