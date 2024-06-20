@@ -15,8 +15,8 @@ type ActivityDataPost = {
   custom8: string | null;
   custom9: string | null;
   custom10: string | null;
-  activity_lon: string;
-  activity_lat: string;
+  activity_lon: string | undefined;
+  activity_lat: string | undefined;
 };
 
 export const postCreateActivity = async (activityDataPost: ActivityDataPost) => {

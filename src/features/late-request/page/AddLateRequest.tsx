@@ -72,8 +72,8 @@ export const AddLateRequest: React.FC = () => {
     const lateRequestData = {
       employee_id: creds?.employee_id,
       reason: form.values.reason,
-      attendance_request_lat: location.coordinates?.latitude.toString(),
-      attendance_request_lon: location.coordinates?.longitude.toString(),
+      attendance_request_lat: (location.coordinates?.latitude ?? 0).toString(),
+      attendance_request_lon: (location.coordinates?.longitude ?? 0).toString(),
     };
 
     await mutationAddLateRequest.mutateAsync(lateRequestData, {
@@ -115,7 +115,7 @@ export const AddLateRequest: React.FC = () => {
           <MapContainer
             key={location.loaded ? 'loaded' : 'notLoaded'}
             style={{ height: '33vh' }}
-            center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+            center={[location.coordinates?.latitude ?? 0, location.coordinates?.longitude ?? 0]}
             zoom={15}
             scrollWheelZoom={true}
           >
@@ -126,13 +126,19 @@ export const AddLateRequest: React.FC = () => {
             {location.loaded && !location.error ? (
               <>
                 <Marker
-                  position={[location.coordinates?.latitude, location.coordinates?.longitude]}
+                  position={[
+                    location.coordinates?.latitude ?? 0,
+                    location.coordinates?.longitude ?? 0,
+                  ]}
                   icon={customIcon}
                 >
                   <Popup>Lokasi anda</Popup>
                 </Marker>
                 <Circle
-                  center={[location.coordinates?.latitude, location.coordinates?.longitude]}
+                  center={[
+                    location.coordinates?.latitude ?? 0,
+                    location.coordinates?.longitude ?? 0,
+                  ]}
                   radius={60}
                   pathOptions={{ color: '#CDE8E5', fillColor: 'blue', fillOpacity: 0.1 }}
                 />

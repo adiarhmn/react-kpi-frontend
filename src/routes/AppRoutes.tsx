@@ -15,6 +15,7 @@ const { Home } = lazyImport(() => import('@/features/misc'), 'Home');
 const { Attendance } = lazyImport(() => import('@/features/attendance'), 'Attendance');
 const { AttendanceInfo } = lazyImport(() => import('@/features/attendance'), 'AttendanceInfo');
 const { Attendances } = lazyImport(() => import('@/features/employee'), 'Attendances');
+const { DetailActivity } = lazyImport(() => import('@/features/attendance'), 'DetailActivity');
 const { DataAttendance } = lazyImport(() => import('@/features/history'), 'DataAttendance');
 const { History } = lazyImport(() => import('@/features/history'), 'History');
 const { DataAbsence } = lazyImport(() => import('@/features/history'), 'DataAbsence');
@@ -139,6 +140,7 @@ export const AppRoutes: React.FC = () => {
           <Route element={<HomeLayout />}>
             <Route index element={<Home />} />
             <Route path="attendance" element={<Attendance />} />
+            <Route path="activity/detail" element={<DetailActivity />} />
             <Route path="info-attendance" element={<AttendanceInfo />} />
             <Route path="history">
               <Route index element={<History />} />
