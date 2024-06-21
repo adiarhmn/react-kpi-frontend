@@ -242,7 +242,7 @@ export const AddOvertime: React.FC = () => {
       {/* Card Map */}
       <section className="bg-white mx-auto max-w-xs w-full mt-3 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="font-bold text-blue-700">Lokasi</span>
+          <span className="font-bold text-base text-blue-700">Lokasi</span>
           <IconMap2 className="opacity-80" size={20} />
         </div>
         <div className="w-full pb-2">
@@ -296,7 +296,7 @@ export const AddOvertime: React.FC = () => {
       {/* Absen card */}
       <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="font-bold text-blue-700">Absensi lembur</span>
+          <span className="font-bold text-base text-blue-700">Absensi lembur</span>
           <IconDeviceTablet className="opacity-80" size={20} />
         </div>
         <div className="w-full divide-x divide-gray-300 p-1 -mb-2">
@@ -358,7 +358,7 @@ export const AddOvertime: React.FC = () => {
 
       <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-7">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="font-bold text-blue-700">Data lembur</span>
+          <span className="font-bold text-base text-blue-700">Data lembur</span>
           <Badge
             size="xs"
             style={{

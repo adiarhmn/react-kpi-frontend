@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
 import { Button, Divider, Input, Modal, Text } from '@mantine/core';
-import { IconCalendarEvent, IconMailForward, IconPlus } from '@tabler/icons-react';
+import { IconMailForward, IconPlus, IconInfoCircle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useGetActivityAlias, useGetActivityDetail } from '../attendance/api/getActivity';
 import {
@@ -14,6 +14,7 @@ import { formatterDate } from '../history';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { EmployeeType } from '@/admin_features/types';
+import { useNavigate } from 'react-router-dom';
 
 type ActivityProps = {
   employee: EmployeeType | undefined;
@@ -22,6 +23,7 @@ type ActivityProps = {
 export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProps) => {
   // const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
+  const navigate = useNavigate();
 
   const [attendance, setAttendance] = useState<AttendanceType>();
   const { data: DataAttendance } = useGetAttendance(
@@ -143,9 +145,25 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProp
               >
                 <div className="flex justify-between text-xs items-center mb-2">
                   <span className="text-sm font-bold text-blue-700">Kegiatan {index + 1}</span>
-                  <IconCalendarEvent className="opacity-80" size={20} />
+                  <Button
+                    disabled={attendance?.check_in == null || attendance?.check_out != null}
+                    onClick={() =>
+                      navigate(`/activity/detail/`, {
+                        state: {
+                          activity: activity,
+                          alias: activityAlias[0],
+                          index: index,
+                        },
+                      })
+                    }
+                    variant="transparent"
+                    className="shadow-xs "
+                    size="xs"
+                  >
+                    <IconInfoCircle size={18} />
+                  </Button>
                 </div>
-                <div className="grid grid-cols-12">
+                <div className="grid grid-cols-12 gap-x-2">
                   {activityDetail != null && activityAlias[0] != null
                     ? Array.from(
                         { length: 10 },
@@ -155,13 +173,18 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProp
                               <Text size="xs" fw={700}>
                                 {activityAlias[0][`cs${i + 1}_name`]}
                               </Text>
-                              <Text style={{ textAlign: 'left' }} size="xs">
+                              <Text truncate="end" style={{ textAlign: 'left' }} size="xs">
                                 {activity[`custom${i + 1}`]}
                               </Text>
                             </div>
                           )
                       )
                     : ''}
+                </div>
+                <div className="text-right mt-2 me-2">
+                  <Text truncate="end" size="xs">
+                    {formatterDate(new Date(activity['created_at'] ?? 0), 'HH:mm')}
+                  </Text>
                 </div>
                 <Divider size={'xs'} className="mt-4" />
               </section>

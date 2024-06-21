@@ -1,18 +1,20 @@
 /* eslint-disable import/order */
 import { IconCalendarEvent, IconChevronLeft } from '@tabler/icons-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ActivityAliasType, ActivityDetailType } from '../types';
-import { Divider } from '@mantine/core';
+import { ActivityDetailType } from '../types';
+import { Divider, Text } from '@mantine/core';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { formatterDate } from '@/features/history';
 
 export const DetailActivity: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const activity = location.state.activity as ActivityDetailType;
-  const alias = location.state.alias as ActivityAliasType;
+  const alias = location.state.alias as any;
   const index = location.state.index as number;
   console.log(index);
   console.log(activity);
+  console.log(alias);
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -32,14 +34,14 @@ export const DetailActivity: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
         <div className="flex justify-between text-xs items-center p-2">
           <span className="text-base font-bold text-blue-700">Kegiatan ke {index + 1}</span>
           <IconCalendarEvent className="opacity-80" size={20} />
         </div>
         <Divider size={'sm'} />
         <div className="w-full p-2">
-          <section className="bg-white mx-auto max-w-xs w-full z-50 relative p-2 px-2 text-slate-700 ">
+          <div className="bg-white mx-auto max-w-xs w-full z-50 relative p-2 px-2 text-slate-700">
             <MapContainer
               key={activity ? 'loaded' : 'notLoaded'}
               style={{ height: '33vh' }}
@@ -55,7 +57,34 @@ export const DetailActivity: React.FC = () => {
                 <Popup>Lokasi anda</Popup>
               </Marker>
             </MapContainer>
-          </section>
+          </div>
+          <div className="w-full">
+            {activity != null && alias != null
+              ? Array.from(
+                  { length: 10 },
+                  (_, i) =>
+                    alias[`cs${i + 1}_name`] != '' && (
+                      <div key={i} className="w-full ms-2 mt-2">
+                        <Text size="xs" fw={700}>
+                          {alias[`cs${i + 1}_name`]}
+                        </Text>
+                        <Text className="text-justify break-words" size="xs">
+                          {activity[`custom${i + 1}`]}
+                        </Text>
+                      </div>
+                    )
+                )
+              : ''}
+
+            <div className="mt-6">
+              <Text size="xs" fw={700}>
+                created at :{' '}
+                <span className="font-normal">
+                  {formatterDate(new Date(activity['created_at']), 'HH:mm; EEEE dd MMM yyyy')}
+                </span>
+              </Text>
+            </div>
+          </div>
         </div>
       </section>
     </main>
