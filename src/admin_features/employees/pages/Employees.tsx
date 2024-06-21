@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { Button, Select } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';

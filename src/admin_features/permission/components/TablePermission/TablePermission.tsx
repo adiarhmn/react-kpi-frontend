@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';

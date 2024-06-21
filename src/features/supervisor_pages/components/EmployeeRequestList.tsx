@@ -54,7 +54,7 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
         request.map((req, index) => (
           <button
             key={index}
-            onClick={() => navigate(`/employee-request/detail`)}
+            onClick={() => navigate(`/employee-request/detail`, { state: { request: req } })}
             className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
           >
             <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
@@ -89,7 +89,13 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
                       marginLeft: '4px',
                       borderRadius: '2px',
                     }}
-                    color={req?.status == 'Disetujui' ? 'green' : 'red'}
+                    color={
+                      req?.status == 'Disetujui'
+                        ? 'green'
+                        : req?.status == 'Belum Disetujui'
+                          ? 'yellow'
+                          : 'red'
+                    }
                   >
                     {req?.status}
                   </Badge>

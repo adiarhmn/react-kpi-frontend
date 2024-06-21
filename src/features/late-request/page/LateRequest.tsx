@@ -52,7 +52,7 @@ export const LateRequest: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
-            <h2 className="font-semibold ">Absen</h2>
+            <h2 className="font-semibold ">Pengajuan absen</h2>
           </div>
           <span className="font-semibold">
             <Button

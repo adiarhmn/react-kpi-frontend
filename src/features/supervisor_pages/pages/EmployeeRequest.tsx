@@ -1,14 +1,51 @@
+/* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
-import { Tabs } from '@mantine/core';
-import { IconChevronLeft } from '@tabler/icons-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Button, Drawer, Fieldset, Select, Tabs } from '@mantine/core';
+import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { EmployeeRequestList } from '../components';
+import Swal from 'sweetalert2';
+import { ShiftType } from '@/admin_features/types';
+import { useGetShift } from '@/features/schedule/api';
+import { useAuth } from '@/features/auth';
+import { useDisclosure } from '@mantine/hooks';
 
 export const EmployeeRequest: React.FC = () => {
   const navigate = useNavigate();
   const [selectType, setSelectType] = useState('sakit');
+  const { creds } = useAuth();
+  const [opened, { open, close }] = useDisclosure(false);
+  const [selectShift, setSelectShift] = useState('');
 
+  // [NOTIFICATION 🔔]
+  const { state } = useLocation();
+  useEffect(() => {
+    const hasNotified = localStorage.getItem('hasNotifiedEmployeeRequest');
+    if (state?.success && hasNotified != 'yes') {
+      Swal.fire({
+        width: '80%',
+        title: state.success,
+        timer: 3000,
+        icon: 'success',
+        confirmButtonText: 'Ok',
+      });
+      localStorage.setItem('hasNotifiedEmployeeRequest', 'yes');
+    }
+  }, [state, navigate]);
+  // [END NOTIFICATION 🔔]
+
+  const [shifts, setShifts] = useState<ShiftType[]>([]);
+  const { data: DataShift } = useGetShift(creds?.company_id);
+  useEffect(() => {
+    if (DataShift) {
+      setShifts(DataShift);
+    }
+  }, [DataShift]);
+  const optionShift = shifts.map((shift: any) => ({
+    value: shift.id.toString(),
+    label: shift.shift_name,
+  }));
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -25,7 +62,12 @@ export const EmployeeRequest: React.FC = () => {
             />
             <h2 className="font-semibold ">Permintaan anggota</h2>
           </div>
-          <span className="font-semibold"></span>
+          <span className="font-semibold">
+            <Button className="shadow-sm" size="xs" onClick={open}>
+              <IconAdjustmentsHorizontal className="me-2 -ms-1" />
+              Filter
+            </Button>
+          </span>
         </div>
       </section>
 
@@ -67,6 +109,34 @@ export const EmployeeRequest: React.FC = () => {
       </Tabs>
 
       <EmployeeRequestList typeRequest={selectType} />
+
+      <Drawer
+        position="right"
+        offset={3}
+        size="80%"
+        radius="sm"
+        opened={opened}
+        onClose={close}
+        title="Filter"
+      >
+        <div>
+          <Fieldset className="mb-2" legend="Shift">
+            <Select
+              className="-m-3"
+              placeholder="Pilih Shift"
+              data={[...optionShift]}
+              searchValue={selectShift}
+              onSearchChange={setSelectShift}
+              allowDeselect
+            />
+          </Fieldset>
+        </div>
+        <div className="text-right mt-3">
+          <Button onClick={close} style={{ width: '160px' }}>
+            Cari
+          </Button>
+        </div>
+      </Drawer>
     </main>
   );
 };

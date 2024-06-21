@@ -15,13 +15,14 @@ import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { EmployeeType } from '@/admin_features/types';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth';
 
 type ActivityProps = {
   employee: EmployeeType | undefined;
 };
 
 export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProps) => {
-  // const { creds } = useAuth();
+  const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
 
@@ -126,14 +127,16 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProp
       <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="flex justify-between text-xs items-center p-2">
           <span className="text-base font-bold text-blue-700">Kegiatan hari ini</span>
-          <Button
-            disabled={attendance?.check_in == null || attendance?.check_out != null}
-            onClick={open}
-            className="shadow-sm me-1"
-            size="xs"
-          >
-            <IconPlus className="-ms-1" size={18} />
-          </Button>
+          {creds?.role == 'employee' && (
+            <Button
+              disabled={attendance?.check_in == null || attendance?.check_out != null}
+              onClick={open}
+              className="shadow-sm me-1"
+              size="xs"
+            >
+              <IconPlus className="-ms-1" size={18} />
+            </Button>
+          )}
         </div>
         <Divider size={'sm'} />
         <div className="w-full p-2">
@@ -146,7 +149,6 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProp
                 <div className="flex justify-between text-xs items-center mb-2">
                   <span className="text-sm font-bold text-blue-700">Kegiatan {index + 1}</span>
                   <Button
-                    disabled={attendance?.check_in == null || attendance?.check_out != null}
                     onClick={() =>
                       navigate(`/activity/detail/`, {
                         state: {

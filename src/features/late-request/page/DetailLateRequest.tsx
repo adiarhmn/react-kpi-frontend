@@ -1,4 +1,4 @@
-import { Badge, Text } from '@mantine/core';
+import { Badge, Divider, Text } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { Icon } from 'leaflet';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
@@ -37,9 +37,9 @@ export const DetailLateRequest: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 mt-3 p-5">
-        <div className="flex justify-between items-center ">
-          <div className="flex items-center text-blue-700 gap-3"></div>
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
+        <div className="flex justify-between text-xs items-center p-2">
+          <span className="text-base font-bold text-blue-700">Absen</span>
           <Badge
             size="sm"
             style={{
@@ -51,9 +51,9 @@ export const DetailLateRequest: React.FC = () => {
             {attendanceRequest?.status}
           </Badge>
         </div>
-        <div className="w-full pb-2 mt-1">
-          <div>
-            {' '}
+        <Divider size={'sm'} />
+        <div className="w-full p-2">
+          <div className="bg-white mx-auto max-w-xs w-full z-50 relative p-2 px-2 text-slate-700">
             <MapContainer
               style={{ height: '33vh' }}
               center={[
@@ -80,23 +80,23 @@ export const DetailLateRequest: React.FC = () => {
               </>
             </MapContainer>
           </div>
-          <div className="mt-4">
+          <div className="mt-4 px-2">
             <div className="w-full grid grid-cols-12">
               <div className="col-span-6">
-                <Text size="sm" fw={700}>
+                <Text size="xs" fw={700}>
                   Tanggal
                 </Text>
-                <Text size="sm">
+                <Text size="xs">
                   {attendanceRequest.date != null
                     ? formatterDate(attendanceRequest.date, 'EEEE, dd MMM yyyy')
                     : '-- --'}
                 </Text>
               </div>
               <div className="col-span-6 ms-4">
-                <Text size="sm" fw={700}>
+                <Text size="xs" fw={700}>
                   Waktu Check In
                 </Text>
-                <Text size="sm">
+                <Text size="xs">
                   {attendanceRequest.date != null
                     ? formatterDate(attendanceRequest.date, 'HH:mm')
                     : '-- --'}
@@ -104,10 +104,10 @@ export const DetailLateRequest: React.FC = () => {
               </div>
             </div>
             <div className="mt-2">
-              <Text size="sm" fw={700}>
+              <Text size="xs" fw={700}>
                 Alasan
               </Text>
-              <Text size="sm">{attendanceRequest.reason}</Text>
+              <Text size="xs">{attendanceRequest.reason}</Text>
             </div>
           </div>
         </div>

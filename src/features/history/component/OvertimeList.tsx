@@ -23,7 +23,7 @@ export const OvertimeList: React.FC<OvertimeProps> = ({ overtimes }) => {
             onClick={() =>
               navigate('/history/data-overtime/detail', { state: { overtime: overtime } })
             }
-            className="bg-white mx-auto max-w-xs w-full mt-4 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700"
+            className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700"
           >
             <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
               <div className="col-span-2 text-center m-auto p-2">
@@ -75,7 +75,7 @@ export const OvertimeList: React.FC<OvertimeProps> = ({ overtimes }) => {
             src="/images/blank-canvas.svg"
             alt=""
           />
-          <span className="font-bold text-slate-400 text-xl">Belum ada data cuti</span>
+          <span className="font-bold text-slate-400 text-xl">Belum ada data lembur</span>
         </section>
       )}
     </div>

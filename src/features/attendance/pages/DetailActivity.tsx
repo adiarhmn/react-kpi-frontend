@@ -5,6 +5,7 @@ import { ActivityDetailType } from '../types';
 import { Divider, Text } from '@mantine/core';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { formatterDate } from '@/features/history';
+import { Icon } from 'leaflet';
 
 export const DetailActivity: React.FC = () => {
   const navigate = useNavigate();
@@ -12,9 +13,10 @@ export const DetailActivity: React.FC = () => {
   const activity = location.state.activity as ActivityDetailType;
   const alias = location.state.alias as any;
   const index = location.state.index as number;
-  console.log(index);
-  console.log(activity);
-  console.log(alias);
+  const customIcon = new Icon({
+    iconUrl: '/images/location-icon.svg',
+    iconSize: [50, 50],
+  });
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -43,7 +45,6 @@ export const DetailActivity: React.FC = () => {
         <div className="w-full p-2">
           <div className="bg-white mx-auto max-w-xs w-full z-50 relative p-2 px-2 text-slate-700">
             <MapContainer
-              key={activity ? 'loaded' : 'notLoaded'}
               style={{ height: '33vh' }}
               center={[activity.activity_lat, activity.activity_lon]}
               zoom={15}
@@ -53,9 +54,11 @@ export const DetailActivity: React.FC = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={[activity.activity_lat, activity.activity_lon]}>
-                <Popup>Lokasi anda</Popup>
-              </Marker>
+              <>
+                <Marker position={[activity.activity_lat, activity.activity_lon]} icon={customIcon}>
+                  <Popup>Lokasi pengajuan</Popup>
+                </Marker>
+              </>
             </MapContainer>
           </div>
           <div className="w-full">

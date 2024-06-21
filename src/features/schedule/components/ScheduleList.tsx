@@ -4,17 +4,24 @@ import { Badge, Divider, Text } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { IconCalendar, IconClockHour8 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import { useGetScheduleDaily, useGetScheduleMonthly } from '../api';
+import { useGetScheduleDaily } from '../api';
 import { formatterDate } from '@/features/history';
 import { useAuth } from '@/features/auth';
+import { useLocation } from 'react-router-dom';
 
 export const ScheduleList: React.FC = () => {
   const [dateValue, setDateValue] = useState<Date | null>(new Date());
+  const location = useLocation();
   const { creds } = useAuth();
+
+  let employeeID: number | undefined = creds?.employee_id;
+  if (location.state) {
+    employeeID = location.state.employee_id;
+  }
 
   const [schedule, setSchedule] = useState<ScheduleType>();
   const { data: DataSchedule, refetch: RefetchSchedule } = useGetScheduleDaily(
-    creds?.employee_id,
+    employeeID,
     formatterDate(dateValue, 'yyyy-MM-dd')
   );
   useEffect(() => {
@@ -24,21 +31,8 @@ export const ScheduleList: React.FC = () => {
     }
   }, [DataSchedule, dateValue]);
 
-  // const [scheduleOff, setScheduleOff] = useState<ScheduleType[]>([]);
-  // const { data: DataScheduleOff } = useGetScheduleMonthly(
-  //   creds?.employee_id,
-  //   formatterDate(dateValue, 'MM'),
-  //   formatterDate(dateValue, 'yyyy'),
-  //   '',
-  //   'off'
-  // );
-  // useEffect(() => {
-  //   if (DataScheduleOff) {
-  //     setScheduleOff(DataScheduleOff);
-  //   }
-  // }, [DataScheduleOff]);
-
   console.log('Tanggal :', dateValue);
+  console.log('employee_id : ', employeeID);
   return (
     <>
       <section className="mx-auto max-w-xs bg-white w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2 mt-2">

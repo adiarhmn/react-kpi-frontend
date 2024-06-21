@@ -12,7 +12,7 @@ import { ShiftType } from '@/admin_features/types';
 // eslint-disable-next-line no-restricted-imports
 import { useGetShift } from '@/features/schedule/api';
 // eslint-disable-next-line no-restricted-imports
-import { ScheduleList, ScheduleListNew } from '@/features/schedule/components';
+import { ScheduleListNew } from '@/features/schedule/components';
 import { useAuth } from '@/features/auth';
 
 export const DataAttendance: React.FC = () => {

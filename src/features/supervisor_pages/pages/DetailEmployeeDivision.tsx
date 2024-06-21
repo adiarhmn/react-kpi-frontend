@@ -58,7 +58,7 @@ export const DetailEmployeeDivision: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-white mx-auto max-w-xs p-3 shadow-md rounded-lg flex flex-col gap-2 mt-2 ">
+      <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 ">
         <div className="flex justify-between items-center text-blue-700">
           <div className="flex items-center">
             <Text fw={700} c="blue">
@@ -69,16 +69,16 @@ export const DetailEmployeeDivision: React.FC = () => {
         </div>
         <div className="grid grid-cols-12 px-2">
           <div className="col-span-4 px-2 flex items-left">
-            <img className="w-full mb-2 rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
+            <img className="w-full rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
           </div>
           <div className="col-span-8">
             <div className="mt-2">
-              <Text size="md" fw={700}>
+              <Text size="auto" fw={700}>
                 {employee.name}
               </Text>
             </div>
             <div>
-              <Text size="md" c="grey" fw={700}>
+              <Text size="xs" c="grey" fw={700}>
                 {employee.user.role}
               </Text>
             </div>
@@ -158,7 +158,7 @@ export const DetailEmployeeDivision: React.FC = () => {
           <div className="text-center text-xs divide-x divide-gray-300 p-2">
             <Group justify="center">
               <Anchor
-                size="sm"
+                size="xs"
                 onClick={() =>
                   navigate(`/employee-division/schedule`, { state: { employee_id: employee.id } })
                 }
@@ -209,7 +209,7 @@ export const DetailEmployeeDivision: React.FC = () => {
           <div className="col-span-9 ms-2 text-left">
             <div className="ms-2">
               <Text size="xs">Tanggal</Text>
-              <Text size="auto" fw={700}>
+              <Text size="sm" fw={700}>
                 {formatterDate(new Date(), 'EEEE, dd MMMM yyyy')}
               </Text>
             </div>
@@ -237,7 +237,7 @@ export const DetailEmployeeDivision: React.FC = () => {
         <div className="text-center text-xs divide-x divide-gray-300 p-2">
           <Group justify="center">
             <Anchor
-              size="sm"
+              size="xs"
               onClick={() =>
                 navigate(`/employee-division/attendance`, { state: { employee: employee } })
               }

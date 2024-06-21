@@ -287,7 +287,7 @@ export const Attendance: React.FC = () => {
 
   return (
     <main className="min-h-96 relative">
-      {employeeLocation.length == 0 ? (
+      {!isLoading && employeeLocation.length == 0 ? (
         <div className="w-full col-span-12">
           <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
 
@@ -404,7 +404,6 @@ export const Attendance: React.FC = () => {
                     <div className="flex justify-between text-xs items-center mb-2">
                       <span className="text-sm font-bold text-blue-700">Kegiatan {index + 1}</span>
                       <Button
-                        disabled={attendance?.check_in == null || attendance?.check_out != null}
                         onClick={() =>
                           navigate(`/activity/detail/`, {
                             state: {
