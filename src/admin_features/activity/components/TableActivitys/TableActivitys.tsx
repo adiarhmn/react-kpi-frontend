@@ -1,4 +1,4 @@
-import { Button, Modal, Table } from '@mantine/core';
+import { Button, Divider, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 
 import { useGetActivityAlias, useGetActivitys } from '../../api';
+
+import { LocationAcivity } from './LocationActivity';
 
 interface TableActivitysProps {
   date: string;
@@ -51,6 +53,7 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
     );
   }
 
+  console.log(DataActivity);
   return (
     <>
       <Table withColumnBorders withTableBorder>
@@ -101,11 +104,54 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
       </Table>
 
       <Modal size={'lg'} opened={opened} onClose={close} title="Detail Aktifitas">
-        {/* Modal content */}
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, itaque.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, itaque.</p>
+        <LocationAcivity
+          latitude={DataActivityToShow?.activity_lat}
+          longitude={DataActivityToShow?.activity_lon}
+          title="Lokasi Aktifitas"
+        />
+        <Divider my="xs" label="Detail Karyawan" labelPosition="left" />
+        <table className="text-xs mb-8">
+          <tbody>
+            <tr className="capitalize">
+              <td>Nama Karyawan</td>
+              <td className="px-4">:</td>
+              <td>{DataActivityToShow?.attendance.employee.name}</td>
+            </tr>
+            <tr className="capitalize">
+              <td>Telphone</td>
+              <td className="px-4">:</td>
+              <td>{DataActivityToShow?.attendance.employee.phone}</td>
+            </tr>
+          </tbody>
+        </table>
+        <Divider my="xs" label="Daftar Aktifitas" labelPosition="left" />
+        <table className="text-xs">
+          <tbody>
+            {Array.from(
+              { length: 10 },
+              (_, i) =>
+                DataActivityAlias[0][`cs${i + 1}_name`] != '' && (
+                  <tr key={i} className="capitalize">
+                    <td>{DataActivityAlias[0][`cs${i + 1}_name`]}</td>
+                    <td className="px-4">:</td>
+                    <td>{DataActivityToShow?.[`custom${i + 1}`] ?? ''}</td>
+                  </tr>
+                )
+            )}
+          </tbody>
+        </table>
 
-        <div className="text-center py-20"></div>
+        <div className="mb-12">
+          <Button
+            color="gray"
+            onClick={close}
+            className="mt-4"
+            style={{ float: 'right' }}
+            size="xs"
+          >
+            Tutup
+          </Button>
+        </div>
       </Modal>
     </>
   );
