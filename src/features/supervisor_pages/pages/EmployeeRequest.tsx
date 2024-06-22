@@ -35,17 +35,17 @@ export const EmployeeRequest: React.FC = () => {
   }, [state, navigate]);
   // [END NOTIFICATION 🔔]
 
-  const [shifts, setShifts] = useState<ShiftType[]>([]);
-  const { data: DataShift } = useGetShift(creds?.company_id);
-  useEffect(() => {
-    if (DataShift) {
-      setShifts(DataShift);
-    }
-  }, [DataShift]);
-  const optionShift = shifts.map((shift: any) => ({
-    value: shift.id.toString(),
-    label: shift.shift_name,
-  }));
+  const [selectStatus, setSelectStatus] = useState('Belum disetujui');
+  // const { data: DataShift } = useGetShift(creds?.company_id);
+  // useEffect(() => {
+  //   if (DataShift) {
+  //     setShifts(DataShift);
+  //   }
+  // }, [DataShift]);
+  // const optionShift = shifts.map((shift: any) => ({
+  //   value: shift.id.toString(),
+  //   label: shift.shift_name,
+  // }));
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -108,7 +108,7 @@ export const EmployeeRequest: React.FC = () => {
         </Tabs.List>
       </Tabs>
 
-      <EmployeeRequestList typeRequest={selectType} />
+      <EmployeeRequestList typeRequest={selectType} status={selectStatus} />
 
       <Drawer
         position="right"
@@ -124,9 +124,9 @@ export const EmployeeRequest: React.FC = () => {
             <Select
               className="-m-3"
               placeholder="Pilih Shift"
-              data={[...optionShift]}
-              searchValue={selectShift}
-              onSearchChange={setSelectShift}
+              data={['Disetujui', 'Dtolak', 'Belum disetujui']}
+              searchValue={selectStatus}
+              onSearchChange={setSelectStatus}
               allowDeselect
             />
           </Fieldset>

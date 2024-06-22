@@ -15,10 +15,12 @@ import { useNavigate } from 'react-router-dom';
 
 type EmployeeRequestListProps = {
   typeRequest: string;
+  status: string;
 };
 
 export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
   typeRequest,
+  status,
 }: EmployeeRequestListProps) => {
   const navigate = useNavigate();
   const { creds } = useAuth();
