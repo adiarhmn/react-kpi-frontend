@@ -107,7 +107,7 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, status }) => 
                       {absence?.status}
                     </Badge>
                   </div>
-                  <div className="my-auto text-center mt-2">
+                  <div className="my-auto text-center mt-1">
                     <Divider orientation="vertical" />
                     <Text size="18px" fw={700}>
                       {absence?.date_start != undefined && absence?.date_end != null
@@ -121,7 +121,7 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, status }) => 
                 <Text style={{ marginLeft: '0px', padding: '8px' }} size="11px" fw={500}>
                   Tanggal pengajuan :{' '}
                   {absence?.created_at != undefined || absence?.date_end != null
-                    ? formatterDate(absence?.created_at, 'EEEE dd MMM yyyy')
+                    ? formatterDate(absence?.created_at, 'EEEE dd MMMM yyyy')
                     : '-- --'}
                 </Text>
               </div>

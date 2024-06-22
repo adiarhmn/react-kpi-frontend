@@ -51,7 +51,7 @@ export const DetailAbsence: React.FC = () => {
                 marginLeft: '4px',
                 borderRadius: '2px',
               }}
-              color={absence?.status == 'Disetujui' ? 'blue' : 'red'}
+              color={absence?.status == 'Disetujui' ? 'green' : 'red'}
             >
               {absence?.status}
             </Badge>

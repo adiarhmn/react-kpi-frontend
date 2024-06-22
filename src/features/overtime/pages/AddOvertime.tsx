@@ -318,7 +318,8 @@ export const AddOvertime: React.FC = () => {
                     disabled={
                       attendance == undefined ||
                       statusLocation == false ||
-                      overtime?.end_time != null
+                      overtime?.end_time != null ||
+                      attendance.check_out == null
                     }
                     className="shadow-lg"
                     style={{ borderRadius: '15px', width: '110px' }}

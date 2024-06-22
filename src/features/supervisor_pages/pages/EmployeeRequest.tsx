@@ -4,12 +4,13 @@ import { Button, Drawer, Fieldset, Select, Tabs } from '@mantine/core';
 import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { EmployeeRequestList } from '../components';
+import { EmployeeOvertimeList, EmployeeRequestList } from '../components';
 import Swal from 'sweetalert2';
 import { ShiftType } from '@/admin_features/types';
 import { useGetShift } from '@/features/schedule/api';
 import { useAuth } from '@/features/auth';
 import { useDisclosure } from '@mantine/hooks';
+import { OvertimeList } from '@/features/history';
 
 export const EmployeeRequest: React.FC = () => {
   const navigate = useNavigate();
@@ -98,17 +99,42 @@ export const EmployeeRequest: React.FC = () => {
               <Tabs.Tab
                 style={{ width: '100%', borderRadius: '20px' }}
                 color="blue"
+                value="cuti"
+                onClick={() => setSelectType('cuti')}
+              >
+                Cuti
+              </Tabs.Tab>
+            </div>
+            <div className="bg-white min-w-[8rem] shadow-md rounded-2xl">
+              <Tabs.Tab
+                style={{ width: '100%', borderRadius: '20px' }}
+                color="blue"
                 value="lembur"
                 onClick={() => setSelectType('lembur')}
               >
                 Lembur
               </Tabs.Tab>
             </div>
+            <div className="bg-white min-w-[8rem] shadow-md rounded-2xl">
+              <Tabs.Tab
+                style={{ width: '100%', borderRadius: '20px' }}
+                color="blue"
+                value="absen"
+                onClick={() => setSelectType('absen')}
+              >
+                Absen
+              </Tabs.Tab>
+            </div>
           </div>
         </Tabs.List>
       </Tabs>
-
-      <EmployeeRequestList typeRequest={selectType} status={selectStatus} />
+      {selectType == 'sakit' || selectType == 'izin' || selectType == 'cuti' ? (
+        <EmployeeRequestList typeRequest={selectType} status={selectStatus} />
+      ) : selectType == 'lembur' ? (
+        <EmployeeOvertimeList status="" />
+      ) : (
+        'false'
+      )}
 
       <Drawer
         position="right"

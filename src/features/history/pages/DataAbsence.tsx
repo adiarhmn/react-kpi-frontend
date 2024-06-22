@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import { MonthPickerInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronLeft } from '@tabler/icons-react';
@@ -5,10 +6,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AbsenceList } from '../component/AbsenceList';
+import { Tabs } from '@mantine/core';
 
 export const DataAbsence: React.FC = () => {
   const navigate = useNavigate();
-  const [opened, { open, close }] = useDisclosure(false);
+  const [selectStatus, setSelectStatus] = useState('Disetujui');
 
   const [month, setMonth] = useState<Date | null>(new Date());
   return (
@@ -40,7 +42,36 @@ export const DataAbsence: React.FC = () => {
         </div>
       </section>
 
-      <AbsenceList status={'Disetujui'} typeAbsence={'izin'} />
+      <Tabs color="#51CF66" variant="pills" defaultValue="Disetujui">
+        <section className="w-full mx-auto p-1 py-3 -mt-1 -mb-2">
+          <Tabs.List className="w-full grid grid-cols-12 text-center">
+            <div className="w-full grid grid-cols-12 text-center px-5 gap-x-2">
+              <div className="col-span-6 bg-white shadow-md rounded-lg">
+                <Tabs.Tab
+                  style={{ width: '100%' }}
+                  color="green"
+                  value="Disetujui"
+                  onClick={() => setSelectStatus('Disetujui')}
+                >
+                  Disetujui
+                </Tabs.Tab>
+              </div>
+              <div className="col-span-6 bg-white shadow-md rounded-lg">
+                <Tabs.Tab
+                  style={{ width: '100%' }}
+                  color="red"
+                  value="Ditolak"
+                  onClick={() => setSelectStatus('Ditolak')}
+                >
+                  Ditolak
+                </Tabs.Tab>
+              </div>
+            </div>
+          </Tabs.List>
+        </section>
+      </Tabs>
+
+      <AbsenceList status={selectStatus} typeAbsence={'izin'} />
     </main>
   );
 };

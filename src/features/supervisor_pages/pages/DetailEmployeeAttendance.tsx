@@ -11,7 +11,7 @@ import { useGetActivityAlias, useGetActivityDetail } from '@/features/attendance
 import { useGetEmployee } from '@/features/employee/api/Profile';
 import { formatterDate } from '@/features/history';
 import { Badge, Button, Divider, Loader, Text } from '@mantine/core';
-import { IconCalendarEvent, IconChevronLeft, IconInfoCircle } from '@tabler/icons-react';
+import { IconChevronLeft, IconInfoCircle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
