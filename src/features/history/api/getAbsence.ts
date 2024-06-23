@@ -50,6 +50,29 @@ export const useGetAbsenceByDivision = (division_id?: number, type?: string) => 
   });
 };
 
+export async function getAbsenceMonthly(
+  employee_id?: number,
+  month?: string | number,
+  year?: string | number
+) {
+  const res = await axios.get(
+    `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}`
+  );
+  console.log('URL : ', `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}`);
+  return res.data.data;
+}
+
+export const useGetAbsenceMonthly = (
+  employee_id?: number,
+  month?: string | number,
+  year?: string | number
+) => {
+  return useQuery({
+    queryKey: ['absence', employee_id, month, year],
+    queryFn: () => getAbsenceMonthly(employee_id, month, year),
+  });
+};
+
 // FORMATTER DATE
 export function formatterDate(date: any, formatType: string) {
   return format(date, formatType, { locale: id });

@@ -59,6 +59,8 @@ export const AttendanceList: React.FC<AttendanceProps> = ({
     setParams(newParams);
   }, [modalState, month]);
 
+  console.log(schedules);
+
   return (
     <div className="text-center">
       <div className="w-full grid grid-cols-12 px-6">

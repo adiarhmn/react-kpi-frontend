@@ -27,15 +27,14 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
           <button
             key={index}
             onClick={() => navigate(`/employee-division/detail`, { state: { employee: emp } })}
-            className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700 mt-1"
+            className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative  px-2 text-slate-700 mt-1"
           >
             <div className="w-full grid grid-cols-12 -mb-2 pt-2 p-4">
-              {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
               <div className="col-span-2 text-center -ms-3">
                 <img className="w-full rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
               </div>
               <div className="col-span-10">
-                <div className="my-auto text-right -mt-3 -me-3">
+                <div className="my-auto text-right -mt-2 -me-3">
                   <Badge
                     size="xs"
                     style={{
@@ -48,19 +47,26 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
                     {emp?.user.role}
                   </Badge>
                 </div>
-                <div className="my-auto text-left mt-2 ms-4">
-                  <Divider orientation="vertical" />
-                  <Text size="18px" fw={700}>
+                <div className="my-auto text-left ms-2">
+                  <Text lineClamp={1} size={'sm'} fw={700}>
                     {emp?.name}
                   </Text>
                 </div>
+                <Divider className="w-full mt-2" />
+                <div className="grid grid-cols-12 text-left">
+                  <div className="col-span-6">
+                    <Text size={'xs'} fw={500}>
+                      Masuk : --:--
+                    </Text>
+                  </div>
+                  <div className="col-span-6">
+                    <Text size={'xs'} fw={500}>
+                      Keluar : --:--
+                    </Text>
+                  </div>
+                </div>
               </div>
             </div>
-            {/* <div className="text-left">
-              <Text style={{ marginLeft: '0px', padding: '8px' }} size="11px" fw={500}>
-                Nomor Hp : {emp?.phone}
-              </Text>
-            </div> */}
           </button>
         ))
       ) : (

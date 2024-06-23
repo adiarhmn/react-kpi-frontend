@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { Select } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useState } from 'react';

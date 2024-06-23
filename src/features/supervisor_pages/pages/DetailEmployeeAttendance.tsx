@@ -10,8 +10,8 @@ import {
 import { useGetActivityAlias, useGetActivityDetail } from '@/features/attendance/api/getActivity';
 import { useGetEmployee } from '@/features/employee/api/Profile';
 import { formatterDate } from '@/features/history';
-import { Badge, Divider, Loader, Text } from '@mantine/core';
-import { IconCalendarEvent, IconChevronLeft } from '@tabler/icons-react';
+import { Badge, Button, Divider, Loader, Text } from '@mantine/core';
+import { IconChevronLeft, IconInfoCircle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -173,7 +173,22 @@ export const DetailEmployeeAttendance: React.FC = () => {
               >
                 <div className="flex justify-between text-xs items-center mb-2">
                   <span className="text-sm font-bold text-blue-700">Kegiatan {index + 1}</span>
-                  <IconCalendarEvent className="opacity-80" size={20} />
+                  <Button
+                    onClick={() =>
+                      navigate(`/activity/detail/`, {
+                        state: {
+                          activity: activity,
+                          alias: activityAlias[0],
+                          index: index,
+                        },
+                      })
+                    }
+                    variant="transparent"
+                    className="shadow-xs "
+                    size="xs"
+                  >
+                    <IconInfoCircle size={18} />
+                  </Button>
                 </div>
                 <div className="grid grid-cols-12">
                   {activityDetail != null && activityAlias[0] != null

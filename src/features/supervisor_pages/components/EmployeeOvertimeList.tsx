@@ -9,19 +9,19 @@ import {
   getDaysBetweenDates,
   useGetAbsenceByDivision,
 } from '@/features/history';
+import { useGetOvertime } from '@/features/overtime/api/getOvertime';
+import { OvertimeType } from '@/features/overtime/types';
 import { Badge, Divider, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-type EmployeeRequestListProps = {
-  typeRequest: string;
+type EmployeeOvertimeProps = {
   status: string;
 };
 
-export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
-  typeRequest,
+export const EmployeeOvertimeList: React.FC<EmployeeOvertimeProps> = ({
   status,
-}: EmployeeRequestListProps) => {
+}: EmployeeOvertimeProps) => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   const [employee, setEmployee] = useState<EmployeeType>();
@@ -32,43 +32,39 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
     }
   }, [DataEmployee]);
   const [params, setParams] = useState({
-    companyID: employee?.division_id,
-    typeRequest: typeRequest,
+    divisionID: employee?.division_id,
   });
   useEffect(() => {
     const newParams = {
-      companyID: employee?.division_id,
-      typeRequest,
+      divisionID: employee?.division_id,
     };
     setParams(newParams);
-  }, [typeRequest, DataEmployee]);
-  const [request, setRequest] = useState<AbsenceType[]>();
-  const { data: DataAbsence } = useGetAbsenceByDivision(params.companyID, params.typeRequest);
+  }, [DataEmployee]);
+  const [overtimes, setOvertimes] = useState<OvertimeType[]>();
+  const { data: DataOvertimes } = useGetOvertime(params.divisionID);
   useEffect(() => {
-    if (DataAbsence) {
-      setRequest(DataAbsence);
+    if (DataOvertimes) {
+      setOvertimes(DataOvertimes);
     }
-  }, [DataAbsence, DataEmployee]);
+  }, [DataOvertimes, DataEmployee]);
 
   return (
     <div className="text-center">
-      {request != undefined ? (
-        request.map((req, index) => (
+      {overtimes != undefined ? (
+        overtimes.map((overtime, index) => (
           <button
             key={index}
-            onClick={() => navigate(`/employee-request/detail`, { state: { request: req } })}
+            onClick={() => navigate(`/employee-request/detail`, { state: { request: overtime } })}
             className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
           >
             <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
               {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
-              <div className="col-span-2 text-center -ms-3">
+              <div className="col-span-2 text-center m-auto p-2">
                 <Text size="30px" fw={700}>
-                  {req?.date_start != undefined || req?.date_end != null
-                    ? getDaysBetweenDates(req?.date_start, req?.date_end) + 1
-                    : '-- --'}
+                  {overtime?.start_time != null ? formatterDate(overtime?.start_time, 'dd') : '.'}
                 </Text>
                 <Text style={{ marginTop: '-5px' }} size="xs">
-                  Hari
+                  {overtime?.start_time != null ? formatterDate(overtime?.start_time, 'MMM') : '-'}
                 </Text>
               </div>
               <div className="col-span-10">
@@ -82,7 +78,7 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
                     }}
                     color="blue"
                   >
-                    {req?.type}
+                    lembur
                   </Badge>
                   <Badge
                     size="xs"
@@ -92,27 +88,28 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
                       borderRadius: '2px',
                     }}
                     color={
-                      req?.status == 'Disetujui'
+                      overtime?.status == 'Disetujui'
                         ? 'green'
-                        : req?.status == 'Belum Disetujui'
+                        : overtime?.status == 'belum Disetujui'
                           ? 'yellow'
                           : 'red'
                     }
                   >
-                    {req?.status}
+                    {overtime?.status}
                   </Badge>
                 </div>
                 <div className="my-auto text-left ms-3 mt-1">
                   <Divider orientation="vertical" />
                   <Text size="18px" fw={700}>
-                    {req.employee.name}
+                    {overtime.detail}
                   </Text>
                 </div>
               </div>
             </div>
             <div className="text-left">
               <Text style={{ marginLeft: '0px', padding: '8px' }} size="11px" fw={500}>
-                Tanggal pengajuan : {formatterDate(new Date(req?.created_at), 'EEEE, dd MMM yyyy')}
+                Tanggal pengajuan :{' '}
+                {formatterDate(new Date(overtime.start_time), 'EEEE, dd MMM yyyy')}
               </Text>
             </div>
           </button>

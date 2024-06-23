@@ -80,7 +80,7 @@ export const PaidLeaveList: React.FC<PaidLeaveProps> = ({ status }) => {
                       marginLeft: '4px',
                       borderRadius: '2px',
                     }}
-                    color="red"
+                    color={leave.status == 'Disetujui' ? 'green' : 'red'}
                   >
                     {leave.status}
                   </Badge>

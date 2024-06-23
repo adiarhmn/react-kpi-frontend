@@ -24,7 +24,7 @@ import { useAuth } from '@/features/auth';
 import { ActivityCard } from '@/features/components';
 // eslint-disable-next-line no-restricted-imports
 import { useGetEmployee } from '@/features/employee/api/Profile';
-import { formatterDate } from '@/features/history';
+import { AbsenceType, formatterDate, useGetAbsenceByType } from '@/features/history';
 // eslint-disable-next-line no-restricted-imports
 import { useGetScheduleDaily } from '@/features/schedule/api';
 import { EmployeeType } from '@/admin_features/types';
@@ -63,6 +63,16 @@ export const Home: React.FC = () => {
     }
   }, [DataEmployee]);
 
+  const [request, setRequest] = useState<AbsenceType[]>([]);
+  const { data: DataRequest } = useGetAbsenceByType(creds?.employee_id, 'sakit', 'disetujui');
+  useEffect(() => {
+    if (DataRequest) {
+      setRequest(DataRequest);
+    }
+  }, [DataRequest]);
+
+  console.log(request);
+
   return (
     <main>
       <section className="bg-blue-700 w-full rounded-b-3xl px-5 pt-8 pb-20 relative">
@@ -100,13 +110,13 @@ export const Home: React.FC = () => {
               <div className="p-2 bg-yellow-500 text-white rounded-xl font-bold w-full h-full text-center shadow">
                 7
               </div>
-              <div className="text-xs mt-1">Izin</div>
+              <div className="text-xs mt-1">Izin / Sakit</div>
             </Link>
             <Link to="#" className="px-4 flex flex-col items-center justify-center">
               <div className="p-2 bg-sky-400 text-white rounded-xl font-bold w-full h-full text-center shadow">
                 7
               </div>
-              <div className="text-xs mt-1 t">Sisa Cuti</div>
+              <div className="text-xs mt-1 t">Pengajuan</div>
             </Link>
           </div>
           <div className=" text-xs divide-x divide-gray-300 p-2"></div>

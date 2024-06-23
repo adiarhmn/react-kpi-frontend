@@ -318,7 +318,8 @@ export const AddOvertime: React.FC = () => {
                     disabled={
                       attendance == undefined ||
                       statusLocation == false ||
-                      overtime?.end_time != null
+                      overtime?.end_time != null ||
+                      attendance.check_out == null
                     }
                     className="shadow-lg"
                     style={{ borderRadius: '15px', width: '110px' }}
@@ -365,9 +366,15 @@ export const AddOvertime: React.FC = () => {
               marginLeft: '4px',
               borderRadius: '2px',
             }}
-            color="red"
+            color={
+              overtime?.start_time == null ? 'red' : overtime?.end_time == null ? 'yellow' : 'green'
+            }
           >
-            belum mulai
+            {overtime?.start_time == null
+              ? 'belum mulai'
+              : overtime?.end_time == null
+                ? 'sedang lembur'
+                : 'selesai lembur'}
           </Badge>
         </div>
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">

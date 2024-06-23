@@ -68,7 +68,7 @@ export const LateRequestList: React.FC = () => {
                 </div>
                 <div className="w-full grid grid-cols-12 mb-3">
                   <div className="col-span-12 text-left mt-1 ms-1">
-                    <Text lineClamp={2} style={{ marginLeft: '6px' }} size="14px" fw={700}>
+                    <Text lineClamp={1} style={{ marginLeft: '6px' }} size="14px" fw={700}>
                       {request.reason}
                     </Text>
                   </div>
@@ -85,7 +85,7 @@ export const LateRequestList: React.FC = () => {
             src="/images/blank-canvas.svg"
             alt=""
           />
-          <span className="font-bold text-slate-400 text-xl">Belum ada data izin</span>
+          <span className="font-bold text-slate-400 text-xl">Belum ada data absen</span>
         </section>
       )}
     </div>

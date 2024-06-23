@@ -18,14 +18,12 @@ export const AddAbsence: React.FC = () => {
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
-      date_start: '',
-      date_end: '',
+      date_start: new Date(),
+      date_end: new Date(new Date().setDate(new Date().getDate() + 2)),
       type: '',
       description: '',
     },
     validate: {
-      date_start: (value) => (value === '' ? 'tanggal mulai tidak boleh kosong' : null),
-      date_end: (value) => (value === '' ? 'tanggal selesai tidak boleh kosong' : null),
       type: (value) => (value === '' ? 'Tipe izin tidak boleh kosong' : null),
       description: (value) => (value === '' ? 'Keterangan tidak boleh kosong' : null),
     },

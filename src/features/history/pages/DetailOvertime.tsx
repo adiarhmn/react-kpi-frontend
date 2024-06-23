@@ -1,4 +1,4 @@
-import { Badge, Text } from '@mantine/core';
+import { Badge, Divider, Text } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { Icon } from 'leaflet';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
@@ -34,9 +34,9 @@ export const DetailOvertime: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 mt-3 p-5">
-        <div className="flex justify-between items-center ">
-          <div className="flex items-center font-semibold text-blue-700 gap-3">Lembur</div>
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
+        <div className="flex justify-between text-xs items-center p-2">
+          <span className="text-base font-bold text-blue-700">Lembur</span>
           <Badge
             size="sm"
             style={{
@@ -48,9 +48,9 @@ export const DetailOvertime: React.FC = () => {
             {overtime?.status}
           </Badge>
         </div>
-        <div className="w-full pb-2 mt-1">
-          <div>
-            {' '}
+        <Divider size={'sm'} />
+        <div className="w-full p-2">
+          <div className="bg-white mx-auto max-w-xs w-full z-50 relative p-2 px-2 text-slate-700">
             <MapContainer
               style={{ height: '33vh' }}
               center={[parseFloat(overtime.overtime_lat), parseFloat(overtime.overtime_lon)]}
@@ -71,9 +71,9 @@ export const DetailOvertime: React.FC = () => {
               </>
             </MapContainer>
           </div>
-          <div className="mt-4">
-            <div className="w-full mb-3">
-              <Text size="sm" fw={700}>
+          <div className="mt-4 px-2">
+            <div className="w-full mb-2">
+              <Text size="xs" fw={700}>
                 Tanggal :
                 <span className="font-base ms-2">
                   {overtime.start_time != null
@@ -84,31 +84,31 @@ export const DetailOvertime: React.FC = () => {
             </div>
             <div className="w-full grid grid-cols-12">
               <div className="col-span-6">
-                <Text size="sm" fw={700}>
+                <Text size="xs" fw={700}>
                   Jam mulai
                 </Text>
-                <Text size="sm">
+                <Text size="xs">
                   {overtime.start_time != null
                     ? formatterDate(new Date(overtime.start_time), 'HH:mm')
                     : '-- --'}
                 </Text>
               </div>
               <div className="col-span-6 ms-4">
-                <Text size="sm" fw={700}>
+                <Text size="xs" fw={700}>
                   Jam selesai
                 </Text>
-                <Text size="sm">
+                <Text size="xs">
                   {overtime.end_time != null
                     ? formatterDate(new Date(overtime.end_time), 'HH:mm')
                     : '-- --'}
                 </Text>
               </div>
             </div>
-            <div className="mt-2">
-              <Text size="sm" fw={700}>
+            <div className="mt-1">
+              <Text size="xs" fw={700}>
                 Deskripsi
               </Text>
-              <Text size="sm">{overtime.detail}</Text>
+              <Text size="xs">{overtime.detail}</Text>
             </div>
           </div>
         </div>
