@@ -1,4 +1,4 @@
-import { Button } from '@mantine/core';
+import { Button, Drawer, Fieldset, Select } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -9,6 +9,7 @@ import { LateRequestList } from '../components';
 
 export const LateRequest: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [selectStatus, setSelectStatus] = useState('Belum disetujui');
   const navigate = useNavigate();
 
   // [SET LOCALSTORAGE STATUS CHECKIN]
@@ -71,7 +72,35 @@ export const LateRequest: React.FC = () => {
         </div>
       </section>
 
-      <LateRequestList />
+      <LateRequestList status={selectStatus} filterState={opened} />
+
+      <Drawer
+        position="right"
+        offset={3}
+        size="80%"
+        radius="sm"
+        opened={opened}
+        onClose={close}
+        title="Filter"
+      >
+        <div>
+          <Fieldset className="mb-2" legend="Status">
+            <Select
+              className="-m-3"
+              placeholder="Pilih Shift"
+              data={['Disetujui', 'Ditolak', 'Belum disetujui']}
+              searchValue={selectStatus}
+              onSearchChange={setSelectStatus}
+              allowDeselect
+            />
+          </Fieldset>
+        </div>
+        <div className="text-right mt-3">
+          <Button onClick={close} style={{ width: '160px' }}>
+            Cari
+          </Button>
+        </div>
+      </Drawer>
     </main>
   );
 };

@@ -1,25 +1,25 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
 import { formatterDate } from '@/features/history';
-import { useGetOvertimeByDivision } from '@/features/overtime/api/getOvertime';
-import { OvertimeType } from '@/features/overtime/types';
+import { AttendanceRequestType } from '@/features/late-request';
+import { useGetAttendanceReqByDivision } from '@/features/late-request/api/getAttendanceRequest';
 import { Badge, Divider, Loader, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-type EmployeeOvertimeProps = {
-  status: string;
+type AttendanceRequestProps = {
+  status: string | null;
   typeRequest: string;
   division_id: number | undefined;
   filterState: boolean;
 };
 
-export const EmployeeOvertimeList: React.FC<EmployeeOvertimeProps> = ({
+export const EmployeeAttendanceRequestList: React.FC<AttendanceRequestProps> = ({
   status,
   typeRequest,
   division_id,
   filterState,
-}: EmployeeOvertimeProps) => {
+}: AttendanceRequestProps) => {
   const navigate = useNavigate();
   const [params, setParams] = useState({
     divisionID: division_id,
@@ -32,19 +32,16 @@ export const EmployeeOvertimeList: React.FC<EmployeeOvertimeProps> = ({
     };
     setParams(newParams);
   }, [typeRequest, filterState]);
-  const [overtimes, setOvertimes] = useState<OvertimeType[]>();
-  const { data: DataOvertimes, isLoading: LoadingOvertime } = useGetOvertimeByDivision(
-    params.divisionID,
-    params.status
-  );
+  const [attendanceReq, setAttendanceReq] = useState<AttendanceRequestType[]>([]);
+  const { data: DataAttendanceReq, isLoading: LoadingAttendanceReq } =
+    useGetAttendanceReqByDivision(params.divisionID, params.status);
   useEffect(() => {
-    if (DataOvertimes) {
-      setOvertimes(DataOvertimes);
+    if (DataAttendanceReq) {
+      setAttendanceReq(DataAttendanceReq);
     }
-  }, [DataOvertimes, filterState, params]);
+  }, [DataAttendanceReq, typeRequest, filterState]);
 
-  console.log('DataOvertime : ', overtimes);
-  if (LoadingOvertime) {
+  if (LoadingAttendanceReq) {
     return (
       <div className="flex justify-center my-20">
         <Loader size="sm" />
@@ -52,27 +49,22 @@ export const EmployeeOvertimeList: React.FC<EmployeeOvertimeProps> = ({
     );
   }
 
-  console.log(status, filterState);
+  console.log('Data absen : ', attendanceReq);
   return (
     <div className="text-center">
-      {overtimes?.length != 0 ? (
-        overtimes?.map((overtime, index) => (
+      {attendanceReq.length != 0 ? (
+        attendanceReq.map((attendance, index) => (
           <button
             key={index}
             onClick={() =>
-              navigate(`/employee-request/overtime/detail`, { state: { overtime: overtime } })
+              navigate(`/employee-request/attendance/detail`, { state: { attendance: attendance } })
             }
-            className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700"
+            className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative py-2 px-2 divide-y divide-gray-300 text-slate-700"
           >
-            <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
+            <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4 -mb-2">
               {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
-              <div className="col-span-2 me-3 mt-2">
-                <Text size="30px" fw={700}>
-                  {overtime?.start_time != null ? formatterDate(overtime?.start_time, 'dd') : '.'}
-                </Text>
-                <Text style={{ marginTop: '-5px' }} size="xs">
-                  {overtime?.start_time != null ? formatterDate(overtime?.start_time, 'MMM') : '-'}
-                </Text>
+              <div className="col-span-2 text-center -ms-3">
+                <img className="w-full rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
               </div>
               <div className="col-span-10">
                 <div className="my-auto text-right -mt-3 -me-3">
@@ -85,7 +77,7 @@ export const EmployeeOvertimeList: React.FC<EmployeeOvertimeProps> = ({
                     }}
                     color="blue"
                   >
-                    lembur
+                    Absen
                   </Badge>
                   <Badge
                     size="xs"
@@ -95,28 +87,28 @@ export const EmployeeOvertimeList: React.FC<EmployeeOvertimeProps> = ({
                       borderRadius: '2px',
                     }}
                     color={
-                      overtime?.status == 'Disetujui'
+                      attendance?.status == 'Disetujui'
                         ? 'green'
-                        : overtime?.status == 'Belum disetujui'
+                        : attendance?.status == 'Belum Disetujui'
                           ? 'yellow'
                           : 'red'
                     }
                   >
-                    {overtime?.status}
+                    {attendance?.status}
                   </Badge>
                 </div>
                 <div className="my-auto text-left ms-3 mt-1">
                   <Divider orientation="vertical" />
                   <Text size={'md'} fw={700}>
-                    {overtime.attendance.employee.name}
+                    {attendance.employee.name}
                   </Text>
                 </div>
               </div>
             </div>
             <div className="text-left">
               <Text style={{ marginLeft: '0px', padding: '8px' }} size="11px" fw={500}>
-                Tanggal pengajuan :{' '}
-                {formatterDate(new Date(overtime.start_time), 'EEEE, dd MMM yyyy')}
+                Waktu pengajuan :{' '}
+                {formatterDate(new Date(attendance.date), 'HH:mm, EEEE dd MMMM yyyy')}
               </Text>
             </div>
           </button>

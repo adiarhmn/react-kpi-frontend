@@ -20,6 +20,7 @@ import { CardAttendance } from '../components';
 import { ActivityDetailType, AttendanceType, EmployeeLocationType } from '../types';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export const Attendance: React.FC = () => {
   const { creds } = useAuth();
@@ -236,7 +237,14 @@ export const Attendance: React.FC = () => {
 
     await mutationAddActivity.mutateAsync(activityData, {
       onSuccess: (data) => {
-        console.log('Success:', data);
+        // console.log('Success:', data);
+        Swal.fire({
+          width: '80%',
+          title: 'Berhasil!',
+          timer: 3000,
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        });
         refetch();
 
         close();

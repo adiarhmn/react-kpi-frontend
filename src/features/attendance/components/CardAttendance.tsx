@@ -98,27 +98,50 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
         <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
           <div className="flex justify-between text-xs items-center p-2">
             <span className="text-base font-bold text-blue-700">Absensi</span>
-
-            <Badge
-              size="xs"
-              style={{
-                marginLeft: '4px',
-                borderRadius: '2px',
-              }}
-              color={
-                attendance?.check_in == null
-                  ? 'red'
+            <div>
+              {schedule?.attendance_status != 'Belum Hadir' && (
+                <Badge
+                  size="sm"
+                  className="uppercase"
+                  style={{
+                    marginTop: '7px',
+                    marginLeft: '4px',
+                    borderRadius: '2px',
+                  }}
+                  color={
+                    schedule?.attendance_status == 'cuti'
+                      ? 'grape'
+                      : schedule?.attendance_status == 'sakit'
+                        ? 'teal'
+                        : schedule?.attendance_status == 'izin'
+                          ? 'yellow'
+                          : 'blue'
+                  }
+                >
+                  {schedule?.attendance_status}
+                </Badge>
+              )}
+              <Badge
+                size="xs"
+                style={{
+                  marginLeft: '4px',
+                  borderRadius: '2px',
+                }}
+                color={
+                  attendance?.check_in == null
+                    ? 'red'
+                    : attendance?.check_out == null
+                      ? 'yellow'
+                      : 'green'
+                }
+              >
+                {attendance?.check_in == null
+                  ? 'Belum check-in'
                   : attendance?.check_out == null
-                    ? 'yellow'
-                    : 'green'
-              }
-            >
-              {attendance?.check_in == null
-                ? 'Belum check-in'
-                : attendance?.check_out == null
-                  ? 'Sedang bekerja'
-                  : 'Selesai bekerja'}
-            </Badge>
+                    ? 'Sedang bekerja'
+                    : 'Selesai bekerja'}
+              </Badge>
+            </div>
           </div>
           <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
             <div className="col-span-3 text-center m-auto p-1">
@@ -152,7 +175,11 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
             {attendance?.check_in == null ? (
               <form onSubmit={handleCheckIn}>
                 <Button
-                  disabled={statusLocation == false || employee_location == null}
+                  disabled={
+                    statusLocation == false ||
+                    employee_location == null ||
+                    schedule.attendance_status != 'Belum Hadir'
+                  }
                   type="submit"
                   fullWidth
                   rightSection={statusLocation == false ? <IconBan /> : <IconDoorEnter />}
@@ -161,7 +188,9 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
                     ? 'Lokasi anda belum ditentukan'
                     : statusLocation == false
                       ? 'Anda berada diluar kantor'
-                      : 'Check-in'}
+                      : schedule.attendance_status != 'Belum Hadir'
+                        ? `Anda dalam kondisi${schedule.attendance_status}`
+                        : 'Check-in'}
                 </Button>
               </form>
             ) : attendance?.check_out == null ? (

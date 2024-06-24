@@ -50,7 +50,7 @@ export const Overtime: React.FC = () => {
         </div>
       </section>
 
-      <OvertimeList overtimes={overtimeData} />
+      <OvertimeList status={'Belum%20disetujui'} filterState={''} />
     </main>
   );
 };

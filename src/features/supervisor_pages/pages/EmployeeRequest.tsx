@@ -1,23 +1,33 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
-import { Button, Drawer, Fieldset, Select, Tabs } from '@mantine/core';
+import { Button, Drawer, Fieldset, Loader, Select, Tabs } from '@mantine/core';
 import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { EmployeeOvertimeList, EmployeeRequestList } from '../components';
+import {
+  EmployeeAttendanceRequestList,
+  EmployeeOvertimeList,
+  EmployeeRequestList,
+} from '../components';
 import Swal from 'sweetalert2';
-import { ShiftType } from '@/admin_features/types';
-import { useGetShift } from '@/features/schedule/api';
 import { useAuth } from '@/features/auth';
 import { useDisclosure } from '@mantine/hooks';
-import { OvertimeList } from '@/features/history';
+import { EmployeeType } from '@/admin_features/types';
+import { useGetEmployee } from '@/features/employee/api/Profile';
 
 export const EmployeeRequest: React.FC = () => {
+  const { creds } = useAuth();
+  const [selectStatus, setSelectStatus] = useState('Belum disetujui');
+  const [employee, setEmployee] = useState<EmployeeType>();
+  const { data: DataEmployee, isLoading: LoadingEmployee } = useGetEmployee(creds?.employee_id);
+  useEffect(() => {
+    if (DataEmployee) {
+      setEmployee(DataEmployee);
+    }
+  }, [DataEmployee]);
   const navigate = useNavigate();
   const [selectType, setSelectType] = useState('sakit');
-  const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
-  const [selectShift, setSelectShift] = useState('');
 
   // [NOTIFICATION 🔔]
   const { state } = useLocation();
@@ -36,17 +46,13 @@ export const EmployeeRequest: React.FC = () => {
   }, [state, navigate]);
   // [END NOTIFICATION 🔔]
 
-  const [selectStatus, setSelectStatus] = useState('Belum disetujui');
-  // const { data: DataShift } = useGetShift(creds?.company_id);
-  // useEffect(() => {
-  //   if (DataShift) {
-  //     setShifts(DataShift);
-  //   }
-  // }, [DataShift]);
-  // const optionShift = shifts.map((shift: any) => ({
-  //   value: shift.id.toString(),
-  //   label: shift.shift_name,
-  // }));
+  if (LoadingEmployee) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -129,11 +135,26 @@ export const EmployeeRequest: React.FC = () => {
         </Tabs.List>
       </Tabs>
       {selectType == 'sakit' || selectType == 'izin' || selectType == 'cuti' ? (
-        <EmployeeRequestList typeRequest={selectType} status={selectStatus} />
+        <EmployeeRequestList
+          status={selectStatus}
+          typeRequest={selectType}
+          division_id={employee?.division_id}
+          filterState={opened}
+        />
       ) : selectType == 'lembur' ? (
-        <EmployeeOvertimeList status="" />
+        <EmployeeOvertimeList
+          status={selectStatus}
+          typeRequest={selectType}
+          division_id={employee?.division_id}
+          filterState={opened}
+        />
       ) : (
-        'false'
+        <EmployeeAttendanceRequestList
+          status={selectStatus}
+          typeRequest={selectType}
+          division_id={employee?.division_id}
+          filterState={opened}
+        />
       )}
 
       <Drawer
@@ -146,11 +167,11 @@ export const EmployeeRequest: React.FC = () => {
         title="Filter"
       >
         <div>
-          <Fieldset className="mb-2" legend="Shift">
+          <Fieldset className="mb-2" legend="Status">
             <Select
               className="-m-3"
               placeholder="Pilih Shift"
-              data={['Disetujui', 'Dtolak', 'Belum disetujui']}
+              data={['Disetujui', 'Ditolak', 'Belum disetujui']}
               searchValue={selectStatus}
               onSearchChange={setSelectStatus}
               allowDeselect

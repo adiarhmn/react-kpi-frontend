@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { HomeLayout, AuthLayout, AppLayout, AdminLayout } from '@/components/layout';
@@ -50,6 +50,14 @@ const { EmployeeAttendance } = lazyImport(
 const { DetailEmployeeAttendance } = lazyImport(
   () => import('@/features/supervisor_pages'),
   'DetailEmployeeAttendance'
+);
+const { DetailEmployeeOvertime } = lazyImport(
+  () => import('@/features/supervisor_pages'),
+  'DetailEmployeeOvertime'
+);
+const { DetailEmployeeAttendanceRequest } = lazyImport(
+  () => import('@/features/supervisor_pages'),
+  'DetailEmployeeAttendanceRequest'
 );
 const { PaidLeave } = lazyImport(() => import('@/features/paid-leave'), 'PaidLeave');
 const { AddPaidLeave } = lazyImport(() => import('@/features/paid-leave'), 'AddPaidLeave');
@@ -161,6 +169,8 @@ export const AppRoutes: React.FC = () => {
             <Route path="employee-request">
               <Route index element={<EmployeeRequest />} />
               <Route path="detail" element={<DetailEmployeeRequest />} />
+              <Route path="overtime/detail" element={<DetailEmployeeOvertime />} />
+              <Route path="attendance/detail" element={<DetailEmployeeAttendanceRequest />} />
             </Route>
             <Route path="employee-division">
               <Route index element={<EmployeeDivision />} />

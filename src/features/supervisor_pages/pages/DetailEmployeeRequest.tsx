@@ -59,16 +59,6 @@ export const DetailEmployeeRequest: React.FC = () => {
             Pengajuan {request?.type}
           </span>
           <div className="">
-            {/* <Badge
-              size="sm"
-              style={{
-                marginLeft: '4px',
-                borderRadius: '2px',
-              }}
-              color={request.type == 'sakit' ? 'yellow' : 'blue'}
-            >
-              {request.type}
-            </Badge> */}
             <Badge
               size="xs"
               style={{
@@ -93,7 +83,7 @@ export const DetailEmployeeRequest: React.FC = () => {
             <div className="col-span-2 text-center my-auto -ms-2">
               <Text size="50px" fw={700}>
                 {request.date_start != null &&
-                  getDaysBetweenDates(request?.date_start, request?.date_end)}
+                  getDaysBetweenDates(request?.date_start, request?.date_end) + 1}
               </Text>
               <Text style={{ marginTop: '-5px' }} size="sm">
                 Hari

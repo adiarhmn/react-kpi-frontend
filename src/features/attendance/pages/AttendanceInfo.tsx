@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
-import { Badge, Divider, Text } from '@mantine/core';
-import { IconCalendarEvent, IconChevronLeft } from '@tabler/icons-react';
+import { Badge, Button, Divider, Text } from '@mantine/core';
+import { IconCalendarEvent, IconChevronLeft, IconInfoCircle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -154,11 +154,26 @@ export const AttendanceInfo: React.FC = () => {
             activityDetail.map((activity, index) => (
               <section
                 key={index}
-                className="bg-white mx-auto max-w-xs w-full z-50 relative p-2 px-2 text-slate-700 "
+                className="bg-white mx-auto max-w-xs w-full z-50 relative  p-2 px-2 text-slate-700 "
               >
                 <div className="flex justify-between text-xs items-center mb-2">
                   <span className="text-sm font-bold text-blue-700">Kegiatan {index + 1}</span>
-                  <IconCalendarEvent className="opacity-80" size={20} />
+                  <Button
+                    onClick={() =>
+                      navigate(`/activity/detail/`, {
+                        state: {
+                          activity: activity,
+                          alias: activityAlias[0],
+                          index: index,
+                        },
+                      })
+                    }
+                    variant="transparent"
+                    className="shadow-xs "
+                    size="xs"
+                  >
+                    <IconInfoCircle size={18} />
+                  </Button>
                 </div>
                 <div className="grid grid-cols-12 gap-x-2">
                   {activityDetail != null && activityAlias[0] != null

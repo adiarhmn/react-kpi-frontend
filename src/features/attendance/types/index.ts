@@ -30,6 +30,7 @@ export type AttendanceType = {
   status: string;
   attendance_status: string;
   employee_id: number;
+  employee: EmployeeType;
   schedule_id: number;
 };
 
