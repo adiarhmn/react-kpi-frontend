@@ -15,7 +15,7 @@ export const Absence: React.FC = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   useEffect(() => {
-    const hasNotified = localStorage.getItem('hasNotifiedPaidLeave');
+    const hasNotified = localStorage.getItem('hasNotifiedRequest');
     if (state?.success && hasNotified != 'yes') {
       Swal.fire({
         width: '80%',
@@ -24,7 +24,7 @@ export const Absence: React.FC = () => {
         icon: 'success',
         confirmButtonText: 'Ok',
       });
-      localStorage.setItem('hasNotifiedPaidLeave', 'yes');
+      localStorage.setItem('hasNotifiedRequest', 'yes');
     }
   }, [state, navigate]);
   // [END NOTIFICATION 🔔]
@@ -88,7 +88,7 @@ export const Absence: React.FC = () => {
         </section>
       </Tabs>
 
-      <AbsenceList status={'Belum%20Disetujui'} typeAbsence={selectType} />
+      <AbsenceList status={'Belum%20disetujui'} typeAbsence={selectType} />
     </main>
   );
 };

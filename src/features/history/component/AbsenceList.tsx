@@ -102,7 +102,13 @@ export const AbsenceList: React.FC<AbsenceProps> = ({ typeAbsence, status }) => 
                         marginLeft: '4px',
                         borderRadius: '2px',
                       }}
-                      color={absence?.status == 'Disetujui' ? 'green' : 'red'}
+                      color={
+                        absence?.status == 'Disetujui'
+                          ? 'green'
+                          : absence.status == 'Ditolak'
+                            ? 'red'
+                            : 'yellow'
+                      }
                     >
                       {absence?.status}
                     </Badge>

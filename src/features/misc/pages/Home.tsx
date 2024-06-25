@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
 import { Badge, Divider, Text } from '@mantine/core';
 import {
@@ -22,12 +23,13 @@ import { MenuList } from '@/components/navigation';
 import { AttendanceType, ScheduleType, useGetAttendanceMonthly } from '@/features/attendance';
 import { useAuth } from '@/features/auth';
 import { ActivityCard } from '@/features/components';
-// eslint-disable-next-line no-restricted-imports
 import { useGetEmployee } from '@/features/employee/api/Profile';
 import { AbsenceType, formatterDate, useGetAbsenceByType } from '@/features/history';
-// eslint-disable-next-line no-restricted-imports
 import { useGetScheduleDaily } from '@/features/schedule/api';
 import { EmployeeType } from '@/admin_features/types';
+import { AttendanceRequestType } from '@/features/late-request';
+import { useGetAttendanceReq } from '@/admin_features/attendance/api';
+import { useGetAttendanceRequest } from '@/features/late-request/api/getAttendanceRequest';
 
 export const Home: React.FC = () => {
   const { creds } = useAuth();
@@ -64,15 +66,24 @@ export const Home: React.FC = () => {
   }, [DataEmployee]);
 
   const [request, setRequest] = useState<AbsenceType[]>([]);
-  const { data: DataRequest } = useGetAbsenceByType(creds?.employee_id, 'sakit', 'disetujui');
+  const { data: DataRequest } = useGetAbsenceByType(creds?.employee_id, 'sakit', 'Disetujui');
   useEffect(() => {
     if (DataRequest) {
       setRequest(DataRequest);
     }
   }, [DataRequest]);
 
-  console.log(request);
+  // console.log(request);
 
+  const [attendanceReq, setAttendanceReq] = useState<AttendanceRequestType[]>([]);
+  const { data: DataAttendanceReq } = useGetAttendanceRequest(creds?.employee_id);
+  useEffect(() => {
+    if (DataAttendanceReq) {
+      setAttendanceReq(DataAttendanceReq);
+    }
+  }, [DataAttendanceReq]);
+
+  // console.log('Data attendanceReq : ', attendanceReq);
   return (
     <main>
       <section className="bg-blue-700 w-full rounded-b-3xl px-5 pt-8 pb-20 relative">
@@ -108,13 +119,13 @@ export const Home: React.FC = () => {
             </Link>
             <Link to="#" className="px-4 flex flex-col items-center justify-center">
               <div className="p-2 bg-yellow-500 text-white rounded-xl font-bold w-full h-full text-center shadow">
-                7
+                {request.length}
               </div>
               <div className="text-xs mt-1">Izin / Sakit</div>
             </Link>
             <Link to="#" className="px-4 flex flex-col items-center justify-center">
               <div className="p-2 bg-sky-400 text-white rounded-xl font-bold w-full h-full text-center shadow">
-                7
+                {attendanceReq.length}
               </div>
               <div className="text-xs mt-1 t">Pengajuan</div>
             </Link>
@@ -256,7 +267,7 @@ export const Home: React.FC = () => {
         <div className="flex justify-between text-xs items-center p-2 -mt-1 -mb-1">
           <div>
             <Text fw={700} c="blue">
-              Jadwal hari ini
+              Jadwal
             </Text>
           </div>
           <div className="my-auto text-right -mt-2 me-2">
@@ -283,6 +294,28 @@ export const Home: React.FC = () => {
               color={schedule?.attendance_place == 'WFH' ? 'yellow' : 'blue'}
             >
               {schedule?.attendance_place}
+            </Badge>
+            <Badge
+              size="sm"
+              className="uppercase"
+              style={{
+                marginTop: '7px',
+                marginLeft: '4px',
+                borderRadius: '2px',
+              }}
+              color={
+                schedule?.attendance_status == 'Belum hadir'
+                  ? 'red'
+                  : schedule?.attendance_status == 'cuti'
+                    ? 'grape'
+                    : schedule?.attendance_status == 'sakit'
+                      ? 'teal'
+                      : schedule?.attendance_status == 'izin'
+                        ? 'yellow'
+                        : 'blue'
+              }
+            >
+              {schedule?.attendance_status}
             </Badge>
           </div>
         </div>

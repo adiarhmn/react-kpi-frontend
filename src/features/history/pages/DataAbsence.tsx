@@ -11,7 +11,6 @@ import { Tabs } from '@mantine/core';
 export const DataAbsence: React.FC = () => {
   const navigate = useNavigate();
   const [selectStatus, setSelectStatus] = useState('Disetujui');
-
   const [month, setMonth] = useState<Date | null>(new Date());
   return (
     <main>

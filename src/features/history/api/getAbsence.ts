@@ -37,39 +37,82 @@ export const useGetAbsenceByType = (id?: number | null, type?: string, status?: 
   });
 };
 
-export async function getAbsenceByDivision(division_id?: number, type?: string) {
-  const res = await axios.get(`${BaseURL}/request?division=${division_id}&types=${type}`);
-  console.log('URL : ', `${BaseURL}/request?division=${division_id}&types=${type}`);
-  return res.data.data;
+export async function getAbsenceByDivision(
+  division_id?: number,
+  type?: string,
+  status?: string | null
+) {
+  if (status == null) {
+    const res = await axios.get(`${BaseURL}/request?division=${division_id}&types=${type}`);
+    console.log('URL : ', `${BaseURL}/request?division=${division_id}&types=${type}`);
+    return res.data.data;
+  } else {
+    const res = await axios.get(
+      `${BaseURL}/request?division=${division_id}&types=${type}&status=${status}`
+    );
+    console.log(
+      'URL : ',
+      `${BaseURL}/request?division=${division_id}&types=${type}&status=${status}`
+    );
+    return res.data.data;
+  }
 }
 
-export const useGetAbsenceByDivision = (division_id?: number, type?: string) => {
+export const useGetAbsenceByDivision = (
+  division_id?: number,
+  type?: string,
+  status?: string | null
+) => {
   return useQuery({
-    queryKey: ['absence', division_id, type],
-    queryFn: () => getAbsenceByDivision(division_id, type),
+    queryKey: ['absence', division_id, type, status],
+    queryFn: () => getAbsenceByDivision(division_id, type, status),
   });
 };
 
 export async function getAbsenceMonthly(
   employee_id?: number,
   month?: string | number,
-  year?: string | number
+  year?: string | number,
+  type?: string | null,
+  status?: string | null
 ) {
-  const res = await axios.get(
-    `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}`
-  );
-  console.log('URL : ', `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}`);
-  return res.data.data;
+  if (type != null && status != null) {
+    const res = await axios.get(
+      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&types=${type}&status=${status}`
+    );
+    console.log(
+      'URL : ',
+      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&types=${type}&status=${status}`
+    );
+    return res.data.data;
+  } else if (type != null && status == null) {
+    const res = await axios.get(
+      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&type=${type}`
+    );
+    console.log(
+      'URL : ',
+      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&type=${type}`
+    );
+    return res.data.data;
+  } else {
+    const res = await axios.get(
+      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}`
+    );
+    console.log('URL : ', `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}`);
+    return res.data.data;
+  }
 }
 
 export const useGetAbsenceMonthly = (
   employee_id?: number,
   month?: string | number,
-  year?: string | number
+  year?: string | number,
+  type?: string | null,
+  status?: string | null
 ) => {
   return useQuery({
-    queryKey: ['absence', employee_id, month, year],
-    queryFn: () => getAbsenceMonthly(employee_id, month, year),
+    queryKey: ['absence', employee_id, month, year, type, status],
+    queryFn: () => getAbsenceMonthly(employee_id, month, year, type, status),
   });
 };
 

@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
 import { ScheduleType } from '@/features/attendance';
 import { Badge, Divider, Indicator, Text } from '@mantine/core';
-import { Calendar, DatePicker } from '@mantine/dates';
+import { Calendar, DatePicker, DatePickerInput } from '@mantine/dates';
 import { IconCalendar, IconClockHour8 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useGetScheduleDaily, useGetScheduleMonthly } from '../api';
@@ -16,10 +16,10 @@ import { useLocation } from 'react-router-dom';
 
 export const ScheduleList: React.FC = () => {
   const [dateValue, setDateValue] = useState<Date | null>(new Date());
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const location = useLocation();
   const { creds } = useAuth();
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const handleMonthChange = (date: Date) => {
     setCurrentMonth(date.getMonth() + 1);
     setCurrentYear(date.getFullYear());
@@ -30,6 +30,7 @@ export const ScheduleList: React.FC = () => {
     employeeID = location.state.employee_id;
   }
 
+  // [RED INDICATOR]
   const [scheduleOff, setScheduleOff] = useState<ScheduleType[]>([]);
   const { data: DataOff } = useGetScheduleMonthly(employeeID, currentMonth, currentYear, '', 'off');
   useEffect(() => {
@@ -37,6 +38,14 @@ export const ScheduleList: React.FC = () => {
       setScheduleOff(DataOff);
     }
   }, [DataOff]);
+
+  const datesArray = scheduleOff.map((item) => {
+    const date = new Date(item.date);
+    const day = date.getDate();
+    const month = date.getMonth();
+    return { day, month };
+  });
+  // [END RED INDICATOR]
 
   const [schedule, setSchedule] = useState<ScheduleType>();
   const { data: DataSchedule, refetch: RefetchSchedule } = useGetScheduleDaily(
@@ -49,37 +58,6 @@ export const ScheduleList: React.FC = () => {
       setSchedule(DataSchedule[0]);
     }
   }, [DataSchedule, dateValue]);
-
-  const data = [
-    {
-      id: 83,
-      date_start: '2024-06-23',
-      date_end: '2024-06-26',
-      status: 'off',
-    },
-    {
-      id: 85,
-      date_start: '2024-06-21',
-      date_end: '2024-06-22',
-      status: 'off',
-    },
-    {
-      id: 87,
-      date_start: '2024-06-10',
-      date_end: '2024-06-12',
-      status: 'off',
-    },
-  ];
-
-  // [YELLOW INDICATOR]
-  const [request, setRequest] = useState<AbsenceType[]>([]);
-  const [formattedAllDates, setFormattedAllDates] = useState([]);
-  const { data: DataRequest } = useGetAbsenceMonthly(employeeID, currentMonth, currentYear);
-  useEffect(() => {
-    if (DataRequest) {
-      setRequest(DataRequest);
-    }
-  }, [DataRequest, currentMonth]);
 
   const generateDateRange = (start: Date | string, end: Date | string) => {
     const startDate = new Date(start);
@@ -97,8 +75,24 @@ export const ScheduleList: React.FC = () => {
     return dateArray;
   };
 
+  // [TEAL INDICATOR]
+  const [requestSick, setRequestSick] = useState<AbsenceType[]>([]);
+  const [formattedAllDates, setFormattedAllDates] = useState([]);
+  const { data: DataRequest } = useGetAbsenceMonthly(
+    employeeID,
+    currentMonth,
+    currentYear,
+    'sakit',
+    'Disetujui'
+  );
   useEffect(() => {
-    const allDates = request.reduce((acc: any, item: any) => {
+    if (DataRequest) {
+      setRequestSick(DataRequest);
+    }
+  }, [DataRequest, currentMonth]);
+
+  useEffect(() => {
+    const allDates = requestSick.reduce((acc: any, item: any) => {
       const dates: any = generateDateRange(item.date_start, item.date_end);
       return acc.concat(dates);
     }, []);
@@ -110,19 +104,77 @@ export const ScheduleList: React.FC = () => {
     }));
 
     setFormattedAllDates(formattedDates);
-  }, [request]);
+  }, [requestSick]);
+  // [END TEAL INDICATOR]
+
+  // [YELLOW INDICATOR]
+  const [requestLeave, setRequestLeave] = useState<AbsenceType[]>([]);
+  const [leaveDates, setLeaveDates] = useState([]);
+  const { data: DataLeave } = useGetAbsenceMonthly(
+    employeeID,
+    currentMonth,
+    currentYear,
+    'izin',
+    'Disetujui'
+  );
+  useEffect(() => {
+    if (DataLeave) {
+      setRequestLeave(DataLeave);
+    }
+  }, [DataLeave, currentMonth]);
+
+  useEffect(() => {
+    const allDates = requestLeave.reduce((acc: any, item: any) => {
+      const dates: any = generateDateRange(item.date_start, item.date_end);
+      return acc.concat(dates);
+    }, []);
+
+    const leaveDate = allDates.map((date: any) => ({
+      day: date.getDate(),
+      month: date.getMonth() + 1,
+      year: date.getFullYear(),
+    }));
+
+    setLeaveDates(leaveDate);
+  }, [requestLeave]);
   // [END YELLOW INDICATOR]
 
-  const datesArray = scheduleOff.map((item) => {
-    const date = new Date(item.date);
-    const day = date.getDate();
-    const month = date.getMonth();
-    return { day, month };
-  });
+  // [GRAPE INDICATOR]
+  const [paidLeave, setPaidLeave] = useState<AbsenceType[]>([]);
+  const [paidLeaveDates, setPaidLeaveDates] = useState([]);
+  const { data: DataPaidLeave } = useGetAbsenceMonthly(
+    employeeID,
+    currentMonth,
+    currentYear,
+    'cuti',
+    'Disetujui'
+  );
+  useEffect(() => {
+    if (DataPaidLeave) {
+      setPaidLeave(DataPaidLeave);
+    }
+  }, [DataPaidLeave, currentMonth]);
+
+  useEffect(() => {
+    const allDates = paidLeave.reduce((acc: any, item: any) => {
+      const dates: any = generateDateRange(item.date_start, item.date_end);
+      return acc.concat(dates);
+    }, []);
+
+    const paidLeaveDate = allDates.map((date: any) => ({
+      day: date.getDate(),
+      month: date.getMonth() + 1,
+      year: date.getFullYear(),
+    }));
+
+    setPaidLeaveDates(paidLeaveDate);
+  }, [paidLeave]);
+  // [END GRAPE INDICATOR]
 
   console.log('Schedule off : ', scheduleOff);
   // console.log('Dates array : ', datesArray);
-  console.log('Request off: ', request);
+  console.log('Request off: ', requestSick);
+  console.log('Tanggal izin ', leaveDates);
   console.log(currentMonth);
   console.log(currentYear);
   console.log('Date off :', formattedAllDates);
@@ -154,6 +206,12 @@ export const ScheduleList: React.FC = () => {
               const showIndicatorAbsence = formattedAllDates.some(
                 (d: any) => d.day === day && d.month === month + 1
               );
+              const showIndicatorLeave = leaveDates.some(
+                (d: any) => d.day === day && d.month === month + 1
+              );
+              const showIndicatorPaidLeave = paidLeaveDates.some(
+                (d: any) => d.day === day && d.month === month + 1
+              );
 
               // console.log(showIndicatorAbsence);
 
@@ -163,7 +221,7 @@ export const ScheduleList: React.FC = () => {
                     {showIndicatorAbsence && (
                       <Indicator
                         size={6}
-                        color="yellow"
+                        color="teal"
                         offset={-9}
                         style={{
                           position: 'absolute',
@@ -178,6 +236,32 @@ export const ScheduleList: React.FC = () => {
                       <Indicator
                         size={6}
                         color="red"
+                        offset={-9}
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                      />
+                    )}
+                    {showIndicatorLeave && (
+                      <Indicator
+                        size={6}
+                        color="yellow"
+                        offset={-9}
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                      />
+                    )}
+                    {showIndicatorPaidLeave && (
+                      <Indicator
+                        size={6}
+                        color="grape"
                         offset={-9}
                         style={{
                           position: 'absolute',
@@ -206,9 +290,25 @@ export const ScheduleList: React.FC = () => {
             <div className="col-span-1">
               <Indicator className="mt-2" color="yellow" position="middle-center"></Indicator>
             </div>
-            <div className="col-span-5">
+            <div className="col-span-2">
               <Text className="" size={'xs'} c="dimmed">
-                Izin / Sakit / Cuti
+                Izin
+              </Text>
+            </div>
+            <div className="col-span-1">
+              <Indicator className="mt-2" color="teal" position="middle-center"></Indicator>
+            </div>
+            <div className="col-span-2">
+              <Text className="" size={'xs'} c="dimmed">
+                Sakit
+              </Text>
+            </div>
+            <div className="col-span-1">
+              <Indicator className="mt-2" color="grape" position="middle-center"></Indicator>
+            </div>
+            <div className="col-span-2">
+              <Text className="" size={'xs'} c="dimmed">
+                Cuti
               </Text>
             </div>
           </div>

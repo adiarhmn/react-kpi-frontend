@@ -1,4 +1,4 @@
-import { Button, Divider, Input, Loader, Select, Textarea } from '@mantine/core';
+import { Button, Divider, Textarea } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft, IconMailForward, IconMap2 } from '@tabler/icons-react';
 import { Icon } from 'leaflet';
@@ -86,6 +86,8 @@ export const AddLateRequest: React.FC = () => {
   };
   // [END SUBMIT PENGAJUAN]
 
+  console.log(schedule);
+
   return (
     <main className="min-h-96 relative">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -172,16 +174,20 @@ export const AddLateRequest: React.FC = () => {
             </div>
             <div className="mb-2 mt-3">
               <Button
-                disabled={attendance?.check_in != null}
+                disabled={
+                  attendance?.check_in != null || schedule?.attendance_status != 'Belum Hadir'
+                }
                 type="submit"
                 fullWidth
                 rightSection={<IconMailForward size={'20px'} />}
               >
-                {attendance?.check_in == null
-                  ? 'Ajukan'
+                {schedule?.attendance_status != 'Belum Hadir'
+                  ? `Status anda sedang ${schedule?.attendance_status}`
                   : attendance?.check_out == null
                     ? 'Anda sudah Check-In'
-                    : 'Anda sudah absen'}
+                    : attendance?.check_out != null
+                      ? 'Anda sudah absen'
+                      : 'Ajukan'}
               </Button>
             </div>
           </form>

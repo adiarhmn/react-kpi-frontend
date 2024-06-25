@@ -1,59 +1,66 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
-import { EmployeeType } from '@/admin_features/types';
-import { useAuth } from '@/features/auth';
-import { useGetEmployee } from '@/features/employee/api/Profile';
 import {
   AbsenceType,
   formatterDate,
   getDaysBetweenDates,
   useGetAbsenceByDivision,
 } from '@/features/history';
-import { Badge, Divider, Text } from '@mantine/core';
+import { Badge, Divider, Loader, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type EmployeeRequestListProps = {
   typeRequest: string;
   status: string;
+  division_id: number | undefined;
+  filterState: boolean;
 };
 
 export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
   typeRequest,
   status,
+  division_id,
+  filterState,
 }: EmployeeRequestListProps) => {
   const navigate = useNavigate();
-  const { creds } = useAuth();
-  const [employee, setEmployee] = useState<EmployeeType>();
-  const { data: DataEmployee } = useGetEmployee(creds?.employee_id);
-  useEffect(() => {
-    if (DataEmployee) {
-      setEmployee(DataEmployee);
-    }
-  }, [DataEmployee]);
   const [params, setParams] = useState({
-    companyID: employee?.division_id,
+    companyID: division_id,
     typeRequest: typeRequest,
+    status: status,
   });
   useEffect(() => {
     const newParams = {
-      companyID: employee?.division_id,
+      companyID: division_id,
       typeRequest,
+      status,
     };
     setParams(newParams);
-  }, [typeRequest, DataEmployee]);
+  }, [typeRequest, filterState]);
   const [request, setRequest] = useState<AbsenceType[]>();
-  const { data: DataAbsence } = useGetAbsenceByDivision(params.companyID, params.typeRequest);
+  const { data: DataAbsence, isLoading: LoadingRequest } = useGetAbsenceByDivision(
+    params.companyID,
+    params.typeRequest,
+    params.status
+  );
   useEffect(() => {
     if (DataAbsence) {
       setRequest(DataAbsence);
     }
-  }, [DataAbsence, DataEmployee]);
+  }, [DataAbsence, params, filterState]);
 
+  if (LoadingRequest) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
+  console.log(status, filterState);
   return (
     <div className="text-center">
-      {request != undefined ? (
-        request.map((req, index) => (
+      {request?.length != 0 ? (
+        request?.map((req, index) => (
           <button
             key={index}
             onClick={() => navigate(`/employee-request/detail`, { state: { request: req } })}
@@ -61,8 +68,8 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
           >
             <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
               {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
-              <div className="col-span-2 text-center -ms-3">
-                <Text size="30px" fw={700}>
+              <div className="col-span-2 -ms-3 mt-2">
+                <Text size="26px" fw={700}>
                   {req?.date_start != undefined || req?.date_end != null
                     ? getDaysBetweenDates(req?.date_start, req?.date_end) + 1
                     : '-- --'}
@@ -102,9 +109,9 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
                     {req?.status}
                   </Badge>
                 </div>
-                <div className="my-auto text-left ms-3 mt-1">
+                <div className="my-auto text-left ms-2">
                   <Divider orientation="vertical" />
-                  <Text size="18px" fw={700}>
+                  <Text size={'md'} fw={700}>
                     {req.employee.name}
                   </Text>
                 </div>
@@ -124,7 +131,7 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
             src="/images/blank-canvas.svg"
             alt=""
           />
-          <span className="font-bold text-slate-400 text-xl">Belum ada data izin</span>
+          <span className="font-bold text-slate-400 text-xl">Belum ada data {typeRequest}</span>
         </section>
       )}
     </div>

@@ -8,12 +8,33 @@ import { formatterDate } from '@/features/history';
 import { useGetAttendanceRequest } from '../api/getAttendanceRequest';
 import { AttendanceRequestType } from '../types';
 
-export const LateRequestList: React.FC = () => {
+type LateRequestProps = {
+  status: string;
+  filterState: boolean;
+};
+
+export const LateRequestList: React.FC<LateRequestProps> = ({
+  status,
+  filterState,
+}: LateRequestProps) => {
   const navigate = useNavigate();
   const { creds } = useAuth();
+
+  const [params, setParams] = useState({
+    employeeID: creds?.employee_id,
+    status: status,
+  });
+  useEffect(() => {
+    const newParams = {
+      employeeID: creds?.employee_id,
+      status,
+    };
+    setParams(newParams);
+  }, [filterState, status]);
+
   const [attendanceRequest, setAttendanceRequest] = useState<AttendanceRequestType[]>([]);
   const { data: DataAttendanceRequest, isLoading: LoadingAttendanceRequest } =
-    useGetAttendanceRequest(creds?.employee_id);
+    useGetAttendanceRequest(params.employeeID, params.status);
   useEffect(() => {
     if (DataAttendanceRequest) {
       setAttendanceRequest(DataAttendanceRequest);
@@ -22,11 +43,8 @@ export const LateRequestList: React.FC = () => {
 
   if (LoadingAttendanceRequest) {
     return (
-      <div className="w-full col-span-12">
-        <section className="min-h-96 flex flex-col items-center justify-center mt-10">
-          <Loader size={50} />
-          <span className="font-bold text-slate-400 text-xl mt-10">Memuat lokasi absen...</span>
-        </section>
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
       </div>
     );
   }
@@ -61,7 +79,13 @@ export const LateRequestList: React.FC = () => {
                       marginRight: '5px',
                       borderRadius: '2px',
                     }}
-                    color={request.status == 'Disetujui' ? 'green' : 'red'}
+                    color={
+                      request.status == 'Disetujui'
+                        ? 'green'
+                        : request.status == 'Ditolak'
+                          ? 'red'
+                          : 'yellow'
+                    }
                   >
                     {request.status}
                   </Badge>

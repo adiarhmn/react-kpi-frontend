@@ -1,19 +1,50 @@
-import { Badge, Divider, Text } from '@mantine/core';
+/* eslint-disable import/order */
+/* eslint-disable no-restricted-imports */
+import { Badge, Divider, Loader, Text } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-
-// eslint-disable-next-line no-restricted-imports
-import { AttendanceType } from '@/features/attendance';
-// eslint-disable-next-line no-restricted-imports
 import { OvertimeType } from '@/features/overtime/types';
-
 import { formatterDate } from '../api';
+import { useAuth } from '@/features/auth';
+import { useEffect, useState } from 'react';
+import { useGetOvertime } from '@/features/overtime/api/getOvertime';
 
 type OvertimeProps = {
-  overtimes: OvertimeType[];
+  status: string | null;
+  filterState: boolean | string;
 };
 
-export const OvertimeList: React.FC<OvertimeProps> = ({ overtimes }) => {
+export const OvertimeList: React.FC<OvertimeProps> = ({ status, filterState }) => {
+  const { creds } = useAuth();
   const navigate = useNavigate();
+  const [params, setParams] = useState({
+    employeeID: creds?.employee_id,
+    status: status,
+  });
+  useEffect(() => {
+    const newParams = {
+      employeeID: creds?.employee_id,
+      status,
+    };
+    setParams(newParams);
+  }, [status]);
+  const [overtimes, setOvertime] = useState<OvertimeType[]>([]);
+  const { data: DataOvertime, isLoading: LoadingOvertime } = useGetOvertime(
+    params.employeeID,
+    params.status
+  );
+  useEffect(() => {
+    if (DataOvertime) {
+      setOvertime(DataOvertime);
+    }
+  }, [DataOvertime, status]);
+
+  if (LoadingOvertime) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
   return (
     <div className="text-center">
       {overtimes.length > 0 ? (
@@ -58,7 +89,7 @@ export const OvertimeList: React.FC<OvertimeProps> = ({ overtimes }) => {
                         marginLeft: '4px',
                         borderRadius: '2px',
                       }}
-                      color={overtime?.status == 'disetujui' ? 'blue' : 'red'}
+                      color={overtime?.status == 'Disetujui' ? 'blue' : 'red'}
                     >
                       {overtime?.status}
                     </Badge>

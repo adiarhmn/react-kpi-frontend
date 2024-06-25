@@ -52,8 +52,8 @@ export const PaidLeaveList: React.FC<PaidLeaveProps> = ({ status }) => {
           >
             <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
               {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
-              <div className="col-span-2 text-center -ms-3">
-                <Text size="30px" fw={700}>
+              <div className="col-span-2 text-center -ms-3 mt-2">
+                <Text size="26px" fw={700}>
                   {getDaysBetweenDates(leave.date_start, leave.date_end) + 1}
                 </Text>
                 <Text style={{ marginTop: '-5px' }} size="xs">
@@ -85,11 +85,10 @@ export const PaidLeaveList: React.FC<PaidLeaveProps> = ({ status }) => {
                     {leave.status}
                   </Badge>
                 </div>
-                <div className="my-auto text-center mt-2">
+                <div className="my-auto text-center ms-2 mt-1">
                   <Divider orientation="vertical" />
-                  <Text size="18px" fw={700}>
-                    {formatterDate(leave.date_start, 'dd')}-{' '}
-                    {formatterDate(leave.date_end, 'dd MMM yyyy')}
+                  <Text size={'md'} fw={700}>
+                    {formatterDate(leave.date_start, 'EEEE, dd MMMM yyyy')}
                   </Text>
                 </div>
               </div>

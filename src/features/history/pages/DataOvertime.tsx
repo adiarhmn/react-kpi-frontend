@@ -1,19 +1,21 @@
+/* eslint-disable import/order */
+/* eslint-disable no-restricted-imports */
 import { MonthPickerInput } from '@mantine/dates';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { useAuth } from '@/features/auth';
-// eslint-disable-next-line no-restricted-imports
 import { useGetOvertime } from '@/features/overtime/api/getOvertime';
-// eslint-disable-next-line no-restricted-imports
 import { OvertimeType } from '@/features/overtime/types';
-
 import { OvertimeList } from '../component/OvertimeList';
+import { Tabs } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 
 export const DataOvertime: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
+  const [opened, { open, close }] = useDisclosure(false);
+  const [selectStatus, setSelectStatus] = useState('Disetujui');
   const [month, setMonth] = useState<Date | null>(new Date());
   const [overtimeData, setOvertime] = useState<OvertimeType[]>([]);
   const { data: DataOvertime } = useGetOvertime(creds?.employee_id);
@@ -22,6 +24,7 @@ export const DataOvertime: React.FC = () => {
       setOvertime(DataOvertime);
     }
   }, [DataOvertime]);
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -50,7 +53,36 @@ export const DataOvertime: React.FC = () => {
         </div>
       </section>
 
-      <OvertimeList overtimes={overtimeData} />
+      <Tabs color="#51CF66" variant="pills" defaultValue="Disetujui">
+        <section className="w-full mx-auto p-1 py-3 -mt-1 -mb-2">
+          <Tabs.List className="w-full grid grid-cols-12 text-center">
+            <div className="w-full grid grid-cols-12 text-center px-5 gap-x-2">
+              <div className="col-span-6 bg-white shadow-md rounded-lg">
+                <Tabs.Tab
+                  style={{ width: '100%' }}
+                  color="green"
+                  value="Disetujui"
+                  onClick={() => setSelectStatus('Disetujui')}
+                >
+                  Disetujui
+                </Tabs.Tab>
+              </div>
+              <div className="col-span-6 bg-white shadow-md rounded-lg">
+                <Tabs.Tab
+                  style={{ width: '100%' }}
+                  color="red"
+                  value="Ditolak"
+                  onClick={() => setSelectStatus('Ditolak')}
+                >
+                  Ditolak
+                </Tabs.Tab>
+              </div>
+            </div>
+          </Tabs.List>
+        </section>
+      </Tabs>
+
+      <OvertimeList status={selectStatus} filterState={opened} />
     </main>
   );
 };
