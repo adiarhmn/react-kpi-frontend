@@ -1,16 +1,11 @@
 /* eslint-disable import/order */
 import { ScheduleType } from '@/features/attendance';
 import { Badge, Divider, Indicator, Text } from '@mantine/core';
-import { Calendar, DatePicker, DatePickerInput } from '@mantine/dates';
+import { DatePicker } from '@mantine/dates';
 import { IconCalendar, IconClockHour8 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useGetScheduleDaily, useGetScheduleMonthly } from '../api';
-import {
-  AbsenceType,
-  formatterDate,
-  useGetAbsence,
-  useGetAbsenceMonthly,
-} from '@/features/history';
+import { AbsenceType, formatterDate, useGetAbsenceMonthly } from '@/features/history';
 import { useAuth } from '@/features/auth';
 import { useLocation } from 'react-router-dom';
 
@@ -347,6 +342,27 @@ export const ScheduleList: React.FC = () => {
             >
               {schedule?.attendance_place}
             </Badge>
+            {schedule?.attendance_status != 'Hadir' &&
+              schedule?.attendance_status != 'Belum Hadir' && (
+                <Badge
+                  size="sm"
+                  className="uppercase"
+                  style={{
+                    marginTop: '7px',
+                    marginLeft: '4px',
+                    borderRadius: '2px',
+                  }}
+                  color={
+                    schedule?.attendance_status == 'izin'
+                      ? 'yellow'
+                      : schedule?.attendance_status == 'sakit'
+                        ? 'teal'
+                        : 'grape'
+                  }
+                >
+                  {schedule?.attendance_status}
+                </Badge>
+              )}
           </div>
         </div>
         <Divider size={'sm'} />

@@ -58,35 +58,6 @@ export const Schedule: React.FC = () => {
             </Button>
           </span>
         </div>
-
-        {/* Month Picker or Input Date
-        <div>
-          <div className="w-full grid grid-cols-12">
-            <div className="col-span-12">
-              <p className="text-xs text-slate-400 mb-1">Rekap jadwal bulan :</p>
-              <MonthPickerInput
-                size="xs"
-                placeholder="Pick date"
-                value={month}
-                onChange={(value) => {
-                  if (value === null) {
-                    setMonth(new Date());
-                  } else {
-                    setMonth(value);
-                  }
-                }}
-              />
-            </div>
-            <div className="col-span-0"></div>
-          </div>
-        </div> */}
-        {/* <ScheduleListNew
-          month={month}
-          shift={selectShift}
-          status={selectStatus}
-          modalState={opened}
-          employee_id={employeeID}
-        /> */}
       </section>
 
       <ScheduleList />

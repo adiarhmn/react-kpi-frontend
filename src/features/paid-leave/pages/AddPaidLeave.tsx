@@ -1,16 +1,16 @@
-import { Button, Textarea } from '@mantine/core';
+/* eslint-disable no-restricted-imports */
+/* eslint-disable import/order */
+import { Button, Indicator, Textarea, rem } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { IconChevronLeft } from '@tabler/icons-react';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
-import React from 'react';
+import { IconCalendar, IconChevronLeft } from '@tabler/icons-react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { useAuth } from '@/features/auth';
-import { formatterDate } from '@/features/history';
-// eslint-disable-next-line no-restricted-imports
+import { AbsenceType, formatterDate, useGetAbsenceMonthly } from '@/features/history';
 import { useCreateRequest } from '@/features/leave/api';
+import { ScheduleType } from '@/features/attendance';
+import { useGetScheduleMonthly } from '@/features/schedule/api';
 
 export const AddPaidLeave: React.FC = () => {
   const navigate = useNavigate();
@@ -51,6 +51,148 @@ export const AddPaidLeave: React.FC = () => {
     });
   };
 
+  const icon = <IconCalendar style={{ width: rem(18), height: rem(18) }} stroke={1.5} />;
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const handleMonthChange = (date: Date) => {
+    setCurrentMonth(date.getMonth() + 1);
+    setCurrentYear(date.getFullYear());
+  };
+
+  const generateDateRange = (start: Date | string, end: Date | string) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const dateArray = [];
+
+    // eslint-disable-next-line prefer-const
+    let currentDate = new Date(startDate);
+
+    while (currentDate <= endDate) {
+      dateArray.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dateArray;
+  };
+  // [RED INDICATOR]
+  const [scheduleOff, setScheduleOff] = useState<ScheduleType[]>([]);
+  const { data: DataOff } = useGetScheduleMonthly(
+    creds?.employee_id,
+    currentMonth,
+    currentYear,
+    '',
+    'off'
+  );
+  useEffect(() => {
+    if (DataOff) {
+      setScheduleOff(DataOff);
+    }
+  }, [DataOff]);
+
+  const datesArray = scheduleOff.map((item) => {
+    const date = new Date(item.date);
+    const day = date.getDate();
+    const month = date.getMonth();
+    return { day, month };
+  });
+  // [END RED INDICATOR]
+
+  // [TEAL INDICATOR]
+  const [requestSick, setRequestSick] = useState<AbsenceType[]>([]);
+  const [formattedAllDates, setFormattedAllDates] = useState([]);
+  const { data: DataRequest } = useGetAbsenceMonthly(
+    creds?.employee_id,
+    currentMonth,
+    currentYear,
+    'sakit',
+    'Disetujui'
+  );
+  useEffect(() => {
+    if (DataRequest) {
+      setRequestSick(DataRequest);
+    }
+  }, [DataRequest, currentMonth]);
+
+  useEffect(() => {
+    const allDates = requestSick.reduce((acc: any, item: any) => {
+      const dates: any = generateDateRange(item.date_start, item.date_end);
+      return acc.concat(dates);
+    }, []);
+
+    const formattedDates = allDates.map((date: any) => ({
+      day: date.getDate(),
+      month: date.getMonth() + 1, // getMonth() mengembalikan bulan dari 0-11, jadi tambahkan 1
+      year: date.getFullYear(),
+    }));
+
+    setFormattedAllDates(formattedDates);
+  }, [requestSick]);
+  // [END TEAL INDICATOR]
+
+  // [YELLOW INDICATOR]
+  const [requestLeave, setRequestLeave] = useState<AbsenceType[]>([]);
+  const [leaveDates, setLeaveDates] = useState([]);
+  const { data: DataLeave } = useGetAbsenceMonthly(
+    creds?.employee_id,
+    currentMonth,
+    currentYear,
+    'izin',
+    'Disetujui'
+  );
+  useEffect(() => {
+    if (DataLeave) {
+      setRequestLeave(DataLeave);
+    }
+  }, [DataLeave, currentMonth]);
+
+  useEffect(() => {
+    const allDates = requestLeave.reduce((acc: any, item: any) => {
+      const dates: any = generateDateRange(item.date_start, item.date_end);
+      return acc.concat(dates);
+    }, []);
+
+    const leaveDate = allDates.map((date: any) => ({
+      day: date.getDate(),
+      month: date.getMonth() + 1,
+      year: date.getFullYear(),
+    }));
+
+    setLeaveDates(leaveDate);
+  }, [requestLeave]);
+  // [END YELLOW INDICATOR]
+
+  // [GRAPE INDICATOR]
+  const [paidLeave, setPaidLeave] = useState<AbsenceType[]>([]);
+  const [paidLeaveDates, setPaidLeaveDates] = useState([]);
+  const { data: DataPaidLeave } = useGetAbsenceMonthly(
+    creds?.employee_id,
+    currentMonth,
+    currentYear,
+    'cuti',
+    'Disetujui'
+  );
+  useEffect(() => {
+    if (DataPaidLeave) {
+      setPaidLeave(DataPaidLeave);
+    }
+  }, [DataPaidLeave, currentMonth]);
+
+  useEffect(() => {
+    const allDates = paidLeave.reduce((acc: any, item: any) => {
+      const dates: any = generateDateRange(item.date_start, item.date_end);
+      return acc.concat(dates);
+    }, []);
+
+    const paidLeaveDate = allDates.map((date: any) => ({
+      day: date.getDate(),
+      month: date.getMonth() + 1,
+      year: date.getFullYear(),
+    }));
+
+    setPaidLeaveDates(paidLeaveDate);
+  }, [paidLeave]);
+  // [END GRAPE INDICATOR]
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -75,6 +217,87 @@ export const AddPaidLeave: React.FC = () => {
                 valueFormat="dddd, DD MMM YYYY"
                 label="Tanggal mulai"
                 placeholder="Pilih tanggal"
+                leftSection={icon}
+                onNextMonth={handleMonthChange}
+                onPreviousMonth={handleMonthChange}
+                renderDay={(date) => {
+                  const day = date.getDate();
+                  const month = date.getMonth();
+                  const showIndicatorOff = datesArray.some(
+                    (d) => d.day === day && d.month === month
+                  );
+                  const showIndicatorAbsence = formattedAllDates.some(
+                    (d: any) => d.day === day && d.month === month + 1
+                  );
+                  const showIndicatorLeave = leaveDates.some(
+                    (d: any) => d.day === day && d.month === month + 1
+                  );
+                  const showIndicatorPaidLeave = paidLeaveDates.some(
+                    (d: any) => d.day === day && d.month === month + 1
+                  );
+
+                  // console.log(showIndicatorAbsence);
+
+                  return (
+                    <div>
+                      <div style={{ position: 'relative' }}>
+                        {showIndicatorAbsence && (
+                          <Indicator
+                            size={6}
+                            color="teal"
+                            offset={-9}
+                            style={{
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                            }}
+                          ></Indicator>
+                        )}
+                        <div>{day}</div>
+                        {showIndicatorOff && (
+                          <Indicator
+                            size={6}
+                            color="red"
+                            offset={-9}
+                            style={{
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                            }}
+                          />
+                        )}
+                        {showIndicatorLeave && (
+                          <Indicator
+                            size={6}
+                            color="yellow"
+                            offset={-9}
+                            style={{
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                            }}
+                          />
+                        )}
+                        {showIndicatorPaidLeave && (
+                          <Indicator
+                            size={6}
+                            color="grape"
+                            offset={-9}
+                            style={{
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                            }}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  );
+                }}
                 {...form.getInputProps('date_start')}
               />
             </div>
@@ -83,6 +306,87 @@ export const AddPaidLeave: React.FC = () => {
                 valueFormat="dddd, DD MMM YYYY"
                 label="Tanggal selesai"
                 placeholder="Pilih tanggal"
+                leftSection={icon}
+                onNextMonth={handleMonthChange}
+                onPreviousMonth={handleMonthChange}
+                renderDay={(date) => {
+                  const day = date.getDate();
+                  const month = date.getMonth();
+                  const showIndicatorOff = datesArray.some(
+                    (d) => d.day === day && d.month === month
+                  );
+                  const showIndicatorAbsence = formattedAllDates.some(
+                    (d: any) => d.day === day && d.month === month + 1
+                  );
+                  const showIndicatorLeave = leaveDates.some(
+                    (d: any) => d.day === day && d.month === month + 1
+                  );
+                  const showIndicatorPaidLeave = paidLeaveDates.some(
+                    (d: any) => d.day === day && d.month === month + 1
+                  );
+
+                  // console.log(showIndicatorAbsence);
+
+                  return (
+                    <div>
+                      <div style={{ position: 'relative' }}>
+                        {showIndicatorAbsence && (
+                          <Indicator
+                            size={6}
+                            color="teal"
+                            offset={-9}
+                            style={{
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                            }}
+                          ></Indicator>
+                        )}
+                        <div>{day}</div>
+                        {showIndicatorOff && (
+                          <Indicator
+                            size={6}
+                            color="red"
+                            offset={-9}
+                            style={{
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                            }}
+                          />
+                        )}
+                        {showIndicatorLeave && (
+                          <Indicator
+                            size={6}
+                            color="yellow"
+                            offset={-9}
+                            style={{
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                            }}
+                          />
+                        )}
+                        {showIndicatorPaidLeave && (
+                          <Indicator
+                            size={6}
+                            color="grape"
+                            offset={-9}
+                            style={{
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                            }}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  );
+                }}
                 {...form.getInputProps('date_end')}
               />
             </div>

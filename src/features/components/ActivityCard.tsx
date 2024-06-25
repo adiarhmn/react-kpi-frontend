@@ -19,9 +19,10 @@ import { useAuth } from '../auth';
 
 type ActivityProps = {
   employee: EmployeeType | undefined;
+  date: Date | string | number | null;
 };
 
-export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProps) => {
+export const ActivityCard: React.FC<ActivityProps> = ({ employee, date }: ActivityProps) => {
   const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProp
   const [attendance, setAttendance] = useState<AttendanceType>();
   const { data: DataAttendance } = useGetAttendance(
     employee?.id,
-    formatterDate(new Date(), 'yyyy-MM-dd')
+    formatterDate(date, 'yyyy-MM-dd')
   );
   useEffect(() => {
     if (DataAttendance) {
@@ -37,27 +38,41 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProp
     }
   }, [DataAttendance]);
 
+  const [params, setParams] = useState({
+    company_id: employee?.user.company_id,
+    employee_id: employee?.id,
+    date: date,
+  });
+  useEffect(() => {
+    const newParams = {
+      company_id: employee?.user.company_id,
+      employee_id: employee?.id,
+      date: date,
+    };
+    setParams(newParams);
+  }, [date, employee]);
+
   // [All about  Activity Alias]
   const [activityAlias, setActivityAlias] = useState([]);
-  const { data: dataActivityAlias } = useGetActivityAlias(employee?.user.company_id);
+  const { data: dataActivityAlias } = useGetActivityAlias(params.company_id);
   useEffect(() => {
     if (dataActivityAlias) {
       setActivityAlias(dataActivityAlias);
     }
-  }, [dataActivityAlias]);
+  }, [dataActivityAlias, date, params]);
   // [End Activity Alias]
-
+  console.log('data employee : ', employee);
   // [All about Activity Detail]
   const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
   const { data: dataActivity, refetch: RefetchActivityDetail } = useGetActivityDetail(
-    employee?.id,
-    formatterDate(new Date(), 'yyyy-MM-dd')
+    params.employee_id,
+    formatterDate(params.date, 'yyyy-MM-dd')
   );
   useEffect(() => {
     if (dataActivity) {
       setActivityDetail(dataActivity);
     }
-  }, [dataActivity]);
+  }, [dataActivity, date, params, employee]);
   // [End Activity Detail]
 
   //[Add Activity]
@@ -126,7 +141,7 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProp
     <>
       <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="text-base font-bold text-blue-700">Kegiatan hari ini</span>
+          <span className="text-base font-bold text-blue-700">Kegiatan</span>
           {creds?.role == 'employee' && (
             <Button
               disabled={attendance?.check_in == null || attendance?.check_out != null}
@@ -193,7 +208,7 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee }: ActivityProp
             ))
           ) : (
             <div className="w-full col-span-12">
-              <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+              <section className="min-h-96 flex flex-col items-center justify-center -mt-10">
                 <img
                   className="w-40 mb-2 bg-slate-200 rounded-full p-2"
                   src="/images/blank-canvas.svg"

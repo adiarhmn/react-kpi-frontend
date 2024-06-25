@@ -1,6 +1,7 @@
 /* eslint-disable import/order */
 /* eslint-disable no-restricted-imports */
 import { EmployeeType } from '@/admin_features/types';
+import { AttendanceListSection } from '@/features/history';
 import { AttendanceList } from '@/features/history/component/AttendanceList';
 import { Button, Drawer, Fieldset, Select } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
@@ -11,7 +12,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 export const EmployeeAttendance: React.FC = () => {
   const location = useLocation();
-  const employee = location.state.employee as EmployeeType;
+  const employeeData = location.state.employee as EmployeeType;
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const [month, setMonth] = useState<Date>(new Date());
@@ -50,7 +51,7 @@ export const EmployeeAttendance: React.FC = () => {
                   <p className="text-xs text-slate-400 mb-1">Rekap absensi bulan :</p>
                 </div>
                 <div className="col-span-6">
-                  <p className="text-xs text-right text-slate-400 mb-1">{employee?.name}</p>
+                  <p className="text-xs text-right text-slate-400 mb-1">{employeeData?.name}</p>
                 </div>
               </div>
 
@@ -72,13 +73,15 @@ export const EmployeeAttendance: React.FC = () => {
         </div>
       </section>
 
-      <AttendanceList
+      {/* <AttendanceList
         month={month}
         shift={selectShift}
         status={selectStatus}
         modalState={opened}
         employee_id={employee?.id}
-      />
+      /> */}
+
+      <AttendanceListSection employee_id={employeeData.id} />
 
       <Drawer
         position="right"

@@ -88,3 +88,27 @@ export const useGetScheduleDaily = (employee_id?: number | null, date?: string) 
     queryFn: () => getScheduleDaily(employee_id, date),
   });
 };
+
+export async function getScheduleAttendance(
+  employee_id: number | undefined,
+  month: string | number,
+  year: string | number,
+  status: string
+) {
+  const res = await axios.get(
+    `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&attendance-status=${status}`
+  );
+  return res.data.data;
+}
+
+export const useGetScheduleAttendance = (
+  employee_id: number | undefined,
+  month: string | number,
+  year: string | number,
+  status: string
+) => {
+  return useQuery({
+    queryKey: ['schedule', employee_id, month, year, status],
+    queryFn: () => getScheduleAttendance(employee_id, month, year, status),
+  });
+};

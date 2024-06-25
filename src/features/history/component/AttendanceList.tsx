@@ -73,7 +73,7 @@ export const AttendanceList: React.FC<AttendanceProps> = ({
                     state: { schedule: schedule },
                   })
                 }
-                className={`${schedule.attendance_status == 'Hadir' ? `bg-white` : `bg-gray-100`} mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700`}
+                className={`${schedule.attendance_status == 'Hadir' || schedule?.attendance_status == 'cuti' ? `bg-white` : `bg-gray-100`} mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 divide-y divide-gray-300 text-slate-700`}
               >
                 <div className="w-full grid grid-cols-12 divide-x divide-gray-300 pb-2 pt-2 p-4">
                   {/* <div className="w-full grid grid-cols-12 pb-2 pt-2 p-4"> */}
@@ -96,7 +96,17 @@ export const AttendanceList: React.FC<AttendanceProps> = ({
                           borderRadius: '2px',
                         }}
                         // color={absence?.status == 'Disetujui' ? 'green' : 'red'}
-                        color={schedule?.attendance_status == 'Hadir' ? 'green' : 'red'}
+                        color={
+                          schedule?.attendance_status == 'Hadir'
+                            ? 'green'
+                            : schedule?.attendance_status == 'izin'
+                              ? 'yellow'
+                              : schedule?.attendance_status == 'sakit'
+                                ? 'teal'
+                                : schedule?.attendance_status == 'cuti'
+                                  ? 'grape'
+                                  : 'red'
+                        }
                       >
                         {schedule?.attendance_status}
                       </Badge>
@@ -129,7 +139,7 @@ export const AttendanceList: React.FC<AttendanceProps> = ({
                 src="/images/blank-canvas.svg"
                 alt=""
               />
-              <span className="font-bold text-slate-400 text-xl">Belum ada data jadwal</span>
+              <span className="font-bold text-slate-400 text-xl">Belum ada data absensi</span>
             </section>
           </div>
         )}
