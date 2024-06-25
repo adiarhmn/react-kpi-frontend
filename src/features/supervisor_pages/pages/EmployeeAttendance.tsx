@@ -35,10 +35,10 @@ export const EmployeeAttendance: React.FC = () => {
             <h2 className="font-semibold ">Riwayat absensi</h2>
           </div>
           <span className="font-semibold">
-            <Button className="shadow-sm" size="xs" onClick={open}>
+            {/* <Button className="shadow-sm" size="xs" onClick={open}>
               <IconAdjustmentsHorizontal className="me-2 -ms-1" />
               Filter
-            </Button>
+            </Button> */}
           </span>
         </div>
 
