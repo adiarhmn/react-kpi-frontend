@@ -364,7 +364,7 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      <ActivityCard employee={employee} />
+      <ActivityCard employee={employee} date={new Date()} />
     </main>
   );
 };

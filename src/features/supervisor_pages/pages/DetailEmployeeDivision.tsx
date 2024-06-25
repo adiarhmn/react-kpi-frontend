@@ -6,7 +6,6 @@ import { ActivityCard } from '@/features/components';
 import { formatterDate } from '@/features/history';
 import { useGetScheduleDaily } from '@/features/schedule/api';
 import { Anchor, Badge, Divider, Group, Text } from '@mantine/core';
-import { IconBriefcase, IconUser } from '@tabler/icons-react';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -197,6 +196,7 @@ export const DetailEmployeeDivision: React.FC = () => {
                 : 'Selesai bekerja'}
           </Badge>
         </div>
+        <Divider size={'sm'} />
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
           <div className="col-span-3 text-center m-auto ">
             <Text size="27px" fw={700}>
@@ -234,6 +234,7 @@ export const DetailEmployeeDivision: React.FC = () => {
             </div>
           </div>
         </div>
+        <Divider size={'sm'} className="mt-2" />
         <div className="text-center text-xs divide-x divide-gray-300 p-2">
           <Group justify="center">
             <Anchor
@@ -251,7 +252,7 @@ export const DetailEmployeeDivision: React.FC = () => {
         </div>
       </section>
 
-      <ActivityCard employee={employee} />
+      <ActivityCard employee={employee} date={new Date()} />
     </main>
   );
 };

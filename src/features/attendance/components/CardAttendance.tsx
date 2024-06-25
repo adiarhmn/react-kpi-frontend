@@ -122,7 +122,7 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
                 </Badge>
               )}
               <Badge
-                size="xs"
+                size="sm"
                 style={{
                   marginLeft: '4px',
                   borderRadius: '2px',

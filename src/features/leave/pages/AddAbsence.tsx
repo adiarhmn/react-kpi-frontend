@@ -225,10 +225,10 @@ export const AddAbsence: React.FC = () => {
             </div>
             <div>
               <DatePickerInput
-                leftSection={icon}
                 valueFormat="dddd, DD MMM YYYY"
                 label="Tanggal mulai"
                 placeholder="Pilih tanggal"
+                leftSection={icon}
                 onNextMonth={handleMonthChange}
                 onPreviousMonth={handleMonthChange}
                 renderDay={(date) => {

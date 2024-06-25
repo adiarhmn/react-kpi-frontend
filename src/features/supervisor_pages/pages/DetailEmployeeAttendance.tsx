@@ -63,6 +63,7 @@ export const DetailEmployeeAttendance: React.FC = () => {
   }, [dataActivity]);
   // [End Activity Detail]
 
+  // console.log('Schedule : ', scheduleData);
   if (LoadingAttendance) {
     return (
       <div className="w-full col-span-12">
@@ -73,6 +74,8 @@ export const DetailEmployeeAttendance: React.FC = () => {
       </div>
     );
   }
+
+  console.log('Data Attendance : ', attendance);
 
   return (
     <main>
@@ -97,26 +100,51 @@ export const DetailEmployeeAttendance: React.FC = () => {
       <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2">
         <div className="flex justify-between text-base items-center py-1 px-2">
           <span className="font-bold text-blue-700">Absensi</span>
-          <Badge
-            size="xs"
-            style={{
-              marginLeft: '4px',
-              borderRadius: '2px',
-            }}
-            color={
-              attendance?.status == 'present'
-                ? 'green'
+          <div>
+            {scheduleData?.attendance_status != 'Belum Hadir' &&
+              scheduleData.attendance_status != 'Hadir' && (
+                <Badge
+                  size="sm"
+                  className="uppercase"
+                  style={{
+                    marginTop: '7px',
+                    marginLeft: '4px',
+                    borderRadius: '2px',
+                  }}
+                  color={
+                    scheduleData?.attendance_status == 'cuti'
+                      ? 'grape'
+                      : scheduleData?.attendance_status == 'sakit'
+                        ? 'teal'
+                        : scheduleData?.attendance_status == 'izin'
+                          ? 'yellow'
+                          : 'blue'
+                  }
+                >
+                  {scheduleData?.attendance_status}
+                </Badge>
+              )}
+            <Badge
+              size="sm"
+              style={{
+                marginLeft: '4px',
+                borderRadius: '2px',
+              }}
+              color={
+                attendance?.status == 'present' || scheduleData.attendance_status == 'cuti'
+                  ? 'green'
+                  : attendance?.status == 'late'
+                    ? 'yellow'
+                    : 'red'
+              }
+            >
+              {attendance?.status == 'present' || scheduleData.attendance_status == 'cuti'
+                ? 'hadir'
                 : attendance?.status == 'late'
-                  ? 'yellow'
-                  : 'red'
-            }
-          >
-            {attendance?.status == 'present'
-              ? 'hadir'
-              : attendance?.status == 'late'
-                ? 'terlambat'
-                : 'belum hadir'}
-          </Badge>
+                  ? 'terlambat'
+                  : 'belum hadir'}
+            </Badge>
+          </div>
         </div>
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
           <div className="col-span-3 text-center m-auto ">

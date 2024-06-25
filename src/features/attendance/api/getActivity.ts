@@ -3,8 +3,9 @@ import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL;
 
-export async function getActivityDetail(attendance_id: number | undefined | null, date: string) {
-  const res = await axios.get(`${BaseURL}/activity-detail?employee=${attendance_id}&date=${date}`);
+export async function getActivityDetail(employee_id: number | undefined | null, date: string) {
+  const res = await axios.get(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
+  console.log(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
   return res.data.data;
 }
 
@@ -13,10 +14,10 @@ export async function getActivityAlias(company_id?: number) {
   return res.data.data;
 }
 
-export const useGetActivityDetail = (attendance_id: number | undefined | null, date: string) => {
+export const useGetActivityDetail = (employee_id: number | undefined | null, date: string) => {
   return useQuery({
-    queryKey: ['activity', attendance_id],
-    queryFn: () => getActivityDetail(attendance_id, date),
+    queryKey: ['activity', employee_id, date],
+    queryFn: () => getActivityDetail(employee_id, date),
   });
 };
 

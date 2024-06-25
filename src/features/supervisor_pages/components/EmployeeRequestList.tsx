@@ -111,7 +111,7 @@ export const EmployeeRequestList: React.FC<EmployeeRequestListProps> = ({
                 </div>
                 <div className="my-auto text-left ms-2">
                   <Divider orientation="vertical" />
-                  <Text size={'md'} fw={700}>
+                  <Text lineClamp={1} size={'md'} fw={700}>
                     {req.employee.name}
                   </Text>
                 </div>
