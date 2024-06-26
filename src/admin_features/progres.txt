@@ -1,56 +1,35 @@
-ADMIN FEATURES :
-===> Dashboard
-    - Data Karywan (Done)
-    - TODO: Data Rekap Absensi (-)
-    - TODO: Data Pengajuan (-)
+Ardiansyah. (2017). Sistem Informasi Administrasi Kependudukan Berbasis Web
+Pada Desa Bogangin Sumpiuh. Indonesian Journal on Networking and Security,
+7(3), 1–9.Dci, S. (2019).
+SISTEM INFORMASI PERPUSTAKAAN. 3(1), 221–230.
+Fallis, A. . (2013). Sistem Informasi Pengolahan Data Inventory Pada Toko Buku
+Studi Cv. Aneka Ilmu Semarang. Journal of Chemical Information and Modeling,
+53(9), 1689–1699.
+Latukolan, M. L. A., Arwan, A., & Ananta, M. T. (2019). Pengembangan Sistem
+Pemetaan Otomatis Entity Relationship Diagram Ke Dalam Database. Jurnal
+Pengembangan Teknologi Informasi Dan Ilmu Komputer, III(4), 4058–4065.
+Ramadhan, S. L. (2021). Perancangan User Experience Aplikasi Pengajuan E-KTP
+menggunakan Metode UCD pada Kelurahan Tanah Baru. JATISI (Jurnal Teknik
+Informatika Dan Sistem Informasi), 8(1), 287–298.
+https://doi.org/10.35957/jatisi.v8i1.633
+Ravago, J. A. F. (2019). Comparison of MySQL and MS SQL Server. 7.
 
-===> Divisi
-    - CRUD (Done)
-    - Validasi From (-)
-    - Detail (-)
+https://d1wqtxts1xzle7.cloudfront.net/55514940/FinalPaper_08012017_ADBMS-
+with-cover-page-v2.pdf?Expires=1659330365&Signature=HdO5AhMx8~GUa~ze-
+Vx5nZcdTek2mGhW69pVsCYRMVx-
 
-===> Shift
-    - CR (Done)
-    - Validasi Form (-)
-
-===> User
-    - CRUD (Done)
-    - Validasi Form (-)
-    - Search By Divisi (Done)
-
-===> Karyawan
-    - CRUD (Done)
-    - Create User When Create Employee (Done)
-
-===> Lokasi
-    - Create With Map (Done)
-    - Read (Done)
-
-===> Jadwal
-    - CRUD (Done)
-    - Search By Month (Done)
-    - CopyPaste Jadwal / Bulan (Done)
-    - CopyPaste Jadwal / Employee (Done)
-    - Select All Employee (Done)
-
-===> Presensi
-    - R (Done)
-    - Search By Day (-)
-
-===> Aktifitas
-    - R (Done)
-
-===> Aktifitas Variabel / Alias
-    - Create (Done)
-
-===> Absensi
-    - Read (Done)
-
-===> Cuti
-    - Read (Done)
-
-===> Izin
-    - Read (Done)
-
-===> Lembur
-    - Read (Done)
+Rizkita, N., Rosely, E., & Nugroho, H. (2018). Aplikasi Pendaftaran dan Transaksi
+Pasien Klinik Hewan di Bandung Berbasis Web. EProceedings of Applied Science,
+4(3), 1512–1520.
+Salahudin, R. A. . M. (2016). Buku RPL Rosa A.S & M. Salahuddin.pdf (p. 295). Sari,
+E., & Pudjiarti, E. (2021). Perancangan Sistem Informasi Inventory (SIVEN). Jurnal
+INSAN: Journal of Information System Management Innovation, 1, 130–139.
+https://doi.org/10.31294/jinsan.v1i2.888
+Setiyadi, D., Henderi, H., & Arifin, R. W. (2020). Implementasi Import dan Export
+Database dengan Menggunakan SQL Server 2008. INFORMATICS FOR
+EDUCATORS AND PROFESSIONAL : Journal of Informatics, 5(1), 1.
+https://doi.org/10.51211/itbi.v5i1.1413
+Suhartini, S., Sadali, M., & Kuspandi Putra, Y. (2020). Sistem Informasi Berbasis
+Web Sma Al- Mukhtariyah Mamben Lauk Berbasis Php Dan Mysql Dengan
+Framework Codeigniter. Infotek : Jurnal Informatika Dan Teknologi, 3(1), 79–83.
+https://doi.org/10.29408/jit.v3i1.1793
