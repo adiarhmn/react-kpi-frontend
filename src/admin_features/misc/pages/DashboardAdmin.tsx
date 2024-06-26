@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { Select } from '@mantine/core';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

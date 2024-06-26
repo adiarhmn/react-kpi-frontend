@@ -182,14 +182,20 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
                   }
                   type="submit"
                   fullWidth
-                  rightSection={statusLocation == false ? <IconBan /> : <IconDoorEnter />}
+                  rightSection={
+                    statusLocation == false || schedule.attendance_status != 'Belum Hadir' ? (
+                      <IconBan />
+                    ) : (
+                      <IconDoorEnter />
+                    )
+                  }
                 >
                   {employee_location == null
                     ? 'Lokasi anda belum ditentukan'
                     : statusLocation == false
                       ? 'Anda berada diluar kantor'
                       : schedule.attendance_status != 'Belum Hadir'
-                        ? `Anda dalam kondisi${schedule.attendance_status}`
+                        ? `Status anda sedang ${schedule.attendance_status}`
                         : 'Check-in'}
                 </Button>
               </form>
