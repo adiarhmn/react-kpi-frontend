@@ -1,5 +1,4 @@
-import { Button, Divider, Modal } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { Badge, Button, Divider, Modal } from '@mantine/core';
 
 import { LocationShow } from '@/admin_features/activity';
 import { useGetActivityAlias, useGetActivityByEmployeeID } from '@/admin_features/activity/api';
@@ -14,7 +13,6 @@ interface Props {
 }
 export const ModalDetailAttendance: React.FC<Props> = ({ opened, close, Attendance, date }) => {
   const { creds } = useAuth();
-  const [Activity, setActivity] = useState<any>();
   const { data, isLoading } = useGetActivityByEmployeeID(
     Attendance?.employee_schedule.employee.id ?? 0,
     date
@@ -22,13 +20,9 @@ export const ModalDetailAttendance: React.FC<Props> = ({ opened, close, Attendan
 
   const { data: ActivityAlias, isLoading: loadAlias } = useGetActivityAlias(creds?.company_id);
 
-  useEffect(() => {
-    if (data) setActivity(data);
-  }, [data, ActivityAlias]);
-
   if (isLoading || loadAlias) return <div>Loading...</div>;
 
-  console.log(Activity);
+  console.log(Attendance);
   return (
     <Modal size={'lg'} opened={opened} onClose={close} title="Detail Presensi">
       {Attendance && Attendance?.Attendance.length > 0 ? (
@@ -63,6 +57,35 @@ export const ModalDetailAttendance: React.FC<Props> = ({ opened, close, Attendan
         </tbody>
       </table>
 
+      <Divider label="Jadwal Karyawan ini" labelPosition="left" />
+      <table className="mb-8 text-sm">
+        <tr className="capitalize">
+          <td>Status</td>
+          <td className="px-4">:</td>
+          <td>
+            {Attendance?.status == 'on' ? (
+              <Badge color="green">Masuk</Badge>
+            ) : (
+              <Badge color="red">Libur</Badge>
+            )}
+          </td>
+        </tr>
+        <tr className="capitalize">
+          <td>Shift</td>
+          <td className="px-4">:</td>
+          <td>{Attendance?.shift.shift_name}</td>
+        </tr>
+        <tr className="capitalize">
+          <td>Shift In</td>
+          <td className="px-4">:</td>
+          <td>{Attendance?.shift.start_time}</td>
+        </tr>
+        <tr className="capitalize">
+          <td>Shift Out</td>
+          <td className="px-4">:</td>
+          <td>{Attendance?.shift.end_time}</td>
+        </tr>
+      </table>
       <Divider label="Daftar Aktifitas" labelPosition="left" />
       {data && data.length > 0 ? (
         <div className="overflow-x-auto mt-2">
