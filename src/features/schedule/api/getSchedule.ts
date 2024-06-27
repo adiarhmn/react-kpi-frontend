@@ -112,3 +112,22 @@ export const useGetScheduleAttendance = (
     queryFn: () => getScheduleAttendance(employee_id, month, year, status),
   });
 };
+
+export async function getScheduleDailyByDivision(
+  division_id?: number | null,
+  date?: string | null
+) {
+  const res = await axios.get(`${BaseURL}/schedule?division=${division_id}&date=${date}`);
+  console.log('URLNYA banggg :', `${BaseURL}/schedule?division=${division_id}&date=${date}`);
+  return res.data.data;
+}
+
+export const useGetScheduleDailyByDivision = (
+  division_id?: number | null,
+  date?: string | null
+) => {
+  return useQuery({
+    queryKey: ['schedule', division_id, date],
+    queryFn: () => getScheduleDailyByDivision(division_id, date),
+  });
+};

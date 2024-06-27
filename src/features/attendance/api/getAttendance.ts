@@ -52,3 +52,17 @@ export const useGetAttendanceBySchedule = (employee_id?: number, schedule_id?: n
     queryFn: () => getAttendanceBySchedule(employee_id, schedule_id),
   });
 };
+
+export async function getAttendanceByDivision(division_id: number | undefined, date: string) {
+  const res = await axios.get(`${BaseURL}/attendance?division=${division_id}&date=${date}`);
+  console.log(`${BaseURL}/attendance?division=${division_id}&date=${date}`);
+  console.log('Respon bang', res.data.data[0]);
+  return res.data.data;
+}
+
+export const useGetAttendanceByDivision = (division_id: number | undefined, date: string) => {
+  return useQuery({
+    queryKey: ['attendance', division_id, date],
+    queryFn: () => getAttendanceByDivision(division_id, date),
+  });
+};

@@ -3,14 +3,21 @@ import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL;
 
-export async function getActivityDetail(employee_id: number | undefined | null, date: string) {
-  const res = await axios.get(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
-  console.log(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
+export async function getActivityAlias(company_id?: number) {
+  const res = await axios.get(`${BaseURL}/activity-alias?company=${company_id}`);
   return res.data.data;
 }
 
-export async function getActivityAlias(company_id?: number) {
-  const res = await axios.get(`${BaseURL}/activity-alias?company=${company_id}`);
+export const useGetActivityAlias = (company_id?: number) => {
+  return useQuery({
+    queryKey: ['activity_alias', company_id],
+    queryFn: () => getActivityAlias(company_id),
+  });
+};
+
+export async function getActivityDetail(employee_id: number | undefined | null, date: string) {
+  const res = await axios.get(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
+  console.log(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
   return res.data.data;
 }
 
@@ -21,9 +28,21 @@ export const useGetActivityDetail = (employee_id: number | undefined | null, dat
   });
 };
 
-export const useGetActivityAlias = (company_id?: number) => {
+export async function getActivityDetailByDivision(
+  division_id: number | undefined | null,
+  date: string | Date
+) {
+  const res = await axios.get(`${BaseURL}/activity-detail?division=${division_id}&date=${date}`);
+  console.log(`${BaseURL}/activity-detail?division=${division_id}&date=${date}`);
+  return res.data.data;
+}
+
+export const useGetActivityDetailByDivision = (
+  division_id: number | undefined | null,
+  date: string | Date
+) => {
   return useQuery({
-    queryKey: ['activity_alias', company_id],
-    queryFn: () => getActivityAlias(company_id),
+    queryKey: ['activity', division_id, date],
+    queryFn: () => getActivityDetailByDivision(division_id, date),
   });
 };

@@ -340,7 +340,11 @@ export const ScheduleList: React.FC = () => {
               }}
               color={schedule?.attendance_place == 'WFH' ? 'yellow' : 'blue'}
             >
-              {schedule?.attendance_place}
+              {schedule == undefined
+                ? ''
+                : schedule.attendance_place
+                  ? schedule.attendance_place
+                  : 'WFO'}
             </Badge>
             {schedule?.attendance_status != 'Hadir' &&
               schedule?.attendance_status != 'Belum Hadir' && (

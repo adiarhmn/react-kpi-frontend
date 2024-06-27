@@ -1,6 +1,17 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
-import { Badge, Divider, RingProgress, Text } from '@mantine/core';
+import {
+  Anchor,
+  Badge,
+  Divider,
+  Group,
+  List,
+  Loader,
+  RingProgress,
+  Text,
+  ThemeIcon,
+  rem,
+} from '@mantine/core';
 import {
   IconCalendar,
   IconFileTime,
@@ -15,9 +26,10 @@ import {
   IconUsersGroup,
   IconClock,
   IconFileText,
+  IconCircleDashed,
 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { MenuList } from '@/components/navigation';
 import { AttendanceType, ScheduleType, useGetAttendanceMonthly } from '@/features/attendance';
@@ -30,9 +42,22 @@ import { EmployeeType } from '@/admin_features/types';
 import { AttendanceRequestType } from '@/features/late-request';
 import { useGetAttendanceRequest } from '@/features/late-request/api/getAttendanceRequest';
 import { useGetAttendanceRecapByDivision } from '@/admin_features/attendance/api';
+import { SchedulesType } from '@/admin_features/schedule/types';
+import { IconCircleCheck } from '@tabler/icons-react';
+
+type DataAttendanceDivisionType = {
+  Hadir: number;
+  BelumHadir: number;
+  Cuti: number;
+  Terlambat: number;
+  Sakit: number;
+  Izin: number;
+  Overall: any;
+};
 
 export const Home: React.FC = () => {
   const { creds } = useAuth();
+  const navigate = useNavigate();
   const [schedule, setSchedule] = useState<ScheduleType>();
   const { data: DataSchedule } = useGetScheduleDaily(
     creds?.employee_id,
@@ -83,12 +108,23 @@ export const Home: React.FC = () => {
     }
   }, [DataAttendanceReq]);
 
-  const { data } = useGetAttendanceRecapByDivision(
-    formatterDate(new Date(), 'yyyy-MM-dd'),
-    employee?.division_id
-  );
-
+  const [attendanceDivision, setAttendanceDivision] = useState<DataAttendanceDivisionType>();
+  const { data: DataAttendanceDivision, isLoading: LoadingDataAttendanceDivision } =
+    useGetAttendanceRecapByDivision(formatterDate(new Date(), 'yyyy-MM-dd'), employee?.division_id);
+  useEffect(() => {
+    if (DataAttendanceDivision) {
+      setAttendanceDivision(DataAttendanceDivision);
+    }
+  });
+  console.log(attendanceDivision);
   // console.log('Data attendanceReq : ', attendanceReq);
+  if (LoadingDataAttendanceDivision) {
+    return (
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
+      </div>
+    );
+  }
   return (
     <main>
       <section className="bg-blue-700 w-full rounded-b-3xl px-5 pt-8 pb-20 relative">
@@ -276,78 +312,94 @@ export const Home: React.FC = () => {
             </div>
           </div>
           <Divider size={'sm'} />
-          <div className="divide-y divide-gray-300">
-            <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
-              <div className="col-span-6 text-center m-auto p-1">
-                <RingProgress
-                  className="mx-auto"
-                  size={140}
-                  thickness={12}
-                  label={
-                    <div className="text-center text-xs font-semibold text-slate-500">
-                      Hadir {data?.Hadir ?? 0}
-                    </div>
-                  }
-                  sections={[
-                    {
-                      value: ((data?.Hadir ?? 0) / (data?.Overall ?? 1)) * 100 || 0,
-                      color: 'green',
-                      tooltip: `Hadir ${data?.Hadir ?? 0} Karyawan`,
-                    },
-                    {
-                      value: ((data?.BelumHadir ?? 0) / (data?.Overall ?? 1)) * 100 || 0,
-                      color: 'red',
-                      tooltip: `Belum Absen ${data?.BelumHadir ?? 0} Karyawan`,
-                    },
-                    {
-                      value: ((data?.Izin ?? 0) / (data?.Overall ?? 1)) * 100 || 0,
-                      color: 'blue',
-                      tooltip: `Izin ${data?.Izin ?? 0} Karyawan`,
-                    },
-                    {
-                      value: ((data?.Terlambat ?? 0) / (data?.Overall ?? 1)) * 100 || 0,
-                      color: 'yellow',
-                      tooltip: `Terlambat ${data?.Terlambat ?? 0} Karyawan`,
-                    },
-                    {
-                      value: ((data?.Cuti ?? 0) / (data?.Overall ?? 1)) * 100 || 0,
-                      color: 'purple',
-                      tooltip: `Cuti ${data?.Cuti ?? 0} Karyawan`,
-                    },
-                  ]}
-                ></RingProgress>
-              </div>
-              <div className="col-span-6 ms-2 text-left">
-                <div className="ms-2 -mb-2">
-                  <Text size="xs">Hari & tanggal : </Text>
-                  <Text size="sm" fw={700}>
-                    {schedule?.date != undefined
-                      ? formatterDate(new Date(schedule?.date), 'EEEE, dd MMMM yyyy')
-                      : '--'}
-                  </Text>
-                </div>
-                <Divider my="sm" />
-                <div className="-mt-2 w-full grid grid-cols-12 mb-1">
-                  <div className="col-span-6 text-left mt-1 ms-2">
-                    <Text size="xs">Jam kerja</Text>
-                    <Text size="sm" fw={700}>
-                      {schedule?.shift.start_time} - {schedule?.shift.end_time}
-                    </Text>
+
+          <div className="w-full grid grid-cols-12  p-1 -mb-2">
+            <div className="col-span-5 text-center m-auto p-1">
+              <RingProgress
+                className="mx-auto -ms-2 mb-2"
+                size={100}
+                thickness={10}
+                label={
+                  <div className="text-center text-xs font-semibold text-slate-500">
+                    Hadir {attendanceDivision?.Hadir ?? 0}
                   </div>
-                  <div className="col-span-6 text-right -mt-1"></div>
-                </div>
+                }
+                sections={[
+                  {
+                    value:
+                      ((attendanceDivision?.Hadir ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                        100 || 0,
+                    color: 'green',
+                  },
+                  {
+                    value:
+                      ((attendanceDivision?.BelumHadir ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                        100 || 0,
+                    color: 'red',
+                  },
+                  {
+                    value:
+                      ((attendanceDivision?.Izin ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                        100 || 0,
+                    color: 'blue',
+                  },
+                  {
+                    value:
+                      ((attendanceDivision?.Sakit ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                        100 || 0,
+                    color: 'yellow',
+                  },
+                  {
+                    value:
+                      ((attendanceDivision?.Cuti ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                        100 || 0,
+                    color: 'grape',
+                  },
+                ]}
+              ></RingProgress>
+            </div>
+            <Divider className="col-span-1" orientation="vertical" />
+            <div className="col-span-6 text-left my-auto">
+              <div className="flex items-center space-x-1">
+                <Badge color="green" radius="xs" size="xs"></Badge>
+                <Text size="sm">Hadir : </Text>
+                <Text size="sm">{attendanceDivision?.Hadir}</Text>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Badge color="red" radius="xs" size="xs"></Badge>
+                <Text size="sm">Belum hadir : </Text>
+                <Text size="sm">{attendanceDivision?.BelumHadir}</Text>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Badge color="blue" radius="xs" size="xs"></Badge>
+                <Text size="sm">Izin : </Text>
+                <Text size="sm">{attendanceDivision?.Izin}</Text>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Badge color="yellow" radius="xs" size="xs"></Badge>
+                <Text size="sm">Sakit : </Text>
+                <Text size="sm">{attendanceDivision?.Sakit}</Text>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Badge color="grape" radius="xs" size="xs"></Badge>
+                <Text size="sm">Cuti : </Text>
+                <Text size="sm">{attendanceDivision?.Cuti}</Text>
               </div>
             </div>
-            <div className="grid grid-cols-2 text-xs divide-x divide-gray-300 p-2">
-              <div className="flex gap-2">
-                <IconClockHour8 size={15} className="text-green-400" /> Masuk :{' '}
-                {schedule?.shift.start_time}
-              </div>
-              <div className="ps-3 flex gap-2">
-                <IconClockHour8 size={15} className="text-rose-400" /> Keluar :{' '}
-                {schedule?.shift.end_time}
-              </div>
-            </div>
+          </div>
+          <Divider size={'sm'} className="mt-2" />
+          <div className="py-2">
+            <Group justify="center">
+              <Anchor
+                size="sm"
+                onClick={() => navigate(`/employee-division/monthly-attendance`)}
+                target="_blank"
+                underline="always"
+              >
+                Lihat rekap bulanan
+              </Anchor>
+              {/* <IconCalendar color="blue" className="-ms-2" /> */}
+            </Group>
           </div>
         </section>
       )}
@@ -382,7 +434,11 @@ export const Home: React.FC = () => {
               }}
               color={schedule?.attendance_place == 'WFH' ? 'yellow' : 'blue'}
             >
-              {schedule?.attendance_place}
+              {schedule == undefined
+                ? ''
+                : schedule.attendance_place
+                  ? schedule.attendance_place
+                  : 'WFO'}
             </Badge>
             <Badge
               size="sm"

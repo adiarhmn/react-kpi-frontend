@@ -157,7 +157,7 @@ export const DetailEmployeeDivision: React.FC = () => {
           <div className="text-center text-xs divide-x divide-gray-300 p-2">
             <Group justify="center">
               <Anchor
-                size="xs"
+                size="sm"
                 onClick={() =>
                   navigate(`/employee-division/schedule`, { state: { employee_id: employee.id } })
                 }
@@ -238,7 +238,7 @@ export const DetailEmployeeDivision: React.FC = () => {
         <div className="text-center text-xs divide-x divide-gray-300 p-2">
           <Group justify="center">
             <Anchor
-              size="xs"
+              size="sm"
               onClick={() =>
                 navigate(`/employee-division/attendance`, { state: { employee: employee } })
               }
