@@ -12,6 +12,7 @@ import { useAuth } from '@/features/auth';
 import { DatetimeToDateString, DatetimeToTime, formatDateToString } from '@/utils/format';
 
 import { useGetAttendance } from '../api';
+import { StateAttendance } from '../components/StateAttendance';
 
 export const Attendance: React.FC = () => {
   const navigate = useNavigate();
@@ -32,12 +33,11 @@ export const Attendance: React.FC = () => {
   };
 
   if (LoadingGetAttendance) return <div>Loading...</div>;
-  console.log('Data attendance :', DataAttendances);
   return (
     <main>
       <section className="bg-white rounded-lg shadow-lg p-5">
-        <div className="grid lg:grid-cols-2 mb-5">
-          <div className="mb-2">
+        <div className="grid lg:grid-cols-2">
+          <div className="">
             <div>
               <h1 className="font-semibold">
                 Presensi Karyawan : {DatetimeToDateString(date.toDateString())}
@@ -62,7 +62,24 @@ export const Attendance: React.FC = () => {
             </Button>
           </div>
         </div>
-        <div className="overflow-x-auto">
+        <Divider
+          className="mt-4 mb-3"
+          label={
+            <span className="text-sm">
+              Data Cepat Presensi : {DatetimeToDateString(date.toDateString())}
+            </span>
+          }
+        />
+        <StateAttendance date={formatDateToString(date.toDateString())} />
+        <Divider
+          className="mt-8"
+          label={
+            <span className="text-sm">
+              Daftar Presensi Pada : {DatetimeToDateString(date.toDateString())}
+            </span>
+          }
+        />
+        <div className="overflow-x-auto mt-3">
           <Table withColumnBorders withTableBorder>
             <Table.Thead>
               <Table.Tr>
