@@ -3,10 +3,11 @@
 import { EmployeeType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
 import { useGetEmployee } from '@/features/employee/api/Profile';
-import { IconChevronLeft } from '@tabler/icons-react';
+import { IconCaretDown, IconChevronLeft } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EmployeeDivisionList } from '../components';
+import { Button, Popover, Text } from '@mantine/core';
 
 export const EmployeeDivision: React.FC = () => {
   const { creds } = useAuth();
@@ -34,7 +35,20 @@ export const EmployeeDivision: React.FC = () => {
             />
             <h2 className="font-semibold ">Anggota {employee?.division.division_name} </h2>
           </div>
-          <span className="font-semibold"></span>
+          <span className="font-semibold">
+            <Popover width={200} position="bottom" withArrow shadow="md">
+              <Popover.Target>
+                <Button variant="transparent" size="xs">
+                  <IconCaretDown />
+                </Button>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Text size="xs">
+                  This is uncontrolled popover, it is opened when button is clicked
+                </Text>
+              </Popover.Dropdown>
+            </Popover>
+          </span>
         </div>
       </section>
 

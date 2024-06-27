@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { Button, RingProgress, Select } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
 import { useState } from 'react';

@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
-import { Badge, Divider, Text } from '@mantine/core';
+import { Badge, Divider, RingProgress, Text } from '@mantine/core';
 import {
   IconCalendar,
   IconFileTime,
@@ -28,8 +28,8 @@ import { AbsenceType, formatterDate, useGetAbsenceByType } from '@/features/hist
 import { useGetScheduleDaily } from '@/features/schedule/api';
 import { EmployeeType } from '@/admin_features/types';
 import { AttendanceRequestType } from '@/features/late-request';
-import { useGetAttendanceReq } from '@/admin_features/attendance/api';
 import { useGetAttendanceRequest } from '@/features/late-request/api/getAttendanceRequest';
+import { useGetAttendanceRecapByDivision } from '@/admin_features/attendance/api';
 
 export const Home: React.FC = () => {
   const { creds } = useAuth();
@@ -83,6 +83,11 @@ export const Home: React.FC = () => {
     }
   }, [DataAttendanceReq]);
 
+  const { data } = useGetAttendanceRecapByDivision(
+    formatterDate(new Date(), 'yyyy-MM-dd'),
+    employee?.division_id
+  );
+
   // console.log('Data attendanceReq : ', attendanceReq);
   return (
     <main>
@@ -92,10 +97,8 @@ export const Home: React.FC = () => {
           className="absolute w-44 right-3 -top-4 opacity-85"
           alt=""
         />
-        <div style={{ fontSize: '25px' }} className="text-white font-bold relative z-10">
-          {employee?.name}
-        </div>
-        <div className="text-sm= font-semibold text-white">{creds?.role}</div>
+        <div className="text-white text-2xl font-bold relative z-10">{employee?.name}</div>
+        <div className="text-sm font-semibold text-white">{creds?.role}</div>
 
         <div className="absolute right-5 top-5">
           <img src="/images/white-logo.png" alt="" className="w-14" />
@@ -108,7 +111,7 @@ export const Home: React.FC = () => {
             <Text fw={700} c="blue">
               Rekap absensi bulan ini
             </Text>
-            <IconChevronRight className="opacity-80" size={20} />
+            <IconCalendar className="opacity-80" size={20} />
           </div>
           <div className="w-full grid grid-cols-3 divide-x divide-gray-300 pb-2 pt-2">
             <Link to="#" className="px-4 flex flex-col items-center justify-center">
@@ -262,6 +265,92 @@ export const Home: React.FC = () => {
           />
         )}
       </section>
+
+      {creds?.role == 'supervisor' && (
+        <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2 -mt-4">
+          <div className="flex justify-between text-xs items-center p-2 -mt-1 -mb-1">
+            <div>
+              <Text fw={700} c="blue">
+                Rekap kehadiran hari ini
+              </Text>
+            </div>
+          </div>
+          <Divider size={'sm'} />
+          <div className="divide-y divide-gray-300">
+            <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
+              <div className="col-span-6 text-center m-auto p-1">
+                <RingProgress
+                  className="mx-auto"
+                  size={140}
+                  thickness={12}
+                  label={
+                    <div className="text-center text-xs font-semibold text-slate-500">
+                      Hadir {data?.Hadir ?? 0}
+                    </div>
+                  }
+                  sections={[
+                    {
+                      value: ((data?.Hadir ?? 0) / (data?.Overall ?? 1)) * 100 || 0,
+                      color: 'green',
+                      tooltip: `Hadir ${data?.Hadir ?? 0} Karyawan`,
+                    },
+                    {
+                      value: ((data?.BelumHadir ?? 0) / (data?.Overall ?? 1)) * 100 || 0,
+                      color: 'red',
+                      tooltip: `Belum Absen ${data?.BelumHadir ?? 0} Karyawan`,
+                    },
+                    {
+                      value: ((data?.Izin ?? 0) / (data?.Overall ?? 1)) * 100 || 0,
+                      color: 'blue',
+                      tooltip: `Izin ${data?.Izin ?? 0} Karyawan`,
+                    },
+                    {
+                      value: ((data?.Terlambat ?? 0) / (data?.Overall ?? 1)) * 100 || 0,
+                      color: 'yellow',
+                      tooltip: `Terlambat ${data?.Terlambat ?? 0} Karyawan`,
+                    },
+                    {
+                      value: ((data?.Cuti ?? 0) / (data?.Overall ?? 1)) * 100 || 0,
+                      color: 'purple',
+                      tooltip: `Cuti ${data?.Cuti ?? 0} Karyawan`,
+                    },
+                  ]}
+                ></RingProgress>
+              </div>
+              <div className="col-span-6 ms-2 text-left">
+                <div className="ms-2 -mb-2">
+                  <Text size="xs">Hari & tanggal : </Text>
+                  <Text size="sm" fw={700}>
+                    {schedule?.date != undefined
+                      ? formatterDate(new Date(schedule?.date), 'EEEE, dd MMMM yyyy')
+                      : '--'}
+                  </Text>
+                </div>
+                <Divider my="sm" />
+                <div className="-mt-2 w-full grid grid-cols-12 mb-1">
+                  <div className="col-span-6 text-left mt-1 ms-2">
+                    <Text size="xs">Jam kerja</Text>
+                    <Text size="sm" fw={700}>
+                      {schedule?.shift.start_time} - {schedule?.shift.end_time}
+                    </Text>
+                  </div>
+                  <div className="col-span-6 text-right -mt-1"></div>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 text-xs divide-x divide-gray-300 p-2">
+              <div className="flex gap-2">
+                <IconClockHour8 size={15} className="text-green-400" /> Masuk :{' '}
+                {schedule?.shift.start_time}
+              </div>
+              <div className="ps-3 flex gap-2">
+                <IconClockHour8 size={15} className="text-rose-400" /> Keluar :{' '}
+                {schedule?.shift.end_time}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2">
         <div className="flex justify-between text-xs items-center p-2 -mt-1 -mb-1">
