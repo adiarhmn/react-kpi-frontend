@@ -39,6 +39,7 @@ export const CreateSchedule: React.FC = () => {
           const dataValidateSchedule = data.data.map((item: any) => ({
             employee_schedule_id: item.id,
             default_shift: shift_id,
+            default_attendance_place: 'WFO',
           }));
           mutationValidateSchedule.mutateAsync(dataValidateSchedule, {
             onSuccess: () => {

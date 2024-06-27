@@ -51,6 +51,26 @@ export const formatDateToString = (dateString: string): string => {
   return `${year}-${month}-${day}`;
 };
 
+export const DatetimeToDateString = (dateString: string): string => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = date.toLocaleString('id-ID', { month: 'long' });
+  const year = date.getFullYear();
+
+  return `${day} ${month} ${year}`;
+};
+
+// to lower case
+export const toLowerCase = (str: string): string => str.toLowerCase();
+
+export const DatetimeToTime = (dateString: string): string => {
+  const date = new Date(dateString);
+  const hour = String(date.getHours()).padStart(2, '0');
+  const minute = String(date.getMinutes()).padStart(2, '0');
+
+  return `${hour}:${minute}`;
+};
+
 export function getStartAndEndOfMonth(month: string = ''): {
   startOfMonth: Date;
   endOfMonth: Date;

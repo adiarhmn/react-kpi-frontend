@@ -5,7 +5,7 @@ interface Props {
   longitude: number;
   title: string;
 }
-export const LocationAcivity: React.FC<Props> = ({ latitude, longitude, title }) => {
+export const LocationShow: React.FC<Props> = ({ latitude, longitude, title }) => {
   return (
     <MapContainer
       style={{ height: '33vh' }}

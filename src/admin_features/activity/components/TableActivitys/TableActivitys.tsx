@@ -8,7 +8,7 @@ import { useAuth } from '@/features/auth';
 
 import { useGetActivityAlias, useGetActivitys } from '../../api';
 
-import { LocationAcivity } from './LocationActivity';
+import { LocationShow } from './LocationActivity';
 
 interface TableActivitysProps {
   date: string;
@@ -104,7 +104,7 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
       </Table>
 
       <Modal size={'lg'} opened={opened} onClose={close} title="Detail Aktifitas">
-        <LocationAcivity
+        <LocationShow
           latitude={DataActivityToShow?.activity_lat}
           longitude={DataActivityToShow?.activity_lon}
           title="Lokasi Aktifitas"

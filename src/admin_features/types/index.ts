@@ -55,6 +55,8 @@ export type AttendanceType = {
   id: number;
   check_in: string;
   check_out: string;
+  attendance_lat: string;
+  attendance_lon: string;
   status: string;
   shift_in: string;
   shift_out: string;
@@ -96,7 +98,9 @@ export type ScheduleAttendanceType = {
   Attendance: AttendanceType[];
   attendance_place: string;
   attendance_status: string;
+  shift: ShiftType;
   date: string;
+  status: string;
   employee_schedule: EmployeeScheduleType;
 };
 

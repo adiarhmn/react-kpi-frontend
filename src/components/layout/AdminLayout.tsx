@@ -100,9 +100,9 @@ export const AdminLayout: React.FC = () => {
                     <UnstyledButton>
                       <Group gap={16} px={20}>
                         <div className="text-sm text-end">
-                          <div className="font-semibold">{creds.username}</div>
-                          <div className="text-xs -mt-1 text-slate-400">
-                            {creds.role === 'admin' ? 'Administrator' : 'Karyawan'}
+                          <div className="font-semibold">{creds?.username}</div>
+                          <div className="text-xs -mt-1 text-slate-400 capitalize">
+                            {creds?.role}
                           </div>
                         </div>
                         <Avatar

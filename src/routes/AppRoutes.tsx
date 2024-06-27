@@ -1,4 +1,4 @@
-import { lazy, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { HomeLayout, AuthLayout, AppLayout, AdminLayout } from '@/components/layout';

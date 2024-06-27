@@ -12,6 +12,7 @@ type SchedulePost = {
 type ScheduleValidatePost = {
   employee_schedule_id: number;
   default_shift: number;
+  default_attendance_place: 'WFO';
 };
 
 export const CreateSchedule = async (schedule: SchedulePost[]) => {
