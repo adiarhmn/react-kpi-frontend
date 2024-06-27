@@ -181,13 +181,13 @@ export const AddLateRequest: React.FC = () => {
                 fullWidth
                 rightSection={<IconMailForward size={'20px'} />}
               >
-                {schedule?.attendance_status != 'Belum Hadir'
-                  ? `Status anda sedang ${schedule?.attendance_status}`
-                  : attendance?.check_out == null
-                    ? 'Anda sudah Check-In'
-                    : attendance?.check_out != null
-                      ? 'Anda sudah absen'
-                      : 'Ajukan'}
+                {schedule?.attendance_status == 'Belum Hadir'
+                  ? 'Ajukan'
+                  : schedule?.attendance_status == 'Hadir'
+                    ? 'Anda sudah absen'
+                    : attendance?.check_in != null
+                      ? 'Anda sudah Check-In'
+                      : `Status anda sedang ${schedule?.attendance_status}`}
               </Button>
             </div>
           </form>

@@ -6,3 +6,4 @@ export * from './EmployeeAttendance';
 export * from './DetailEmployeeAttendance';
 export * from './DetailEmployeeOvertime';
 export * from './DetailEmployeeAttendanceRequest';
+export * from './EmployeeMonthlyAttendance';
