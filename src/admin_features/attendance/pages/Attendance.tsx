@@ -33,6 +33,7 @@ export const Attendance: React.FC = () => {
   };
 
   if (LoadingGetAttendance) return <div>Loading...</div>;
+  console.log(DataAttendances);
   return (
     <main>
       <section className="bg-white rounded-lg shadow-lg p-5">

@@ -21,7 +21,7 @@ export async function getAttendanceRecap(date: string, company_id?: number) {
   const Overall = res.data.data.length;
 
   res.data.data.forEach((item: any) => {
-    if (item.attendance_status == 'Belum Hadir') BelumHadir++;
+    if (item.Attendance.length < 1) BelumHadir++;
     if (item.Attendance.length != 0) Hadir++;
     if (item.Attendance.length > 0 && item.Attendance[0].status == 'late') Terlambat++;
     if (item.attendance_status == 'Cuti' || item.attendance_status == 'cuti') Cuti++;
@@ -68,7 +68,7 @@ export async function getAttendanceRecapByDivision(date: string, division_id?: n
 
   console.log('Data Recap -->', res.data.data);
   res.data.data.forEach((item: any) => {
-    if (item.Attendance.length == 0) BelumHadir++;
+    if (item.Attendance.length < 1) BelumHadir++;
     if (item.Attendance.length != 0) Hadir++;
     if (item.Attendance.length > 0 && item.Attendance[0].status == 'late') Terlambat++;
     if (item.attendance_status == 'Cuti' || item.attendance_status == 'cuti') Cuti++;
