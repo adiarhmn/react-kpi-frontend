@@ -1,17 +1,17 @@
 /* eslint-disable linebreak-style */
-import { Badge, Button, Divider, Modal, Table, UnstyledButton } from '@mantine/core';
+import { Badge, Button, Divider, Table, UnstyledButton } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { IconArrowUpRight, IconEye } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { LocationShow } from '@/admin_features/activity';
 import { ScheduleAttendanceType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
 import { DatetimeToDateString, DatetimeToTime, formatDateToString } from '@/utils/format';
 
 import { useGetAttendance } from '../api';
+import { ModalDetailAttendance } from '../components/ModalDetailAttendance';
 import { StateAttendance } from '../components/StateAttendance';
 
 export const Attendance: React.FC = () => {
@@ -198,46 +198,12 @@ export const Attendance: React.FC = () => {
             </Table.Tbody>
           </Table>
 
-          <Modal size={'lg'} opened={opened} onClose={close} title="Detail Presensi">
-            {Attendance && Attendance?.Attendance.length > 0 ? (
-              <LocationShow
-                latitude={parseFloat(Attendance?.Attendance[0].attendance_lat)}
-                longitude={parseFloat(Attendance?.Attendance[0].attendance_lon)}
-                title="Lokasi Attendance"
-              />
-            ) : (
-              <div className="flex justify-center items-center w-full h-24">
-                <h1 className="text-red-500 font-semibold">Karyawan Belum Absen</h1>
-              </div>
-            )}
-            <Divider my="xs" label="Detail Karyawan" labelPosition="left" />
-            <table className="text-sm mb-8">
-              <tbody>
-                <tr className="capitalize">
-                  <td>Nama Karyawan</td>
-                  <td className="px-4">:</td>
-                  <td>{Attendance?.employee_schedule.employee.name}</td>
-                </tr>
-                <tr className="capitalize">
-                  <td>Telphone</td>
-                  <td className="px-4">:</td>
-                  <td>{Attendance?.employee_schedule.employee.phone}</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div className="pb-12">
-              <Button
-                color="gray"
-                onClick={close}
-                className="mt-4"
-                style={{ float: 'right' }}
-                size="xs"
-              >
-                Tutup
-              </Button>
-            </div>
-          </Modal>
+          <ModalDetailAttendance
+            opened={opened}
+            close={close}
+            Attendance={Attendance}
+            date={formatDateToString(date.toString())}
+          />
         </div>
       </section>
     </main>

@@ -8,7 +8,7 @@ interface Props {
 export const LocationShow: React.FC<Props> = ({ latitude, longitude, title }) => {
   return (
     <MapContainer
-      style={{ height: '33vh' }}
+      style={{ height: '33vh', zIndex: 0 }}
       center={[latitude, longitude]}
       zoom={15}
       scrollWheelZoom={true}
