@@ -70,6 +70,9 @@ export const Attendance: React.FC = () => {
                   Nama Karyawan
                 </Table.Th>
                 <Table.Th className="font-semibold" style={{ width: 200 }}>
+                  Divisi
+                </Table.Th>
+                <Table.Th className="font-semibold" style={{ width: 200 }}>
                   Check In | Check Out
                 </Table.Th>
                 <Table.Th className="font-semibold">Shift</Table.Th>
@@ -84,6 +87,7 @@ export const Attendance: React.FC = () => {
               {DataAttendances?.map((item: ScheduleAttendanceType) => (
                 <Table.Tr key={item.id}>
                   <Table.Td>{item.employee_schedule.employee.name}</Table.Td>
+                  <Table.Td>{item.employee_schedule.employee.division.division_name}</Table.Td>
 
                   {item.Attendance.length > 0 ? (
                     <Table.Td>

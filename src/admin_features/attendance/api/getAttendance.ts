@@ -20,7 +20,6 @@ export async function getAttendanceRecap(date: string, company_id?: number) {
   let Izin = 0;
   const Overall = res.data.data.length;
 
-  console.log('Data Recap -->', res.data.data);
   res.data.data.forEach((item: any) => {
     if (item.attendance_status == 'Belum Hadir') BelumHadir++;
     if (item.Attendance.length != 0) Hadir++;
