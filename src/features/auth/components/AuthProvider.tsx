@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { LoadingScreen } from '@/components/elements';
 import { useEmployee } from '@/features/employee';
@@ -14,12 +15,14 @@ type Props = {
 export const AuthProvider: React.FC<Props> = ({ children }) => {
   const queryClient = useQueryClient();
   const credsQuery = useCreds();
+  const navigate = useNavigate();
   const employeeQuery = useEmployee({ config: { enabled: false } });
 
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: () => {
       queryClient.clear();
+      navigate('/login');
     },
   });
 

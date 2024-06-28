@@ -41,3 +41,71 @@ export function formatBytes(bytes: number, decimals = 2) {
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
+
+export const formatDateToString = (dateString: string): string => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() mengembalikan bulan mulai dari 0
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
+
+export const DatetimeToDateString = (dateString: string): string => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = date.toLocaleString('id-ID', { month: 'long' });
+  const year = date.getFullYear();
+
+  return `${day} ${month} ${year}`;
+};
+
+// to lower case
+export const toLowerCase = (str: string): string => str.toLowerCase();
+
+export const DatetimeToTime = (dateString: string): string => {
+  const date = new Date(dateString);
+  const hour = String(date.getHours()).padStart(2, '0');
+  const minute = String(date.getMinutes()).padStart(2, '0');
+
+  return `${hour}:${minute}`;
+};
+
+export function getStartAndEndOfMonth(month: string = ''): {
+  startOfMonth: Date;
+  endOfMonth: Date;
+} {
+  const now = new Date(month);
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const endOfMonth = new Date(startOfNextMonth.getTime() - 1);
+  return { startOfMonth, endOfMonth };
+}
+
+export function getDaysInMonth(dateString: string): number {
+  const date = new Date(dateString);
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+
+  return new Date(year, month, 0).getDate();
+}
+
+export const getDaysInMonths = (
+  month: number,
+  year: number
+): { date: string; dayName: string }[] => {
+  const daysInMonth = new Date(year, month + 1, 0).getDate(); // Mendapatkan jumlah hari dalam bulan
+  const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+  const daysArray = [];
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    const dayName = dayNames[date.getDay()];
+    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+    daysArray.push({ date: formattedDate, dayName });
+  }
+
+  return daysArray;
+};

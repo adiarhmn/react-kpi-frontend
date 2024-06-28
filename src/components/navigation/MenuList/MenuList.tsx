@@ -1,18 +1,30 @@
 import { useId } from '@mantine/hooks';
+import { Icon } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
 type Navigation = {
   title: string;
   href: string;
-  icon: string;
+  icon: Icon;
+  color?: string;
 };
 
-export const MenuItem: React.FC<Navigation> = ({ title, href, icon }) => {
+export const MenuItem: React.FC<Navigation> = ({
+  title,
+  href,
+  icon,
+  color = 'bg-gradient-to-r from-blue-700 to-blue-400',
+}) => {
+  const Icon = icon;
   return (
     <Link to={href}>
       <div className="cursor-pointer flex flex-col items-center justify-center">
-        <img src={icon} alt="" width={30} loading="eager" />
-        <h3 className="text-xs text-gray-700 font-semibold mt-2 text-center px-1">{title}</h3>
+        <div
+          className={` ${color} rounded-xl w-14 h-14 text-white shadow-md flex justify-center items-center`}
+        >
+          <Icon size={37} />
+        </div>
+        <h3 className="text-xs text-gray-700 font-semibold mt-1 text-center px-1">{title}</h3>
       </div>
     </Link>
   );
@@ -26,10 +38,12 @@ export const MenuList: React.FC<Props> = ({ navigations }) => {
   const id = useId();
 
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {navigations.map((nav, i) => (
-        <MenuItem key={`${id}_${i}`} {...nav} />
-      ))}
+    <div className="overflow-x-auto overflow-y-hidden pb-3">
+      <div className="lg:w-full w-screen  grid grid-cols-5 grid-rows-2 mx-2 gap-y-4">
+        {navigations.map((nav, i) => (
+          <MenuItem key={`${id}_${i}`} {...nav} />
+        ))}
+      </div>
     </div>
   );
 };

@@ -8,13 +8,15 @@ export const useAuth = () => {
   function getRoleText() {
     switch (context.creds?.role) {
       case 'employee':
-        return 'Admin Outlet';
-      case 'owner':
-        return 'Owner';
+        return 'employee';
       case 'superadmin':
-        return 'Superadmin';
+        return 'superadmin';
+      case 'admin':
+        return 'admin';
+      case 'supervisor':
+        return 'supervisor';
       default:
-        return 'Pengguna';
+        return 'employee';
     }
   }
 

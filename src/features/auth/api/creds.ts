@@ -5,15 +5,28 @@ import storage from '@/utils/storage';
 
 import { Creds } from '../types';
 
-export async function getCreds() {
-  const res = await axios.get<Creds>('/auth/me');
+type AuthMeType = {
+  creds: Creds;
+  status: string;
+};
+const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
-  return res.data;
+export async function getCreds() {
+  const res = await axios.get<AuthMeType>(`${BaseURL}/auth/me`);
+
+  // Cek Local Storage id company
+  const id_company = localStorage.getItem('id_company');
+  if (id_company != null) {
+    res.data.creds = {
+      ...res.data.creds,
+      company_id: parseInt(id_company),
+    };
+  }
+  return res.data.creds;
 }
 
 export async function loadCreds() {
   if (!storage.getToken()) return null;
-
   const data = await getCreds();
   return data;
 }
@@ -23,6 +36,7 @@ export function useCreds() {
     queryKey: ['creds'],
     queryFn: loadCreds,
     throwOnError: () => {
+      console.log('Error loading creds');
       storage.clear();
       return false;
     },
