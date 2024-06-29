@@ -109,3 +109,22 @@ export const getDaysInMonths = (
 
   return daysArray;
 };
+
+export function getLateDuration(startTime: string, endTime: string) {
+  // Membagi waktu menjadi jam dan menit
+  const [startHours, startMinutes] = startTime.split(':').map(Number);
+  const [endHours, endMinutes] = endTime.split(':').map(Number);
+
+  // Menghitung total menit dari jam 00:00
+  const startTotalMinutes = startHours * 60 + startMinutes;
+  const endTotalMinutes = endHours * 60 + endMinutes;
+
+  // Menghitung selisih menit
+  const diffMinutes = endTotalMinutes - startTotalMinutes;
+
+  // Mengubah selisih menit menjadi jam dan menit
+  const hours = Math.floor(diffMinutes / 60);
+  const minutes = diffMinutes % 60;
+
+  return `${hours} jam ${minutes} menit`;
+}

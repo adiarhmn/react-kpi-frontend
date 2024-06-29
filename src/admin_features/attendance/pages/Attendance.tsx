@@ -8,7 +8,12 @@ import { useNavigate } from 'react-router-dom';
 
 import { ScheduleAttendanceType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
-import { DatetimeToDateString, DatetimeToTime, formatDateToString } from '@/utils/format';
+import {
+  DatetimeToDateString,
+  DatetimeToTime,
+  formatDateToString,
+  getLateDuration,
+} from '@/utils/format';
 
 import { useGetAttendance } from '../api';
 import { ModalDetailAttendance, StateAttendance, RecapAttendance } from '../components';
@@ -164,7 +169,12 @@ export const Attendance: React.FC = () => {
                             <div className="w-20 text-center">Hadir</div>
                           </Badge>
                           <Badge color="yellow">
-                            <div className="text-center">T</div>
+                            <div className="text-center">
+                              {getLateDuration(
+                                item.shift.start_time,
+                                DatetimeToTime(item.Attendance[0].check_in)
+                              )}
+                            </div>
                           </Badge>
                         </div>
                       )}
