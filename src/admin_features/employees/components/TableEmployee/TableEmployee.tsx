@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 import { ActionIcon, Button, Indicator, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconMapPin, IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconChevronRight, IconMapPin, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -89,6 +89,9 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
             <Table.Th className="font-bold">Username</Table.Th>
             <Table.Th className="font-bold">Role</Table.Th>
             <Table.Th className="font-bold">Aksi</Table.Th>
+            <Table.Th className="font-bold">
+              <div className="text-center font-bold">Detail</div>
+            </Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -119,6 +122,18 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
                         <IconMapPin size={14} />
                       </ActionIcon>
                     </Indicator>
+                  </div>
+                </Table.Td>
+                <Table.Td>
+                  <div className="text-center">
+                    <Button
+                      rightSection={<IconChevronRight size={14} />}
+                      onClick={() => navigate(`/employees/detail`, { state: { employee } })}
+                      color="blue"
+                      size="xs"
+                    >
+                      Detail
+                    </Button>
                   </div>
                 </Table.Td>
               </Table.Tr>

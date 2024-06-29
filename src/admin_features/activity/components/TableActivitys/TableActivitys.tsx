@@ -109,7 +109,10 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
       <div className="mt-2">
         <MapContainer
           style={{ height: '33vh', zIndex: 0 }}
-          center={[DataActivity[0].activity_lat, DataActivity[0].activity_lon]}
+          center={[
+            DataActivity[0]?.activity_lat ?? -3.7536276323430213,
+            DataActivity[0]?.activity_lon ?? 114.7677391547546,
+          ]}
           zoom={15}
           scrollWheelZoom={true}
         >
@@ -118,7 +121,7 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {DataActivity?.map((location: any) => (
-            <Marker key={location.id} position={[location.activity_lat, location.activity_lon]}>
+            <Marker key={location.id} position={[location?.activity_lat, location?.activity_lon]}>
               <Popup>
                 <h4>{location.attendance.employee.name}</h4>
               </Popup>
