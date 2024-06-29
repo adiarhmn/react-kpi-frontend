@@ -146,7 +146,7 @@ export const AttendanceCard: React.FC = () => {
             justify="space-between"
             fullWidth
             className="mt-2 border-2 shadow-lg"
-            onClick={() => navigate('/attendance')}
+            onClick={() => navigate('/attendance#RecapAttendance')}
             rightSection={<IconChevronRight size={14} />}
           >
             Lihat Semua

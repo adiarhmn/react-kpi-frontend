@@ -8,7 +8,6 @@ import { formatDateToString } from '@/utils/format';
 import { TablePermission } from '../components';
 
 export const Permission: React.FC = () => {
-  const [typeRequest, setTypeRequest] = useState<string>('Semua Jenis');
   const [date, setDate] = useState<Date>(new Date());
   const [status, setStatus] = useState<string>('Semua Status');
   return (
@@ -33,24 +32,13 @@ export const Permission: React.FC = () => {
           <Select
             className="mt-2 lg:mt-0 max-w-xs"
             placeholder="Pilih Pengajuan"
-            data={['Semua Jenis', 'sakit', 'izin', 'cuti']}
-            defaultValue="Semua Jenis"
-            onChange={(e) => setTypeRequest(e ?? 'Semua Jenis')}
-          />
-          <Select
-            className="mt-2 lg:mt-0 max-w-xs"
-            placeholder="Pilih Pengajuan"
             data={['Semua Status', 'Disetujui', 'Ditolak', 'Belum Disetujui']}
             defaultValue="Semua Status"
             onChange={(e) => setStatus(e ?? 'Semua Status')}
           />
         </div>
         <div className="mt-7">
-          <TablePermission
-            typeRequest={typeRequest}
-            date={formatDateToString(date.toDateString())}
-            status={status}
-          />
+          <TablePermission date={formatDateToString(date.toDateString())} status={status} />
         </div>
       </section>
     </main>

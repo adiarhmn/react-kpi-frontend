@@ -31,7 +31,7 @@ export const StateAttendance: React.FC<Props> = ({ date }) => {
         <span>Belum Hadir</span>
         <span className="font-semibold text-xl">{data?.BelumHadir}</span>
       </div>
-      <div className="p-3  rounded-xl bg-gradient-to-l from-cyan-400 to-cyan-900 text-sm flex justify-between items-center ">
+      <div className="p-3  rounded-xl bg-gradient-to-l from-blue-400 to-blue-900 text-sm flex justify-between items-center ">
         <span>Izin</span>
         <span className="font-semibold text-xl">{data?.Izin}</span>
       </div>
@@ -39,11 +39,11 @@ export const StateAttendance: React.FC<Props> = ({ date }) => {
         <span>Terlambat</span>
         <span className="font-semibold text-xl">{data?.Terlambat}</span>
       </div>
-      <div className="p-3  rounded-xl bg-gradient-to-l from-rose-400 to-rose-900 text-sm flex justify-between items-center ">
+      <div className="p-3  rounded-xl bg-gradient-to-l from-cyan-400 to-cyan-900 text-sm flex justify-between items-center ">
         <span>Sakit</span>
         <span className="font-semibold text-xl">{data?.Sakit}</span>
       </div>
-      <div className="p-3  rounded-xl bg-gradient-to-l from-emerald-400 to-emerald-900 text-sm flex justify-between items-center ">
+      <div className="p-3  rounded-xl bg-gradient-to-l from-purple-400 to-purple-900 text-sm flex justify-between items-center ">
         <span>Cuti</span>
         <span className="font-semibold text-xl">{data?.Cuti}</span>
       </div>

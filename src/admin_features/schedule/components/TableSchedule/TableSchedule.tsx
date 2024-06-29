@@ -255,8 +255,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     }
   };
 
-  console.log('Data DataSchedule :', dataSchedule);
-  console.log('Data DataCopySchedule :', MonthCopyDataSchedule);
   return (
     <section className="bg-white rounded-lg shadow-lg p-3">
       <div className="mb-3 flex gap-2 justify-between flex-wrap">
