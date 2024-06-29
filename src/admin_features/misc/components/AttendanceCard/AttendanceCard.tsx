@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
-import { Button, RingProgress, Select } from '@mantine/core';
-import { IconChevronRight } from '@tabler/icons-react';
+import { Button, RingProgress, Select, ThemeIcon } from '@mantine/core';
+import { IconChevronRight, IconStethoscope } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,7 +27,6 @@ export const AttendanceCard: React.FC = () => {
     (data?.Terlambat ?? 0);
 
   console.log('Data Recap', data);
-  console.log('Data Recap RESULT', ((data?.BelumHadir ?? 0) / (data?.Overall ?? 1)) * 100 || 0);
 
   return (
     <section className="bg-white shadow-lg p-3 rounded-lg">
@@ -69,6 +68,12 @@ export const AttendanceCard: React.FC = () => {
               onMouseEnter: () => setRingHovered(`Izin ${data?.Izin ?? 0}`),
             },
             {
+              value: calculatePercentage(data?.Sakit ?? 0, recalculatedOverall),
+              color: 'blue',
+              tooltip: `Sakit ${data?.Sakit ?? 0} Karyawan`,
+              onMouseEnter: () => setRingHovered(`Sakit ${data?.Sakit ?? 0}`),
+            },
+            {
               value: calculatePercentage(data?.Terlambat ?? 0, recalculatedOverall),
               color: 'yellow',
               tooltip: `Terlambat ${data?.Terlambat ?? 0} Karyawan`,
@@ -103,10 +108,20 @@ export const AttendanceCard: React.FC = () => {
               </tr>
               <tr>
                 <td>
-                  <div className="bg-blue-600 w-5 h-5"></div>
+                  <ThemeIcon color="blue" size="sm" variant="filled">
+                    <IconStethoscope size={20} />
+                  </ThemeIcon>
                 </td>
                 <td>Izin</td>
                 <td>: {data?.Izin} </td>
+                <td>Orang</td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="bg-cyan-500 w-5 h-5"></div>
+                </td>
+                <td>Sakit</td>
+                <td>: {data?.Sakit} </td>
                 <td>Orang</td>
               </tr>
               <tr>

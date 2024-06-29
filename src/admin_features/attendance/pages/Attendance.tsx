@@ -164,7 +164,7 @@ export const Attendance: React.FC = () => {
                           <Badge color="green">
                             <div className="w-20 text-center">Hadir</div>
                           </Badge>
-                          <Badge color="red">
+                          <Badge color="yellow">
                             <div className="text-center">T</div>
                           </Badge>
                         </div>
