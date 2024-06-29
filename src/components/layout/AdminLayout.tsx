@@ -57,7 +57,6 @@ const MenuAbsensi = [
 
 const MenuPengajuan = [
   { title: 'Absensi', href: '/request-attendance', icon: IconClockPin },
-  { title: 'Cuti', href: '/leave', icon: IconLuggage },
   { title: 'Izin', href: '/permission', icon: IconFileAlert },
   { title: 'Lembur', href: '/overtime', icon: IconAlarmPlus },
 ];

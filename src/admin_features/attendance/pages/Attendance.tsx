@@ -11,8 +11,7 @@ import { useAuth } from '@/features/auth';
 import { DatetimeToDateString, DatetimeToTime, formatDateToString } from '@/utils/format';
 
 import { useGetAttendance } from '../api';
-import { ModalDetailAttendance } from '../components/ModalDetailAttendance';
-import { StateAttendance } from '../components/StateAttendance';
+import { ModalDetailAttendance, StateAttendance, RecapAttendance } from '../components';
 
 export const Attendance: React.FC = () => {
   const navigate = useNavigate();
@@ -206,6 +205,8 @@ export const Attendance: React.FC = () => {
           />
         </div>
       </section>
+
+      <RecapAttendance date={formatDateToString(date.toString())} />
     </main>
   );
 };
