@@ -14,7 +14,7 @@ async function getAttendance(employee_id: number, month: number, year: number) {
   return res.data.data;
 }
 
-async function getRecap(company_id?: number, division_id?: number) {
+async function getRecap(company_id?: number, month?: number, year?: number, division_id?: number) {
   let url = `${BaseURL}/employee`;
   if (company_id) url += `?company=${company_id}`;
   if (division_id) url += `&division=${division_id}`;
@@ -31,8 +31,8 @@ async function getRecap(company_id?: number, division_id?: number) {
     // Await the asynchronous getAttendance call
     const recap = await getAttendance(
       employee.id,
-      new Date().getMonth() + 1,
-      new Date().getFullYear()
+      month ?? new Date().getMonth() + 1,
+      year ?? new Date().getFullYear()
     );
     DataAttendance[index].recap = recap;
   });
@@ -43,9 +43,14 @@ async function getRecap(company_id?: number, division_id?: number) {
   return DataAttendance;
 }
 
-export const useGetRecap = (company_id?: number, division_id?: number) => {
+export const useGetRecap = (
+  company_id?: number,
+  month?: number,
+  year?: number,
+  division_id?: number
+) => {
   return useQuery({
-    queryKey: ['recap', company_id, division_id],
-    queryFn: () => getRecap(company_id, division_id),
+    queryKey: ['recap', company_id, division_id, month, year],
+    queryFn: () => getRecap(company_id, month, year, division_id),
   });
 };
