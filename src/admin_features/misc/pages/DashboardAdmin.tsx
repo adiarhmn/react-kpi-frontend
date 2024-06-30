@@ -7,6 +7,7 @@ import { useAuth } from '@/features/auth';
 
 import {
   AllEmployeeCard,
+  AttendanceCalendar,
   AttendanceCard,
   FemaleEmployeeCard,
   MaleEmployeeCard,
@@ -32,7 +33,9 @@ export const DashboardAdmin: React.FC = () => {
     <main>
       {/* Rekap Absensi Hari ini */}
       <div className="grid lg:grid-cols-2 gap-4">
+        {/* Recap Attendance Card */}
         <AttendanceCard />
+
         {/* Total Employees */}
         <section className="bg-white shadow-lg p-3 rounded-lg">
           <div className="mb-3">
@@ -48,7 +51,7 @@ export const DashboardAdmin: React.FC = () => {
           </div>
         </section>
 
-        <section className="bg-white shadow-lg p-3 rounded-lg col-span-2">
+        <section className="bg-white shadow-lg p-3 rounded-lg">
           <div className="grid lg:grid-cols-2">
             <div>
               <h2 className="font-bold">Daftar Pengajuan</h2>
@@ -68,6 +71,9 @@ export const DashboardAdmin: React.FC = () => {
             <RequestCard typeRequest={typeRequest}></RequestCard>
           </div>
         </section>
+
+        {/* <AttendanceCalendar /> */}
+        <AttendanceCalendar />
       </div>
     </main>
   );
