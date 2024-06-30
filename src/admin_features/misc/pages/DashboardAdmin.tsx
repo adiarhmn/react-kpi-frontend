@@ -13,7 +13,6 @@ import {
   MaleEmployeeCard,
   RequestCard,
 } from '../components';
-// TODO: Membuat Data Rekap Absensi Dinamis
 export const DashboardAdmin: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
