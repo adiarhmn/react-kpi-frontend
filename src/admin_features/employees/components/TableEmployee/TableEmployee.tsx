@@ -128,7 +128,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
                   <div className="text-center">
                     <Button
                       rightSection={<IconChevronRight size={14} />}
-                      onClick={() => navigate(`/employees/detail`, { state: { employee } })}
+                      onClick={() => navigate(`/employees/detail/${employee.id}`)}
                       color="blue"
                       size="xs"
                     >

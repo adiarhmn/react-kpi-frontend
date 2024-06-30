@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
-import { Button, RingProgress, Select, ThemeIcon } from '@mantine/core';
-import { IconChevronRight, IconStethoscope } from '@tabler/icons-react';
-import { useState } from 'react';
+import { Button, RingProgress, Select } from '@mantine/core';
+import { IconChevronRight } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetAttendanceRecap } from '@/admin_features/attendance/api';
@@ -12,13 +12,19 @@ export const AttendanceCard: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   if (!creds) navigate('/login');
-  const [ringHovered, setRingHovered] = useState<string | null>('Hadir 40');
+  const [ringHovered, setRingHovered] = useState<string | null>('Hadir 0');
   const DateNow = formatDateToString(new Date().toDateString());
 
   const { data, isLoading } = useGetAttendanceRecap(DateNow, creds?.company_id);
   const calculatePercentage = (value: number, overall: number) => (value / overall) * 100;
-  if (isLoading) return <div>Loading...</div>;
 
+  useEffect(() => {
+    if (data) {
+      setRingHovered(`Hadir ${data?.Hadir ?? 0}`);
+    }
+  }, [data]);
+
+  if (isLoading) return <div>Loading...</div>;
   const recalculatedOverall =
     (data?.Hadir ?? 0) +
     (data?.BelumHadir ?? 0) +
@@ -92,7 +98,7 @@ export const AttendanceCard: React.FC = () => {
             <tbody>
               <tr>
                 <td>
-                  <div className="bg-green-600 w-5 h-5"></div>
+                  <div className="bg-green-600 w-5 h-5 rounded-full"></div>
                 </td>
                 <td>Hadir</td>
                 <td>: {data?.Hadir} </td>
@@ -100,7 +106,7 @@ export const AttendanceCard: React.FC = () => {
               </tr>
               <tr>
                 <td>
-                  <div className="bg-red-600 w-5 h-5"></div>
+                  <div className="bg-red-600 w-5 h-5 rounded-full"></div>
                 </td>
                 <td>Belum Absen</td>
                 <td>: {data?.BelumHadir} </td>
@@ -108,9 +114,7 @@ export const AttendanceCard: React.FC = () => {
               </tr>
               <tr>
                 <td>
-                  <ThemeIcon color="blue" size="sm" variant="filled">
-                    <IconStethoscope size={20} />
-                  </ThemeIcon>
+                  <div className="bg-blue-600 w-5 h-5 rounded-full"></div>
                 </td>
                 <td>Izin</td>
                 <td>: {data?.Izin} </td>
@@ -118,7 +122,7 @@ export const AttendanceCard: React.FC = () => {
               </tr>
               <tr>
                 <td>
-                  <div className="bg-cyan-500 w-5 h-5"></div>
+                  <div className="bg-cyan-500 w-5 h-5 rounded-full"></div>
                 </td>
                 <td>Sakit</td>
                 <td>: {data?.Sakit} </td>
@@ -126,7 +130,7 @@ export const AttendanceCard: React.FC = () => {
               </tr>
               <tr>
                 <td>
-                  <div className="bg-yellow-600 w-5 h-5"></div>
+                  <div className="bg-yellow-600 w-5 h-5 rounded-full"></div>
                 </td>
                 <td>Terlambat</td>
                 <td>: {data?.Terlambat} </td>
@@ -134,7 +138,7 @@ export const AttendanceCard: React.FC = () => {
               </tr>
               <tr>
                 <td>
-                  <div className="bg-purple-600 w-5 h-5"></div>
+                  <div className="bg-purple-600 w-5 h-5 rounded-full"></div>
                 </td>
                 <td>Cuti</td>
                 <td>: {data?.Cuti} </td>
