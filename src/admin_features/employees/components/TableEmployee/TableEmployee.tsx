@@ -68,6 +68,21 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
     navigate(`/employees/update`, { state: { employee } });
   };
 
+  // Pagination Features
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+
+  // Hitung jumlah total halaman [(❁´◡`❁)]
+  const totalPages = Math.ceil(employees.length / itemsPerPage);
+
+  // Fungsi untuk mengubah halaman
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // Mendapatkan employees untuk halaman saat ini
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = employees.slice(indexOfFirstItem, indexOfLastItem);
+
   if (isLoading) {
     return (
       <div className="flex justify-center my-20">
@@ -79,11 +94,14 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
+  console.log('Current Items', currentItems);
+  console.log('Curent Page', currentPage);
   return (
     <div className="mt-7">
-      <Table withColumnBorders withTableBorder>
+      <Table withColumnBorders withTableBorder highlightOnHover>
         <Table.Thead>
           <Table.Tr>
+            <Table.Th className="font-bold">No</Table.Th>
             <Table.Th className="font-bold">Nama</Table.Th>
             <Table.Th className="font-bold">Divisi</Table.Th>
             <Table.Th className="font-bold">Username</Table.Th>
@@ -95,9 +113,10 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {employees.map((employee, index) => {
+          {currentItems.map((employee, index) => {
             return (
               <Table.Tr key={index}>
+                <Table.Td>{indexOfFirstItem + index + 1}</Table.Td>
                 <Table.Td>{employee?.name}</Table.Td>
                 <Table.Td>{employee?.division.division_name}</Table.Td>
                 <Table.Td>{employee?.user.username}</Table.Td>
@@ -141,6 +160,37 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
           })}
         </Table.Tbody>
       </Table>
+
+      {/* WKWK */}
+      <section className="flex justify-between mt-3">
+        <div>
+          <span className="text-xs text-gray-500">
+            Menampilkan {indexOfFirstItem + 1} - {indexOfLastItem} dari {employees.length} data
+          </span>
+        </div>
+        <div className="flex gap-2">
+          {/* Render tombol pagination */}
+          {/* Next and Back */}
+          <Button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            color="blue"
+            variant="outline"
+            size="xs"
+          >
+            Back
+          </Button>
+          <Button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            color="blue"
+            variant="outline"
+            size="xs"
+          >
+            Next
+          </Button>
+        </div>
+      </section>
 
       {/* Delete Employee */}
       <Modal

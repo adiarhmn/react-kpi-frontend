@@ -18,6 +18,7 @@ export type ShiftType = {
 
 export type DivisionType = {
   id: number;
+  Employees: EmployeeType[];
   division_name: string;
 };
 
