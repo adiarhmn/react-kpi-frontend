@@ -1,5 +1,14 @@
 /* eslint-disable linebreak-style */
-import { ActionIcon, Button, Indicator, Loader, Modal, Table } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Indicator,
+  Loader,
+  Modal,
+  Pagination,
+  Select,
+  Table,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronRight, IconMapPin, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -161,35 +170,36 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
         </Table.Tbody>
       </Table>
 
-      {/* WKWK */}
+      {/* PAGINATION ======== */}
       <section className="flex justify-between mt-3">
-        <div>
+        <div className="flex items-center gap-4">
+          {/* Selection */}
+          <Select
+            placeholder="5"
+            data={['5', '10', '15', '25']}
+            size="xs"
+            style={{ width: 70 }}
+            defaultValue={'5'}
+            value={itemsPerPage.toString()}
+            allowDeselect={false}
+            onChange={(e) => {
+              setItemsPerPage(Number(e));
+              setCurrentPage(1);
+            }}
+          />
           <span className="text-xs text-gray-500">
-            Menampilkan {indexOfFirstItem + 1} - {indexOfLastItem} dari {employees.length} data
+            Menampilkan {indexOfFirstItem + 1} -{' '}
+            {totalPages == currentPage ? employees?.length : indexOfLastItem} dari{' '}
+            {employees?.length} data
           </span>
         </div>
-        <div className="flex gap-2">
-          {/* Render tombol pagination */}
-          {/* Next and Back */}
-          <Button
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage === 1}
-            color="blue"
-            variant="outline"
-            size="xs"
-          >
-            Back
-          </Button>
-          <Button
-            onClick={() => paginate(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            color="blue"
-            variant="outline"
-            size="xs"
-          >
-            Next
-          </Button>
-        </div>
+        <Pagination
+          total={totalPages}
+          value={currentPage}
+          onChange={setCurrentPage}
+          mt="sm"
+          size="xs"
+        />
       </section>
 
       {/* Delete Employee */}
