@@ -15,9 +15,21 @@ export async function getEmployees(company_id?: number, division_id?: number, se
   return res.data.data;
 }
 
+async function getEmployeeByID(id: number) {
+  const res = await axios.get(`${BaseURL}/employee/${id}`);
+  return res.data.data;
+}
+
 export const useGetEmployees = (company_id?: number, division_id?: number, sex?: string) => {
   return useQuery({
     queryKey: ['employee', company_id, division_id, sex],
     queryFn: () => getEmployees(company_id, division_id, sex),
+  });
+};
+
+export const useGetEmployee = (id: number) => {
+  return useQuery({
+    queryKey: ['employee', id],
+    queryFn: () => getEmployeeByID(id),
   });
 };
