@@ -20,9 +20,10 @@ export const UpdateDivision: React.FC = () => {
   const mutation = useUpdateDivision();
 
   const handleSubmit = async (dataDivision: DivisionType) => {
-    const dataDivisionUpdate = {
+    const dataDivisionUpdate: DivisionType = {
       id: dataDivision.id,
       division_name: dataDivision.division_name,
+      Employees: dataDivision.Employees,
     };
 
     await mutation.mutateAsync(dataDivisionUpdate, {

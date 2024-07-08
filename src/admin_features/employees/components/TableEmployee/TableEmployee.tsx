@@ -84,9 +84,6 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
   // Hitung jumlah total halaman [(❁´◡`❁)]
   const totalPages = Math.ceil(employees.length / itemsPerPage);
 
-  // Fungsi untuk mengubah halaman
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   // Mendapatkan employees untuk halaman saat ini
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -103,8 +100,6 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
-  console.log('Current Items', currentItems);
-  console.log('Curent Page', currentPage);
   return (
     <div className="mt-7">
       <Table withColumnBorders withTableBorder highlightOnHover>
