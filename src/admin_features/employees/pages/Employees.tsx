@@ -41,7 +41,8 @@ export const Employees: React.FC = () => {
       <section className="bg-white p-5 rounded-lg shadow-lg">
         <div className="flex justify-between items-center mb-2">
           <div>
-            <h2 className="font-bold">Daftar Karyawan</h2>
+            {/* <h2 className="font-bold">Daftar Karyawan</h2> */}
+            <h2 className="font-bold">TEST COMMIT</h2>
             <div className="-mt-1 text-xs text-slate-400">
               Berikut daftar karyawan yang terdaftar pada sistem
             </div>
