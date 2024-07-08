@@ -7,6 +7,7 @@ import {
 } from '@/features/attendance/api/getActivity';
 import { formatterDate } from '@/features/history';
 import { Button, Divider, Text } from '@mantine/core';
+import { IconClipboardText } from '@tabler/icons-react';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -47,9 +48,16 @@ export const EmployeeActivitiesSection: React.FC<ActivitiesSectionProps> = ({
 
   return (
     <>
-      <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 py-2 px-2 text-slate-700 mb-6 mt-2">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="text-base font-bold text-blue-700">Kegiatan</span>
+          <div>
+            <Text fw={700} c="blue">
+              Kegiatan
+            </Text>
+          </div>
+          <div className="my-auto text-right -mt-1  me-2">
+            <IconClipboardText />
+          </div>
         </div>
         <Divider size={'sm'} />
         <div className="w-full p-2">
@@ -99,6 +107,9 @@ export const EmployeeActivitiesSection: React.FC<ActivitiesSectionProps> = ({
                 <div className="text-right mt-2 me-2">
                   <Text truncate="end" size="xs">
                     {formatterDate(new Date(activity['created_at'] ?? 0), 'HH:mm')}
+                  </Text>
+                  <Text truncate="end" size="xs">
+                    {activity.attendance.employee.name}
                   </Text>
                 </div>
                 <Divider size={'xs'} className="mt-4" />

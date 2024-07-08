@@ -525,7 +525,8 @@ export const Attendance: React.FC = () => {
                         error=""
                       >
                         <Input
-                          placeholder="masukkan judul kegiatan"
+                          required
+                          placeholder={`masukkan ${activityAlias[0][`cs${i + 1}_name`]}`}
                           {...formActivity.getInputProps(`custom${i + 1}`)}
                         />
                       </Input.Wrapper>

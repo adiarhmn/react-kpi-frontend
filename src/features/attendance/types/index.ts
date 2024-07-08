@@ -52,6 +52,7 @@ export type ActivityAliasType = {
 export type ActivityDetailType = {
   id: number;
   attendance_id: number;
+  attendance: AttendanceType;
   activity_lon: number;
   activity_lat: number;
   custom1: any;
