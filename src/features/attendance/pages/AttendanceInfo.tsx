@@ -104,6 +104,7 @@ export const AttendanceInfo: React.FC = () => {
                 : 'Selesai bekerja'}
           </Badge>
         </div>
+        <Divider size={'sm'} />
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
           <div className="col-span-3 text-center m-auto ">
             <Text size="27px" fw={700}>
@@ -141,11 +142,12 @@ export const AttendanceInfo: React.FC = () => {
             </div>
           </div>
         </div>
+        <Divider className="mb-2 mt-2" size={'sm'} />
       </section>
 
       {/* Tugas card */}
       <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
-        <div className="flex justify-between text-xs items-center p-2">
+        <div className="flex justify-between text-xs items-center px-2 py-2">
           <span className="text-base font-bold text-blue-700">Kegiatan hari ini</span>
         </div>
         <Divider size={'sm'} />

@@ -45,7 +45,7 @@ export const EmployeeAttendancesSection: React.FC<AttendanceSectionProps> = ({
               Kehadiran
             </Text>
           </div>
-          <div className="my-auto text-right -mt-2 me-2">
+          <div className="my-auto text-right -mt-1 me-2">
             <IconCalendar />
           </div>
         </div>

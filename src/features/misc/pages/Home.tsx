@@ -1,23 +1,11 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
-import {
-  Anchor,
-  Badge,
-  Divider,
-  Group,
-  List,
-  Loader,
-  RingProgress,
-  Text,
-  ThemeIcon,
-  rem,
-} from '@mantine/core';
+import { Anchor, Badge, Divider, Group, Loader, RingProgress, Text } from '@mantine/core';
 import {
   IconCalendar,
   IconFileTime,
   IconNews,
   IconFingerprint,
-  IconChevronRight,
   IconClockHour8,
   IconClock24,
   IconLuggage,
@@ -26,7 +14,6 @@ import {
   IconUsersGroup,
   IconClock,
   IconFileText,
-  IconCircleDashed,
 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -43,7 +30,7 @@ import { AttendanceRequestType } from '@/features/late-request';
 import { useGetAttendanceRequest } from '@/features/late-request/api/getAttendanceRequest';
 import { useGetAttendanceRecapByDivision } from '@/admin_features/attendance/api';
 import { SchedulesType } from '@/admin_features/schedule/types';
-import { IconCircleCheck } from '@tabler/icons-react';
+import { MotionConfig } from 'framer-motion';
 
 type DataAttendanceDivisionType = {
   Hadir: number;
@@ -315,48 +302,56 @@ export const Home: React.FC = () => {
 
           <div className="w-full grid grid-cols-12  p-1 -mb-2">
             <div className="col-span-5 text-center m-auto p-1">
-              <RingProgress
-                className="mx-auto -ms-2 mb-2"
-                size={100}
-                thickness={10}
-                label={
-                  <div className="text-center text-xs font-semibold text-slate-500">
-                    Hadir {attendanceDivision?.Hadir ?? 0}
-                  </div>
-                }
-                sections={[
-                  {
-                    value:
-                      ((attendanceDivision?.Hadir ?? 0) / (attendanceDivision?.Overall ?? 1)) *
-                        100 || 0,
-                    color: 'green',
-                  },
-                  {
-                    value:
-                      ((attendanceDivision?.BelumHadir ?? 0) / (attendanceDivision?.Overall ?? 1)) *
-                        100 || 0,
-                    color: 'red',
-                  },
-                  {
-                    value:
-                      ((attendanceDivision?.Izin ?? 0) / (attendanceDivision?.Overall ?? 1)) *
-                        100 || 0,
-                    color: 'blue',
-                  },
-                  {
-                    value:
-                      ((attendanceDivision?.Sakit ?? 0) / (attendanceDivision?.Overall ?? 1)) *
-                        100 || 0,
-                    color: 'yellow',
-                  },
-                  {
-                    value:
-                      ((attendanceDivision?.Cuti ?? 0) / (attendanceDivision?.Overall ?? 1)) *
-                        100 || 0,
-                    color: 'grape',
-                  },
-                ]}
-              ></RingProgress>
+              <MotionConfig
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <RingProgress
+                  className="mx-auto -ms-2 mb-2"
+                  size={100}
+                  roundCaps
+                  thickness={10}
+                  label={
+                    <div className="text-center text-xs font-semibold text-slate-500">
+                      Hadir {attendanceDivision?.Hadir ?? 0}
+                    </div>
+                  }
+                  sections={[
+                    {
+                      value:
+                        ((attendanceDivision?.Hadir ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                          100 || 0,
+                      color: 'green',
+                    },
+                    {
+                      value:
+                        ((attendanceDivision?.BelumHadir ?? 0) /
+                          (attendanceDivision?.Overall ?? 1)) *
+                          100 || 0,
+                      color: 'red',
+                    },
+                    {
+                      value:
+                        ((attendanceDivision?.Izin ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                          100 || 0,
+                      color: 'blue',
+                    },
+                    {
+                      value:
+                        ((attendanceDivision?.Sakit ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                          100 || 0,
+                      color: 'yellow',
+                    },
+                    {
+                      value:
+                        ((attendanceDivision?.Cuti ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                          100 || 0,
+                      color: 'grape',
+                    },
+                  ]}
+                ></RingProgress>
+              </MotionConfig>
             </div>
             <Divider className="col-span-1" orientation="vertical" />
             <div className="col-span-6 text-left my-auto">

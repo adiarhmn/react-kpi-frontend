@@ -95,7 +95,7 @@ export const BiodataEdit: React.FC = () => {
         </div>
       </section>
       <section className="mx-auto max-w-sm w-full relative p-2 px-2 text-slate-700">
-        <div className="flex justify-between text-sm items-center p-2">
+        <div className="flex justify-between text-sm items-center p-2 px-5 -mb-2">
           <span className="font-bold text-blue-700">Data diri pegawai</span>
           <IconUser className="opacity-80" size={25} />
         </div>
