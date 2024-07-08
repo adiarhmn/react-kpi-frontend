@@ -326,7 +326,9 @@ export const Attendance: React.FC = () => {
             <span className="font-bold text-slate-400 text-base">
               Perizinan lokasi anda belum aktif
             </span>
-            <span className="text-slate-400 text-sm">Setting > app > HR APP > Perizinan Lokasi</span>
+            <span className="text-slate-400 text-sm">
+              Setting &gt; app &gt; HR APP &gt; Perizinan Lokasi
+            </span>
           </section>
         </div>
       ) : (

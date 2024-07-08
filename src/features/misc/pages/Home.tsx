@@ -302,11 +302,7 @@ export const Home: React.FC = () => {
 
           <div className="w-full grid grid-cols-12  p-1 -mb-2">
             <div className="col-span-5 text-center m-auto p-1">
-              <MotionConfig
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-              >
+              <MotionConfig transition={{ duration: 0.5 }}>
                 <RingProgress
                   className="mx-auto -ms-2 mb-2"
                   size={100}
