@@ -1,4 +1,14 @@
-import { AppShell, Avatar, Burger, Group, Menu, NavLink, UnstyledButton } from '@mantine/core';
+import {
+  ActionIcon,
+  AppShell,
+  Avatar,
+  Burger,
+  Group,
+  Menu,
+  NavLink,
+  UnstyledButton,
+  Indicator,
+} from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
   IconCalendar,
@@ -18,6 +28,7 @@ import {
   IconMap2,
   IconAlertCircle,
   IconBuildingBank,
+  IconBell,
 } from '@tabler/icons-react';
 import { Suspense, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
@@ -46,7 +57,6 @@ const MenuAbsensi = [
 
 const MenuPengajuan = [
   { title: 'Absensi', href: '/request-attendance', icon: IconClockPin },
-  { title: 'Cuti', href: '/leave', icon: IconLuggage },
   { title: 'Izin', href: '/permission', icon: IconFileAlert },
   { title: 'Lembur', href: '/overtime', icon: IconAlarmPlus },
 ];
@@ -95,41 +105,50 @@ export const AdminLayout: React.FC = () => {
               <Group className="grow h-full" justify="space-between">
                 <h1 className="px-3 py-2 font-semibold text-center">{title}</h1>
                 {NAME_COMPANY && <div className="text-sm font-semibold">{NAME_COMPANY}</div>}
-                <Menu shadow="md" width={200}>
-                  <Menu.Target>
-                    <UnstyledButton>
-                      <Group gap={16} px={20}>
-                        <div className="text-sm text-end">
-                          <div className="font-semibold">{creds.username}</div>
-                          <div className="text-xs -mt-1 text-slate-400">
-                            {creds.role === 'admin' ? 'Administrator' : 'Karyawan'}
+                <Group gap={5} className="h-full" justify="end">
+                  <div className="border-r border-slate-400 pe-5">
+                    <Indicator inline label="2" size={16} color="red">
+                      <ActionIcon radius={'xl'} color="rgba(219,219,219,1)">
+                        <IconBell className="text-slate-500" size={20} />
+                      </ActionIcon>
+                    </Indicator>
+                  </div>
+                  <Menu shadow="md" width={200}>
+                    <Menu.Target>
+                      <UnstyledButton>
+                        <Group gap={16} px={20}>
+                          <div className="text-sm text-end">
+                            <div className="font-semibold">{creds?.username}</div>
+                            <div className="text-xs -mt-1 text-slate-400 capitalize">
+                              {creds?.role}
+                            </div>
                           </div>
-                        </div>
-                        <Avatar
-                          src={'/images/user-blue-person.png'}
-                          alt={'User'}
-                          radius="xl"
-                          size={33}
-                        />
-                      </Group>
-                    </UnstyledButton>
-                  </Menu.Target>
+                          <Avatar
+                            src={'/images/user-blue-person.png'}
+                            alt={'User'}
+                            radius="xl"
+                            size={33}
+                          />
+                        </Group>
+                      </UnstyledButton>
+                    </Menu.Target>
 
-                  <Menu.Dropdown>
-                    <Menu.Label>List Menu</Menu.Label>
-                    <Menu.Item leftSection={<IconSettings size={14} />}>Settings</Menu.Item>
+                    <Menu.Dropdown>
+                      <Menu.Label>List Menu</Menu.Label>
+                      <Menu.Item leftSection={<IconSettings size={14} />}>Settings</Menu.Item>
 
-                    <Menu.Divider />
+                      <Menu.Divider />
 
-                    <Menu.Item
-                      onClick={() => logout()}
-                      color="red"
-                      leftSection={<IconLogout size={14} />}
-                    >
-                      Logout
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
+                      <Menu.Item
+                        onClick={() => logout()}
+                        color="red"
+                        leftSection={<IconLogout size={14} />}
+                      >
+                        Logout
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </Group>
               </Group>
             )}
           </Group>

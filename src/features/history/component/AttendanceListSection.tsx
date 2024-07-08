@@ -14,10 +14,12 @@ import { useGetEmployee } from '@/features/employee/api/Profile';
 
 type AttendanceListSectionProps = {
   employee_id?: number;
+  with_activity?: boolean;
 };
 
 export const AttendanceListSection: React.FC<AttendanceListSectionProps> = ({
   employee_id,
+  with_activity = true,
 }: AttendanceListSectionProps) => {
   const [dateValue, setDateValue] = useState<Date | null>(new Date());
   const { creds } = useAuth();
@@ -292,7 +294,10 @@ export const AttendanceListSection: React.FC<AttendanceListSectionProps> = ({
         </div>
       </section>
 
-      <ActivityCard employee={employee} date={dateValue} />
+      {
+        // Activity Card
+        with_activity && <ActivityCard employee={employee} date={dateValue} />
+      }
     </>
   );
 };

@@ -2,13 +2,14 @@ import { Button, Divider, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
 
 import { useGetActivityAlias, useGetActivitys } from '../../api';
 
-import { LocationAcivity } from './LocationActivity';
+import { LocationShow } from './LocationActivity';
 
 interface TableActivitysProps {
   date: string;
@@ -73,7 +74,7 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {DataActivity.map((activity: any, index: number) => {
+          {DataActivity?.map((activity: any, index: number) => {
             return (
               <Table.Tr key={index}>
                 <Table.Td>{activity.attendance.employee.name}</Table.Td>
@@ -103,8 +104,34 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
         </Table.Tbody>
       </Table>
 
+      <Divider my="lg" mt="xl" label="Daftar Lokasi Aktifitas Karyawan" labelPosition="left" />
+
+      <div className="mt-2">
+        <MapContainer
+          style={{ height: '33vh', zIndex: 0 }}
+          center={[
+            DataActivity[0]?.activity_lat ?? -3.7536276323430213,
+            DataActivity[0]?.activity_lon ?? 114.7677391547546,
+          ]}
+          zoom={15}
+          scrollWheelZoom={true}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {DataActivity?.map((location: any) => (
+            <Marker key={location.id} position={[location?.activity_lat, location?.activity_lon]}>
+              <Popup>
+                <h4>{location.attendance.employee.name}</h4>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      </div>
+
       <Modal size={'lg'} opened={opened} onClose={close} title="Detail Aktifitas">
-        <LocationAcivity
+        <LocationShow
           latitude={DataActivityToShow?.activity_lat}
           longitude={DataActivityToShow?.activity_lon}
           title="Lokasi Aktifitas"

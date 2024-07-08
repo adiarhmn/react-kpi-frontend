@@ -67,13 +67,19 @@ export const TableDivision: React.FC = () => {
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
+  console.log('Console Log Division', division);
   return (
     <>
       <Table withColumnBorders withTableBorder>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th className="font-bold">Kode Divisi</Table.Th>
+            <Table.Th className="font-bold" style={{ width: 70, textAlign: 'center' }}>
+              No
+            </Table.Th>
             <Table.Th className="font-bold">Nama Divisi</Table.Th>
+            <Table.Th className="font-bold" style={{ width: 150, textAlign: 'center' }}>
+              Total Karyawan
+            </Table.Th>
             <Table.Th className="flex gap-2 items-center justify-center font-bold">Aksi</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -81,8 +87,11 @@ export const TableDivision: React.FC = () => {
           {division.map((divisi, index) => {
             return (
               <Table.Tr key={index}>
-                <Table.Td>{index + 1}</Table.Td>
+                <Table.Td style={{ width: 70, textAlign: 'center' }}>{index + 1}</Table.Td>
                 <Table.Td>{divisi?.division_name}</Table.Td>
+                <Table.Td style={{ width: 150, textAlign: 'center' }}>
+                  {divisi?.Employees.length ?? 0} Orang
+                </Table.Td>
                 <Table.Td className="flex gap-2 items-center justify-center">
                   <ActionIcon
                     onClick={() => {

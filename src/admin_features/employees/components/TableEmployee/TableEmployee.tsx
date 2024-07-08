@@ -1,7 +1,16 @@
 /* eslint-disable linebreak-style */
-import { ActionIcon, Button, Indicator, Loader, Modal, Table } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Indicator,
+  Loader,
+  Modal,
+  Pagination,
+  Select,
+  Table,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconMapPin, IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconChevronRight, IconMapPin, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -68,6 +77,18 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
     navigate(`/employees/update`, { state: { employee } });
   };
 
+  // Pagination Features
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+
+  // Hitung jumlah total halaman [(❁´◡`❁)]
+  const totalPages = Math.ceil(employees.length / itemsPerPage);
+
+  // Mendapatkan employees untuk halaman saat ini
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = employees.slice(indexOfFirstItem, indexOfLastItem);
+
   if (isLoading) {
     return (
       <div className="flex justify-center my-20">
@@ -81,20 +102,25 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
 
   return (
     <div className="mt-7">
-      <Table withColumnBorders withTableBorder>
+      <Table withColumnBorders withTableBorder highlightOnHover>
         <Table.Thead>
           <Table.Tr>
+            <Table.Th className="font-bold">No</Table.Th>
             <Table.Th className="font-bold">Nama</Table.Th>
             <Table.Th className="font-bold">Divisi</Table.Th>
             <Table.Th className="font-bold">Username</Table.Th>
             <Table.Th className="font-bold">Role</Table.Th>
             <Table.Th className="font-bold">Aksi</Table.Th>
+            <Table.Th className="font-bold">
+              <div className="text-center font-bold">Detail</div>
+            </Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {employees.map((employee, index) => {
+          {currentItems.map((employee, index) => {
             return (
               <Table.Tr key={index}>
+                <Table.Td>{indexOfFirstItem + index + 1}</Table.Td>
                 <Table.Td>{employee?.name}</Table.Td>
                 <Table.Td>{employee?.division.division_name}</Table.Td>
                 <Table.Td>{employee?.user.username}</Table.Td>
@@ -121,11 +147,55 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
                     </Indicator>
                   </div>
                 </Table.Td>
+                <Table.Td>
+                  <div className="text-center">
+                    <Button
+                      rightSection={<IconChevronRight size={14} />}
+                      onClick={() => navigate(`/employees/detail/${employee.id}`)}
+                      color="blue"
+                      size="xs"
+                    >
+                      Detail
+                    </Button>
+                  </div>
+                </Table.Td>
               </Table.Tr>
             );
           })}
         </Table.Tbody>
       </Table>
+
+      {/* PAGINATION ======== */}
+      <section className="flex justify-between mt-3">
+        <div className="flex items-center gap-4">
+          {/* Selection */}
+          <Select
+            placeholder="5"
+            data={['5', '10', '15', '25']}
+            size="xs"
+            style={{ width: 70 }}
+            defaultValue={'5'}
+            value={itemsPerPage.toString()}
+            allowDeselect={false}
+            onChange={(e) => {
+              setItemsPerPage(Number(e));
+              setCurrentPage(1);
+            }}
+          />
+          <span className="text-xs text-gray-500">
+            Menampilkan {indexOfFirstItem + 1} -{' '}
+            {totalPages == currentPage ? employees?.length : indexOfLastItem} dari{' '}
+            {employees?.length} data
+          </span>
+        </div>
+        <Pagination
+          total={totalPages}
+          value={currentPage}
+          onChange={setCurrentPage}
+          mt="sm"
+          size="xs"
+        />
+      </section>
 
       {/* Delete Employee */}
       <Modal

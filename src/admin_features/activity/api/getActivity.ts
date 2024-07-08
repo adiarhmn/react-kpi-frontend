@@ -29,3 +29,17 @@ export const useGetActivityAlias = (company_id?: number) => {
     queryFn: () => getActivityAlias(company_id),
   });
 };
+
+// ===================== Get Activity Detail By EMployee ID =====================
+
+export const getActivityByEmployeeID = async (employee_id: number, date: string) => {
+  const res = await axios.get(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
+  return res.data.data;
+};
+
+export const useGetActivityByEmployeeID = (employee_id: number, date: string) => {
+  return useQuery({
+    queryKey: ['activity-employee', employee_id, date],
+    queryFn: () => getActivityByEmployeeID(employee_id, date),
+  });
+};

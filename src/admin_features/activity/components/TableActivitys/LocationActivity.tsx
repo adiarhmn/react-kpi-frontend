@@ -5,10 +5,10 @@ interface Props {
   longitude: number;
   title: string;
 }
-export const LocationAcivity: React.FC<Props> = ({ latitude, longitude, title }) => {
+export const LocationShow: React.FC<Props> = ({ latitude, longitude, title }) => {
   return (
     <MapContainer
-      style={{ height: '33vh' }}
+      style={{ height: '33vh', zIndex: 0 }}
       center={[latitude, longitude]}
       zoom={15}
       scrollWheelZoom={true}
