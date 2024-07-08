@@ -312,6 +312,23 @@ export const Attendance: React.FC = () => {
             <span className="text-slate-400 text-sm">Harap hubungi admin</span>
           </section>
         </div>
+      ) : location.error != undefined ? (
+        <div className="w-full col-span-12">
+          <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
+
+          <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+            <img
+              className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+              src="/images/blank-canvas.svg"
+              alt=""
+            />
+            <span className="font-bold text-slate-400 text-2xl mt-3">Oops!</span>
+            <span className="font-bold text-slate-400 text-base">
+              Perizinan lokasi anda belum aktif
+            </span>
+            <span className="text-slate-400 text-sm">Setting > app > HR APP > Perizinan Lokasi</span>
+          </section>
+        </div>
       ) : (
         <>
           <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
