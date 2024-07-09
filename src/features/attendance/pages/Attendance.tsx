@@ -475,13 +475,13 @@ export const Attendance: React.FC = () => {
                 ))
               ) : (
                 <div className="w-full col-span-12">
-                  <section className="min-h-96 flex flex-col items-center justify-center -mt-7">
+                  <section className="min-h-96 flex flex-col items-center justify-center -mt-10 -mb-10">
                     <img
-                      className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+                      className="w-28 mb-2 bg-slate-200 rounded-full p-2"
                       src="/images/blank-canvas.svg"
                       alt=""
                     />
-                    <span className="font-bold text-slate-400 text-lg">
+                    <span className="font-bold text-slate-400 text-base">
                       Belum ada data kegiatan
                     </span>
                   </section>

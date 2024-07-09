@@ -1,13 +1,17 @@
-import { Button, FileInput, Modal, TextInput } from '@mantine/core';
+import { Button, FileButton, FileInput, Group, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { FileList } from '../components';
+import { useRef } from 'react';
+import { useCreateFiles } from '../api';
+import { useAuth } from '@/features/auth';
 
 export const FileProfile: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 50em)');
 
@@ -15,12 +19,40 @@ export const FileProfile: React.FC = () => {
     validateInputOnChange: true,
     initialValues: {
       namaBerkas: '',
+      image: null as File | null,
+      employee_id: creds?.employee_id,
     },
     validate: {
       namaBerkas: (value) =>
-        value.length < 5 ? 'Jenjang setidaknya harus memuat lebih dari 2 karakter' : null,
+        value.length < 2 ? 'Nama file setidaknya harus memuat lebih dari 2 karakter' : null,
     },
   });
+
+  const mutationCreateFiles = useCreateFiles();
+  const handleSubmitFile = async (values: typeof form.values) => {
+    const FilesData = {
+      file_name: values.namaBerkas,
+      file: values.image,
+      employee_id: values.employee_id,
+    };
+
+    await mutationCreateFiles.mutateAsync(FilesData, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        localStorage.setItem('hasNotifiedBiodata', 'no');
+        navigate('/profile/file', {
+          state: { success: 'Biodata berhasil diubah!' },
+        });
+      },
+    });
+  };
+
+  const resetRef = useRef<() => void>(null);
+
+  const clearFile = () => {
+    form.setFieldValue('image', null);
+    resetRef.current?.();
+  };
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -54,13 +86,50 @@ export const FileProfile: React.FC = () => {
         fullScreen={isMobile}
         transitionProps={{ transition: 'fade', duration: 200 }}
       >
-        <TextInput
-          label="Nama berkas"
-          name="namaBerkas"
-          withAsterisk
-          {...form.getInputProps('namaBerkas')}
-        />
-        <FileInput label="Lampiran" withAsterisk placeholder="Masukkan bukti berkas" />
+        <form onSubmit={form.onSubmit(handleSubmitFile)}>
+          <div className="">
+            <TextInput
+              label="Nama berkas"
+              name="namaBerkas"
+              withAsterisk
+              {...form.getInputProps('namaBerkas')}
+            />
+          </div>
+          <div className="mt-2">
+            <div className="flex items-center justify-center mb-2">
+              <div className="h-36 w-80 bg-slate-500 text-white">
+                {form.values.image ? (
+                  <img
+                    src={URL.createObjectURL(form.values.image)}
+                    alt="Preview"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span>No Image</span>
+                )}
+              </div>
+            </div>
+            <div className="my-auto">
+              <Group justify="center">
+                <FileButton
+                  resetRef={resetRef}
+                  onChange={(file) => form.setFieldValue('image', file)}
+                  accept="image/png,image/jpeg"
+                >
+                  {(props) => <Button {...props}>Pilih foto</Button>}
+                </FileButton>
+                <Button className="" disabled={!form.values.image} color="red" onClick={clearFile}>
+                  Reset
+                </Button>
+              </Group>
+            </div>
+          </div>
+          <div className="mt-3">
+            <Button fullWidth type="submit">
+              Simpan
+            </Button>
+          </div>
+        </form>
       </Modal>
     </main>
   );

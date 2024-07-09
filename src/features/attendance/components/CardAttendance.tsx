@@ -216,16 +216,21 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
           </div>
         </section>
       ) : (
-        <div className="w-full col-span-12">
-          <section className="min-h-96 flex flex-col items-center justify-center mt-10">
-            <img
-              className="w-40 mb-2 bg-slate-200 rounded-full p-2"
-              src="/images/blank-canvas.svg"
-              alt=""
-            />
-            <span className="font-bold text-slate-400 text-xl">Belum ada jadwal masuk</span>
-          </section>
-        </div>
+        <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
+          <div className="flex justify-between text-xs items-center p-2">
+            <span className="text-base font-bold text-blue-700">Absensi</span>
+          </div>
+          <div className="w-full col-span-12 -mt-20 -mb-20">
+            <div className="min-h-96 flex flex-col items-center justify-center -mb-2">
+              <img
+                className="w-28 mb-2 bg-slate-200 rounded-full p-2"
+                src="/images/blank-canvas.svg"
+                alt=""
+              />
+              <span className="font-bold text-slate-400 text-base">Belum ada jadwal</span>
+            </div>
+          </div>
+        </section>
       )}
     </>
   );
