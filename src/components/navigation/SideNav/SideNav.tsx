@@ -46,14 +46,14 @@ export const SideNav: React.FC<Props> = ({
       {SideNavProps.map((SideNavProps, index) => {
         return (
           <NavLink
-            className="rounded-xl mb-1"
+            className="rounded-xl mb-1 min-w-56"
             key={index}
             label={SideNavProps.title}
             onClick={() => {
               navigate(SideNavProps.href);
               ToggleButton();
             }}
-            leftSection={<SideNavProps.icon size={22} />}
+            leftSection={<SideNavProps.icon size={19} />}
             active={isActive(SideNavProps.href)}
           />
         );

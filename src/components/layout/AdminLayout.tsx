@@ -8,6 +8,7 @@ import {
   NavLink,
   UnstyledButton,
   Indicator,
+  Button,
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
@@ -21,7 +22,6 @@ import {
   IconBuildingEstate,
   IconBriefcase,
   IconLogout,
-  IconLuggage,
   IconAlarmPlus,
   IconFileAlert,
   IconClockPin,
@@ -29,9 +29,10 @@ import {
   IconAlertCircle,
   IconBuildingBank,
   IconBell,
+  IconChevronDown,
 } from '@tabler/icons-react';
 import { Suspense, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
 
@@ -66,6 +67,7 @@ const MenuPengajuan = [
 // ================================================================================
 export const AdminLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
+  const navigate = useNavigate();
   const [title, setTitle] = useState('Beranda');
   const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -80,7 +82,7 @@ export const AdminLayout: React.FC = () => {
       <AppShell
         header={{ height: 60 }}
         navbar={{
-          width: 240,
+          width: 0,
           breakpoint: 'sm',
           collapsed: { mobile: !opened },
         }}
@@ -88,7 +90,7 @@ export const AdminLayout: React.FC = () => {
         withBorder={false}
       >
         <AppShell.Header className="shadow-md">
-          <Group h="100%" justify="space-between" gap={0} className="px-3">
+          <Group w="100%" h="100%" justify="space-between" gap={0} className="px-3">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <Group
               gap={5}
@@ -97,13 +99,98 @@ export const AdminLayout: React.FC = () => {
               className="h-full"
             >
               <img className="w-24" src="/images/logo-2-kpi.png" alt="KPI" />
-              {/* <div className='text-xs -mt-3 font-semibold'>Key Performance Indicator</div> */}
+            </Group>
+
+            {/* Navigation */}
+            <Group gap={2} justify="space-between" className="h-full">
+              {/* Menu Utama */}
+              <Menu openDelay={50} closeDelay={50}>
+                <Menu.Target>
+                  <Button
+                    variant="white"
+                    color="black"
+                    size="xs"
+                    onClick={() => {
+                      navigate('/beranda');
+                    }}
+                  >
+                    <span className="text-xs font-bold">Beranda</span>
+                  </Button>
+                </Menu.Target>
+              </Menu>
+
+              {/* Menu Data Master */}
+              <Menu closeOnItemClick={true} openDelay={50} closeDelay={50}>
+                <Menu.Target>
+                  <Button
+                    variant="white"
+                    color="black"
+                    size="xs"
+                    rightSection={<IconChevronDown size={15} />}
+                  >
+                    <span className="text-xs font-bold">Data Master</span>
+                  </Button>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item bg->
+                    <SideNav
+                      SideNavProps={MenuDataMaster}
+                      HeaderList={'Data Master'}
+                      ToggleButton={() => toggle()}
+                      TitleSetting={setTitle}
+                    />
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+
+              {/* Menu Absensi */}
+              <Menu openDelay={50} closeDelay={50}>
+                <Menu.Target>
+                  <Button
+                    variant="white"
+                    color="black"
+                    size="xs"
+                    rightSection={<IconChevronDown size={15} />}
+                  >
+                    <span className="text-xs font-bold">Absensi</span>
+                  </Button>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <SideNav
+                    SideNavProps={MenuAbsensi}
+                    HeaderList={'Absensi'}
+                    ToggleButton={() => toggle()}
+                    TitleSetting={setTitle}
+                  />
+                </Menu.Dropdown>
+              </Menu>
+
+              <Menu openDelay={50} closeDelay={50}>
+                {/* ... menu items */}
+                <Menu.Target>
+                  <Button
+                    variant="white"
+                    color="black"
+                    size="xs"
+                    rightSection={<IconChevronDown size={15} />}
+                  >
+                    <span className="text-xs font-bold">Pengajuan</span>
+                  </Button>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <SideNav
+                    SideNavProps={MenuPengajuan}
+                    HeaderList={'Pengajuan'}
+                    ToggleButton={() => toggle()}
+                    TitleSetting={setTitle}
+                  />
+                </Menu.Dropdown>
+              </Menu>
             </Group>
 
             {/* Profile and Name Information */}
             {!isMobile && (
-              <Group className="grow h-full" justify="space-between">
-                <h1 className="px-3 py-2 font-semibold text-center">{title}</h1>
+              <Group className="h-full" justify="space-between">
                 {NAME_COMPANY && <div className="text-sm font-semibold">{NAME_COMPANY}</div>}
                 <Group gap={5} className="h-full" justify="end">
                   <div className="border-r border-slate-400 pe-5">
@@ -153,57 +240,59 @@ export const AdminLayout: React.FC = () => {
             )}
           </Group>
         </AppShell.Header>
-        <AppShell.Navbar style={{ transition: 'all 0.3s ease' }}>
-          <section className="overflow-x-auto min-h-screen pt-1 bar-scroll-blue">
-            <div className="p-2 flex flex-col pb-20">
-              {creds?.role == 'superadmin' && <NavSuperadmin />}
-              <SideNav
-                SideNavProps={MenuMain}
-                HeaderList={null}
-                ToggleButton={() => toggle()}
-                TitleSetting={setTitle}
-              />
-              {creds?.role == 'superadmin' && (
+        {isMobile && (
+          <AppShell.Navbar style={{ transition: 'all 0.3s ease' }}>
+            <section className="overflow-x-auto min-h-screen pt-1 bar-scroll-blue">
+              <div className="p-2 flex flex-col pb-20">
+                {creds?.role == 'superadmin' && <NavSuperadmin />}
                 <SideNav
-                  SideNavProps={MenuDataMasterSuperadmin}
-                  HeaderList={'Data Master'}
+                  SideNavProps={MenuMain}
+                  HeaderList={null}
                   ToggleButton={() => toggle()}
                   TitleSetting={setTitle}
                 />
-              )}
-              {creds?.role == 'admin' || ID_COMPANY !== null ? (
-                <>
+                {creds?.role == 'superadmin' && (
                   <SideNav
-                    SideNavProps={MenuDataMaster}
+                    SideNavProps={MenuDataMasterSuperadmin}
                     HeaderList={'Data Master'}
                     ToggleButton={() => toggle()}
                     TitleSetting={setTitle}
                   />
-                  <SideNav
-                    SideNavProps={MenuAbsensi}
-                    HeaderList={'Absensi'}
-                    ToggleButton={() => toggle()}
-                    TitleSetting={setTitle}
+                )}
+                {creds?.role == 'admin' || ID_COMPANY !== null ? (
+                  <>
+                    <SideNav
+                      SideNavProps={MenuDataMaster}
+                      HeaderList={'Data Master'}
+                      ToggleButton={() => toggle()}
+                      TitleSetting={setTitle}
+                    />
+                    <SideNav
+                      SideNavProps={MenuAbsensi}
+                      HeaderList={'Absensi'}
+                      ToggleButton={() => toggle()}
+                      TitleSetting={setTitle}
+                    />
+                    <SideNav
+                      SideNavProps={MenuPengajuan}
+                      HeaderList={'Pengajuan'}
+                      ToggleButton={() => toggle()}
+                      TitleSetting={setTitle}
+                    />
+                  </>
+                ) : (
+                  <NavLink
+                    className="rounded-xl mt-5"
+                    label={<span className="text-red-500">Pilih Company</span>}
+                    leftSection={<IconAlertCircle className="text-red-500" size={22} />}
+                    active={false}
+                    disabled
                   />
-                  <SideNav
-                    SideNavProps={MenuPengajuan}
-                    HeaderList={'Pengajuan'}
-                    ToggleButton={() => toggle()}
-                    TitleSetting={setTitle}
-                  />
-                </>
-              ) : (
-                <NavLink
-                  className="rounded-xl mt-5"
-                  label={<span className="text-red-500">Pilih Company</span>}
-                  leftSection={<IconAlertCircle className="text-red-500" size={22} />}
-                  active={false}
-                  disabled
-                />
-              )}
-            </div>
-          </section>
-        </AppShell.Navbar>
+                )}
+              </div>
+            </section>
+          </AppShell.Navbar>
+        )}
         <AppShell.Main>
           <Outlet />
         </AppShell.Main>
