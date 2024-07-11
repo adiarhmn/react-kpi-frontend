@@ -132,14 +132,12 @@ export const AdminLayout: React.FC = () => {
                   </Button>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item bg->
-                    <SideNav
-                      SideNavProps={MenuDataMaster}
-                      HeaderList={'Data Master'}
-                      ToggleButton={() => toggle()}
-                      TitleSetting={setTitle}
-                    />
-                  </Menu.Item>
+                  <SideNav
+                    SideNavProps={MenuDataMaster}
+                    HeaderList={'Data Master'}
+                    ToggleButton={() => toggle()}
+                    TitleSetting={setTitle}
+                  />
                 </Menu.Dropdown>
               </Menu>
 
