@@ -21,6 +21,7 @@ export const HomeLayout: React.FC = () => {
   useEffect(() => {
     setCurrentPath(path);
   }, [path]);
+
   return (
     <div className="w-full min-h-screen pb-14 mx-auto bg-gradient-to-t from-[#f2f8fd] via-[#f6f9fc] to-[#f6f9fc] max-w-md relative overflow-y-auto overflow-x-hidden">
       <Suspense fallback={<LoadingScreen />}>
@@ -32,7 +33,7 @@ export const HomeLayout: React.FC = () => {
           <NavItem key={navigation.title} {...navigation} currentPath={currentPath} />
         ))}
         <div className="w-full">
-          <div className="min-w-20 w-20 bg-blue-600 rounded-full max-w-20 min-h-20 h-20 absolute bottom-1 shadow-lg">
+          <div className="min-w-[74px] w-[74px] bg-blue-600 rounded-full max-w-[74px] min-h-[74px] h-[74px] absolute bottom-1 shadow-2xl">
             <Link
               to={'/attendance'}
               className={'flex flex-col items-center justify-center w-full h-full text-white'}

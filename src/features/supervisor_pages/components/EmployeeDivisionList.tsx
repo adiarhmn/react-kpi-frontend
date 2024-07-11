@@ -61,7 +61,9 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
         employeeAttendance.map((emp, index) => (
           <button
             key={index}
-            onClick={() => navigate(`/employee-division/detail`, { state: { employee: emp } })}
+            onClick={() =>
+              navigate(`/employee-division/detail`, { state: { employee: emp?.employee } })
+            }
             className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative  px-2 text-slate-700 mt-1"
           >
             <div className="w-full grid grid-cols-12 -mb-2 pt-2 p-4">
