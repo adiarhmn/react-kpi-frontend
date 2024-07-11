@@ -316,28 +316,6 @@ export const Home: React.FC = () => {
                     ? schedule.attendance_place
                     : 'WFO'}
               </Badge>
-              {/* <Badge
-              size="sm"
-              className="uppercase"
-              style={{
-                marginTop: '7px',
-                marginLeft: '4px',
-                borderRadius: '2px',
-              }}
-              color={
-                schedule?.attendance_status == 'Belum hadir'
-                  ? 'red'
-                  : schedule?.attendance_status == 'cuti'
-                    ? 'grape'
-                    : schedule?.attendance_status == 'sakit'
-                      ? 'teal'
-                      : schedule?.attendance_status == 'izin'
-                        ? 'yellow'
-                        : 'blue'
-              }
-            >
-              {schedule?.attendance_status}
-            </Badge> */}
             </div>
           </div>
           <Divider size={'sm'} />
@@ -375,11 +353,15 @@ export const Home: React.FC = () => {
             <div className="grid grid-cols-2 text-xs divide-x divide-gray-300 p-2">
               <div className="flex gap-2">
                 <IconClockHour8 size={15} className="text-green-400" /> Check-in :{' '}
-                {formatterDate(attendance?.check_in ?? 0, 'HH:mm') ?? '--:--'}
+                {attendance?.check_in != undefined
+                  ? formatterDate(attendance?.check_in, 'HH:mm')
+                  : '--:--'}
               </div>
               <div className="ps-3 flex gap-2">
                 <IconClockHour8 size={15} className="text-rose-400" /> Check-out :{' '}
-                {attendance?.check_out ?? '--:--'}
+                {attendance?.check_out != undefined
+                  ? formatterDate(attendance?.check_out, 'HH:mm')
+                  : '--:--'}
               </div>
             </div>
           </div>
@@ -387,8 +369,9 @@ export const Home: React.FC = () => {
       )}
 
       {/* Menu List => Berisi daftar menu pada sistem */}
-      <section className="px-7 mt-5">
-        {creds?.role == 'supervisor' ? (
+
+      {creds?.role == 'supervisor' ? (
+        <section className="px-7 mt-5">
           <MenuList
             navigations={[
               {
@@ -429,7 +412,9 @@ export const Home: React.FC = () => {
               },
             ]}
           />
-        ) : (
+        </section>
+      ) : (
+        <section className="px-7 mt-5" style={{ marginBottom: '-110px' }}>
           <MenuList
             navigations={[
               {
@@ -458,8 +443,8 @@ export const Home: React.FC = () => {
               },
             ]}
           />
-        )}
-      </section>
+        </section>
+      )}
 
       {creds?.role == 'supervisor' && (
         <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2 -mt-4">
@@ -498,28 +483,6 @@ export const Home: React.FC = () => {
                     ? schedule.attendance_place
                     : 'WFO'}
               </Badge>
-              {/* <Badge
-              size="sm"
-              className="uppercase"
-              style={{
-                marginTop: '7px',
-                marginLeft: '4px',
-                borderRadius: '2px',
-              }}
-              color={
-                schedule?.attendance_status == 'Belum hadir'
-                  ? 'red'
-                  : schedule?.attendance_status == 'cuti'
-                    ? 'grape'
-                    : schedule?.attendance_status == 'sakit'
-                      ? 'teal'
-                      : schedule?.attendance_status == 'izin'
-                        ? 'yellow'
-                        : 'blue'
-              }
-            >
-              {schedule?.attendance_status}
-            </Badge> */}
             </div>
           </div>
           <Divider size={'sm'} />
@@ -557,11 +520,15 @@ export const Home: React.FC = () => {
             <div className="grid grid-cols-2 text-xs divide-x divide-gray-300 p-2">
               <div className="flex gap-2">
                 <IconClockHour8 size={15} className="text-green-400" /> Check-in :{' '}
-                {formatterDate(attendance?.check_in ?? 0, 'HH:mm') ?? '--:--'}
+                {attendance?.check_in != undefined
+                  ? formatterDate(attendance?.check_in, 'HH:mm')
+                  : '--:--'}
               </div>
               <div className="ps-3 flex gap-2">
                 <IconClockHour8 size={15} className="text-rose-400" /> Check-out :{' '}
-                {attendance?.check_out ?? '--:--'}
+                {attendance?.check_out != undefined
+                  ? formatterDate(attendance?.check_out, 'HH:mm')
+                  : '--:--'}
               </div>
             </div>
           </div>

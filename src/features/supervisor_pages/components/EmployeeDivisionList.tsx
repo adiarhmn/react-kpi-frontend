@@ -26,6 +26,8 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
     }
   }, [DataEmployeeDivision]);
 
+  console.log('Data Employee', employeeDivision);
+
   const [employeeAttendance, setEmployeeAttendance] = useState<
     { employee: EmployeeType; attendance: any }[]
   >([]);

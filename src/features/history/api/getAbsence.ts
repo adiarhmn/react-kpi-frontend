@@ -25,8 +25,8 @@ export const useGetAbsence = (id?: number | null) => {
 
 export async function getAbsenceByType(id?: number | null, type?: string, status?: string) {
   const res = await axios.get(`${BaseURL}/request?employee=${id}&types=${type}&status=${status}`);
-  console.log('URL : ', `${BaseURL}/request?employee=${id}&type=${type}&status${status}`);
-  console.log('Data Request : ', res.data.data);
+  // console.log('URL : ', `${BaseURL}/request?employee=${id}&type=${type}&status${status}`);
+  // console.log('Data Request : ', res.data.data);
   return res.data.data;
 }
 
