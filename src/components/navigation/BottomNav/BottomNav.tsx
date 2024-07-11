@@ -6,6 +6,7 @@ export type Navigation = {
   title: string;
   href: string;
   icon: Icon;
+  currentPath: string;
 };
 
 interface Props {
