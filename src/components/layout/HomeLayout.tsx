@@ -31,15 +31,19 @@ export const HomeLayout: React.FC = () => {
         {navigationsleft.map((navigation) => (
           <NavItem key={navigation.title} {...navigation} currentPath={currentPath} />
         ))}
-        <div className="w-full">
-          <div className="min-w-20 w-20 bg-blue-600 rounded-full max-w-20 min-h-20 h-20 absolute bottom-1 shadow-lg">
+        <div className="w-full flex justify-center">
+          <div className="absolute bottom-1">
             <Link
               to={'/attendance'}
-              className={'flex flex-col items-center justify-center w-full h-full text-white'}
+              className={
+                'flex flex-col items-center justify-center text-white w-16 max-w-16 bg-blue-600 rounded-full min-h-16 h-16 shadow-lg'
+              }
             >
-              <IconHandStop className="mb-1" size={33} />
-              <div className="text-xs font-medium mb-1">Check-In</div>
+              <IconHandStop className="mb-1" size={37} />
             </Link>
+            <div className="text-xs font-medium mb-1 mt-1 text-dark-100 w-full text-center">
+              Check-In
+            </div>
           </div>
         </div>
         {navigationsright.map((navigation) => (
