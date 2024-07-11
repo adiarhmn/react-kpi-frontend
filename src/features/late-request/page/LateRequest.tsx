@@ -1,6 +1,13 @@
-import { Button, Drawer, Fieldset, Select } from '@mantine/core';
+import { Button, Drawer, Fieldset, Select, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconAdjustmentsHorizontal, IconChevronLeft, IconPlus } from '@tabler/icons-react';
+import {
+  IconAdjustmentsHorizontal,
+  IconChevronLeft,
+  IconFileTime,
+  IconHandStop,
+  IconLuggage,
+  IconPlus,
+} from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -53,9 +60,9 @@ export const LateRequest: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
-            <h2 className="font-semibold ">Pengajuan absen</h2>
+            <h2 className="font-semibold ">Pengajuan</h2>
           </div>
-          <span className="font-semibold">
+          {/* <span className="font-semibold">
             <Button
               className="shadow-sm me-1"
               size="xs"
@@ -68,11 +75,67 @@ export const LateRequest: React.FC = () => {
             <Button className="shadow-sm" size="xs" onClick={open}>
               <IconAdjustmentsHorizontal className=" -ms-1" />
             </Button>
-          </span>
+          </span> */}
         </div>
       </section>
+      <div className="text-center mt-4">
+        <button
+          onClick={() => navigate('/late-request/add')}
+          className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative px-2 text-slate-700"
+        >
+          <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1">
+            <div className="col-span-2 text-center m-auto p-2">
+              <IconHandStop size={32} />
+            </div>
+            <div className="col-span-10 my-auto">
+              <div className="text-right"></div>
+              <div className="col-span-12 text-left ms-1">
+                <Text c={'blue'} style={{ marginLeft: '6px' }} size="16px" fw={700}>
+                  Pengajuan absen
+                </Text>
+              </div>
+            </div>
+          </div>
+        </button>
+        <button
+          onClick={() => navigate('/paid-leave/add')}
+          className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative px-2 text-slate-700 mt-2"
+        >
+          <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1">
+            <div className="col-span-2 text-center m-auto p-2">
+              <IconLuggage  size={32} />
+            </div>
+            <div className="col-span-10 my-auto">
+              <div className="text-right"></div>
+              <div className="col-span-12 text-left ms-1">
+                <Text c={'blue'} style={{ marginLeft: '6px' }} size="16px" fw={700}>
+                  Pengajuan cuti
+                </Text>
+              </div>
+            </div>
+          </div>
+        </button>
+        <button
+          onClick={() => navigate('/absence/add')}
+          className="bg-white mx-auto max-w-xs w-full mt-1 shadow-lg rounded-xl z-50 relative px-2 text-slate-700 mt-2"
+        >
+          <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1">
+            <div className="col-span-2 text-center m-auto p-2">
+              <IconFileTime size={32} />
+            </div>
+            <div className="col-span-10 my-auto">
+              <div className="text-right"></div>
+              <div className="col-span-12 text-left ms-1">
+                <Text c={'blue'} style={{ marginLeft: '6px' }} size="16px" fw={700}>
+                  Pengajuan sakit / izin
+                </Text>
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
 
-      <LateRequestList status={selectStatus} filterState={opened} />
+      {/* <LateRequestList status={selectStatus} filterState={opened} /> */}
 
       <Drawer
         position="right"

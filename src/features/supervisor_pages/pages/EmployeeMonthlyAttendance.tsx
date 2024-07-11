@@ -58,7 +58,10 @@ export const EmployeeMonthlyAttendance: React.FC = () => {
               className="font-bold rounded-md"
             />
             <h2 className="font-semibold">
-              Rekap <span className="font-semibold lowercase">{selectStatus}</span>
+              Rekap{' '}
+              <span className="font-semibold lowercase">
+                {selectStatus} divisi
+              </span>
             </h2>
           </div>
           <span className="font-semibold"></span>

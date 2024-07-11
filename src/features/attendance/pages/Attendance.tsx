@@ -99,14 +99,14 @@ export const Attendance: React.FC = () => {
   useEffect(() => {
     if (location.loaded && !location.error) {
       const officeIcon = new Icon({
-        iconUrl: '/images/office-icon.svg',
+        iconUrl: '/images/office-icon.png',
         iconSize: [50, 50],
       });
 
       const officeCircle = {
-        color: 'white',
+        color: '',
         fillColor: 'red',
-        fillOpacity: 0.2,
+        fillOpacity: 0,
       };
 
       const markers = employeeLocation.map((emp_loc) => ({
