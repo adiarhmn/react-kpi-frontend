@@ -5,6 +5,7 @@ import { AttendanceType, getAttendance, useGetAttendance } from '@/features/atte
 import { useGetEmployeeByDivision } from '@/features/employee/api/Profile';
 import { formatterDate } from '@/features/history';
 import { Badge, Divider, Text } from '@mantine/core';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,6 +15,7 @@ type EmployeeDivisionProps = {
 export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
   division_id,
 }: EmployeeDivisionProps) => {
+  const BaseURL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [employeeDivision, setEmployeeDivision] = useState<EmployeeType[]>([]);
   const { data: DataEmployeeDivision } = useGetEmployeeByDivision(division_id);
@@ -25,18 +27,22 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
   }, [DataEmployeeDivision]);
 
   const [employeeAttendance, setEmployeeAttendance] = useState<
-    { employee: any; attendance: any }[]
+    { employee: EmployeeType; attendance: any }[]
   >([]);
 
   useEffect(() => {
     const fetchAttendance = async () => {
       const allAttendance = await Promise.all(
         employeeDivision.map(async (employee) => {
-          const attendanceData = await useGetAttendance(
-            employee.id,
-            formatterDate(new Date(), 'yyyy-MM-dd')
-          );
-          return { employee, attendance: attendanceData };
+          try {
+            const response = await axios.get(
+              `${BaseURL}/attendance?employee=${employee.id}&date=${formatterDate(new Date(), 'yyyy-MM-dd')}`
+            );
+            return { employee, attendance: response.data.data[0] };
+          } catch (error) {
+            console.error(`Error fetching attendance for employee ${employee.id}:`, error);
+            return { employee, attendance: [] };
+          }
         })
       );
       setEmployeeAttendance(allAttendance);
@@ -47,12 +53,12 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
     }
   }, [employeeDivision]);
 
-  console.log("Data employeeAttendance", employeeAttendance);
+  console.log('Data employeeAttendance', employeeAttendance);
 
   return (
     <div className="text-center">
-      {employeeDivision.length > 0 ? (
-        employeeDivision.map((emp, index) => (
+      {employeeAttendance.length > 0 ? (
+        employeeAttendance.map((emp, index) => (
           <button
             key={index}
             onClick={() => navigate(`/employee-division/detail`, { state: { employee: emp } })}
@@ -71,21 +77,24 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
                       marginLeft: '4px',
                       borderRadius: '2px',
                     }}
-                    color={emp?.user.role == 'supervisor' ? 'red' : 'blue'}
+                    color={emp?.employee.user.role == 'supervisor' ? 'red' : 'blue'}
                   >
-                    {emp?.user.role}
+                    {emp?.employee.user.role}
                   </Badge>
                 </div>
                 <div className="my-auto text-left ms-2">
                   <Text lineClamp={1} size={'sm'} fw={700}>
-                    {emp?.name}
+                    {emp?.employee.name}
                   </Text>
                 </div>
-                {/* <Divider className="w-full mt-2" />
+                <Divider className="w-full mt-2" />
                 <div className="grid grid-cols-12 text-left">
                   <div className="col-span-6">
                     <Text size={'xs'} fw={500}>
-                      Masuk : --:--
+                      Masuk :{' '}
+                      {emp?.attendance != undefined
+                        ? formatterDate(new Date(emp?.attendance.check_in), 'HH:mm')
+                        : '--:--'}
                     </Text>
                   </div>
                   <div className="col-span-6">
@@ -93,7 +102,7 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
                       Keluar : --:--
                     </Text>
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
           </button>
