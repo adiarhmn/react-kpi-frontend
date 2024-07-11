@@ -1,8 +1,9 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
 import { EmployeeType } from '@/admin_features/types';
-import { AttendanceType, useGetAttendance } from '@/features/attendance';
+import { AttendanceType, getAttendance, useGetAttendance } from '@/features/attendance';
 import { useGetEmployeeByDivision } from '@/features/employee/api/Profile';
+import { formatterDate } from '@/features/history';
 import { Badge, Divider, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,15 +17,38 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
   const navigate = useNavigate();
   const [employeeDivision, setEmployeeDivision] = useState<EmployeeType[]>([]);
   const { data: DataEmployeeDivision } = useGetEmployeeByDivision(division_id);
+
   useEffect(() => {
     if (DataEmployeeDivision) {
       setEmployeeDivision(DataEmployeeDivision);
     }
   }, [DataEmployeeDivision]);
 
-  const [attendance, setAttendance] = useState<AttendanceType[]>([]);
-  const { data: DataAttendance } = useGetAttendance(employeeDivision.id_employee, new Date());
-  
+  const [employeeAttendance, setEmployeeAttendance] = useState<
+    { employee: any; attendance: any }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchAttendance = async () => {
+      const allAttendance = await Promise.all(
+        employeeDivision.map(async (employee) => {
+          const attendanceData = await useGetAttendance(
+            employee.id,
+            formatterDate(new Date(), 'yyyy-MM-dd')
+          );
+          return { employee, attendance: attendanceData };
+        })
+      );
+      setEmployeeAttendance(allAttendance);
+    };
+
+    if (employeeDivision.length > 0) {
+      fetchAttendance();
+    }
+  }, [employeeDivision]);
+
+  console.log("Data employeeAttendance", employeeAttendance);
+
   return (
     <div className="text-center">
       {employeeDivision.length > 0 ? (
