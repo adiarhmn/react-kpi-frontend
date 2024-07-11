@@ -1,13 +1,14 @@
-import { Button, FileButton, FileInput, Group, Modal, TextInput } from '@mantine/core';
+import { Button, FileButton, FileInput, Group, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { FileList } from '../components';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCreateFiles } from '../api';
 import { useAuth } from '@/features/auth';
+import Swal from 'sweetalert2';
 
 export const FileProfile: React.FC = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export const FileProfile: React.FC = () => {
   const mutationCreateFiles = useCreateFiles();
   const handleSubmitFile = async (values: typeof form.values) => {
     const FilesData = {
-      file_name: values.namaBerkas,
+      filename: values.namaBerkas,
       file: values.image,
       employee_id: values.employee_id,
     };
@@ -39,10 +40,16 @@ export const FileProfile: React.FC = () => {
     await mutationCreateFiles.mutateAsync(FilesData, {
       onSuccess: (data) => {
         console.log('Success:', data);
-        localStorage.setItem('hasNotifiedBiodata', 'no');
-        navigate('/profile/file', {
-          state: { success: 'Biodata berhasil diubah!' },
+        localStorage.setItem('hasNotifiedFiles', 'no');
+        close();
+        Swal.fire({
+          width: '80%',
+          title: 'Data berhasil ditambahkan',
+          timer: 3000,
+          icon: 'success',
+          confirmButtonText: 'Ok',
         });
+        form.reset();
       },
     });
   };
@@ -53,6 +60,7 @@ export const FileProfile: React.FC = () => {
     form.setFieldValue('image', null);
     resetRef.current?.();
   };
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -87,15 +95,19 @@ export const FileProfile: React.FC = () => {
         transitionProps={{ transition: 'fade', duration: 200 }}
       >
         <form onSubmit={form.onSubmit(handleSubmitFile)}>
-          <div className="">
+          <div>
             <TextInput
               label="Nama berkas"
               name="namaBerkas"
+              required
               withAsterisk
               {...form.getInputProps('namaBerkas')}
             />
           </div>
           <div className="mt-2">
+            <Text size="sm" fw={500}>
+              Lampiran
+            </Text>
             <div className="flex items-center justify-center mb-2">
               <div className="h-36 w-80 bg-slate-500 text-white">
                 {form.values.image ? (
@@ -105,7 +117,7 @@ export const FileProfile: React.FC = () => {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <span>No Image</span>
+                  <span className="text-xs ms-2">format png/jpeg</span>
                 )}
               </div>
             </div>
@@ -118,8 +130,8 @@ export const FileProfile: React.FC = () => {
                 >
                   {(props) => <Button {...props}>Pilih foto</Button>}
                 </FileButton>
-                <Button className="" disabled={!form.values.image} color="red" onClick={clearFile}>
-                  Reset
+                <Button  disabled={!form.values.image} color="red" onClick={clearFile}>
+                  Hapus foto
                 </Button>
               </Group>
             </div>

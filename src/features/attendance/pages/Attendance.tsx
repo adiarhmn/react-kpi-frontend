@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
 import { Button, Text, Loader, Modal, Input, Divider } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useViewportSize } from '@mantine/hooks';
 import { IconMailForward, IconMap2, IconPlus } from '@tabler/icons-react';
 import { Icon } from 'leaflet';
 import { useEffect, useState } from 'react';
@@ -161,7 +161,6 @@ export const Attendance: React.FC = () => {
     }
   }, [location, employeeLocation]);
 
-  console.log(attendanceLocationId);
 
   const myIcon: any = new Icon({
     iconUrl: '/images/my-icon.svg',
@@ -254,6 +253,10 @@ export const Attendance: React.FC = () => {
   // [End add kegiatan]
   // [END ACTIVITY]
 
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   if (loadingActivityAlias) {
     return (
       <div className="w-full col-span-12">
@@ -329,6 +332,7 @@ export const Attendance: React.FC = () => {
             <span className="text-slate-400 text-sm">
               Setting &gt; app &gt; HR APP &gt; Perizinan Lokasi
             </span>
+            <Button className='mt-2' size='xs' onClick={handleRefresh}>Refresh</Button>
           </section>
         </div>
       ) : (

@@ -32,6 +32,7 @@ export type AttendanceType = {
   employee_id: number;
   employee: EmployeeType;
   schedule_id: number;
+  schedule: ScheduleType;
 };
 
 export type ActivityAliasType = {

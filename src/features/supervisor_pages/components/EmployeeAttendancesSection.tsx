@@ -55,7 +55,11 @@ export const EmployeeAttendancesSection: React.FC<AttendanceSectionProps> = ({
             dataAttendances.map((att, index) => (
               <button
                 key={index}
-                onClick={() => navigate(`/employee-division/detail`, { state: { employee: att } })}
+                onClick={() =>
+                  navigate(`/employee-division/monthly-attendance/detail`, {
+                    state: { attendance: att },
+                  })
+                }
                 className="bg-white mx-auto max-w-xs w-full mt-1 mb-2 shadow-sm rounded-xl z-50 relative  px-2 text-slate-700 mt-1"
               >
                 <div className="w-full grid grid-cols-12 -mb-2 pt-2 p-4">
@@ -91,14 +95,16 @@ export const EmployeeAttendancesSection: React.FC<AttendanceSectionProps> = ({
               </button>
             ))
           ) : (
-            <section className="min-h-96 flex flex-col items-center justify-center -mt-10">
+            <section className="min-h-96 flex flex-col items-center justify-center -mt-10 -mb-10">
               <img
-                className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+                className="w-28 mb-2 bg-slate-200 rounded-full p-2"
                 src="/images/blank-canvas.svg"
                 alt=""
               />
-              <span className="font-bold text-slate-400 text-xl">Ops! Kehadiran kosong</span>
-              <span className="font-normal text-slate-400 text-xs">Apakah hari libur?</span>
+              <span className="font-bold text-slate-400 text-sm">Ops! Kehadiran kosong</span>
+              <span className="font-normal text-slate-400 text-xs">
+                Tidak ada yang absen hari ini
+              </span>
             </section>
           )}
         </div>

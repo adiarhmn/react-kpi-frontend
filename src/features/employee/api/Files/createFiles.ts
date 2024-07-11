@@ -4,7 +4,7 @@ import axios from 'axios';
 const BaseURL = import.meta.env.VITE_API_URL;
 
 type FilesDataPost = {
-  file_name: string;
+  filename: string;
   file: File | null;
   employee_id: number | undefined;
 };
@@ -13,7 +13,7 @@ export const postCreateFiles = async (filesDataPost: FilesDataPost) => {
   console.log('Data yang dikirim : ', filesDataPost);
 
   const formData = new FormData();
-  formData.append('file_name', filesDataPost.file_name);
+  formData.append('filename', filesDataPost.filename);
   if (filesDataPost.employee_id !== undefined) {
     formData.append('employee_id', filesDataPost.employee_id.toString());
   }

@@ -51,7 +51,7 @@ export const DetailEmployeeDivision: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
-            <h2 className="font-semibold ">Data {employee.name}</h2>
+            <h2 className="font-semibold ">Data karyawan</h2>
           </div>
           <span className="font-semibold"></span>
         </div>

@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
 import { EmployeeType } from '@/admin_features/types';
+import { AttendanceType, useGetAttendance } from '@/features/attendance';
 import { useGetEmployeeByDivision } from '@/features/employee/api/Profile';
 import { Badge, Divider, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
@@ -20,6 +21,10 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
       setEmployeeDivision(DataEmployeeDivision);
     }
   }, [DataEmployeeDivision]);
+
+  const [attendance, setAttendance] = useState<AttendanceType[]>([]);
+  const { data: DataAttendance } = useGetAttendance(employeeDivision.id_employee, new Date());
+  
   return (
     <div className="text-center">
       {employeeDivision.length > 0 ? (
@@ -52,7 +57,7 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
                     {emp?.name}
                   </Text>
                 </div>
-                <Divider className="w-full mt-2" />
+                {/* <Divider className="w-full mt-2" />
                 <div className="grid grid-cols-12 text-left">
                   <div className="col-span-6">
                     <Text size={'xs'} fw={500}>
@@ -64,7 +69,7 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
                       Keluar : --:--
                     </Text>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </button>
