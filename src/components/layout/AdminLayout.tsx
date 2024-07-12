@@ -5,7 +5,6 @@ import {
   Burger,
   Group,
   Menu,
-  NavLink,
   UnstyledButton,
   Indicator,
   Button,
@@ -13,7 +12,6 @@ import {
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
   IconCalendar,
-  IconHome2,
   IconSettings,
   IconClockHour1,
   IconUsersGroup,
@@ -26,40 +24,65 @@ import {
   IconFileAlert,
   IconClockPin,
   IconMap2,
-  IconAlertCircle,
-  IconBuildingBank,
   IconBell,
-  IconChevronDown,
 } from '@tabler/icons-react';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
 
 import { LoadingScreen } from '../elements';
-import { NavSuperadmin, SideNav } from '../navigation';
+import { SegmentControl } from '../navigation';
 
-const MenuMain = [{ title: 'Beranda', href: '/beranda', icon: IconHome2 }];
-const MenuDataMasterSuperadmin = [{ title: 'Company', href: '/company', icon: IconBuildingBank }];
+type SubMenuListType = {
+  maintitle: string;
+  title: string;
+  href: string;
+  icon: JSX.Element;
+};
+
+const MenuBeranda = [
+  { maintitle: 'none', title: 'Beranda', href: '/beranda', icon: <IconCalendar size={15} /> },
+];
 
 const MenuDataMaster = [
-  { title: 'Divisi', href: '/division', icon: IconBuildingEstate },
-  { title: 'Shift', href: '/shift', icon: IconClockHour1 },
-  { title: 'User', href: '/users', icon: IconUsersGroup },
-  { title: 'Lokasi', href: '/locations', icon: IconMap2 },
-  { title: 'Karyawan', href: '/employees', icon: IconBriefcase },
+  {
+    maintitle: 'Data Master',
+    title: 'Divisi',
+    href: '/division',
+    icon: <IconBuildingEstate size={15} />,
+  },
+  { maintitle: 'Data Master', title: 'Shift', href: '/shift', icon: <IconClockHour1 size={15} /> },
+  { maintitle: 'Data Master', title: 'User', href: '/users', icon: <IconUsersGroup size={15} /> },
+  { maintitle: 'Data Master', title: 'Lokasi', href: '/locations', icon: <IconMap2 size={15} /> },
+  {
+    maintitle: 'Data Master',
+    title: 'Karyawan',
+    href: '/employees',
+    icon: <IconBriefcase size={15} />,
+  },
 ];
 
 const MenuAbsensi = [
-  { title: 'Jadwal', href: '/schedule', icon: IconCalendar },
-  { title: 'Presensi', href: '/attendance', icon: IconClipboardText },
-  { title: 'Aktivitas', href: '/activity', icon: IconGauge },
+  { maintitle: 'Absensi', title: 'Jadwal', href: '/schedule', icon: <IconCalendar size={15} /> },
+  {
+    maintitle: 'Absensi',
+    title: 'Presensi',
+    href: '/attendance',
+    icon: <IconClipboardText size={15} />,
+  },
+  { maintitle: 'Absensi', title: 'Aktivitas', href: '/activity', icon: <IconGauge size={15} /> },
 ];
 
 const MenuPengajuan = [
-  { title: 'Absensi', href: '/request-attendance', icon: IconClockPin },
-  { title: 'Izin', href: '/permission', icon: IconFileAlert },
-  { title: 'Lembur', href: '/overtime', icon: IconAlarmPlus },
+  {
+    maintitle: 'Pengajuan',
+    title: 'Absensi',
+    href: '/request-attendance',
+    icon: <IconClockPin size={15} />,
+  },
+  { maintitle: 'Pengajuan', title: 'Izin', href: '/permission', icon: <IconFileAlert size={15} /> },
+  { maintitle: 'Pengajuan', title: 'Lembur', href: '/overtime', icon: <IconAlarmPlus size={15} /> },
 ];
 
 // ================================================================================
@@ -68,14 +91,43 @@ const MenuPengajuan = [
 export const AdminLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
   const navigate = useNavigate();
-  const [title, setTitle] = useState('Beranda');
+  const [title, setTitle] = useState<string>('Beranda');
+  const [subtitle, setSubtitle] = useState<string | null>(null);
+  const [submenu, setSubmenu] = useState<SubMenuListType[]>(MenuBeranda);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const { creds, logout } = useAuth();
-  const ID_COMPANY = localStorage.getItem('id_company');
+  // const ID_COMPANY = localStorage.getItem('id_company');
   const NAME_COMPANY = localStorage.getItem('name_company');
 
+  useEffect(() => {
+    if (title === 'Beranda') {
+      setSubmenu(MenuBeranda);
+      navigate('/beranda');
+    }
+    if (title === 'Data Master') {
+      if (submenu[0].maintitle !== 'Data Master') {
+        navigate('/division');
+      }
+      setSubmenu(MenuDataMaster);
+    }
+    if (title === 'Absensi') {
+      if (submenu[0].maintitle !== 'Absensi') {
+        navigate('/schedule');
+      }
+      setSubmenu(MenuAbsensi);
+    }
+    if (title === 'Pengajuan') {
+      if (submenu[0].maintitle !== 'Pengajuan') {
+        navigate('/request-attendance');
+      }
+      setSubmenu(MenuPengajuan);
+    }
+  }, [title, creds, navigate, submenu]);
+
   if (!creds) return <Navigate to="/login" replace />;
+
+  console.log('Titile', title);
 
   return (
     <Suspense fallback={<LoadingScreen />}>
@@ -102,89 +154,7 @@ export const AdminLayout: React.FC = () => {
             </Group>
 
             {/* Navigation */}
-            <Group gap={2} justify="space-between" className="h-full">
-              {/* Menu Utama */}
-              <Menu openDelay={50} closeDelay={50}>
-                <Menu.Target>
-                  <Button
-                    variant="white"
-                    color="black"
-                    size="xs"
-                    onClick={() => {
-                      navigate('/beranda');
-                    }}
-                  >
-                    <span className="text-xs font-bold">Beranda</span>
-                  </Button>
-                </Menu.Target>
-              </Menu>
-
-              {/* Menu Data Master */}
-              <Menu closeOnItemClick={true} openDelay={50} closeDelay={50}>
-                <Menu.Target>
-                  <Button
-                    variant="white"
-                    color="black"
-                    size="xs"
-                    rightSection={<IconChevronDown size={15} />}
-                  >
-                    <span className="text-xs font-bold">Data Master</span>
-                  </Button>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <SideNav
-                    SideNavProps={MenuDataMaster}
-                    HeaderList={'Data Master'}
-                    ToggleButton={() => toggle()}
-                    TitleSetting={setTitle}
-                  />
-                </Menu.Dropdown>
-              </Menu>
-
-              {/* Menu Absensi */}
-              <Menu openDelay={50} closeDelay={50}>
-                <Menu.Target>
-                  <Button
-                    variant="white"
-                    color="black"
-                    size="xs"
-                    rightSection={<IconChevronDown size={15} />}
-                  >
-                    <span className="text-xs font-bold">Absensi</span>
-                  </Button>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <SideNav
-                    SideNavProps={MenuAbsensi}
-                    HeaderList={'Absensi'}
-                    ToggleButton={() => toggle()}
-                    TitleSetting={setTitle}
-                  />
-                </Menu.Dropdown>
-              </Menu>
-
-              <Menu openDelay={50} closeDelay={50}>
-                {/* ... menu items */}
-                <Menu.Target>
-                  <Button
-                    variant="white"
-                    color="black"
-                    size="xs"
-                    rightSection={<IconChevronDown size={15} />}
-                  >
-                    <span className="text-xs font-bold">Pengajuan</span>
-                  </Button>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <SideNav
-                    SideNavProps={MenuPengajuan}
-                    HeaderList={'Pengajuan'}
-                    ToggleButton={() => toggle()}
-                    TitleSetting={setTitle}
-                  />
-                </Menu.Dropdown>
-              </Menu>
-            </Group>
+            <SegmentControl title={title} setTitle={setTitle} />
 
             {/* Profile and Name Information */}
             {!isMobile && (
@@ -238,60 +208,26 @@ export const AdminLayout: React.FC = () => {
             )}
           </Group>
         </AppShell.Header>
-        {isMobile && (
-          <AppShell.Navbar style={{ transition: 'all 0.3s ease' }}>
-            <section className="overflow-x-auto min-h-screen pt-1 bar-scroll-blue">
-              <div className="p-2 flex flex-col pb-20">
-                {creds?.role == 'superadmin' && <NavSuperadmin />}
-                <SideNav
-                  SideNavProps={MenuMain}
-                  HeaderList={null}
-                  ToggleButton={() => toggle()}
-                  TitleSetting={setTitle}
-                />
-                {creds?.role == 'superadmin' && (
-                  <SideNav
-                    SideNavProps={MenuDataMasterSuperadmin}
-                    HeaderList={'Data Master'}
-                    ToggleButton={() => toggle()}
-                    TitleSetting={setTitle}
-                  />
-                )}
-                {creds?.role == 'admin' || ID_COMPANY !== null ? (
-                  <>
-                    <SideNav
-                      SideNavProps={MenuDataMaster}
-                      HeaderList={'Data Master'}
-                      ToggleButton={() => toggle()}
-                      TitleSetting={setTitle}
-                    />
-                    <SideNav
-                      SideNavProps={MenuAbsensi}
-                      HeaderList={'Absensi'}
-                      ToggleButton={() => toggle()}
-                      TitleSetting={setTitle}
-                    />
-                    <SideNav
-                      SideNavProps={MenuPengajuan}
-                      HeaderList={'Pengajuan'}
-                      ToggleButton={() => toggle()}
-                      TitleSetting={setTitle}
-                    />
-                  </>
-                ) : (
-                  <NavLink
-                    className="rounded-xl mt-5"
-                    label={<span className="text-red-500">Pilih Company</span>}
-                    leftSection={<IconAlertCircle className="text-red-500" size={22} />}
-                    active={false}
-                    disabled
-                  />
-                )}
-              </div>
-            </section>
-          </AppShell.Navbar>
-        )}
         <AppShell.Main>
+          {/* SUB MENU LIST */}
+          {submenu[0].maintitle != 'none' && (
+            <section id="submenulist" className="rounded-md mb-4 flex justify-center gap-5">
+              {submenu?.map((item, index) => (
+                <Button
+                  key={index}
+                  onClick={() => {
+                    navigate(item.href);
+                  }}
+                  variant="outline"
+                  color="blue"
+                  radius="xl"
+                  leftSection={item.icon}
+                >
+                  {item.title}
+                </Button>
+              ))}
+            </section>
+          )}
           <Outlet />
         </AppShell.Main>
       </AppShell>
