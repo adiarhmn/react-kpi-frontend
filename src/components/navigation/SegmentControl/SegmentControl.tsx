@@ -1,79 +1,49 @@
-import { Center, Group, SegmentedControl } from '@mantine/core';
+import { UnstyledButton } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 interface SegmentControlProps {
   title: string;
-  setTitle: (value: string) => void;
 }
 
-export const SegmentControl: React.FC<SegmentControlProps> = ({ title, setTitle }) => {
-  const MenuList = [
+export const SegmentControl: React.FC<SegmentControlProps> = ({ title }) => {
+  const navigate = useNavigate();
+
+  const MenuListSimple = [
     {
-      value: 'Beranda',
-      label: (
-        <>
-          <Center style={{ gap: 10, width: 100 }}>
-            <span className={` font-semibold`}>Beranda</span>
-          </Center>
-        </>
-      ),
+      title: 'Beranda',
+      href: '/beranda',
     },
     {
-      value: 'Data Master',
-      label: (
-        <>
-          <Center style={{ gap: 10, width: 100 }}>
-            <span className={` font-semibold`}>Data Master</span>
-          </Center>
-        </>
-      ),
+      title: 'Data Master',
+      href: '/division',
     },
     {
-      value: 'Absensi',
-      label: (
-        <>
-          <Center style={{ gap: 10, width: 100 }}>
-            <span className={`font-semibold`}>Absensi</span>
-          </Center>
-        </>
-      ),
+      title: 'Absensi',
+      href: '/attendance',
     },
     {
-      value: 'Pengajuan',
-      label: (
-        <>
-          <Center style={{ gap: 10, width: 100 }}>
-            <span className={`font-semibold`}>Pengajuan</span>
-          </Center>
-        </>
-      ),
+      title: 'Pengajuan',
+      href: '/permission',
     },
     {
-      value: 'Laporan',
-      label: (
-        <>
-          <Center style={{ gap: 10, width: 100 }}>
-            <span className={` font-semibold`}>Laporan</span>
-          </Center>
-        </>
-      ),
+      title: 'Laporan',
+      href: '/report',
     },
   ];
 
   return (
-    <Group gap={5} className="h-full">
-      <SegmentedControl
-        withItemsBorders={false}
-        classNames={{ input: 'text-white' }}
-        style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-        data={MenuList}
-        value={title}
-        onChange={(value) => {
-          setTitle(value);
-        }}
-        color="blue"
-        size="sm"
-        fullWidth
-      />
-    </Group>
+    <section className="flex gap-7">
+      {MenuListSimple.map((item, index) => (
+        <UnstyledButton key={index} onClick={() => navigate(item.href)}>
+          <span
+            className={`${
+              title === item.title ? 'text-blue-500' : 'text-slate-400'
+            } font-semibold cursor-pointer text-sm`}
+          >
+            {item.title}
+          </span>
+        </UnstyledButton>
+      ))}
+    </section>
   );
 };

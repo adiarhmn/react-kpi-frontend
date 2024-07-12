@@ -27,12 +27,13 @@ import {
   IconBell,
 } from '@tabler/icons-react';
 import { Suspense, useEffect, useState } from 'react';
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
 
 import { LoadingScreen } from '../elements';
 import { SegmentControl } from '../navigation';
+import { useTitleContext } from '../providers/TitleProvider';
 
 type SubMenuListType = {
   maintitle: string;
@@ -48,25 +49,40 @@ const MenuBeranda = [
 const MenuDataMaster = [
   {
     maintitle: 'Data Master',
-    title: 'Divisi',
+    title: 'Data Divisi',
     href: '/division',
     icon: <IconBuildingEstate size={15} />,
   },
-  { maintitle: 'Data Master', title: 'Shift', href: '/shift', icon: <IconClockHour1 size={15} /> },
-  { maintitle: 'Data Master', title: 'User', href: '/users', icon: <IconUsersGroup size={15} /> },
-  { maintitle: 'Data Master', title: 'Lokasi', href: '/locations', icon: <IconMap2 size={15} /> },
   {
     maintitle: 'Data Master',
-    title: 'Karyawan',
+    title: 'Data Shift',
+    href: '/shift',
+    icon: <IconClockHour1 size={15} />,
+  },
+  {
+    maintitle: 'Data Master',
+    title: 'Data Lokasi',
+    href: '/locations',
+    icon: <IconMap2 size={15} />,
+  },
+  {
+    maintitle: 'Data Master',
+    title: 'Data Karyawan',
     href: '/employees',
     icon: <IconBriefcase size={15} />,
+  },
+  {
+    maintitle: 'Data Master',
+    title: 'Data User',
+    href: '/users',
+    icon: <IconUsersGroup size={15} />,
   },
 ];
 
 const MenuAbsensi = [
   { maintitle: 'Absensi', title: 'Jadwal', href: '/schedule', icon: <IconCalendar size={15} /> },
   {
-    maintitle: 'Absensi',
+    maintitle: 'Data Absensi',
     title: 'Presensi',
     href: '/attendance',
     icon: <IconClipboardText size={15} />,
@@ -89,10 +105,10 @@ const MenuPengajuan = [
 // ================== THIS LAYOUT FOR SUPERADMIN & ADMIN ==========================
 // ================================================================================
 export const AdminLayout: React.FC = () => {
+  const location = useLocation();
   const [opened, { toggle }] = useDisclosure();
+  const { title, setTitle } = useTitleContext();
   const navigate = useNavigate();
-  const [title, setTitle] = useState<string>('Beranda');
-  const [subtitle, setSubtitle] = useState<string | null>(null);
   const [submenu, setSubmenu] = useState<SubMenuListType[]>(MenuBeranda);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -101,33 +117,26 @@ export const AdminLayout: React.FC = () => {
   const NAME_COMPANY = localStorage.getItem('name_company');
 
   useEffect(() => {
-    if (title === 'Beranda') {
+    if (['/beranda'].includes(location.pathname)) {
       setSubmenu(MenuBeranda);
+      setTitle('Beranda');
       navigate('/beranda');
     }
-    if (title === 'Data Master') {
-      if (submenu[0].maintitle !== 'Data Master') {
-        navigate('/division');
-      }
+    if ([`/division`, '/shift', '/users', '/locations', '/employees'].includes(location.pathname)) {
       setSubmenu(MenuDataMaster);
+      setTitle('Data Master');
     }
-    if (title === 'Absensi') {
-      if (submenu[0].maintitle !== 'Absensi') {
-        navigate('/schedule');
-      }
+    if ([`/schedule`, '/attendance', '/activity'].includes(location.pathname)) {
       setSubmenu(MenuAbsensi);
+      setTitle('Absensi');
     }
-    if (title === 'Pengajuan') {
-      if (submenu[0].maintitle !== 'Pengajuan') {
-        navigate('/request-attendance');
-      }
+    if ([`/request-attendance`, '/permission', '/overtime'].includes(location.pathname)) {
       setSubmenu(MenuPengajuan);
+      setTitle('Pengajuan');
     }
-  }, [title, creds, navigate, submenu]);
+  }, [creds, navigate, submenu, location.pathname, setTitle]);
 
   if (!creds) return <Navigate to="/login" replace />;
-
-  console.log('Titile', title);
 
   return (
     <Suspense fallback={<LoadingScreen />}>
@@ -154,7 +163,7 @@ export const AdminLayout: React.FC = () => {
             </Group>
 
             {/* Navigation */}
-            <SegmentControl title={title} setTitle={setTitle} />
+            <SegmentControl title={title} />
 
             {/* Profile and Name Information */}
             {!isMobile && (
@@ -218,9 +227,8 @@ export const AdminLayout: React.FC = () => {
                   onClick={() => {
                     navigate(item.href);
                   }}
-                  variant="outline"
+                  variant={location.pathname === item.href ? 'filled' : 'outline'}
                   color="blue"
-                  radius="xl"
                   leftSection={item.icon}
                 >
                   {item.title}

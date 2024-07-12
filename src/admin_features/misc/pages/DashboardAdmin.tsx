@@ -1,5 +1,6 @@
 /* eslint-disable linebreak-style */
-import { Select } from '@mantine/core';
+import { Button, Select } from '@mantine/core';
+import { IconChevronRight } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +8,6 @@ import { useAuth } from '@/features/auth';
 
 import {
   AllEmployeeCard,
-  AttendanceCalendar,
   AttendanceCard,
   FemaleEmployeeCard,
   MaleEmployeeCard,
@@ -48,6 +48,11 @@ export const DashboardAdmin: React.FC = () => {
             <MaleEmployeeCard></MaleEmployeeCard>
             <FemaleEmployeeCard></FemaleEmployeeCard>
           </div>
+          <div className="mt-10">
+            <Button justify="space-between" fullWidth rightSection={<IconChevronRight size={14} />}>
+              Lihat Semua Karyawan
+            </Button>
+          </div>
         </section>
 
         <section className="bg-white shadow-lg p-3 rounded-lg">
@@ -71,8 +76,7 @@ export const DashboardAdmin: React.FC = () => {
           </div>
         </section>
 
-        {/* <AttendanceCalendar /> */}
-        <AttendanceCalendar />
+        <section className="bg-white shadow-lg p-3 rounded-lg">sj</section>
       </div>
     </main>
   );
