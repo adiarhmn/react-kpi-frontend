@@ -19,7 +19,7 @@ export const UpdateEmployee: React.FC = () => {
   if (!location.state.employee) navigate(-1);
 
   const [user, setUser] = useState<UserType | null>(null);
-  const mutationEmployeeCreate = useUpdateEmployee();
+  const mutationUpdate = useUpdateEmployee();
   const { data: DataUser, isLoading: loadUser } = useGetUsersById(
     location.state.employee.user_id ?? 0
   );
@@ -29,11 +29,11 @@ export const UpdateEmployee: React.FC = () => {
   };
 
   const handleSubmit = async (data: FormEmployeeType) => {
-    await mutationEmployeeCreate.mutateAsync(data, {
+    await mutationUpdate.mutateAsync(data, {
       onSuccess: () => {
         notifications.show({
           title: 'Berhasil',
-          message: 'Karyawan berhasil ditambahkan',
+          message: 'Karyawan berhasil Diperbarui',
           color: 'teal',
         });
         navigate(-1);
@@ -59,7 +59,7 @@ export const UpdateEmployee: React.FC = () => {
             <IconChevronLeft size={20} />
           </ActionIcon>
           <div>
-            <h2 className="font-bold">Tambah Karyawan</h2>
+            <h2 className="font-bold">Edit Data Karyawan</h2>
             <div className="-mt-1 text-xs text-slate-400">
               Berikut form untuk menambahkan karyawan
             </div>
@@ -68,7 +68,7 @@ export const UpdateEmployee: React.FC = () => {
         <div className="mt-5">
           <FormEmployee
             onsubmit={handleSubmit}
-            loading={mutationEmployeeCreate.isPending}
+            loading={mutationUpdate.isPending}
             initialValues={{
               ...location.state.employee,
               username: user?.username ?? '',

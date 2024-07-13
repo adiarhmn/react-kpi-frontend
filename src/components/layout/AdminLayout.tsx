@@ -116,7 +116,6 @@ export const AdminLayout: React.FC = () => {
   const { creds, logout } = useAuth();
   // const ID_COMPANY = localStorage.getItem('id_company');
   const NAME_COMPANY = localStorage.getItem('name_company');
-  const ROLE = localStorage.getItem('role');
 
   const ChangeRole = () => {
     localStorage.setItem('role', 'employee');

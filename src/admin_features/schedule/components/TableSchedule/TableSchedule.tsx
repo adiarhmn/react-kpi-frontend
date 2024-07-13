@@ -255,6 +255,9 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     }
   };
 
+  console.log('Data Edit FreeDay :', dataSchedule);
+  // RENDER COMPONENT ==============================================================================================
+
   return (
     <section className="bg-white rounded-lg shadow-lg p-3">
       <div className="mb-3 flex gap-2 justify-between flex-wrap">
@@ -415,7 +418,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                       }}
                       className={`cursor-pointer text-center ${ShowScheduleCell(schedule).className}`}
                     >
-                      {ShowScheduleCell(schedule).value}
+                      {schedule?.shift.shift_code}
                       {schedule.status === 'on' && (
                         <div className="text-xxs -mt-2 text-slate-400">
                           {schedule.attendance_place === 'WFH' && 'WFH'}
