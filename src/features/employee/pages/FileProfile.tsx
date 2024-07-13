@@ -130,7 +130,7 @@ export const FileProfile: React.FC = () => {
                 >
                   {(props) => <Button {...props}>Pilih foto</Button>}
                 </FileButton>
-                <Button  disabled={!form.values.image} color="red" onClick={clearFile}>
+                <Button disabled={!form.values.image} color="red" onClick={clearFile}>
                   Hapus foto
                 </Button>
               </Group>

@@ -1,5 +1,6 @@
-import { Button, Select, TextInput } from '@mantine/core';
+import { ActionIcon, Button, Divider, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { IconClipboardList, IconUser } from '@tabler/icons-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useGetDivisions } from '@/admin_features/division/api';
@@ -15,7 +16,7 @@ interface Props {
 
 export type FormEmployeeType = EmployeeType & UserType;
 
-export const FormEmployee: React.FC<Props> = ({ onsubmit, loading, initialValues }) => {
+export const FormEmployee: React.FC<Props> = ({ onsubmit, loading = false, initialValues }) => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   const { state } = useLocation();
@@ -37,6 +38,7 @@ export const FormEmployee: React.FC<Props> = ({ onsubmit, loading, initialValues
       ...initialValues,
       division_id: initialValues?.division_id.toString() ?? '',
       username: DataUser?.username ?? '',
+      role: DataUser?.role ?? 'employee',
       password: '',
     } || {
       id: initialValues?.id ?? 0,
@@ -60,6 +62,7 @@ export const FormEmployee: React.FC<Props> = ({ onsubmit, loading, initialValues
       status: true,
       username: '',
       password: '',
+      role: 'employee',
       division_id: '',
     },
   });
@@ -68,6 +71,7 @@ export const FormEmployee: React.FC<Props> = ({ onsubmit, loading, initialValues
     event.preventDefault();
 
     const employeeDataPost = {
+      id: form.values.id,
       nip: form.values.nip,
       nik: form.values.nik,
       no_bpjs: form.values.no_bpjs,
@@ -87,6 +91,7 @@ export const FormEmployee: React.FC<Props> = ({ onsubmit, loading, initialValues
       status: form.values.status,
       username: form.values.username,
       password: form.values.password,
+      role: form.values.role,
       division_id: parseInt(form.values.division_id.toString()),
       user_id: initialValues?.user_id,
       company_id: creds?.company_id,
@@ -119,8 +124,19 @@ export const FormEmployee: React.FC<Props> = ({ onsubmit, loading, initialValues
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="grid grid-cols-3">
-        shjad
+      <Divider
+        className="mb-3 mt-7"
+        label={
+          <div className="flex gap-2 items-center">
+            <ActionIcon color="gray">
+              <IconUser size={20} />
+            </ActionIcon>
+            <div className="font-semibold text-slate-500 text-lg">Akun Login Pengguna</div>
+          </div>
+        }
+        labelPosition="left"
+      />
+      <div className="grid grid-cols-3 gap-2 ">
         <TextInput
           className="mb-3"
           label={
@@ -140,23 +156,66 @@ export const FormEmployee: React.FC<Props> = ({ onsubmit, loading, initialValues
             </span>
           }
           placeholder="Password"
-          required={initialValues?.id === 0}
           {...form.getInputProps('password')}
         />
-        
+        <Select
+          label="Jabatan atau Level"
+          required
+          placeholder="Pilih Role"
+          data={[
+            {
+              value: 'admin',
+              label: 'Admin',
+            },
+            {
+              value: 'employee',
+              label: 'Employee (Karyawan)',
+            },
+            {
+              value: 'supervisor',
+              label: 'Supervisor (Kepada Divisi)',
+            },
+            ...(creds?.role === 'superadmin'
+              ? [
+                  {
+                    value: 'superadmin',
+                    label: 'Superadmin',
+                  },
+                ]
+              : []),
+          ]}
+          value={form.values.role}
+          allowDeselect={false}
+          {...form.getInputProps('role')}
+        />
       </div>
+
+      {/* Data Pribadi Karyawan */}
+      <Divider
+        className="mb-3 mt-10"
+        label={
+          <div className="flex gap-2 items-center">
+            <ActionIcon color="gray">
+              <IconClipboardList size={20} />
+            </ActionIcon>
+            <div className="font-semibold text-slate-500 text-lg">Data Pribadi Karyawan</div>
+          </div>
+        }
+        labelPosition="left"
+      />
       <Select
-        label="Pilih Divisi"
+        label="Posisi Divisi"
         className="col-span-2 lg:col-span-1 mb-3"
         placeholder="Pilih Divisi"
         data={optionDataDivision}
         required
+        defaultValue={optionDataDivision[0]?.value}
         {...form.getInputProps('division_id')}
       ></Select>
       <TextInput
         className="mb-3"
-        label="Nama Karyawan"
-        placeholder="Nama Karyawan"
+        label="Nama Lengkap"
+        placeholder="Nama Lengkap"
         required
         {...form.getInputProps('name')}
       />
@@ -234,7 +293,7 @@ export const FormEmployee: React.FC<Props> = ({ onsubmit, loading, initialValues
         {...form.getInputProps('postal_code')}
       />
       <div className="flex gap-3">
-        <Button loading={loading} type="submit" color="blue" className="mt-5">
+        <Button type="submit" color="blue" className="mt-5" loading={loading}>
           Simpan
         </Button>
         <Button onClick={NavBack} type="button" color="gray" className="mt-5">

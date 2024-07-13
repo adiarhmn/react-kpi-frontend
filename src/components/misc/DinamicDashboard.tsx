@@ -4,5 +4,10 @@ import { DashboardSuperadmin } from '@/superadmin/misc';
 
 export const DinamicDashboard: React.FC = () => {
   const { creds } = useAuth();
-  return <>{creds?.role === 'superadmin' ? <DashboardSuperadmin /> : <DashboardAdmin />}</>;
+  const ID_COMPANY = localStorage.getItem('id_company');
+  return (
+    <>
+      {creds?.role === 'superadmin' && !ID_COMPANY ? <DashboardSuperadmin /> : <DashboardAdmin />}
+    </>
+  );
 };

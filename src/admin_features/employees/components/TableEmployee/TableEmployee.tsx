@@ -40,8 +40,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
   // Fungsi Delete Division
   const deleteEmployee = async (id: number) => {
     mutationDeleteEmployee.mutateAsync(id, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
+      onSuccess: () => {
         const newEmployees = employees.filter((employee) => employee.id !== id);
         setEmployees(newEmployees);
       },
@@ -68,7 +67,6 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
   // UseEffect for access API
   useEffect(() => {
     if (data) {
-      console.log(data);
       setEmployees(data);
     }
   }, [data]);
