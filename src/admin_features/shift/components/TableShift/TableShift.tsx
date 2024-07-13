@@ -133,7 +133,7 @@ export const TableShift: React.FC = () => {
         </div>
         <div className="pt-10 flex gap-2 justify-end">
           <Button onClick={confirmDelete} loading={mutate.isPending}>
-            Simpan
+            Yakin
           </Button>
 
           <Button color="red" onClick={close}>

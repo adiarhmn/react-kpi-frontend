@@ -129,11 +129,15 @@ export const AdminLayout: React.FC = () => {
     localStorage.removeItem('id_company');
     localStorage.removeItem('name_company');
     setTimeout(() => {
-      window.location.reload();
+      window.location.replace('/beranda');
     }, 100);
   };
 
   useEffect(() => {
+    if (!location.pathname.includes('/beranda')) {
+      if (!ID_COMPANY) window.location.replace('/beranda');
+    }
+
     if (location.pathname.includes('/beranda')) {
       setSubmenu(MenuBeranda);
       setTitle('Beranda');
