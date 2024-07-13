@@ -22,5 +22,5 @@ export type Companys = {
   id?: number;
   name: string;
   shift_active: boolean;
-  company_url: string;
+  companyUrl: string;
 };

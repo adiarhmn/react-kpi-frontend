@@ -115,7 +115,7 @@ export const AdminLayout: React.FC = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const { creds, logout } = useAuth();
-  // const ID_COMPANY = localStorage.getItem('id_company');
+  const ID_COMPANY = localStorage.getItem('id_company');
   const NAME_COMPANY = localStorage.getItem('name_company');
 
   const ChangeRole = () => {
@@ -123,6 +123,14 @@ export const AdminLayout: React.FC = () => {
     setTimeout(() => {
       window.location.replace('/');
     }, 1000);
+  };
+
+  const changeCompany = () => {
+    localStorage.removeItem('id_company');
+    localStorage.removeItem('name_company');
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   };
 
   useEffect(() => {
@@ -181,11 +189,15 @@ export const AdminLayout: React.FC = () => {
               style={{ width: 240 }}
               className="h-full"
             >
-              <img className="w-24" src="/images/logo-2-kpi.png" alt="KPI" />
+              {NAME_COMPANY ? (
+                <div className="text-dark-500 font-semibold">{NAME_COMPANY}</div>
+              ) : (
+                <img className="w-24" src="/images/logo-2-kpi.png" alt="KPI" />
+              )}
             </Group>
 
             {/* Navigation Untuk Admin */}
-            {creds?.role === 'admin' ? (
+            {creds?.role === 'admin' || ID_COMPANY ? (
               <SegmentControl title={title} />
             ) : (
               <div className="text-slate-500 font-semibold">Superadmin</div>
@@ -194,15 +206,22 @@ export const AdminLayout: React.FC = () => {
             {/* Profile and Name Information */}
             {!isMobile && (
               <Group className="h-full" justify="space-between">
-                {NAME_COMPANY && <div className="text-sm font-semibold">{NAME_COMPANY}</div>}
                 <Group gap={5} className="h-full" justify="end">
-                  <div className="border-r border-slate-400 pe-5">
-                    <Indicator inline label="2" size={16} color="red">
-                      <ActionIcon radius={'xl'} color="rgba(219,219,219,1)">
-                        <IconBell className="text-slate-500" size={20} />
-                      </ActionIcon>
-                    </Indicator>
-                  </div>
+                  {ID_COMPANY ? (
+                    <div className="border-r border-slate-400 pe-5">
+                      <Button size="xs" onClick={changeCompany}>
+                        Ganti Company
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="border-r border-slate-400 pe-5">
+                      <Indicator inline label="2" size={16} color="red">
+                        <ActionIcon radius={'xl'} color="rgba(219,219,219,1)">
+                          <IconBell className="text-slate-500" size={20} />
+                        </ActionIcon>
+                      </Indicator>
+                    </div>
+                  )}
                   <Menu shadow="md" width={200}>
                     <Menu.Target>
                       <UnstyledButton>

@@ -24,7 +24,7 @@ export const FormCompany: React.FC<FormCompanyProps> = ({ onSubmit, opened, load
     event.preventDefault();
     const data = {
       name: form.values.name,
-      company_url: form.values.company_url,
+      companyUrl: form.values.company_url,
       company_logo: form.values.company_logo,
       shift_active: form.values.shift_active === '1' ? true : false,
     };

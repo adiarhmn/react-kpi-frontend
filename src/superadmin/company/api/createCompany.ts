@@ -13,7 +13,7 @@ export const createCompany = async (data: Companys) => {
   formData.append('company_logo', data.company_logo);
   formData.append('name', data.name);
   formData.append('shift_active', data.shift_active.toString());
-  formData.append('company_url', data.company_url);
+  formData.append('companyUrl', data.companyUrl);
 
   console.log('Data yang dikirim : ', formData);
   for (const [key, value] of formData.entries()) {
@@ -24,7 +24,7 @@ export const createCompany = async (data: Companys) => {
       'Content-Type': 'multipart/form-data',
     },
   });
-  return response.data;
+  return response.data.data;
 };
 
 export const useCreateCompany = () => {
