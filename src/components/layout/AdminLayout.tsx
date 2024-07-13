@@ -25,6 +25,7 @@ import {
   IconClockPin,
   IconMap2,
   IconBell,
+  IconDashboard,
 } from '@tabler/icons-react';
 import { Suspense, useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -115,22 +116,43 @@ export const AdminLayout: React.FC = () => {
   const { creds, logout } = useAuth();
   // const ID_COMPANY = localStorage.getItem('id_company');
   const NAME_COMPANY = localStorage.getItem('name_company');
+  const ROLE = localStorage.getItem('role');
+
+  const ChangeRole = () => {
+    localStorage.setItem('role', 'employee');
+    setTimeout(() => {
+      window.location.replace('/');
+    }, 1000);
+  };
 
   useEffect(() => {
-    if (['/beranda'].includes(location.pathname)) {
+    if (location.pathname.includes('/beranda')) {
       setSubmenu(MenuBeranda);
       setTitle('Beranda');
       navigate('/beranda');
     }
-    if ([`/division`, '/shift', '/users', '/locations', '/employees'].includes(location.pathname)) {
+
+    if (
+      [`/division`, '/shift', '/users', '/locations', '/employees'].some((path) =>
+        location.pathname.includes(path)
+      )
+    ) {
       setSubmenu(MenuDataMaster);
       setTitle('Data Master');
     }
-    if ([`/schedule`, '/attendance', '/activity'].includes(location.pathname)) {
+
+    if (
+      [`/schedule`, '/attendance', '/activity'].some((path) => location.pathname.includes(path))
+    ) {
       setSubmenu(MenuAbsensi);
       setTitle('Absensi');
     }
-    if ([`/request-attendance`, '/permission', '/overtime'].includes(location.pathname)) {
+
+    if (
+      [`/request-attendance`, '/permission', '/overtime'].some((path) =>
+        location.pathname.includes(path)
+      )
+    ) {
       setSubmenu(MenuPengajuan);
       setTitle('Pengajuan');
     }
@@ -210,6 +232,10 @@ export const AdminLayout: React.FC = () => {
                       >
                         Logout
                       </Menu.Item>
+                      <Menu.Label>Ganti Level</Menu.Label>
+                      <Menu.Item leftSection={<IconDashboard size={14} />} onClick={ChangeRole}>
+                        <div>Halaman Karyawan</div>
+                      </Menu.Item>
                     </Menu.Dropdown>
                   </Menu>
                 </Group>
@@ -227,7 +253,7 @@ export const AdminLayout: React.FC = () => {
                   onClick={() => {
                     navigate(item.href);
                   }}
-                  variant={location.pathname === item.href ? 'filled' : 'outline'}
+                  variant={location.pathname.includes(item.href) ? 'filled' : 'outline'}
                   color="blue"
                   leftSection={item.icon}
                 >

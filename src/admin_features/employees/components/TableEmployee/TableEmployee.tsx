@@ -107,6 +107,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
           <Table.Tr>
             <Table.Th className="font-bold">No</Table.Th>
             <Table.Th className="font-bold">Nama</Table.Th>
+            <Table.Th className="font-bold">Status</Table.Th>
             <Table.Th className="font-bold">Divisi</Table.Th>
             <Table.Th className="font-bold">Username</Table.Th>
             <Table.Th className="font-bold">Role</Table.Th>
@@ -122,6 +123,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
               <Table.Tr key={index}>
                 <Table.Td>{indexOfFirstItem + index + 1}</Table.Td>
                 <Table.Td>{employee?.name}</Table.Td>
+                <Table.Td>{employee?.status ? "Aktif" : "Nonaktif"}</Table.Td>
                 <Table.Td>{employee?.division.division_name}</Table.Td>
                 <Table.Td>{employee?.user.username}</Table.Td>
                 <Table.Td>{employee?.user.role}</Table.Td>
