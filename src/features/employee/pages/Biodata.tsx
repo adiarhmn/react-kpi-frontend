@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import { IconChevronLeft, IconPencil } from '@tabler/icons-react';
+import { IconChevronLeft, IconPencil, IconPlus } from '@tabler/icons-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { BiodataInfo } from '../components';
@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { useGetEmployee } from '../api/Profile';
 import { useAuth } from '@/features/auth';
 import Swal from 'sweetalert2';
+import { Button } from '@mantine/core';
 
 export const Biodata: React.FC = () => {
   const navigate = useNavigate();
@@ -55,12 +56,15 @@ export const Biodata: React.FC = () => {
             <h2 className="font-semibold ">Data diri</h2>
           </div>
           <div>
-            <button
-              onClick={() => navigate('/profile/biodata/edit', { state: { biodata } })}
-              className="bg-transparent pe-3"
+            <Button
+              className="shadow-sm me-1"
+              size="xs"
+              onClick={() => {
+                navigate('edit', { state: { biodata: biodata } });
+              }}
             >
-              <IconPencil size={21} />
-            </button>
+              <IconPencil size={19}/>
+            </Button>
           </div>
         </div>
       </section>

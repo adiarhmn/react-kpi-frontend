@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
+import { ActionIcon, Badge, Button, Loader, Modal, Pagination, Select, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconPencil, IconTrash } from '@tabler/icons-react';
@@ -16,14 +16,19 @@ export const TableUser = () => {
   if (creds === null) navigate('/login');
 
   const [users, setUsers] = useState<UserType[]>([]);
-  const { data, error, isLoading } = useGetUsers(creds?.company_id);
+  const { data, error, isLoading, refetch } = useGetUsers(creds?.company_id);
   const [UserData, setUserData] = useState<UserType>({
     id: 0,
     username: '',
     role: '',
-    status: false,
+    status: 1,
     password: '',
   });
+
+  // Pagination Feature
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+
   const [opened, { open, close }] = useDisclosure(false);
   const mutationDeleteUser = useDeleteUser();
 
@@ -41,8 +46,9 @@ export const TableUser = () => {
     mutationDeleteUser.mutateAsync(UserData?.id, {
       onSuccess: (data) => {
         console.log('Success Delete:', data);
-        const newUsers = users.filter((user) => user.id !== UserData?.id);
-        setUsers(newUsers);
+        // const newUsers = users.filter((user) => user.id !== UserData?.id);
+        refetch();
+        // setUsers(newUsers);
         close();
 
         notifications.show({
@@ -71,7 +77,13 @@ export const TableUser = () => {
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
-  console.log(data);
+  // Pagination Feature
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+
+  // Mendapatkan employees untuk halaman saat ini
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = users.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="mt-7">
@@ -80,15 +92,21 @@ export const TableUser = () => {
           <Table.Tr>
             <Table.Th className="font-bold">Username</Table.Th>
             <Table.Th className="font-bold">Role</Table.Th>
+            <Table.Th className="font-bold">Status</Table.Th>
             <Table.Th className="font-bold">Aksi</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {users.map((user, index) => {
+          {currentItems.map((user, index) => {
             return (
               <Table.Tr key={index}>
                 <Table.Td>{user?.username}</Table.Td>
                 <Table.Td>{user?.role}</Table.Td>
+                <Table.Td>
+                  <div className="flex justify-center">
+                    {user?.status ? <Badge>Aktif</Badge> : <Badge color="red">Nonaktif</Badge>}
+                  </div>
+                </Table.Td>
                 <Table.Td className="flex gap-2 items-center justify-center">
                   <ActionIcon onClick={() => UpdateUser(user)} color="yellow">
                     <IconPencil size={14} />
@@ -102,6 +120,36 @@ export const TableUser = () => {
           })}
         </Table.Tbody>
       </Table>
+
+      <section className="flex justify-between mt-3">
+        <div className="flex items-center gap-4">
+          {/* Selection */}
+          <Select
+            placeholder="5"
+            data={['5', '10', '15', '25']}
+            size="xs"
+            style={{ width: 70 }}
+            defaultValue={'5'}
+            value={itemsPerPage.toString()}
+            allowDeselect={false}
+            onChange={(e) => {
+              setItemsPerPage(Number(e));
+              setCurrentPage(1);
+            }}
+          />
+          <span className="text-xs text-gray-500">
+            Menampilkan {indexOfFirstItem + 1} -{' '}
+            {totalPages == currentPage ? users?.length : indexOfLastItem} dari {users?.length} data
+          </span>
+        </div>
+        <Pagination
+          total={totalPages}
+          value={currentPage}
+          onChange={setCurrentPage}
+          mt="sm"
+          size="xs"
+        />
+      </section>
 
       {/* Modal Confirm for Delete Data */}
       <Modal

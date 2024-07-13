@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
 import {
   ActionIcon,
+  Badge,
   Button,
   Indicator,
   Loader,
@@ -84,9 +85,6 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
   // Hitung jumlah total halaman [(❁´◡`❁)]
   const totalPages = Math.ceil(employees.length / itemsPerPage);
 
-  // Fungsi untuk mengubah halaman
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   // Mendapatkan employees untuk halaman saat ini
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -103,8 +101,6 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
-  console.log('Current Items', currentItems);
-  console.log('Curent Page', currentPage);
   return (
     <div className="mt-7">
       <Table withColumnBorders withTableBorder highlightOnHover>
@@ -112,6 +108,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
           <Table.Tr>
             <Table.Th className="font-bold">No</Table.Th>
             <Table.Th className="font-bold">Nama</Table.Th>
+            <Table.Th className="font-bold">Status</Table.Th>
             <Table.Th className="font-bold">Divisi</Table.Th>
             <Table.Th className="font-bold">Username</Table.Th>
             <Table.Th className="font-bold">Role</Table.Th>
@@ -127,6 +124,11 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
               <Table.Tr key={index}>
                 <Table.Td>{indexOfFirstItem + index + 1}</Table.Td>
                 <Table.Td>{employee?.name}</Table.Td>
+                <Table.Td>
+                  <div className="flex justify-center">
+                    {employee?.status ? <Badge>Aktif</Badge> : <Badge color="red">Nonaktif</Badge>}
+                  </div>
+                </Table.Td>
                 <Table.Td>{employee?.division.division_name}</Table.Td>
                 <Table.Td>{employee?.user.username}</Table.Td>
                 <Table.Td>{employee?.user.role}</Table.Td>

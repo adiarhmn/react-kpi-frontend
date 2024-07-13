@@ -1,13 +1,18 @@
-import { Button, FileInput, Modal, TextInput } from '@mantine/core';
+import { Button, FileButton, FileInput, Group, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { FileList } from '../components';
+import { useEffect, useRef, useState } from 'react';
+import { useCreateFiles } from '../api';
+import { useAuth } from '@/features/auth';
+import Swal from 'sweetalert2';
 
 export const FileProfile: React.FC = () => {
   const navigate = useNavigate();
+  const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 50em)');
 
@@ -15,12 +20,47 @@ export const FileProfile: React.FC = () => {
     validateInputOnChange: true,
     initialValues: {
       namaBerkas: '',
+      image: null as File | null,
+      employee_id: creds?.employee_id,
     },
     validate: {
       namaBerkas: (value) =>
-        value.length < 5 ? 'Jenjang setidaknya harus memuat lebih dari 2 karakter' : null,
+        value.length < 2 ? 'Nama file setidaknya harus memuat lebih dari 2 karakter' : null,
     },
   });
+
+  const mutationCreateFiles = useCreateFiles();
+  const handleSubmitFile = async (values: typeof form.values) => {
+    const FilesData = {
+      filename: values.namaBerkas,
+      file: values.image,
+      employee_id: values.employee_id,
+    };
+
+    await mutationCreateFiles.mutateAsync(FilesData, {
+      onSuccess: (data) => {
+        console.log('Success:', data);
+        localStorage.setItem('hasNotifiedFiles', 'no');
+        close();
+        Swal.fire({
+          width: '80%',
+          title: 'Data berhasil ditambahkan',
+          timer: 3000,
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        });
+        form.reset();
+      },
+    });
+  };
+
+  const resetRef = useRef<() => void>(null);
+
+  const clearFile = () => {
+    form.setFieldValue('image', null);
+    resetRef.current?.();
+  };
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -54,13 +94,54 @@ export const FileProfile: React.FC = () => {
         fullScreen={isMobile}
         transitionProps={{ transition: 'fade', duration: 200 }}
       >
-        <TextInput
-          label="Nama berkas"
-          name="namaBerkas"
-          withAsterisk
-          {...form.getInputProps('namaBerkas')}
-        />
-        <FileInput label="Lampiran" withAsterisk placeholder="Masukkan bukti berkas" />
+        <form onSubmit={form.onSubmit(handleSubmitFile)}>
+          <div>
+            <TextInput
+              label="Nama berkas"
+              name="namaBerkas"
+              required
+              withAsterisk
+              {...form.getInputProps('namaBerkas')}
+            />
+          </div>
+          <div className="mt-2">
+            <Text size="sm" fw={500}>
+              Lampiran
+            </Text>
+            <div className="flex items-center justify-center mb-2">
+              <div className="h-36 w-80 bg-slate-500 text-white">
+                {form.values.image ? (
+                  <img
+                    src={URL.createObjectURL(form.values.image)}
+                    alt="Preview"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="text-xs ms-2">format png/jpeg</span>
+                )}
+              </div>
+            </div>
+            <div className="my-auto">
+              <Group justify="center">
+                <FileButton
+                  resetRef={resetRef}
+                  onChange={(file) => form.setFieldValue('image', file)}
+                  accept="image/png,image/jpeg"
+                >
+                  {(props) => <Button {...props}>Pilih foto</Button>}
+                </FileButton>
+                <Button  disabled={!form.values.image} color="red" onClick={clearFile}>
+                  Hapus foto
+                </Button>
+              </Group>
+            </div>
+          </div>
+          <div className="mt-3">
+            <Button fullWidth type="submit">
+              Simpan
+            </Button>
+          </div>
+        </form>
       </Modal>
     </main>
   );

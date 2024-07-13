@@ -7,6 +7,7 @@ import {
 } from '@/features/attendance/api/getActivity';
 import { formatterDate } from '@/features/history';
 import { Button, Divider, Text } from '@mantine/core';
+import { IconClipboardText } from '@tabler/icons-react';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -47,9 +48,16 @@ export const EmployeeActivitiesSection: React.FC<ActivitiesSectionProps> = ({
 
   return (
     <>
-      <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 py-2 px-2 text-slate-700 mb-6 mt-2">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="text-base font-bold text-blue-700">Kegiatan</span>
+          <div>
+            <Text fw={700} c="blue">
+              Kegiatan
+            </Text>
+          </div>
+          <div className="my-auto text-right -mt-1  me-2">
+            <IconClipboardText />
+          </div>
         </div>
         <Divider size={'sm'} />
         <div className="w-full p-2">
@@ -100,19 +108,22 @@ export const EmployeeActivitiesSection: React.FC<ActivitiesSectionProps> = ({
                   <Text truncate="end" size="xs">
                     {formatterDate(new Date(activity['created_at'] ?? 0), 'HH:mm')}
                   </Text>
+                  <Text truncate="end" size="xs">
+                    {activity.attendance.employee.name}
+                  </Text>
                 </div>
                 <Divider size={'xs'} className="mt-4" />
               </section>
             ))
           ) : (
             <div className="w-full col-span-12">
-              <section className="min-h-96 flex flex-col items-center justify-center -mt-10">
+              <section className="min-h-96 flex flex-col items-center justify-center -mt-10 -mb-10">
                 <img
-                  className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+                  className="w-28 mb-2 bg-slate-200 rounded-full p-2"
                   src="/images/blank-canvas.svg"
                   alt=""
                 />
-                <span className="font-bold text-slate-400 text-lg">Belum ada data kegiatan</span>
+                <span className="font-bold text-slate-400 text-sm">Belum ada data kegiatan</span>
               </section>
             </div>
           )}

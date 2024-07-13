@@ -9,6 +9,7 @@ import { queryClient } from '@/lib/react-query';
 
 import { ErrorProvider } from './ErrorProvider';
 import { StyleProvider } from './StyleProvider';
+import { TitleProvider } from './TitleProvider';
 
 type Props = {
   children: React.ReactNode;
@@ -30,7 +31,7 @@ const LocationProvider = ({ children }: { children: React.ReactNode }) => {
     });
   }, []);
 
-  return <>{children}</>;  
+  return <>{children}</>;
 };
 
 export const AppProvider: React.FC<Props> = ({ children }) => {
@@ -41,9 +42,11 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
           <Router>
             <AuthProvider>
               {/* <OutletProvider> */}
-                <HelmetProvider>
+              <HelmetProvider>
+                <TitleProvider>
                   <LocationProvider>{children}</LocationProvider>
-                </HelmetProvider>
+                </TitleProvider>
+              </HelmetProvider>
               {/* </OutletProvider> */}
             </AuthProvider>
           </Router>

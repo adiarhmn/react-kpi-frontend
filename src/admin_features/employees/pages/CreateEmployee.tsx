@@ -1,7 +1,15 @@
-import { ActionIcon, Button, Select, TextInput } from '@mantine/core';
+import {
+  ActionIcon,
+  Badge,
+  Button,
+  Divider,
+  Select,
+  TextInput,
+  UnstyledButton,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { IconChevronLeft } from '@tabler/icons-react';
+import { IconChevronLeft, IconClipboardList, IconInfoCircle, IconUser } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetDivisions } from '@/admin_features/division/api';
@@ -45,6 +53,7 @@ export const CreateEmployee: React.FC = () => {
       status: true,
       username: '',
       password: '',
+      role: 'employee',
       division_id: '',
     },
   });
@@ -72,6 +81,7 @@ export const CreateEmployee: React.FC = () => {
       status: form.values.status,
       username: form.values.username,
       password: form.values.password,
+      role: form.values.role,
       division_id: parseInt(form.values.division_id),
       company_id: creds?.company_id,
     };
@@ -111,43 +121,110 @@ export const CreateEmployee: React.FC = () => {
   return (
     <main>
       <section className="bg-white p-5 rounded-lg">
-        <div className="flex gap-3 items-center">
-          <ActionIcon onClick={NavBack} color="blue">
-            <IconChevronLeft size={20} />
-          </ActionIcon>
-          <div>
-            <h2 className="font-bold">Tambah Karyawan</h2>
-            <div className="-mt-1 text-xs text-slate-400">
-              Berikut form untuk menambahkan karyawan
+        <div className="flex justify-between">
+          <div className="flex gap-3 items-start">
+            <ActionIcon onClick={NavBack} color="blue" className="mt-1">
+              <IconChevronLeft size={20} />
+            </ActionIcon>
+            <div>
+              <div className="flex gap-3 items-center">
+                <h2 className="font-bold">Tambah Karyawan</h2>
+              </div>
+              <div className="-mt-1 text-xs text-slate-400">
+                Berikut form untuk menambahkan karyawan
+              </div>
             </div>
           </div>
+          <UnstyledButton>
+            <Badge color="blue" size="lg" leftSection={<IconInfoCircle size={19} />}>
+              <span className="capitalize">Petunjuk</span>
+            </Badge>
+          </UnstyledButton>
         </div>
         <div className="mt-5">
           <form onSubmit={handleSubmit}>
-            <TextInput
-              className="mb-3"
+            <Divider
+              className="mb-3 mt-7"
               label={
-                <span className="font-semibold">
-                  Username <span className="text-xs italic">(Akun Sistem)</span>
-                </span>
+                <div className="flex gap-2 items-center">
+                  <ActionIcon color="gray">
+                    <IconUser size={20} />
+                  </ActionIcon>
+                  <div className="font-semibold text-slate-500 text-lg">Akun Login Pengguna</div>
+                </div>
               }
-              placeholder="Username"
-              required
-              {...form.getInputProps('username')}
+              labelPosition="left"
             />
-            <TextInput
-              className="mb-3"
+            <div className="grid grid-cols-3 gap-2 ">
+              <TextInput
+                className="mb-3"
+                label={
+                  <span className="font-semibold">
+                    Username <span className="text-xs italic">(Akun Sistem)</span>
+                  </span>
+                }
+                placeholder="Username"
+                required
+                {...form.getInputProps('username')}
+              />
+              <TextInput
+                className="mb-3"
+                label={
+                  <span className="font-semibold">
+                    Password <span className="text-xs italic">(Password Akun Sistem)</span>
+                  </span>
+                }
+                placeholder="Password"
+                required
+                {...form.getInputProps('password')}
+              />
+              <Select
+                label="Jabatan atau Level"
+                required
+                placeholder="Pilih Role"
+                data={[
+                  {
+                    value: 'admin',
+                    label: 'Admin',
+                  },
+                  {
+                    value: 'employee',
+                    label: 'Employee (Karyawan)',
+                  },
+                  {
+                    value: 'supervisor',
+                    label: 'Supervisor (Kepada Divisi)',
+                  },
+                  ...(creds?.role === 'superadmin'
+                    ? [
+                        {
+                          value: 'superadmin',
+                          label: 'Superadmin',
+                        },
+                      ]
+                    : []),
+                ]}
+                value={form.values.role}
+                allowDeselect={false}
+                {...form.getInputProps('role')}
+              />
+            </div>
+
+            {/* Data Pribadi Karyawan */}
+            <Divider
+              className="mb-3 mt-10"
               label={
-                <span className="font-semibold">
-                  Password <span className="text-xs italic">(Password Akun Sistem)</span>
-                </span>
+                <div className="flex gap-2 items-center">
+                  <ActionIcon color="gray">
+                    <IconClipboardList size={20} />
+                  </ActionIcon>
+                  <div className="font-semibold text-slate-500 text-lg">Data Pribadi Karyawan</div>
+                </div>
               }
-              placeholder="Password"
-              required
-              {...form.getInputProps('password')}
+              labelPosition="left"
             />
             <Select
-              label="Pilih Divisi"
+              label="Posisi Divisi"
               className="col-span-2 lg:col-span-1 mb-3"
               placeholder="Pilih Divisi"
               data={optionDataDivision}
@@ -157,8 +234,8 @@ export const CreateEmployee: React.FC = () => {
             ></Select>
             <TextInput
               className="mb-3"
-              label="Nama Karyawan"
-              placeholder="Nama Karyawan"
+              label="Nama Lengkap"
+              placeholder="Nama Lengkap"
               required
               {...form.getInputProps('name')}
             />

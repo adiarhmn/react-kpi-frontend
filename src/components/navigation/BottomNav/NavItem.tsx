@@ -1,13 +1,11 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { clsx } from '@/utils/format';
 
 import type { Navigation } from './BottomNav';
 
-export const NavItem: React.FC<Navigation> = ({ title, href, icon }) => {
-  const location = useLocation();
-  const isActive =
-    href == '/' ? location.pathname == href : new RegExp(`${href}/*`, 'gi').test(location.pathname);
+export const NavItem: React.FC<Navigation> = ({ title, href, icon, currentPath }) => {
+  const isActive = currentPath == href;
   const Icon = icon;
 
   return (

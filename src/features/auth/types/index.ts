@@ -2,7 +2,7 @@ export type Creds = {
   id: number | null;
   username: string;
   name: string;
-  role: 'admin' | 'superadmin' | 'employee' | 'supervisor';
+  role: string | 'admin' | 'superadmin' | 'employee' | 'supervisor';
   employee_id: number;
   company_id: number;
 };

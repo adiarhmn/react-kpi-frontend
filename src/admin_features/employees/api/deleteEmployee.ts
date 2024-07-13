@@ -4,7 +4,9 @@ import axios from 'axios';
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export async function deleteEmployee(id: number) {
-  const res = await axios.delete(`${BaseURL}/employee/${id}`);
+  const res = await axios.put(`${BaseURL}/employee/${id}`, {
+    status: false,
+  });
   return res.data;
 }
 

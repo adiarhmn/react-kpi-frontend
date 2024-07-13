@@ -2,8 +2,6 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
-import { EmployeeType } from '@/admin_features/types';
-
 const BaseURL = import.meta.env.VITE_API_URL;
 
 type EmployeDataPost = {
@@ -31,11 +29,47 @@ type EmployeDataPost = {
   status: boolean;
   user_id: number;
   division_id: number;
+  image?: File | null;
 };
 
 async function updateEmployee(data: EmployeDataPost) {
   console.log('Data yang dikirim :', data);
-  const response = await axios.put(`${BaseURL}/employee/${data.id}`, data);
+
+  const formData = new FormData();
+  formData.append('id', data.id.toString());
+  formData.append('nip', data.nip);
+  formData.append('nik', data.nik);
+  formData.append('no_bpjs', data.no_bpjs);
+  formData.append('name', data.name);
+  formData.append('email', data.email);
+  formData.append('sex', data.sex);
+  formData.append('birth_date', data.birth_date);
+  formData.append('religion', data.religion);
+  formData.append('first_degree', data.first_degree);
+  formData.append('last_degree', data.last_degree);
+  formData.append('last_education', data.last_education);
+  formData.append('address', data.address);
+  formData.append('rt', data.rt);
+  formData.append('rw', data.rw);
+  formData.append('village', data.village);
+  formData.append('subdistrict', data.subdistrict);
+  formData.append('district', data.district);
+  formData.append('province', data.province);
+  formData.append('postal_code', data.postal_code);
+  formData.append('phone', data.phone);
+  formData.append('status', data.status.toString());
+  formData.append('user_id', data.user_id.toString());
+  formData.append('division_id', data.division_id.toString());
+
+  if (data.image) {
+    formData.append('image', data.image);
+  }
+
+  const response = await axios.put(`${BaseURL}/employee/${data.id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 }
 

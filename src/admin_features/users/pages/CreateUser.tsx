@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
-import { ActionIcon } from '@mantine/core';
+import { ActionIcon, Alert } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconChevronLeft } from '@tabler/icons-react';
+import { IconChevronLeft, IconInfoCircle } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { UserType } from '@/admin_features/types';
@@ -29,7 +29,6 @@ export const CreateUser: React.FC = () => {
       company_id: creds?.company_id,
     };
 
-    console.log('Simpan Data User', userData);
     await mutationUser.mutateAsync(userData, {
       onSuccess: (data) => {
         console.log('Success:', data);
@@ -49,16 +48,27 @@ export const CreateUser: React.FC = () => {
   return (
     <main>
       <section className="bg-white p-5 rounded-lg">
-        <div className="flex gap-3 items-center">
-          <ActionIcon onClick={NavBack} color="blue">
-            <IconChevronLeft size={20} />
-          </ActionIcon>
-          <div>
-            <h2 className="font-bold">Tambah User</h2>
-            <div className="-mt-1 text-xs text-slate-400">
-              Berikut form untuk menambahkan user atau pengguna baru
+        <div className="flex justify-between">
+          <div className="flex gap-3 items-center">
+            <ActionIcon onClick={NavBack} color="blue">
+              <IconChevronLeft size={20} />
+            </ActionIcon>
+            <div>
+              <h2 className="font-bold">Tambah User</h2>
+              <div className="-mt-1 text-xs text-slate-400">
+                Berikut form untuk menambahkan user atau pengguna baru
+              </div>
             </div>
           </div>
+          <Alert
+            className="mb-3"
+            variant="light"
+            color="blue"
+            title="Pengumuman"
+            icon={<IconInfoCircle size={25} />}
+          >
+            Form User Ini Hanya untuk Menambahkan
+          </Alert>
         </div>
         <div className="mt-5">
           <FormUser loading={mutationUser.isPending} onSubmit={handleSubmit} />

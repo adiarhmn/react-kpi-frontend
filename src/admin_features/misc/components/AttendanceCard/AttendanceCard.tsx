@@ -5,10 +5,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetAttendanceRecap } from '@/admin_features/attendance/api';
+import { useTitleContext } from '@/components/providers/TitleProvider';
 import { useAuth } from '@/features/auth';
 import { formatDateToString } from '@/utils/format';
 
 export const AttendanceCard: React.FC = () => {
+  const { title, setTitle } = useTitleContext();
   const navigate = useNavigate();
   const { creds } = useAuth();
   if (!creds) navigate('/login');
@@ -35,7 +37,7 @@ export const AttendanceCard: React.FC = () => {
   console.log('Data Recap', data);
 
   return (
-    <section className="bg-white shadow-lg p-3 rounded-lg">
+    <section className="bg-white shadow-lg p-6 rounded-lg max-h-72">
       <div className="grid lg:grid-cols-2">
         <div>
           <h2 className="font-bold">Rekap Absensi Karyawan</h2>
@@ -150,10 +152,13 @@ export const AttendanceCard: React.FC = () => {
             justify="space-between"
             fullWidth
             className="mt-2 border-2 shadow-lg"
-            onClick={() => navigate('/attendance#RecapAttendance')}
+            onClick={() => {
+              setTitle('Absensi');
+              navigate('/attendance');
+            }}
             rightSection={<IconChevronRight size={14} />}
           >
-            Lihat Semua
+            Lihat Semua Rekap
           </Button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
 import { Button, Text, Loader, Modal, Input, Divider } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useViewportSize } from '@mantine/hooks';
 import { IconMailForward, IconMap2, IconPlus } from '@tabler/icons-react';
 import { Icon } from 'leaflet';
 import { useEffect, useState } from 'react';
@@ -99,14 +99,14 @@ export const Attendance: React.FC = () => {
   useEffect(() => {
     if (location.loaded && !location.error) {
       const officeIcon = new Icon({
-        iconUrl: '/images/office-icon.svg',
+        iconUrl: '/images/office-icon.png',
         iconSize: [50, 50],
       });
 
       const officeCircle = {
-        color: 'white',
+        color: '',
         fillColor: 'red',
-        fillOpacity: 0.2,
+        fillOpacity: 0,
       };
 
       const markers = employeeLocation.map((emp_loc) => ({
@@ -161,7 +161,6 @@ export const Attendance: React.FC = () => {
     }
   }, [location, employeeLocation]);
 
-  console.log(attendanceLocationId);
 
   const myIcon: any = new Icon({
     iconUrl: '/images/my-icon.svg',
@@ -254,6 +253,10 @@ export const Attendance: React.FC = () => {
   // [End add kegiatan]
   // [END ACTIVITY]
 
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   if (loadingActivityAlias) {
     return (
       <div className="w-full col-span-12">
@@ -310,6 +313,26 @@ export const Attendance: React.FC = () => {
               Lokasi absen anda belum ditentukan
             </span>
             <span className="text-slate-400 text-sm">Harap hubungi admin</span>
+          </section>
+        </div>
+      ) : location.error != undefined ? (
+        <div className="w-full col-span-12">
+          <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
+
+          <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+            <img
+              className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+              src="/images/blank-canvas.svg"
+              alt=""
+            />
+            <span className="font-bold text-slate-400 text-2xl mt-3">Oops!</span>
+            <span className="font-bold text-slate-400 text-base">
+              Perizinan lokasi anda belum aktif
+            </span>
+            <span className="text-slate-400 text-sm">
+              Setting &gt; app &gt; HR APP &gt; Perizinan Lokasi
+            </span>
+            <Button className='mt-2' size='xs' onClick={handleRefresh}>Refresh</Button>
           </section>
         </div>
       ) : (
@@ -456,13 +479,13 @@ export const Attendance: React.FC = () => {
                 ))
               ) : (
                 <div className="w-full col-span-12">
-                  <section className="min-h-96 flex flex-col items-center justify-center -mt-7">
+                  <section className="min-h-96 flex flex-col items-center justify-center -mt-10 -mb-10">
                     <img
-                      className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+                      className="w-28 mb-2 bg-slate-200 rounded-full p-2"
                       src="/images/blank-canvas.svg"
                       alt=""
                     />
-                    <span className="font-bold text-slate-400 text-lg">
+                    <span className="font-bold text-slate-400 text-base">
                       Belum ada data kegiatan
                     </span>
                   </section>
@@ -525,7 +548,8 @@ export const Attendance: React.FC = () => {
                         error=""
                       >
                         <Input
-                          placeholder="masukkan judul kegiatan"
+                          required
+                          placeholder={`masukkan ${activityAlias[0][`cs${i + 1}_name`]}`}
                           {...formActivity.getInputProps(`custom${i + 1}`)}
                         />
                       </Input.Wrapper>

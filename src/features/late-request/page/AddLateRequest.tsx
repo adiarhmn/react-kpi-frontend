@@ -1,4 +1,4 @@
-import { Button, Divider, Textarea } from '@mantine/core';
+import { Button, Divider, Select, Textarea } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft, IconMailForward, IconMap2 } from '@tabler/icons-react';
 import { Icon } from 'leaflet';
@@ -105,6 +105,12 @@ export const AddLateRequest: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
+        <div className=" text-xs items-center p-2">
+          <div></div>
+        </div>
+      </section> */}
       {/* Card Map */}
       <section className="bg-white mx-auto max-w-xs w-full mt-4 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="flex justify-between text-xs items-center p-2">

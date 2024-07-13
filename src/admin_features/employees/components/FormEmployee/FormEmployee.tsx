@@ -119,28 +119,32 @@ export const FormEmployee: React.FC<Props> = ({ onsubmit, loading, initialValues
 
   return (
     <form onSubmit={handleSubmit}>
-      <TextInput
-        className="mb-3"
-        label={
-          <span className="font-semibold">
-            Username <span className="text-xs italic">(Akun Sistem)</span>
-          </span>
-        }
-        placeholder="Username"
-        required
-        {...form.getInputProps('username')}
-      />
-      <TextInput
-        className="mb-3"
-        label={
-          <span className="font-semibold">
-            Password <span className="text-xs italic">(Password Akun Sistem)</span>
-          </span>
-        }
-        placeholder="Password"
-        required={initialValues?.id === 0}
-        {...form.getInputProps('password')}
-      />
+      <div className="grid grid-cols-3">
+        shjad
+        <TextInput
+          className="mb-3"
+          label={
+            <span className="font-semibold">
+              Username <span className="text-xs italic">(Akun Sistem)</span>
+            </span>
+          }
+          placeholder="Username"
+          required
+          {...form.getInputProps('username')}
+        />
+        <TextInput
+          className="mb-3"
+          label={
+            <span className="font-semibold">
+              Password <span className="text-xs italic">(Password Akun Sistem)</span>
+            </span>
+          }
+          placeholder="Password"
+          required={initialValues?.id === 0}
+          {...form.getInputProps('password')}
+        />
+        
+      </div>
       <Select
         label="Pilih Divisi"
         className="col-span-2 lg:col-span-1 mb-3"

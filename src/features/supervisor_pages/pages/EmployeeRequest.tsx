@@ -14,6 +14,8 @@ import { useAuth } from '@/features/auth';
 import { useDisclosure } from '@mantine/hooks';
 import { EmployeeType } from '@/admin_features/types';
 import { useGetEmployee } from '@/features/employee/api/Profile';
+import { AbsenceType, useGetAbsenceByDivision, useGetAbsenceByType } from '@/features/history';
+import { useGetOvertimeByDivision } from '@/features/overtime/api/getOvertime';
 
 export const EmployeeRequest: React.FC = () => {
   const { creds } = useAuth();
@@ -45,6 +47,74 @@ export const EmployeeRequest: React.FC = () => {
     }
   }, [state, navigate]);
   // [END NOTIFICATION 🔔]
+
+  // [Data sakit]
+  const [sickRequest, setSickRequest] = useState<AbsenceType[]>([]);
+  const { data: DataSickRequest } = useGetAbsenceByDivision(
+    employee?.division_id,
+    'sakit',
+    'Belum Disetujui'
+  );
+  useEffect(() => {
+    if (DataSickRequest) {
+      setSickRequest(DataSickRequest);
+    }
+  }, [DataSickRequest]);
+  // [End data sakit]
+
+  // [Data izin]
+  const [absenceRequest, setAbsenceRequest] = useState<AbsenceType[]>([]);
+  const { data: DataAbsenceRequest } = useGetAbsenceByDivision(
+    employee?.division_id,
+    'izin',
+    'Belum Disetujui'
+  );
+  useEffect(() => {
+    if (DataAbsenceRequest) {
+      setAbsenceRequest(DataAbsenceRequest);
+    }
+  }, [DataAbsenceRequest]);
+  // [End data izin]
+
+  // [Data cuti]
+  const [paidLeaveRequest, setPaidLeaveRequest] = useState<AbsenceType[]>([]);
+  const { data: DataPaidLeaveRequest } = useGetAbsenceByDivision(
+    employee?.division_id,
+    'Cuti',
+    'Belum Disetujui'
+  );
+  useEffect(() => {
+    if (DataPaidLeaveRequest) {
+      setPaidLeaveRequest(DataPaidLeaveRequest);
+    }
+  }, [DataPaidLeaveRequest]);
+  // [End data cuti]
+
+  // [Data lembur]
+  const [overtimeRequest, setOvertimeRequest] = useState<AbsenceType[]>([]);
+  const { data: DataOvertimeRequest } = useGetOvertimeByDivision(
+    employee?.division_id,
+    'Belum Disetujui'
+  );
+  useEffect(() => {
+    if (DataOvertimeRequest) {
+      setOvertimeRequest(DataOvertimeRequest);
+    }
+  }, [DataOvertimeRequest]);
+  // [End data lembur]
+
+  // [Data absensi]
+  const [lateRequest, setLateRequest] = useState<AbsenceType[]>([]);
+  const { data: DataLateRequest } = useGetOvertimeByDivision(
+    employee?.division_id,
+    'Belum Disetujui'
+  );
+  useEffect(() => {
+    if (DataLateRequest) {
+      setLateRequest(DataLateRequest);
+    }
+  }, [DataLateRequest]);
+  // [End data absensi]
 
   if (LoadingEmployee) {
     return (

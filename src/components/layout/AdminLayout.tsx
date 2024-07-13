@@ -5,14 +5,13 @@ import {
   Burger,
   Group,
   Menu,
-  NavLink,
   UnstyledButton,
   Indicator,
+  Button,
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
   IconCalendar,
-  IconHome2,
   IconSettings,
   IconClockHour1,
   IconUsersGroup,
@@ -21,57 +20,143 @@ import {
   IconBuildingEstate,
   IconBriefcase,
   IconLogout,
-  IconLuggage,
   IconAlarmPlus,
   IconFileAlert,
   IconClockPin,
   IconMap2,
-  IconAlertCircle,
-  IconBuildingBank,
   IconBell,
+  IconDashboard,
 } from '@tabler/icons-react';
-import { Suspense, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Suspense, useEffect, useState } from 'react';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
 
 import { LoadingScreen } from '../elements';
-import { NavSuperadmin, SideNav } from '../navigation';
+import { SegmentControl } from '../navigation';
+import { useTitleContext } from '../providers/TitleProvider';
 
-const MenuMain = [{ title: 'Beranda', href: '/beranda', icon: IconHome2 }];
-const MenuDataMasterSuperadmin = [{ title: 'Company', href: '/company', icon: IconBuildingBank }];
+type SubMenuListType = {
+  maintitle: string;
+  title: string;
+  href: string;
+  icon: JSX.Element;
+};
+
+const MenuBeranda = [
+  { maintitle: 'none', title: 'Beranda', href: '/beranda', icon: <IconCalendar size={15} /> },
+];
 
 const MenuDataMaster = [
-  { title: 'Divisi', href: '/division', icon: IconBuildingEstate },
-  { title: 'Shift', href: '/shift', icon: IconClockHour1 },
-  { title: 'User', href: '/users', icon: IconUsersGroup },
-  { title: 'Lokasi', href: '/locations', icon: IconMap2 },
-  { title: 'Karyawan', href: '/employees', icon: IconBriefcase },
+  {
+    maintitle: 'Data Master',
+    title: 'Data Divisi',
+    href: '/division',
+    icon: <IconBuildingEstate size={15} />,
+  },
+  {
+    maintitle: 'Data Master',
+    title: 'Data Shift',
+    href: '/shift',
+    icon: <IconClockHour1 size={15} />,
+  },
+  {
+    maintitle: 'Data Master',
+    title: 'Data Lokasi',
+    href: '/locations',
+    icon: <IconMap2 size={15} />,
+  },
+  {
+    maintitle: 'Data Master',
+    title: 'Data Karyawan',
+    href: '/employees',
+    icon: <IconBriefcase size={15} />,
+  },
+  {
+    maintitle: 'Data Master',
+    title: 'Data User',
+    href: '/users',
+    icon: <IconUsersGroup size={15} />,
+  },
 ];
 
 const MenuAbsensi = [
-  { title: 'Jadwal', href: '/schedule', icon: IconCalendar },
-  { title: 'Presensi', href: '/attendance', icon: IconClipboardText },
-  { title: 'Aktivitas', href: '/activity', icon: IconGauge },
+  { maintitle: 'Absensi', title: 'Jadwal', href: '/schedule', icon: <IconCalendar size={15} /> },
+  {
+    maintitle: 'Data Absensi',
+    title: 'Presensi',
+    href: '/attendance',
+    icon: <IconClipboardText size={15} />,
+  },
+  { maintitle: 'Absensi', title: 'Aktivitas', href: '/activity', icon: <IconGauge size={15} /> },
 ];
 
 const MenuPengajuan = [
-  { title: 'Absensi', href: '/request-attendance', icon: IconClockPin },
-  { title: 'Izin', href: '/permission', icon: IconFileAlert },
-  { title: 'Lembur', href: '/overtime', icon: IconAlarmPlus },
+  {
+    maintitle: 'Pengajuan',
+    title: 'Absensi',
+    href: '/request-attendance',
+    icon: <IconClockPin size={15} />,
+  },
+  { maintitle: 'Pengajuan', title: 'Izin', href: '/permission', icon: <IconFileAlert size={15} /> },
+  { maintitle: 'Pengajuan', title: 'Lembur', href: '/overtime', icon: <IconAlarmPlus size={15} /> },
 ];
 
 // ================================================================================
 // ================== THIS LAYOUT FOR SUPERADMIN & ADMIN ==========================
 // ================================================================================
 export const AdminLayout: React.FC = () => {
+  const location = useLocation();
   const [opened, { toggle }] = useDisclosure();
-  const [title, setTitle] = useState('Beranda');
+  const { title, setTitle } = useTitleContext();
+  const navigate = useNavigate();
+  const [submenu, setSubmenu] = useState<SubMenuListType[]>(MenuBeranda);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const { creds, logout } = useAuth();
-  const ID_COMPANY = localStorage.getItem('id_company');
+  // const ID_COMPANY = localStorage.getItem('id_company');
   const NAME_COMPANY = localStorage.getItem('name_company');
+  const ROLE = localStorage.getItem('role');
+
+  const ChangeRole = () => {
+    localStorage.setItem('role', 'employee');
+    setTimeout(() => {
+      window.location.replace('/');
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (location.pathname.includes('/beranda')) {
+      setSubmenu(MenuBeranda);
+      setTitle('Beranda');
+      navigate('/beranda');
+    }
+
+    if (
+      [`/division`, '/shift', '/users', '/locations', '/employees'].some((path) =>
+        location.pathname.includes(path)
+      )
+    ) {
+      setSubmenu(MenuDataMaster);
+      setTitle('Data Master');
+    }
+
+    if (
+      [`/schedule`, '/attendance', '/activity'].some((path) => location.pathname.includes(path))
+    ) {
+      setSubmenu(MenuAbsensi);
+      setTitle('Absensi');
+    }
+
+    if (
+      [`/request-attendance`, '/permission', '/overtime'].some((path) =>
+        location.pathname.includes(path)
+      )
+    ) {
+      setSubmenu(MenuPengajuan);
+      setTitle('Pengajuan');
+    }
+  }, [creds, navigate, submenu, location.pathname, setTitle]);
 
   if (!creds) return <Navigate to="/login" replace />;
 
@@ -80,7 +165,7 @@ export const AdminLayout: React.FC = () => {
       <AppShell
         header={{ height: 60 }}
         navbar={{
-          width: 240,
+          width: 0,
           breakpoint: 'sm',
           collapsed: { mobile: !opened },
         }}
@@ -88,7 +173,7 @@ export const AdminLayout: React.FC = () => {
         withBorder={false}
       >
         <AppShell.Header className="shadow-md">
-          <Group h="100%" justify="space-between" gap={0} className="px-3">
+          <Group w="100%" h="100%" justify="space-between" gap={0} className="px-3">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <Group
               gap={5}
@@ -97,13 +182,14 @@ export const AdminLayout: React.FC = () => {
               className="h-full"
             >
               <img className="w-24" src="/images/logo-2-kpi.png" alt="KPI" />
-              {/* <div className='text-xs -mt-3 font-semibold'>Key Performance Indicator</div> */}
             </Group>
+
+            {/* Navigation */}
+            <SegmentControl title={title} />
 
             {/* Profile and Name Information */}
             {!isMobile && (
-              <Group className="grow h-full" justify="space-between">
-                <h1 className="px-3 py-2 font-semibold text-center">{title}</h1>
+              <Group className="h-full" justify="space-between">
                 {NAME_COMPANY && <div className="text-sm font-semibold">{NAME_COMPANY}</div>}
                 <Group gap={5} className="h-full" justify="end">
                   <div className="border-r border-slate-400 pe-5">
@@ -146,6 +232,10 @@ export const AdminLayout: React.FC = () => {
                       >
                         Logout
                       </Menu.Item>
+                      <Menu.Label>Ganti Level</Menu.Label>
+                      <Menu.Item leftSection={<IconDashboard size={14} />} onClick={ChangeRole}>
+                        <div>Halaman Karyawan</div>
+                      </Menu.Item>
                     </Menu.Dropdown>
                   </Menu>
                 </Group>
@@ -153,58 +243,25 @@ export const AdminLayout: React.FC = () => {
             )}
           </Group>
         </AppShell.Header>
-        <AppShell.Navbar style={{ transition: 'all 0.3s ease' }}>
-          <section className="overflow-x-auto min-h-screen pt-1 bar-scroll-blue">
-            <div className="p-2 flex flex-col pb-20">
-              {creds?.role == 'superadmin' && <NavSuperadmin />}
-              <SideNav
-                SideNavProps={MenuMain}
-                HeaderList={null}
-                ToggleButton={() => toggle()}
-                TitleSetting={setTitle}
-              />
-              {creds?.role == 'superadmin' && (
-                <SideNav
-                  SideNavProps={MenuDataMasterSuperadmin}
-                  HeaderList={'Data Master'}
-                  ToggleButton={() => toggle()}
-                  TitleSetting={setTitle}
-                />
-              )}
-              {creds?.role == 'admin' || ID_COMPANY !== null ? (
-                <>
-                  <SideNav
-                    SideNavProps={MenuDataMaster}
-                    HeaderList={'Data Master'}
-                    ToggleButton={() => toggle()}
-                    TitleSetting={setTitle}
-                  />
-                  <SideNav
-                    SideNavProps={MenuAbsensi}
-                    HeaderList={'Absensi'}
-                    ToggleButton={() => toggle()}
-                    TitleSetting={setTitle}
-                  />
-                  <SideNav
-                    SideNavProps={MenuPengajuan}
-                    HeaderList={'Pengajuan'}
-                    ToggleButton={() => toggle()}
-                    TitleSetting={setTitle}
-                  />
-                </>
-              ) : (
-                <NavLink
-                  className="rounded-xl mt-5"
-                  label={<span className="text-red-500">Pilih Company</span>}
-                  leftSection={<IconAlertCircle className="text-red-500" size={22} />}
-                  active={false}
-                  disabled
-                />
-              )}
-            </div>
-          </section>
-        </AppShell.Navbar>
         <AppShell.Main>
+          {/* SUB MENU LIST */}
+          {submenu[0].maintitle != 'none' && (
+            <section id="submenulist" className="rounded-md mb-4 flex justify-center gap-5">
+              {submenu?.map((item, index) => (
+                <Button
+                  key={index}
+                  onClick={() => {
+                    navigate(item.href);
+                  }}
+                  variant={location.pathname.includes(item.href) ? 'filled' : 'outline'}
+                  color="blue"
+                  leftSection={item.icon}
+                >
+                  {item.title}
+                </Button>
+              ))}
+            </section>
+          )}
           <Outlet />
         </AppShell.Main>
       </AppShell>

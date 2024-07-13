@@ -1,23 +1,11 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
-import {
-  Anchor,
-  Badge,
-  Divider,
-  Group,
-  List,
-  Loader,
-  RingProgress,
-  Text,
-  ThemeIcon,
-  rem,
-} from '@mantine/core';
+import { Anchor, Badge, Divider, Group, Loader, RingProgress, Text } from '@mantine/core';
 import {
   IconCalendar,
   IconFileTime,
   IconNews,
   IconFingerprint,
-  IconChevronRight,
   IconClockHour8,
   IconClock24,
   IconLuggage,
@@ -26,13 +14,17 @@ import {
   IconUsersGroup,
   IconClock,
   IconFileText,
-  IconCircleDashed,
 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { MenuList } from '@/components/navigation';
-import { AttendanceType, ScheduleType, useGetAttendanceMonthly } from '@/features/attendance';
+import {
+  AttendanceType,
+  ScheduleType,
+  useGetAttendance,
+  useGetAttendanceMonthly,
+} from '@/features/attendance';
 import { useAuth } from '@/features/auth';
 import { ActivityCard } from '@/features/components';
 import { useGetEmployee } from '@/features/employee/api/Profile';
@@ -42,8 +34,8 @@ import { EmployeeType } from '@/admin_features/types';
 import { AttendanceRequestType } from '@/features/late-request';
 import { useGetAttendanceRequest } from '@/features/late-request/api/getAttendanceRequest';
 import { useGetAttendanceRecapByDivision } from '@/admin_features/attendance/api';
-import { SchedulesType } from '@/admin_features/schedule/types';
-import { IconCircleCheck } from '@tabler/icons-react';
+// import { SchedulesType } from '@/admin_features/schedule/types';
+import { MotionConfig } from 'framer-motion';
 
 type DataAttendanceDivisionType = {
   Hadir: number;
@@ -70,17 +62,17 @@ export const Home: React.FC = () => {
   }, [DataSchedule]);
 
   const currentDate = new Date();
-  const [attendance, setAttendance] = useState<AttendanceType[]>([]);
-  const { data: DataAttendance } = useGetAttendanceMonthly(
+  const [attendanceMonthly, setAttendanceMonthly] = useState<AttendanceType[]>([]);
+  const { data: DataAttendanceMonthly } = useGetAttendanceMonthly(
     creds?.employee_id,
     formatterDate(currentDate, 'MM'),
     formatterDate(currentDate, 'yyyy')
   );
   useEffect(() => {
-    if (DataAttendance) {
-      setAttendance(DataAttendance);
+    if (DataAttendanceMonthly) {
+      setAttendanceMonthly(DataAttendanceMonthly);
     }
-  }, [DataAttendance]);
+  }, [DataAttendanceMonthly]);
 
   const [employee, setEmployee] = useState<EmployeeType>();
   const { data: DataEmployee } = useGetEmployee(creds?.employee_id);
@@ -116,8 +108,18 @@ export const Home: React.FC = () => {
       setAttendanceDivision(DataAttendanceDivision);
     }
   });
-  console.log(attendanceDivision);
-  // console.log('Data attendanceReq : ', attendanceReq);
+
+  const [attendance, setAttendance] = useState<AttendanceType>();
+  const { data: DataAttendance } = useGetAttendance(
+    creds?.employee_id,
+    formatterDate(currentDate, 'yyyy-MM-dd')
+  );
+  useEffect(() => {
+    if (DataAttendance) {
+      setAttendance(DataAttendance);
+    }
+  }, [DataAttendance]);
+  console.log('Data Attendance : ', attendance);
   if (LoadingDataAttendanceDivision) {
     return (
       <div className="flex justify-center my-20">
@@ -141,7 +143,7 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-white mx-auto max-w-xs w-full -mt-16 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
+      {/* <section className="bg-white mx-auto max-w-xs w-full -mt-16 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="divide-y divide-gray-300">
           <div className="flex justify-between text-xs items-center p-2">
             <Text fw={700} c="blue">
@@ -171,139 +173,10 @@ export const Home: React.FC = () => {
           </div>
           <div className=" text-xs divide-x divide-gray-300 p-2"></div>
         </div>
-      </section>
+      </section> */}
 
-      {/* Menu List => Berisi daftar menu pada sistem */}
-      <section className="px-7 mt-5 mb-7">
-        {creds?.role == 'supervisor' ? (
-          <MenuList
-            navigations={[
-              {
-                title: 'Kehadiran',
-                href: '/info-attendance',
-                icon: IconFingerprint,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Jadwal',
-                href: '/schedule',
-                icon: IconCalendar,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Izin',
-                href: '/absence',
-                icon: IconFileTime,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Cuti',
-                href: '/paid-leave',
-                icon: IconLuggage,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Slip Gaji',
-                href: '/development',
-                icon: IconFileDollar,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Pengajuan',
-                href: '/late-request',
-                icon: IconClipboardText,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Lembur',
-                href: '/overtime',
-                icon: IconClock24,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Permintaan',
-                href: '/employee-request',
-                icon: IconFileText,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Divisi',
-                href: '/employee-division',
-                icon: IconUsersGroup,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Berita',
-                href: '/development',
-                icon: IconNews,
-                color: 'bg-blue-600',
-              },
-            ]}
-          />
-        ) : (
-          <MenuList
-            navigations={[
-              {
-                title: 'Kehadiran',
-                href: '/info-attendance',
-                icon: IconFingerprint,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Jadwal',
-                href: '/schedule',
-                icon: IconCalendar,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Izin',
-                href: '/absence',
-                icon: IconFileTime,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Cuti',
-                href: '/paid-leave',
-                icon: IconLuggage,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Testing',
-                href: '/test',
-                icon: IconClock,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Pengajuan',
-                href: '/late-request',
-                icon: IconClipboardText,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Lembur',
-                href: '/overtime',
-                icon: IconClock24,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Slip Gaji',
-                href: '/development',
-                icon: IconFileDollar,
-                color: 'bg-blue-600',
-              },
-              {
-                title: 'Berita',
-                href: '/development',
-                icon: IconNews,
-                color: 'bg-blue-600',
-              },
-            ]}
-          />
-        )}
-      </section>
-
-      {creds?.role == 'supervisor' && (
-        <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2 -mt-4">
+      {creds?.role == 'supervisor' ? (
+        <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2 -mt-16">
           <div className="flex justify-between text-xs items-center p-2 -mt-1 -mb-1">
             <div>
               <Text fw={700} c="blue">
@@ -315,48 +188,52 @@ export const Home: React.FC = () => {
 
           <div className="w-full grid grid-cols-12  p-1 -mb-2">
             <div className="col-span-5 text-center m-auto p-1">
-              <RingProgress
-                className="mx-auto -ms-2 mb-2"
-                size={100}
-                thickness={10}
-                label={
-                  <div className="text-center text-xs font-semibold text-slate-500">
-                    Hadir {attendanceDivision?.Hadir ?? 0}
-                  </div>
-                }
-                sections={[
-                  {
-                    value:
-                      ((attendanceDivision?.Hadir ?? 0) / (attendanceDivision?.Overall ?? 1)) *
-                        100 || 0,
-                    color: 'green',
-                  },
-                  {
-                    value:
-                      ((attendanceDivision?.BelumHadir ?? 0) / (attendanceDivision?.Overall ?? 1)) *
-                        100 || 0,
-                    color: 'red',
-                  },
-                  {
-                    value:
-                      ((attendanceDivision?.Izin ?? 0) / (attendanceDivision?.Overall ?? 1)) *
-                        100 || 0,
-                    color: 'blue',
-                  },
-                  {
-                    value:
-                      ((attendanceDivision?.Sakit ?? 0) / (attendanceDivision?.Overall ?? 1)) *
-                        100 || 0,
-                    color: 'yellow',
-                  },
-                  {
-                    value:
-                      ((attendanceDivision?.Cuti ?? 0) / (attendanceDivision?.Overall ?? 1)) *
-                        100 || 0,
-                    color: 'grape',
-                  },
-                ]}
-              ></RingProgress>
+              <MotionConfig transition={{ duration: 0.5 }}>
+                <RingProgress
+                  className="mx-auto -ms-2 mb-2"
+                  size={100}
+                  roundCaps
+                  thickness={10}
+                  label={
+                    <div className="text-center text-xs font-semibold text-slate-500">
+                      Hadir {attendanceDivision?.Hadir ?? 0}
+                    </div>
+                  }
+                  sections={[
+                    {
+                      value:
+                        ((attendanceDivision?.Hadir ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                          100 || 0,
+                      color: 'green',
+                    },
+                    {
+                      value:
+                        ((attendanceDivision?.BelumHadir ?? 0) /
+                          (attendanceDivision?.Overall ?? 1)) *
+                          100 || 0,
+                      color: 'red',
+                    },
+                    {
+                      value:
+                        ((attendanceDivision?.Izin ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                          100 || 0,
+                      color: 'blue',
+                    },
+                    {
+                      value:
+                        ((attendanceDivision?.Sakit ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                          100 || 0,
+                      color: 'yellow',
+                    },
+                    {
+                      value:
+                        ((attendanceDivision?.Cuti ?? 0) / (attendanceDivision?.Overall ?? 1)) *
+                          100 || 0,
+                      color: 'grape',
+                    },
+                  ]}
+                ></RingProgress>
+              </MotionConfig>
             </div>
             <Divider className="col-span-1" orientation="vertical" />
             <div className="col-span-6 text-left my-auto">
@@ -402,112 +279,261 @@ export const Home: React.FC = () => {
             </Group>
           </div>
         </section>
-      )}
-
-      <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2">
-        <div className="flex justify-between text-xs items-center p-2 -mt-1 -mb-1">
-          <div>
-            <Text fw={700} c="blue">
-              Jadwal
-            </Text>
-          </div>
-          <div className="my-auto text-right -mt-2 me-2">
-            <Badge
-              size="sm"
-              className="uppercase"
-              style={{
-                marginTop: '7px',
-                marginLeft: '4px',
-                borderRadius: '2px',
-              }}
-              color={schedule?.status == 'on' ? 'green' : 'red'}
-            >
-              {schedule?.status}
-            </Badge>
-            <Badge
-              size="sm"
-              className="uppercase"
-              style={{
-                marginTop: '7px',
-                marginLeft: '4px',
-                borderRadius: '2px',
-              }}
-              color={schedule?.attendance_place == 'WFH' ? 'yellow' : 'blue'}
-            >
-              {schedule == undefined
-                ? ''
-                : schedule.attendance_place
-                  ? schedule.attendance_place
-                  : 'WFO'}
-            </Badge>
-            <Badge
-              size="sm"
-              className="uppercase"
-              style={{
-                marginTop: '7px',
-                marginLeft: '4px',
-                borderRadius: '2px',
-              }}
-              color={
-                schedule?.attendance_status == 'Belum hadir'
-                  ? 'red'
-                  : schedule?.attendance_status == 'cuti'
-                    ? 'grape'
-                    : schedule?.attendance_status == 'sakit'
-                      ? 'teal'
-                      : schedule?.attendance_status == 'izin'
-                        ? 'yellow'
-                        : 'blue'
-              }
-            >
-              {schedule?.attendance_status}
-            </Badge>
-          </div>
-        </div>
-        <Divider size={'sm'} />
-        <div className="divide-y divide-gray-300">
-          <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
-            <div className="col-span-3 text-center m-auto p-1">
-              <Text size="28px" fw={700}>
-                {schedule?.shift.shift_code}
-              </Text>
-              <Text style={{ marginTop: '-5px' }} size="sm">
-                {schedule?.shift.shift_name}
+      ) : (
+        <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2 -mt-16">
+          <div className="flex justify-between text-xs items-center p-2 -mt-1 -mb-1">
+            <div>
+              <Text fw={700} c="blue">
+                Jadwal
               </Text>
             </div>
-            <div className="col-span-9 ms-2 text-left">
-              <div className="ms-2 -mb-2">
-                <Text size="xs">Hari & tanggal : </Text>
-                <Text size="sm" fw={700}>
-                  {schedule?.date != undefined
-                    ? formatterDate(new Date(schedule?.date), 'EEEE, dd MMMM yyyy')
-                    : '--'}
+            <div className="my-auto text-right -mt-2 me-2">
+              <Badge
+                size="sm"
+                className="uppercase"
+                style={{
+                  marginTop: '7px',
+                  marginLeft: '4px',
+                  borderRadius: '2px',
+                }}
+                color={schedule?.status == 'on' ? 'green' : 'red'}
+              >
+                {schedule?.status}
+              </Badge>
+              <Badge
+                size="sm"
+                className="uppercase"
+                style={{
+                  marginTop: '7px',
+                  marginLeft: '4px',
+                  borderRadius: '2px',
+                }}
+                color={schedule?.attendance_place == 'WFH' ? 'yellow' : 'blue'}
+              >
+                {schedule == undefined
+                  ? ''
+                  : schedule.attendance_place
+                    ? schedule.attendance_place
+                    : 'WFO'}
+              </Badge>
+            </div>
+          </div>
+          <Divider size={'sm'} />
+          <div className="divide-y divide-gray-300">
+            <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
+              <div className="col-span-3 text-center m-auto p-1">
+                <Text size="28px" fw={700}>
+                  {schedule?.shift.shift_code}
+                </Text>
+                <Text style={{ marginTop: '-5px' }} size="sm">
+                  {schedule?.shift.shift_name}
                 </Text>
               </div>
-              <Divider my="sm" />
-              <div className="-mt-2 w-full grid grid-cols-12 mb-1">
-                <div className="col-span-6 text-left mt-1 ms-2">
-                  <Text size="xs">Jam kerja</Text>
+              <div className="col-span-9 ms-2 text-left">
+                <div className="ms-2 -mb-2">
+                  <Text size="xs">Hari & tanggal : </Text>
                   <Text size="sm" fw={700}>
-                    {schedule?.shift.start_time} - {schedule?.shift.end_time}
+                    {schedule?.date != undefined
+                      ? formatterDate(new Date(schedule?.date), 'EEEE, dd MMMM yyyy')
+                      : '--'}
                   </Text>
                 </div>
-                <div className="col-span-6 text-right -mt-1"></div>
+                <Divider my="sm" />
+                <div className="-mt-2 w-full grid grid-cols-12 mb-1">
+                  <div className="col-span-6 text-left mt-1 ms-2">
+                    <Text size="xs">Jam kerja</Text>
+                    <Text size="sm" fw={700}>
+                      {schedule?.shift.start_time} - {schedule?.shift.end_time}
+                    </Text>
+                  </div>
+                  <div className="col-span-6 text-right -mt-1"></div>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 text-xs divide-x divide-gray-300 p-2">
+              <div className="flex gap-2">
+                <IconClockHour8 size={15} className="text-green-400" /> Check-in :{' '}
+                {attendance?.check_in != undefined
+                  ? formatterDate(attendance?.check_in, 'HH:mm')
+                  : '--:--'}
+              </div>
+              <div className="ps-3 flex gap-2">
+                <IconClockHour8 size={15} className="text-rose-400" /> Check-out :{' '}
+                {attendance?.check_out != undefined
+                  ? formatterDate(attendance?.check_out, 'HH:mm')
+                  : '--:--'}
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 text-xs divide-x divide-gray-300 p-2">
-            <div className="flex gap-2">
-              <IconClockHour8 size={15} className="text-green-400" /> Masuk :{' '}
-              {schedule?.shift.start_time}
+        </section>
+      )}
+
+      {/* Menu List => Berisi daftar menu pada sistem */}
+
+      {creds?.role == 'supervisor' ? (
+        <section className="px-7 mt-5">
+          <MenuList
+            navigations={[
+              {
+                title: 'Jadwal',
+                href: '/schedule',
+                icon: IconCalendar,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Divisi',
+                href: '/employee-division',
+                icon: IconUsersGroup,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Pengajuan',
+                href: '/late-request',
+                icon: IconClipboardText,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Permintaan',
+                href: '/employee-request',
+                icon: IconFileText,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Lembur',
+                href: '/overtime',
+                icon: IconClock24,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Slip Gaji',
+                href: '/development',
+                icon: IconFileDollar,
+                color: 'bg-blue-600',
+              },
+            ]}
+          />
+        </section>
+      ) : (
+        <section className="px-7 mt-5" style={{ marginBottom: '-110px' }}>
+          <MenuList
+            navigations={[
+              {
+                title: 'Jadwal',
+                href: '/schedule',
+                icon: IconCalendar,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Pengajuan',
+                href: '/late-request',
+                icon: IconClipboardText,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Lembur',
+                href: '/overtime',
+                icon: IconClock24,
+                color: 'bg-blue-600',
+              },
+              {
+                title: 'Slip Gaji',
+                href: '/development',
+                icon: IconFileDollar,
+                color: 'bg-blue-600',
+              },
+            ]}
+          />
+        </section>
+      )}
+
+      {creds?.role == 'supervisor' && (
+        <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2 -mt-4">
+          <div className="flex justify-between text-xs items-center p-2 -mt-1 -mb-1">
+            <div>
+              <Text fw={700} c="blue">
+                Jadwal
+              </Text>
             </div>
-            <div className="ps-3 flex gap-2">
-              <IconClockHour8 size={15} className="text-rose-400" /> Keluar :{' '}
-              {schedule?.shift.end_time}
+            <div className="my-auto text-right -mt-2 me-2">
+              <Badge
+                size="sm"
+                className="uppercase"
+                style={{
+                  marginTop: '7px',
+                  marginLeft: '4px',
+                  borderRadius: '2px',
+                }}
+                color={schedule?.status == 'on' ? 'green' : 'red'}
+              >
+                {schedule?.status}
+              </Badge>
+              <Badge
+                size="sm"
+                className="uppercase"
+                style={{
+                  marginTop: '7px',
+                  marginLeft: '4px',
+                  borderRadius: '2px',
+                }}
+                color={schedule?.attendance_place == 'WFH' ? 'yellow' : 'blue'}
+              >
+                {schedule == undefined
+                  ? ''
+                  : schedule.attendance_place
+                    ? schedule.attendance_place
+                    : 'WFO'}
+              </Badge>
             </div>
           </div>
-        </div>
-      </section>
+          <Divider size={'sm'} />
+          <div className="divide-y divide-gray-300">
+            <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
+              <div className="col-span-3 text-center m-auto p-1">
+                <Text size="28px" fw={700}>
+                  {schedule?.shift.shift_code}
+                </Text>
+                <Text style={{ marginTop: '-5px' }} size="sm">
+                  {schedule?.shift.shift_name}
+                </Text>
+              </div>
+              <div className="col-span-9 ms-2 text-left">
+                <div className="ms-2 -mb-2">
+                  <Text size="xs">Hari & tanggal : </Text>
+                  <Text size="sm" fw={700}>
+                    {schedule?.date != undefined
+                      ? formatterDate(new Date(schedule?.date), 'EEEE, dd MMMM yyyy')
+                      : '--'}
+                  </Text>
+                </div>
+                <Divider my="sm" />
+                <div className="-mt-2 w-full grid grid-cols-12 mb-1">
+                  <div className="col-span-6 text-left mt-1 ms-2">
+                    <Text size="xs">Jam kerja</Text>
+                    <Text size="sm" fw={700}>
+                      {schedule?.shift.start_time} - {schedule?.shift.end_time}
+                    </Text>
+                  </div>
+                  <div className="col-span-6 text-right -mt-1"></div>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 text-xs divide-x divide-gray-300 p-2">
+              <div className="flex gap-2">
+                <IconClockHour8 size={15} className="text-green-400" /> Check-in :{' '}
+                {attendance?.check_in != undefined
+                  ? formatterDate(attendance?.check_in, 'HH:mm')
+                  : '--:--'}
+              </div>
+              <div className="ps-3 flex gap-2">
+                <IconClockHour8 size={15} className="text-rose-400" /> Check-out :{' '}
+                {attendance?.check_out != undefined
+                  ? formatterDate(attendance?.check_out, 'HH:mm')
+                  : '--:--'}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <ActivityCard employee={employee} date={new Date()} />
     </main>

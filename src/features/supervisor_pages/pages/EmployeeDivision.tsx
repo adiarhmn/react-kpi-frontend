@@ -35,7 +35,7 @@ export const EmployeeDivision: React.FC = () => {
             />
             <h2 className="font-semibold ">Anggota {employee?.division.division_name} </h2>
           </div>
-          <span className="font-semibold">
+          {/* <span className="font-semibold">
             <Popover width={200} position="bottom" withArrow shadow="md">
               <Popover.Target>
                 <Button variant="transparent" size="xs">
@@ -48,7 +48,7 @@ export const EmployeeDivision: React.FC = () => {
                 </Text>
               </Popover.Dropdown>
             </Popover>
-          </span>
+          </span> */}
         </div>
       </section>
 

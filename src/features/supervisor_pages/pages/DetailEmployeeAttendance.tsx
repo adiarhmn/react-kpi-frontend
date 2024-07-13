@@ -6,10 +6,12 @@ import {
   AttendanceType,
   ScheduleType,
   useGetAttendanceBySchedule,
+  useGetSchedule,
 } from '@/features/attendance';
 import { useGetActivityAlias, useGetActivityDetail } from '@/features/attendance/api/getActivity';
 import { useGetEmployee } from '@/features/employee/api/Profile';
 import { formatterDate } from '@/features/history';
+import { useGetScheduleDaily } from '@/features/schedule/api';
 import { Badge, Button, Divider, Loader, Text } from '@mantine/core';
 import { IconChevronLeft, IconInfoCircle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -18,27 +20,31 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export const DetailEmployeeAttendance: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const scheduleData = location.state.schedule as ScheduleType;
-  const [attendance, setAttendance] = useState<AttendanceType>();
-  const { data: DataAttendance, isLoading: LoadingAttendance } = useGetAttendanceBySchedule(
-    scheduleData.employee_schedule.employee_id,
-    scheduleData.id
-  );
-  useEffect(() => {
-    if (DataAttendance) {
-      setAttendance(DataAttendance[0]);
-    }
-  }, [DataAttendance]);
+  const attendance = location.state.attendance as AttendanceType;
 
   // [GET EMPLOYEE]
   const [employee, setEmployee] = useState<EmployeeType>();
-  const { data: DataEmployee } = useGetEmployee(scheduleData.employee_schedule.employee_id);
+  const { data: DataEmployee, isLoading: LoadingEmployee } = useGetEmployee(attendance.employee_id);
   useEffect(() => {
     if (DataEmployee) {
       setEmployee(DataEmployee);
     }
   }, [DataEmployee]);
   // [END GET EMPLOYEE]
+
+  // [GET SCHEDULE]
+  const [schedule, setSchedule] = useState<ScheduleType>();
+  const { data: dataSchedule, isLoading: LoadingSchedule } = useGetScheduleDaily(
+    employee?.id,
+    formatterDate(new Date(attendance.check_in), 'yyyy-MM-dd')
+  );
+  useEffect(() => {
+    if (dataSchedule) {
+      setSchedule(dataSchedule[0]);
+    }
+  }, [dataSchedule]);
+  console.log('Data Schedule', schedule);
+  // [END GET SCHEDULE]
 
   // [All about  Activity Alias]
   const [activityAlias, setActivityAlias] = useState([]);
@@ -54,7 +60,7 @@ export const DetailEmployeeAttendance: React.FC = () => {
   const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
   const { data: dataActivity } = useGetActivityDetail(
     employee?.id,
-    formatterDate(new Date(scheduleData.date), 'yyyy-MM-dd')
+    formatterDate(new Date(attendance.id), 'yyyy-MM-dd')
   );
   useEffect(() => {
     if (dataActivity) {
@@ -63,19 +69,13 @@ export const DetailEmployeeAttendance: React.FC = () => {
   }, [dataActivity]);
   // [End Activity Detail]
 
-  // console.log('Schedule : ', scheduleData);
-  if (LoadingAttendance) {
+  if (LoadingSchedule && LoadingEmployee) {
     return (
-      <div className="w-full col-span-12">
-        <section className="min-h-96 flex flex-col items-center justify-center mt-10">
-          <Loader size={50} />
-          <span className="font-bold text-slate-400 text-xl mt-10">Memuat data absen ...</span>
-        </section>
+      <div className="flex justify-center my-20">
+        <Loader size="sm" />
       </div>
     );
   }
-
-  console.log('Data Attendance : ', attendance);
 
   return (
     <main>
@@ -101,29 +101,6 @@ export const DetailEmployeeAttendance: React.FC = () => {
         <div className="flex justify-between text-base items-center py-1 px-2">
           <span className="font-bold text-blue-700">Absensi</span>
           <div>
-            {scheduleData?.attendance_status != 'Belum Hadir' &&
-              scheduleData.attendance_status != 'Hadir' && (
-                <Badge
-                  size="sm"
-                  className="uppercase"
-                  style={{
-                    marginTop: '7px',
-                    marginLeft: '4px',
-                    borderRadius: '2px',
-                  }}
-                  color={
-                    scheduleData?.attendance_status == 'cuti'
-                      ? 'grape'
-                      : scheduleData?.attendance_status == 'sakit'
-                        ? 'teal'
-                        : scheduleData?.attendance_status == 'izin'
-                          ? 'yellow'
-                          : 'blue'
-                  }
-                >
-                  {scheduleData?.attendance_status}
-                </Badge>
-              )}
             <Badge
               size="sm"
               style={{
@@ -131,14 +108,14 @@ export const DetailEmployeeAttendance: React.FC = () => {
                 borderRadius: '2px',
               }}
               color={
-                attendance?.status == 'present' || scheduleData.attendance_status == 'cuti'
+                attendance?.status == 'present'
                   ? 'green'
                   : attendance?.status == 'late'
                     ? 'yellow'
                     : 'red'
               }
             >
-              {attendance?.status == 'present' || scheduleData.attendance_status == 'cuti'
+              {attendance?.status == 'present'
                 ? 'hadir'
                 : attendance?.status == 'late'
                   ? 'terlambat'
@@ -146,20 +123,21 @@ export const DetailEmployeeAttendance: React.FC = () => {
             </Badge>
           </div>
         </div>
+        <Divider size={'sm'} />
         <div className="w-full grid grid-cols-12 divide-x divide-gray-300 p-1 -mb-2">
           <div className="col-span-3 text-center m-auto ">
             <Text size="27px" fw={700}>
-              {scheduleData?.shift.shift_code}
+              {schedule?.shift.shift_code}
             </Text>
             <Text style={{ marginTop: '-5px' }} size="sm">
-              {scheduleData?.shift.shift_name}
+              {schedule?.shift.shift_name}
             </Text>
           </div>
           <div className="col-span-9 ms-2 text-left">
             <div className="ms-2">
               <Text size="xs">Tanggal</Text>
               <Text size="auto" fw={700}>
-                {formatterDate(new Date(scheduleData.date), 'EEEE, dd MMMM yyyy')}
+                {formatterDate(new Date(attendance.check_in), 'EEEE, dd MMMM yyyy')}
               </Text>
             </div>
             <Divider my="sm" />
@@ -183,6 +161,7 @@ export const DetailEmployeeAttendance: React.FC = () => {
             </div>
           </div>
         </div>
+        <Divider className='mt-2 mb-2' size={'sm'} />
       </section>
 
       {/* <ActivityCard employee={scheduleData.employee_schedule.employee} /> */}
@@ -241,13 +220,13 @@ export const DetailEmployeeAttendance: React.FC = () => {
             ))
           ) : (
             <div className="w-full col-span-12">
-              <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+              <section className="min-h-96 flex flex-col items-center justify-center -mt-10 -mb-10">
                 <img
-                  className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+                  className="w-28 mb-2 bg-slate-200 rounded-full p-2"
                   src="/images/blank-canvas.svg"
                   alt=""
                 />
-                <span className="font-bold text-slate-400 text-lg">Belum ada data kegiatan</span>
+                <span className="font-bold text-slate-400 text-sm">Belum ada data kegiatan</span>
               </section>
             </div>
           )}
