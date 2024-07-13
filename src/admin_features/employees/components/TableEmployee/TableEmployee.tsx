@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
 import {
   ActionIcon,
+  Badge,
   Button,
   Indicator,
   Loader,
@@ -123,7 +124,11 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
               <Table.Tr key={index}>
                 <Table.Td>{indexOfFirstItem + index + 1}</Table.Td>
                 <Table.Td>{employee?.name}</Table.Td>
-                <Table.Td>{employee?.status ? "Aktif" : "Nonaktif"}</Table.Td>
+                <Table.Td>
+                  <div className="flex justify-center">
+                    {employee?.status ? <Badge>Aktif</Badge> : <Badge color="red">Nonaktif</Badge>}
+                  </div>
+                </Table.Td>
                 <Table.Td>{employee?.division.division_name}</Table.Td>
                 <Table.Td>{employee?.user.username}</Table.Td>
                 <Table.Td>{employee?.user.role}</Table.Td>

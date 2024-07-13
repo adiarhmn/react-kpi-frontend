@@ -3,7 +3,7 @@ export type UserType = {
   id: number;
   username: string;
   role: string;
-  status: boolean;
+  status: number | boolean;
   password: string;
   company_id?: number;
 };

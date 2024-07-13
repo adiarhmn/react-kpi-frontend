@@ -50,7 +50,6 @@ export async function updateUser(user: UserPostType) {
 }
 
 const UpdateEmployee = async (employee: EmployeePostType & UserPostType) => {
-  console.log('EMPLOYE COYYYYYYY', employee);
   const CreateUser = {
     id: employee.user_id,
     username: employee.username,
