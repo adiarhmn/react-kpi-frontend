@@ -209,7 +209,11 @@ export const AdminLayout: React.FC = () => {
                 <Group gap={5} className="h-full" justify="end">
                   {ID_COMPANY ? (
                     <div className="border-r border-slate-400 pe-5">
-                      <Button size="xs" onClick={changeCompany}>
+                      <Button
+                        size="xs"
+                        onClick={changeCompany}
+                        leftSection={<IconAdjustmentsFilled size={18}></IconAdjustmentsFilled>}
+                      >
                         Ganti Company
                       </Button>
                     </div>
