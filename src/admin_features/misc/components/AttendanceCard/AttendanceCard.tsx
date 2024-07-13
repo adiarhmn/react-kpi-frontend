@@ -37,7 +37,7 @@ export const AttendanceCard: React.FC = () => {
   console.log('Data Recap', data);
 
   return (
-    <section className="bg-white shadow-lg p-3 rounded-lg">
+    <section className="bg-white shadow-lg p-6 rounded-lg max-h-72">
       <div className="grid lg:grid-cols-2">
         <div>
           <h2 className="font-bold">Rekap Absensi Karyawan</h2>
