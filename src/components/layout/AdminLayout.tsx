@@ -26,6 +26,7 @@ import {
   IconMap2,
   IconBell,
   IconDashboard,
+  IconAdjustmentsFilled,
 } from '@tabler/icons-react';
 import { Suspense, useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -183,8 +184,12 @@ export const AdminLayout: React.FC = () => {
               <img className="w-24" src="/images/logo-2-kpi.png" alt="KPI" />
             </Group>
 
-            {/* Navigation */}
-            <SegmentControl title={title} />
+            {/* Navigation Untuk Admin */}
+            {creds?.role === 'admin' ? (
+              <SegmentControl title={title} />
+            ) : (
+              <div className="text-slate-500 font-semibold">Superadmin</div>
+            )}
 
             {/* Profile and Name Information */}
             {!isMobile && (
