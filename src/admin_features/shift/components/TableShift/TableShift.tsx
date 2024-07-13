@@ -93,7 +93,8 @@ export const TableShift: React.FC = () => {
                   <div className="flex gap-2 items-center justify-center pt-1">
                     <ActionIcon
                       onClick={() => {
-                        open();
+                        // serta mengirim state shift ke halaman update
+                        navigate(`/shift/${shift.id}`, { state: { shift } });
                       }}
                       color="yellow"
                     >

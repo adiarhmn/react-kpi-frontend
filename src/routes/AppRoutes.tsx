@@ -94,6 +94,7 @@ const { Attendance: AdminAttendance } = lazyImport(
 const { CreateSchedule } = lazyImport(() => import('@/admin_features/schedule'), 'CreateSchedule');
 const { UpdateSchedule } = lazyImport(() => import('@/admin_features/schedule'), 'UpdateSchedule');
 const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'ShiftAdmin');
+const { UpdateShift } = lazyImport(() => import('@/admin_features/shift'), 'UpdateShift');
 const { Employees } = lazyImport(() => import('@/admin_features/employees'), 'Employees');
 const { DetailEmployee } = lazyImport(() => import('@/admin_features/employees'), 'DetailEmployee');
 const { Division } = lazyImport(() => import('@/admin_features/division'), 'Division');
@@ -237,6 +238,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="schedule/create" element={<CreateSchedule />} />
             <Route path="schedule/update" element={<UpdateSchedule />} />
             <Route path="shift" element={<ShiftAdmin />} />
+            <Route path="shift/:id" element={<UpdateShift />} />
             <Route path="attendance" element={<AdminAttendance />} />
             <Route path="request-attendance" element={<AttendanceRequest />} />
             <Route path="employees" element={<Employees />} />

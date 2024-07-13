@@ -8,6 +8,15 @@ async function getShift(company_id?: number) {
   return res.data;
 }
 
+async function getShiftBYID(id: number) {
+  const res = await axios.get(`${BaseURL}/shift/${id}`);
+  return res.data;
+}
+
 export const useGetShift = (company_id?: number) => {
   return useQuery({ queryKey: ['shift'], queryFn: () => getShift(company_id) });
+};
+
+export const useGetShiftByID = (id: number) => {
+  return useQuery({ queryKey: ['shift', id], queryFn: () => getShiftBYID(id) });
 };

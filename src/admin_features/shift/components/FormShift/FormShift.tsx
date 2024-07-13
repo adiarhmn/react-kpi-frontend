@@ -10,8 +10,14 @@ interface FormShiftProps {
   onSubmit: (data: any) => void;
   loading: boolean;
   initialValues?: ShiftType;
+  edit?: boolean;
 }
-export const FormShift: React.FC<FormShiftProps> = ({ onSubmit, loading, initialValues }) => {
+export const FormShift: React.FC<FormShiftProps> = ({
+  onSubmit,
+  loading,
+  initialValues,
+  edit = false,
+}) => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   if (creds === null) navigate('/login');
@@ -30,6 +36,7 @@ export const FormShift: React.FC<FormShiftProps> = ({ onSubmit, loading, initial
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const shiftDataPost = {
+      id: initialValues?.id,
       shift_name: form.values.shift_name,
       start_time: form.values.start_time,
       end_time: form.values.end_time,
@@ -71,10 +78,20 @@ export const FormShift: React.FC<FormShiftProps> = ({ onSubmit, loading, initial
           {...form.getInputProps('shift_active')}
         />
       </div>
-      <div className="grid grid-cols-2 gap-5 mb-3">
-        <TimeInput label="Jam Masuk" {...form.getInputProps('start_time')} />
-        <TimeInput label="Jam Keluar" {...form.getInputProps('end_time')} />
-      </div>
+      {edit ? (
+        <>
+          <div className="grid grid-cols-2 gap-5">
+            <TimeInput disabled label="Jam Masuk" {...form.getInputProps('start_time')} />
+            <TimeInput disabled label="Jam Keluar" {...form.getInputProps('end_time')} />
+          </div>
+          <span className="text-red-600 text-xs italic">Waktu Shift tidak bisa diubah !</span>
+        </>
+      ) : (
+        <div className="grid grid-cols-2 gap-5 mb-3">
+          <TimeInput label="Jam Masuk" {...form.getInputProps('start_time')} />
+          <TimeInput label="Jam Keluar" {...form.getInputProps('end_time')} />
+        </div>
+      )}
       <div className="flex gap-3">
         <Button loading={loading} type="submit" color="blue" className="mt-5">
           Simpan
