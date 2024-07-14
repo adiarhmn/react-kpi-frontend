@@ -10,10 +10,12 @@ export const createCompany = async (data: Companys) => {
   console.log('DATA : ', data);
   const formData = new FormData();
   // Jika file ada, tambahkan ke FormData
-  formData.append('company_logo', data.company_logo);
-  formData.append('name', data.name);
-  formData.append('shift_active', data.shift_active.toString());
-  formData.append('companyUrl', data.companyUrl);
+  if (data.company_logo !== null) {
+    formData.append('company_logo', data.company_logo);
+    formData.append('name', data.name);
+    formData.append('shift_active', data.shift_active.toString());
+    formData.append('companyUrl', data.companyUrl);
+  }
 
   console.log('Data yang dikirim : ', formData);
   for (const [key, value] of formData.entries()) {

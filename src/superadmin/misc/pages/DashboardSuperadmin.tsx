@@ -62,24 +62,6 @@ export const DashboardSuperadmin: React.FC = () => {
         </h1>
       </section>
 
-      {Company && (
-        <section className="m-3 mx-7 p-6 bg-white rounded-lg shadow-lg">
-          <div>
-            <h2 className="font-semibold text-lg"> {Company?.name}</h2>
-          </div>
-          <div className="grid grid-cols-1 mt-5">
-            <div className="border-2 border-slate-200 p-2 rounded-md">
-              <div>
-                <h3 className="font-semibold text-sm">{Company?.name}</h3>
-                <div className="-mt-1 text-xs text-slate-400">
-                  Berikut company yang dipilih untuk melihat detail
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Daftar atau List Daftar Company */}
       <section className="m-3 mt-5 mx-7 p-6 bg-white rounded-lg shadow-lg">
         <div id="Header-List-Company" className="flex justify-between items-center">

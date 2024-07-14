@@ -129,11 +129,15 @@ export const AdminLayout: React.FC = () => {
     localStorage.removeItem('id_company');
     localStorage.removeItem('name_company');
     setTimeout(() => {
-      window.location.reload();
+      window.location.replace('/beranda');
     }, 100);
   };
 
   useEffect(() => {
+    if (!location.pathname.includes('/beranda')) {
+      if (!ID_COMPANY) window.location.replace('/beranda');
+    }
+
     if (location.pathname.includes('/beranda')) {
       setSubmenu(MenuBeranda);
       setTitle('Beranda');
@@ -209,7 +213,11 @@ export const AdminLayout: React.FC = () => {
                 <Group gap={5} className="h-full" justify="end">
                   {ID_COMPANY ? (
                     <div className="border-r border-slate-400 pe-5">
-                      <Button size="xs" onClick={changeCompany}>
+                      <Button
+                        size="xs"
+                        onClick={changeCompany}
+                        leftSection={<IconAdjustmentsFilled size={18}></IconAdjustmentsFilled>}
+                      >
                         Ganti Company
                       </Button>
                     </div>

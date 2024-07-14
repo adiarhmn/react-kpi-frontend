@@ -12,6 +12,7 @@ export type ShiftType = {
   id: number;
   shift_name: string;
   start_time: string;
+  is_active: boolean | string;
   end_time: string;
   shift_code: string;
 };
