@@ -5,6 +5,8 @@ import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 
+import { Companys } from '@/features/auth';
+
 import { useCreateCompany } from '../api';
 import { TableCompany } from '../components';
 
@@ -22,8 +24,10 @@ export const Company: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = {
+    const data: Companys = {
       name: form.values.name,
+      company_logo: null as File | null,
+      companyUrl: '',
       shift_active: form.values.shift_active === '1',
     };
     try {
