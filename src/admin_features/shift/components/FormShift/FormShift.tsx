@@ -24,7 +24,7 @@ export const FormShift: React.FC<FormShiftProps> = ({
 
   const form = useForm({
     validateInputOnChange: true,
-    initialValues: initialValues || {
+    initialValues: { ...initialValues, is_active: initialValues?.is_active ? '1' : '0' } || {
       shift_name: '',
       shift_code: '',
       start_time: '',
@@ -70,12 +70,12 @@ export const FormShift: React.FC<FormShiftProps> = ({
           className="mb-3"
           placeholder="Pilih"
           required
-          defaultValue={'1'}
+          defaultValue="1"
           data={[
             { value: '1', label: 'Aktif' },
             { value: '0', label: 'Tidak Aktif' },
           ]}
-          {...form.getInputProps('shift_active')}
+          {...form.getInputProps('is_active')}
         />
       </div>
       {edit ? (
