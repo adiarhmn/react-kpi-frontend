@@ -134,7 +134,7 @@ export const AdminLayout: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!location.pathname.includes('/beranda')) {
+    if (!location.pathname.includes('/beranda') && creds?.role !== 'admin') {
       if (!ID_COMPANY) window.location.replace('/beranda');
     }
 
