@@ -13,6 +13,7 @@ export const DashboardSuperadmin: React.FC = () => {
   const { creds } = useAuth();
 
   const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api/';
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [Company, setCompany] = useState<Companys | undefined>(undefined);
   const navigate = useNavigate();
   if (creds === null) navigate('/login');
@@ -50,8 +51,6 @@ export const DashboardSuperadmin: React.FC = () => {
   // Get Data Companys
   // Loading Get Data Companys
   if (LoadCompany) return <div>Loading...</div>;
-
-  console.log(CompanyList);
   // RENDER COMPONENT =====================================================
   return (
     <main>

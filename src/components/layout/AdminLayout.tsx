@@ -31,7 +31,8 @@ import {
 import { Suspense, useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { useAuth } from '@/features/auth';
+import { Companys, useAuth } from '@/features/auth';
+import { useGetCompanys } from '@/superadmin/company';
 
 import { LoadingScreen } from '../elements';
 import { SegmentControl } from '../navigation';
@@ -46,6 +47,9 @@ type SubMenuListType = {
 
 const MenuBeranda = [
   { maintitle: 'none', title: 'Beranda', href: '/beranda', icon: <IconCalendar size={15} /> },
+];
+const MenuJadwal = [
+  { maintitle: 'none', title: 'Jadwal', href: '/schedule', icon: <IconCalendar size={15} /> },
 ];
 
 const MenuDataMaster = [
@@ -73,23 +77,17 @@ const MenuDataMaster = [
     href: '/employees',
     icon: <IconBriefcase size={15} />,
   },
-  {
-    maintitle: 'Data Master',
-    title: 'Data User',
-    href: '/users',
-    icon: <IconUsersGroup size={15} />,
-  },
 ];
 
 const MenuAbsensi = [
-  { maintitle: 'Absensi', title: 'Jadwal', href: '/schedule', icon: <IconCalendar size={15} /> },
+  // { maintitle: 'Absensi', title: 'Jadwal', href: '/schedule', icon: <IconCalendar size={15} /> },
   {
-    maintitle: 'Data Absensi',
+    maintitle: 'Laporan',
     title: 'Presensi',
     href: '/attendance',
     icon: <IconClipboardText size={15} />,
   },
-  { maintitle: 'Absensi', title: 'Aktivitas', href: '/activity', icon: <IconGauge size={15} /> },
+  { maintitle: 'Laporan', title: 'Aktivitas', href: '/activity', icon: <IconGauge size={15} /> },
 ];
 
 const MenuPengajuan = [
@@ -107,6 +105,22 @@ const MenuPengajuan = [
 // ================== THIS LAYOUT FOR SUPERADMIN & ADMIN ==========================
 // ================================================================================
 export const AdminLayout: React.FC = () => {
+  const BASE_URL = window.location.origin;
+  const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api/';
+
+  const [company, setCompany] = useState<Companys | undefined>(undefined);
+
+  const { data, isLoading, isError } = useGetCompanys();
+
+  useEffect(() => {
+    if (data) {
+      // Search for the company that matches the base URL
+      const company = data.find((company: any) => company.companyUrl === BASE_URL);
+      company && localStorage.setItem('company', company);
+      setCompany(company);
+    }
+  }, [BASE_URL, data]);
+
   const location = useLocation();
   const [opened, { toggle }] = useDisclosure();
   const { title, setTitle } = useTitleContext();
@@ -114,9 +128,11 @@ export const AdminLayout: React.FC = () => {
   const [submenu, setSubmenu] = useState<SubMenuListType[]>(MenuBeranda);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
-  const { creds, logout } = useAuth();
   const ID_COMPANY = localStorage.getItem('id_company');
   const NAME_COMPANY = localStorage.getItem('name_company');
+  const { creds, logout } = useAuth();
+
+  // if (!ID_COMPANY && creds?.role !== 'admin') navigate('/beranda');
 
   const ChangeRole = () => {
     localStorage.setItem('role', 'employee');
@@ -149,15 +165,30 @@ export const AdminLayout: React.FC = () => {
         location.pathname.includes(path)
       )
     ) {
-      setSubmenu(MenuDataMaster);
+      setSubmenu([
+        ...MenuDataMaster,
+        ...(creds?.role === 'superadmin'
+          ? [
+              {
+                maintitle: 'Data Master',
+                title: 'Data User',
+                href: '/users',
+                icon: <IconUsersGroup size={15} />,
+              },
+            ]
+          : []),
+      ]);
       setTitle('Data Master');
     }
 
-    if (
-      [`/schedule`, '/attendance', '/activity'].some((path) => location.pathname.includes(path))
-    ) {
+    if (['/attendance', '/activity'].some((path) => location.pathname.includes(path))) {
       setSubmenu(MenuAbsensi);
-      setTitle('Absensi');
+      setTitle('Laporan');
+    }
+
+    if (location.pathname.includes('/schedule')) {
+      setSubmenu(MenuJadwal);
+      setTitle('Jadwal');
     }
 
     if (
@@ -168,9 +199,12 @@ export const AdminLayout: React.FC = () => {
       setSubmenu(MenuPengajuan);
       setTitle('Pengajuan');
     }
-  }, [creds, navigate, submenu, location.pathname, setTitle]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [creds, navigate]);
 
   if (!creds) return <Navigate to="/login" replace />;
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <div>Error</div>;
 
   return (
     <Suspense fallback={<LoadingScreen />}>
@@ -196,7 +230,21 @@ export const AdminLayout: React.FC = () => {
               {NAME_COMPANY ? (
                 <div className="text-dark-500 font-semibold">{NAME_COMPANY}</div>
               ) : (
-                <img className="w-24" src="/images/logo-2-kpi.png" alt="KPI" />
+                <>
+                  {company ? (
+                    <Avatar
+                      src={
+                        company?.company_logo
+                          ? BaseURL + '/public/company-logo/' + company?.company_logo
+                          : '/images/kpi-logo.png'
+                      }
+                      alt="it's me"
+                      size={60}
+                    />
+                  ) : (
+                    <img src="/images/kpi-logo.png" alt="" className="w-20" />
+                  )}
+                </>
               )}
             </Group>
 
@@ -211,7 +259,7 @@ export const AdminLayout: React.FC = () => {
             {!isMobile && (
               <Group className="h-full" justify="space-between">
                 <Group gap={5} className="h-full" justify="end">
-                  {ID_COMPANY ? (
+                  {ID_COMPANY && creds?.role === 'superadmin' ? (
                     <div className="border-r border-slate-400 pe-5">
                       <Button
                         size="xs"

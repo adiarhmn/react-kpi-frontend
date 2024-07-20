@@ -26,7 +26,6 @@ export const Login: React.FC = () => {
   if (isError) return <div>Error</div>;
 
   // Get Base URL now
-  console.log(data, BASE_URL);
   return (
     <main className="w-full mx-auto flex p-10">
       <div className="m-auto pt-10 w-full lg:w-[350px]">

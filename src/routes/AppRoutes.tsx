@@ -135,6 +135,10 @@ const { AttendanceRequest } = lazyImport(
   'AttendanceRequest'
 );
 const { Company } = lazyImport(() => import('@/superadmin/company'), 'Company');
+const { TutorialApplication } = lazyImport(
+  () => import('@/admin_features/misc'),
+  'TutorialApplication'
+);
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -233,6 +237,7 @@ export const AppRoutes: React.FC = () => {
         {creds?.role === 'admin' || creds?.role === 'superadmin' ? (
           <Route element={<AdminLayout />}>
             <Route index path="/" element={<RedirectToBeranda />} />
+            <Route path="tutorial" element={<TutorialApplication />} />
             <Route path="beranda" element={<DinamicDashboard />} />
             <Route path="schedule" element={<AdminSchedule />} />
             <Route path="schedule/create" element={<CreateSchedule />} />
