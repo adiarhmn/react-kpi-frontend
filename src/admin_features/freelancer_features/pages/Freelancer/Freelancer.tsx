@@ -2,6 +2,8 @@ import { Button } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
+import { TableFreelancer } from '../../components';
+
 export const Freelancer: React.FC = () => {
   const navigate = useNavigate();
   return (
@@ -19,8 +21,10 @@ export const Freelancer: React.FC = () => {
             Tambah Pekerja
           </Button>
         </div>
-        <div className="flex gap-2"></div>
-        <div className="mt-7"></div>
+        <div className="mt-3">
+          {/* Menampilkan Data Pekerja */}
+          <TableFreelancer />
+        </div>
       </section>
     </main>
   );
