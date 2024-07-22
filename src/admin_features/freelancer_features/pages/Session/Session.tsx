@@ -1,6 +1,7 @@
-import { Button } from '@mantine/core';
+import { Button, Table } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+import { TableSession } from '../../components';
 
 export const Session: React.FC = () => {
   const navigate = useNavigate();
@@ -18,8 +19,9 @@ export const Session: React.FC = () => {
             Tambah Sesi
           </Button>
         </div>
-        <div className="flex gap-2"></div>
-        <div className="mt-7"></div>
+        <div className="mt-7">
+          <TableSession />
+        </div>
       </section>
     </main>
   );
