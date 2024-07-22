@@ -48,6 +48,7 @@ type SubMenuListType = {
 const MenuBeranda = [
   { maintitle: 'none', title: 'Beranda', href: '/beranda', icon: <IconCalendar size={15} /> },
 ];
+
 const MenuJadwal = [
   { maintitle: 'none', title: 'Jadwal', href: '/schedule', icon: <IconCalendar size={15} /> },
 ];
@@ -80,7 +81,6 @@ const MenuDataMaster = [
 ];
 
 const MenuAbsensi = [
-  // { maintitle: 'Absensi', title: 'Jadwal', href: '/schedule', icon: <IconCalendar size={15} /> },
   {
     maintitle: 'Laporan',
     title: 'Presensi',
@@ -99,6 +99,27 @@ const MenuPengajuan = [
   },
   { maintitle: 'Pengajuan', title: 'Izin', href: '/permission', icon: <IconFileAlert size={15} /> },
   { maintitle: 'Pengajuan', title: 'Lembur', href: '/overtime', icon: <IconAlarmPlus size={15} /> },
+];
+
+const MenuFreelancer = [
+  {
+    maintitle: 'Pekerja Lepas',
+    title: 'Data Pekerja',
+    href: '/freelancer',
+    icon: <IconUsersGroup size={15} />,
+  },
+  {
+    maintitle: 'Pekerja Lepas',
+    title: 'Data Sesi',
+    href: '/freelancer-sesi',
+    icon: <IconClockHour1 size={15} />,
+  },
+  {
+    maintitle: 'Pekerja Lepas',
+    title: 'Data Kelompok',
+    href: '/freelancer-group',
+    icon: <IconBuildingEstate size={15} />,
+  },
 ];
 
 // ================================================================================
@@ -199,6 +220,15 @@ export const AdminLayout: React.FC = () => {
       setSubmenu(MenuPengajuan);
       setTitle('Pengajuan');
     }
+
+    if (
+      [`/freelancer`, '/freelancer-sesi', '/freelancer-group'].some((path) =>
+        location.pathname.includes(path)
+      )
+    ) {
+      setSubmenu(MenuFreelancer);
+      setTitle('Pekerja Lepas');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [creds, navigate]);
 
@@ -238,8 +268,8 @@ export const AdminLayout: React.FC = () => {
                           ? BaseURL + '/public/company-logo/' + company?.company_logo
                           : '/images/kpi-logo.png'
                       }
-                      alt="it's me"
-                      size={60}
+                      alt="Logo company"
+                      size={40}
                     />
                   ) : (
                     <img src="/images/kpi-logo.png" alt="" className="w-20" />
@@ -341,6 +371,7 @@ export const AdminLayout: React.FC = () => {
               ))}
             </section>
           )}
+
           <Outlet />
         </AppShell.Main>
       </AppShell>

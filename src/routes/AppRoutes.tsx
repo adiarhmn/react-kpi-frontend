@@ -140,6 +140,8 @@ const { TutorialApplication } = lazyImport(
   'TutorialApplication'
 );
 
+const { Freelancer } = lazyImport(() => import('@/admin_features/freelancer/pages'), 'Freelancer');
+
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
   const navigate = useNavigate();
@@ -267,6 +269,9 @@ export const AppRoutes: React.FC = () => {
             <Route path="locations/create" element={<CreateLocations />} />
             <Route path="locations/update" element={<UpdateLocations />} />
             {creds?.role == 'superadmin' && <Route path="company" element={<Company />} />}
+
+            {/* Freelence Conditions =============================================================================> */}
+            <Route path="freelancer" element={<Freelancer />} />
           </Route>
         ) : (
           <Route path="development" element={<Development />} />
