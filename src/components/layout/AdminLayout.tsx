@@ -111,14 +111,20 @@ const MenuFreelancer = [
   {
     maintitle: 'Pekerja Lepas',
     title: 'Data Sesi',
-    href: '/freelancer-sesi',
+    href: '/session',
     icon: <IconClockHour1 size={15} />,
   },
   {
     maintitle: 'Pekerja Lepas',
     title: 'Data Kelompok',
-    href: '/freelancer-group',
+    href: '/group',
     icon: <IconBuildingEstate size={15} />,
+  },
+  {
+    maintitle: 'Pekerja Lepas',
+    title: 'Presensi',
+    href: '/attendance_freelancer',
+    icon: <IconClipboardText size={15} />,
   },
 ];
 
@@ -150,7 +156,6 @@ export const AdminLayout: React.FC = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const ID_COMPANY = localStorage.getItem('id_company');
-  const NAME_COMPANY = localStorage.getItem('name_company');
   const { creds, logout } = useAuth();
 
   // if (!ID_COMPANY && creds?.role !== 'admin') navigate('/beranda');
@@ -222,7 +227,7 @@ export const AdminLayout: React.FC = () => {
     }
 
     if (
-      [`/freelancer`, '/freelancer-sesi', '/freelancer-group'].some((path) =>
+      [`/freelancer`, '/session', '/group', '/attendance_freelancer'].some((path) =>
         location.pathname.includes(path)
       )
     ) {
@@ -236,6 +241,11 @@ export const AdminLayout: React.FC = () => {
   if (isLoading) return <LoadingScreen />;
   if (isError) return <div>Error</div>;
 
+  // ==================================================================================================================================================>
+  // ==================================================================================================================================================>
+  // ==== RENDER COMPONENT =============================================================================================================================>
+  // ==================================================================================================================================================>
+  // ==================================================================================================================================================>
   return (
     <Suspense fallback={<LoadingScreen />}>
       <AppShell
@@ -257,12 +267,11 @@ export const AdminLayout: React.FC = () => {
               style={{ width: 240 }}
               className="h-full"
             >
-              {NAME_COMPANY ? (
-                <div className="text-dark-500 font-semibold">{NAME_COMPANY}</div>
-              ) : (
-                <>
-                  {company ? (
+              <div className="flex gap-2 items-center">
+                {company ? (
+                  <>
                     <Avatar
+                      className="shadow-lg"
                       src={
                         company?.company_logo
                           ? BaseURL + '/public/company-logo/' + company?.company_logo
@@ -271,11 +280,19 @@ export const AdminLayout: React.FC = () => {
                       alt="Logo company"
                       size={40}
                     />
-                  ) : (
+                    <div className="text-sm font-bold uppercase text-slate-700 text-center">
+                      {company?.name}
+                    </div>
+                  </>
+                ) : (
+                  <>
                     <img src="/images/kpi-logo.png" alt="" className="w-20" />
-                  )}
-                </>
-              )}
+                    <div className="text-sm font-bold uppercase text-slate-700 text-center">
+                      KPI
+                    </div>
+                  </>
+                )}
+              </div>
             </Group>
 
             {/* Navigation Untuk Admin */}

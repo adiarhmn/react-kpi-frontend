@@ -140,7 +140,26 @@ const { TutorialApplication } = lazyImport(
   'TutorialApplication'
 );
 
-const { Freelancer } = lazyImport(() => import('@/admin_features/freelancer/pages'), 'Freelancer');
+const { Freelancer } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'Freelancer'
+);
+const { CreateFreelancer } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'CreateFreelancer'
+);
+
+const { Session } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'Session'
+);
+
+const { AttendanceFreelancer } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'AttendanceFreelancer'
+);
+
+const { Group } = lazyImport(() => import('@/admin_features/freelancer_features/pages'), 'Group');
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -272,6 +291,10 @@ export const AppRoutes: React.FC = () => {
 
             {/* Freelence Conditions =============================================================================> */}
             <Route path="freelancer" element={<Freelancer />} />
+            <Route path="freelancer/create" element={<CreateFreelancer />} />
+            <Route path="session" element={<Session />} />
+            <Route path="group" element={<Group />} />
+            <Route path="attendance_freelancer" element={<AttendanceFreelancer />} />
           </Route>
         ) : (
           <Route path="development" element={<Development />} />
