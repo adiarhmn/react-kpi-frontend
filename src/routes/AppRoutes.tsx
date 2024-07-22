@@ -165,6 +165,10 @@ const { AttendanceFreelancer } = lazyImport(
 );
 
 const { Group } = lazyImport(() => import('@/admin_features/freelancer_features/pages'), 'Group');
+const { CreateGroup } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'CreateGroup'
+);
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -300,6 +304,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="session" element={<Session />} />
             <Route path="session/create" element={<CreateSession />} />
             <Route path="group" element={<Group />} />
+            <Route path="group/create" element={<CreateGroup />} />
             <Route path="attendance_freelancer" element={<AttendanceFreelancer />} />
           </Route>
         ) : (
