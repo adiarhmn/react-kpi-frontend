@@ -18,12 +18,20 @@ export const SegmentControl: React.FC<SegmentControlProps> = ({ title }) => {
       href: '/division',
     },
     {
-      title: 'Absensi',
-      href: '/attendance',
+      title: 'Jadwal',
+      href: '/schedule',
     },
     {
       title: 'Pengajuan',
       href: '/permission',
+    },
+    {
+      title: 'Laporan',
+      href: '/attendance',
+    },
+    {
+      title: 'Pekerja Lepas',
+      href: '/freelancer',
     },
   ];
 

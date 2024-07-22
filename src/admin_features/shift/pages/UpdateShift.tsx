@@ -28,6 +28,7 @@ export const UpdateShift: React.FC = () => {
   const mutate = useUpdateShift();
 
   const handleSubmit = async (data: ShiftType) => {
+    console.log('Data SHIFT DI FORM EDIT:', data);
     await mutate.mutateAsync(data, {
       onSuccess: (data) => {
         console.log('Success:', data);

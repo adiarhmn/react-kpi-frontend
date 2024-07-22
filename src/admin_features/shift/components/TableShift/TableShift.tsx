@@ -23,6 +23,7 @@ export const TableShift: React.FC = () => {
     data: DataShift,
     error: errorShift,
     isLoading: loadingShift,
+    refetch,
   } = useGetShift(creds?.company_id);
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export const TableShift: React.FC = () => {
         { ...deleteShift, is_active: false },
         {
           onSuccess: () => {
+            refetch();
             close();
             notifications.show({
               title: 'Berhasil',

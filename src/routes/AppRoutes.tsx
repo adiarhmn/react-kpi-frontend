@@ -135,6 +135,31 @@ const { AttendanceRequest } = lazyImport(
   'AttendanceRequest'
 );
 const { Company } = lazyImport(() => import('@/superadmin/company'), 'Company');
+const { TutorialApplication } = lazyImport(
+  () => import('@/admin_features/misc'),
+  'TutorialApplication'
+);
+
+const { Freelancer } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'Freelancer'
+);
+const { CreateFreelancer } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'CreateFreelancer'
+);
+
+const { Session } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'Session'
+);
+
+const { AttendanceFreelancer } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'AttendanceFreelancer'
+);
+
+const { Group } = lazyImport(() => import('@/admin_features/freelancer_features/pages'), 'Group');
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -233,6 +258,7 @@ export const AppRoutes: React.FC = () => {
         {creds?.role === 'admin' || creds?.role === 'superadmin' ? (
           <Route element={<AdminLayout />}>
             <Route index path="/" element={<RedirectToBeranda />} />
+            <Route path="tutorial" element={<TutorialApplication />} />
             <Route path="beranda" element={<DinamicDashboard />} />
             <Route path="schedule" element={<AdminSchedule />} />
             <Route path="schedule/create" element={<CreateSchedule />} />
@@ -262,6 +288,13 @@ export const AppRoutes: React.FC = () => {
             <Route path="locations/create" element={<CreateLocations />} />
             <Route path="locations/update" element={<UpdateLocations />} />
             {creds?.role == 'superadmin' && <Route path="company" element={<Company />} />}
+
+            {/* Freelence Conditions =============================================================================> */}
+            <Route path="freelancer" element={<Freelancer />} />
+            <Route path="freelancer/create" element={<CreateFreelancer />} />
+            <Route path="session" element={<Session />} />
+            <Route path="group" element={<Group />} />
+            <Route path="attendance_freelancer" element={<AttendanceFreelancer />} />
           </Route>
         ) : (
           <Route path="development" element={<Development />} />
