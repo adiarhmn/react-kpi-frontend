@@ -154,6 +154,11 @@ const { Session } = lazyImport(
   'Session'
 );
 
+const { CreateSession } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'CreateSession'
+);
+
 const { AttendanceFreelancer } = lazyImport(
   () => import('@/admin_features/freelancer_features/pages'),
   'AttendanceFreelancer'
@@ -293,6 +298,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="freelancer" element={<Freelancer />} />
             <Route path="freelancer/create" element={<CreateFreelancer />} />
             <Route path="session" element={<Session />} />
+            <Route path="session/create" element={<CreateSession />} />
             <Route path="group" element={<Group />} />
             <Route path="attendance_freelancer" element={<AttendanceFreelancer />} />
           </Route>
