@@ -23,3 +23,17 @@ export const usePostGroup = () => {
     },
   });
 };
+
+export const useGetGroup = (company_id: number) => {
+  return useQuery({
+    queryKey: ['group', company_id],
+    queryFn: async () => {
+      try {
+        const res = await axios.get(`${BaseURL}/group?company=${company_id}`);
+        return res.data.data;
+      } catch (e) {
+        return [];
+      }
+    },
+  });
+};

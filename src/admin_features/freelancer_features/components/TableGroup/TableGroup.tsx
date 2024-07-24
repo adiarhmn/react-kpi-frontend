@@ -1,7 +1,21 @@
 import { ActionIcon, Table } from '@mantine/core';
 import { IconPencil, IconTrash } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
+
+import { useAuth } from '@/features/auth';
+
+import { useGetGroup } from '../../api';
 
 export const TableGroup: React.FC = () => {
+  const { creds } = useAuth();
+  const navigate = useNavigate();
+  if (!creds) navigate('./login');
+
+  const { data, isLoading, isError } = useGetGroup(creds?.company_id || 0);
+  if (isLoading) return <div>Loading</div>;
+  if (isError) return <div>Error</div>;
+
+  console.log(data);
   return (
     <div>
       <Table withColumnBorders withTableBorder>
