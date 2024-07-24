@@ -1,3 +1,7 @@
+import { Button } from '@mantine/core';
+
+import { TableAttendance } from '../../components';
+
 export const AttendanceFreelancer: React.FC = () => {
   return (
     <main>
@@ -7,9 +11,12 @@ export const AttendanceFreelancer: React.FC = () => {
             <h2 className="font-bold">Daftar Kehadiran Pekerja</h2>
             <div className="-mt-1 text-xs text-slate-400">Berikut daftar kehadiran pekerja</div>
           </div>
+          <Button>Download PDF</Button>
         </div>
         <div className="flex gap-2"></div>
-        <div className="mt-7"></div>
+        <div className="mt-7">
+          <TableAttendance />
+        </div>
       </section>
     </main>
   );
