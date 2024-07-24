@@ -3,7 +3,7 @@ export type UserType = {
   id: number;
   username: string;
   role: string;
-  status: boolean;
+  status: number | boolean;
   password: string;
   company_id?: number;
 };
@@ -12,6 +12,7 @@ export type ShiftType = {
   id: number;
   shift_name: string;
   start_time: string;
+  is_active: boolean | string;
   end_time: string;
   shift_code: string;
 };
@@ -47,6 +48,7 @@ export type EmployeeType = {
   status: boolean;
   user_id: number;
   division_id: number;
+  profile_pic: string;
   user: UserType;
   division: DivisionType;
   EmployeeLocation: EmployeeLocation[];

@@ -9,8 +9,6 @@ export async function getEmployees(company_id?: number, division_id?: number, se
   if (division_id) url += `&division=${division_id}`;
   if (sex) url += `&sex=${sex}`;
 
-  console.log(url);
-  // const BaseGetURL = BaseURLS(company_id, division_id);
   const res = await axios.get(url);
   return res.data.data;
 }

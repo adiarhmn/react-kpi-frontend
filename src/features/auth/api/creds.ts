@@ -16,10 +16,18 @@ export async function getCreds() {
 
   // Cek Local Storage id company
   const id_company = localStorage.getItem('id_company');
+  const role = localStorage.getItem('role');
   if (id_company != null) {
     res.data.creds = {
       ...res.data.creds,
       company_id: parseInt(id_company),
+    };
+  }
+
+  if (role != null) {
+    res.data.creds = {
+      ...res.data.creds,
+      role: role,
     };
   }
   return res.data.creds;

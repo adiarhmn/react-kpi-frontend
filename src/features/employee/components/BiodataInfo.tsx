@@ -10,11 +10,46 @@ type BiodataProps = {
 };
 
 export const BiodataInfo: React.FC<BiodataProps> = ({ employee }) => {
+  const BaseURL = import.meta.env.VITE_API_URL;
   return (
     <>
+      <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-lg rounded-lg flex flex-col mt-2">
+        <div className="flex justify-between items-center text-blue-700">
+          <div className="flex items-center">
+            <Text fw={700} c="blue">
+              Foto profil
+            </Text>
+          </div>
+          <IconUser className="opacity-80" size={25} />
+        </div>
+        <div className="w-full text-center mx-auto p-2 w-80 text-slate-700 px-2">
+          <div className="flex justify-center">
+            <div>
+              <div className="h-28 w-28 text-white rounded-full">
+                {employee?.profile_pic ? (
+                  <img
+                    src={`${BaseURL}/public/employee-files/${employee?.profile_pic}`}
+                    alt="Preview"
+                    className="h-full w-full object-cover rounded-full"
+                  />
+                ) : (
+                  <img
+                    src="/images/profile-pic.svg"
+                    alt="Preview"
+                    className="h-full w-full object-cover rounded-full"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-white mx-auto max-w-xs w-full mt-4 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="font-bold text-blue-700">Data diri pegawai</span>
+          <Text fw={700} c="blue">
+            Data diri
+          </Text>
           <IconUser className="opacity-80" size={20} />
         </div>
         <div className="w-full pb-2 pt-2 ms-4">
@@ -59,9 +94,7 @@ export const BiodataInfo: React.FC<BiodataProps> = ({ employee }) => {
           <div className="mt-2 ps-2 gap-2 align-item-left">
             <Text size="xs">Tanggal lahir</Text>
             <Text size="xs" fw={700}>
-              {employee?.birth_date != null
-                ? formatterDate(employee.birth_date, 'dd MMM yyyy')
-                : '-'}
+              {employee?.birth_date ? formatterDate(employee.birth_date, 'dd MMM yyyy') : '-'}
             </Text>
           </div>
           <div className="mt-2 gap-2 align-item-left">
@@ -92,7 +125,9 @@ export const BiodataInfo: React.FC<BiodataProps> = ({ employee }) => {
       </section>
       <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-6 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="font-bold text-blue-700">Data alamat pegawai</span>
+          <Text fw={700} c="blue">
+            Data alamat
+          </Text>
           <IconMap2 className="opacity-80" size={20} />
         </div>
         <div className="w-full grid grid-cols-2  pb-2 pt-2 ms-4">

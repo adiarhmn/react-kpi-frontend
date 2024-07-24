@@ -63,6 +63,7 @@ const { EmployeeMonthlyAttendance } = lazyImport(
   () => import('@/features/supervisor_pages'),
   'EmployeeMonthlyAttendance'
 );
+const { Application } = lazyImport(() => import('@/features/application'), 'Application');
 const { PaidLeave } = lazyImport(() => import('@/features/paid-leave'), 'PaidLeave');
 const { AddPaidLeave } = lazyImport(() => import('@/features/paid-leave'), 'AddPaidLeave');
 const { Overtime } = lazyImport(() => import('@/features/overtime'), 'Overtime');
@@ -80,6 +81,9 @@ const { EditEduBackground } = lazyImport(() => import('@/features/employee'), 'E
 const { Biodata } = lazyImport(() => import('@/features/employee'), 'Biodata');
 const { BiodataEdit } = lazyImport(() => import('@/features/employee'), 'BiodataEdit');
 const { FileProfile } = lazyImport(() => import('@/features/employee'), 'FileProfile');
+const { LaborerGroup } = lazyImport(() => import('@/features/attendance'), 'LaborerGroup');
+const { Laborer } = lazyImport(() => import('@/features/attendance'), 'Laborer');
+const { GroupSession } = lazyImport(() => import('@/features/attendance'), 'GroupSession');
 
 // Admin Role Pages
 const { DinamicDashboard } = lazyImport(() => import('@/components/misc'), 'DinamicDashboard');
@@ -94,6 +98,7 @@ const { Attendance: AdminAttendance } = lazyImport(
 const { CreateSchedule } = lazyImport(() => import('@/admin_features/schedule'), 'CreateSchedule');
 const { UpdateSchedule } = lazyImport(() => import('@/admin_features/schedule'), 'UpdateSchedule');
 const { ShiftAdmin } = lazyImport(() => import('@/admin_features/shift'), 'ShiftAdmin');
+const { UpdateShift } = lazyImport(() => import('@/admin_features/shift'), 'UpdateShift');
 const { Employees } = lazyImport(() => import('@/admin_features/employees'), 'Employees');
 const { DetailEmployee } = lazyImport(() => import('@/admin_features/employees'), 'DetailEmployee');
 const { Division } = lazyImport(() => import('@/admin_features/division'), 'Division');
@@ -134,6 +139,10 @@ const { AttendanceRequest } = lazyImport(
   'AttendanceRequest'
 );
 const { Company } = lazyImport(() => import('@/superadmin/company'), 'Company');
+const { TutorialApplication } = lazyImport(
+  () => import('@/admin_features/misc'),
+  'TutorialApplication'
+);
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
@@ -154,6 +163,7 @@ export const AppRoutes: React.FC = () => {
             <Route index element={<Home />} />
             <Route path="attendance" element={<Attendance />} />
             <Route path="activity/detail" element={<DetailActivity />} />
+            <Route path="application" element={<Application />} />
             <Route path="info-attendance" element={<AttendanceInfo />} />
             <Route path="history">
               <Route index element={<History />} />
@@ -201,6 +211,13 @@ export const AppRoutes: React.FC = () => {
                 <Route path="edit" element={<EditEduBackground />} />
               </Route>
             </Route>
+            <Route path="laborer-group">
+              <Route index element={<LaborerGroup />} />
+              <Route path="session">
+                <Route index element={<GroupSession />} />
+                <Route path="laborer" element={<Laborer />} />
+              </Route>
+            </Route>
 
             {/* Route Menu List */}
             <Route path="absence">
@@ -232,11 +249,13 @@ export const AppRoutes: React.FC = () => {
         {creds?.role === 'admin' || creds?.role === 'superadmin' ? (
           <Route element={<AdminLayout />}>
             <Route index path="/" element={<RedirectToBeranda />} />
+            <Route path="tutorial" element={<TutorialApplication />} />
             <Route path="beranda" element={<DinamicDashboard />} />
             <Route path="schedule" element={<AdminSchedule />} />
             <Route path="schedule/create" element={<CreateSchedule />} />
             <Route path="schedule/update" element={<UpdateSchedule />} />
             <Route path="shift" element={<ShiftAdmin />} />
+            <Route path="shift/:id" element={<UpdateShift />} />
             <Route path="attendance" element={<AdminAttendance />} />
             <Route path="request-attendance" element={<AttendanceRequest />} />
             <Route path="employees" element={<Employees />} />

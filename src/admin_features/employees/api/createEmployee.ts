@@ -23,6 +23,7 @@ type EmployeePostType = {
   division_id: number;
   username: string;
   password: string;
+  role: string;
   company_id?: number;
 };
 
@@ -45,7 +46,7 @@ const createEmployee = async (employee: EmployeePostType) => {
   const CreateUser = {
     username: employee.username,
     password: employee.password,
-    role: 'employee',
+    role: employee.role,
     status: employee.status,
     company_id: employee.company_id,
   };

@@ -83,7 +83,7 @@ export const DetailActivity: React.FC = () => {
               <Text size="xs" fw={700}>
                 created at :{' '}
                 <span className="font-normal">
-                  {formatterDate(new Date(activity['created_at']), 'HH:mm; EEEE dd MMM yyyy')}
+                  {formatterDate(new Date(activity['created_at']), 'HH:mm | EEEE dd MMMM yyyy')}
                 </span>
               </Text>
             </div>

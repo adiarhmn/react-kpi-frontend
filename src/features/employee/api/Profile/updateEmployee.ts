@@ -12,7 +12,7 @@ type EmployeDataPost = {
   name: string;
   email: string;
   sex: string;
-  birth_date: string;
+  birth_date: any;
   religion: string;
   first_degree: string;
   last_degree: string;
@@ -29,7 +29,7 @@ type EmployeDataPost = {
   status: boolean;
   user_id: number;
   division_id: number;
-  image?: File | null;
+  profile_pic?: File | null;
 };
 
 async function updateEmployee(data: EmployeDataPost) {
@@ -61,10 +61,10 @@ async function updateEmployee(data: EmployeDataPost) {
   formData.append('user_id', data.user_id.toString());
   formData.append('division_id', data.division_id.toString());
 
-  if (data.image) {
-    formData.append('image', data.image);
+  if (data.profile_pic) {
+    formData.append('profile_pic', data.profile_pic);
   }
-
+  console.log('Data yang dikirim sebelum edit', formData);
   const response = await axios.put(`${BaseURL}/employee/${data.id}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

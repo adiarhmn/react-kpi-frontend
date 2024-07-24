@@ -2,7 +2,7 @@ export type Creds = {
   id: number | null;
   username: string;
   name: string;
-  role: 'admin' | 'superadmin' | 'employee' | 'supervisor';
+  role: string | 'admin' | 'superadmin' | 'employee' | 'supervisor';
   employee_id: number;
   company_id: number;
 };
@@ -18,8 +18,9 @@ export type User = {
 };
 
 export type Companys = {
-  company_logo?: string;
+  company_logo: File | null | string;
   id?: number;
   name: string;
   shift_active: boolean;
+  companyUrl: string;
 };

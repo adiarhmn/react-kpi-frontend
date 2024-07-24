@@ -3,7 +3,7 @@
 import { EmployeeType } from '@/admin_features/types';
 import { AttendanceListSection } from '@/features/history';
 import { AttendanceList } from '@/features/history/component/AttendanceList';
-import { Button, Drawer, Fieldset, Select } from '@mantine/core';
+import { Button, Drawer, Fieldset, Select, Text } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react';
@@ -23,7 +23,7 @@ export const EmployeeAttendance: React.FC = () => {
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
 
       <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 -mt-10">
-        <div className="flex justify-between items-center text-blue-700 mb-1">
+        <div className="flex justify-between items-center text-blue-700">
           <div className="flex items-center">
             <IconChevronLeft
               onClick={() => {
@@ -41,34 +41,28 @@ export const EmployeeAttendance: React.FC = () => {
             </Button> */}
           </span>
         </div>
+        <div></div>
+      </section>
 
-        {/* Month Picker or Input Date */}
-        <div>
-          <div className="w-full">
-            <div className="col-span-12">
-              <div className="w-full grid grid-cols-12">
-                <div className="col-span-6">
-                  <p className="text-xs text-slate-400 mb-1">Rekap absensi bulan :</p>
-                </div>
-                <div className="col-span-6">
-                  <p className="text-xs text-right text-slate-400 mb-1">{employeeData?.name}</p>
-                </div>
-              </div>
-
-              <MonthPickerInput
-                size="xs"
-                placeholder="Pick date"
-                value={month}
-                onChange={(value) => {
-                  if (value === null) {
-                    setMonth(new Date());
-                  } else {
-                    setMonth(value);
-                  }
-                }}
-              />
+      <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 ">
+        <div className="flex justify-between items-center text-blue-700">
+          <span className="font-semibold"></span>
+        </div>
+        <div className="grid grid-cols-12 px-2">
+          <div className="col-span-4 px-2 flex items-left">
+            <img className="w-full rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
+          </div>
+          <div className="col-span-8">
+            <div className="mt-2">
+              <Text size="auto" fw={700}>
+                {employeeData.name}
+              </Text>
             </div>
-            <div className="col-span-0"></div>
+            <div>
+              <Text size="xs" c="grey" fw={700}>
+                {employeeData.user.role}
+              </Text>
+            </div>
           </div>
         </div>
       </section>

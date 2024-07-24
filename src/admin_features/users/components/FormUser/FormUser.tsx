@@ -48,63 +48,65 @@ export const FormUser: React.FC<FormUserProps> = ({ currentUser, loading, onSubm
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextInput
-        {...form.getInputProps('username')}
-        className="mb-3"
-        label="Username"
-        placeholder="Username"
-        required
-      />
-      <TextInput
-        {...form.getInputProps('password')}
-        className="mb-3"
-        label="Password"
-        placeholder="Password"
-        required={!currentUser}
-      />
-      <Select
-        label="Role atau Level"
-        required
-        placeholder="Pilih Role"
-        data={[
-          {
-            value: 'admin',
-            label: 'Admin',
-          },
-          {
-            value: 'employee',
-            label: 'Employee',
-          },
-          // {
-          //   value: 'superadmin',
-          //   label: 'Superadmin',
-          // },
-          {
-            value: 'supervisor',
-            label: 'Supervisor',
-          },
-          ...(creds?.role === 'superadmin'
-            ? [
-                {
-                  value: 'superadmin',
-                  label: 'Superadmin',
-                },
-              ]
-            : []),
-        ]}
-        value={form.values.role}
-        allowDeselect={false}
-        {...form.getInputProps('role')}
-      />
-      <div className="flex gap-3">
-        <Button type="submit" color="blue" className="mt-5" loading={loading}>
-          Simpan
-        </Button>
-        <Button onClick={NavBack} type="button" color="gray" className="mt-5">
-          Batal
-        </Button>
-      </div>
-    </form>
+    <>
+      <form onSubmit={handleSubmit}>
+        <TextInput
+          {...form.getInputProps('username')}
+          className="mb-3"
+          label="Username"
+          placeholder="Username"
+          required
+        />
+        <TextInput
+          {...form.getInputProps('password')}
+          className="mb-3"
+          label="Password"
+          placeholder="Password"
+          required={!currentUser}
+        />
+        <Select
+          label="Role atau Level"
+          required
+          placeholder="Pilih Role"
+          data={[
+            {
+              value: 'admin',
+              label: 'Admin',
+            },
+            // {
+            //   value: 'employee',
+            //   label: 'Employee',
+            // },
+            // {
+            //   value: 'superadmin',
+            //   label: 'Superadmin',
+            // },
+            {
+              value: 'supervisor',
+              label: 'Supervisor',
+            },
+            ...(creds?.role === 'superadmin'
+              ? [
+                  {
+                    value: 'superadmin',
+                    label: 'Superadmin',
+                  },
+                ]
+              : []),
+          ]}
+          value={form.values.role}
+          allowDeselect={false}
+          {...form.getInputProps('role')}
+        />
+        <div className="flex gap-3">
+          <Button type="submit" color="blue" className="mt-5" loading={loading}>
+            Simpan
+          </Button>
+          <Button onClick={NavBack} type="button" color="gray" className="mt-5">
+            Batal
+          </Button>
+        </div>
+      </form>
+    </>
   );
 };

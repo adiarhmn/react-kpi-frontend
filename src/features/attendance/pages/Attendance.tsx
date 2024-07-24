@@ -16,7 +16,7 @@ import {
   useGetSchedule,
 } from '../api';
 import { useGetActivityDetail, useGetActivityAlias } from '../api/getActivity';
-import { CardAttendance } from '../components';
+import { CardAttendance, LaborerCardAttendance } from '../components';
 import { ActivityDetailType, AttendanceType, EmployeeLocationType } from '../types';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
@@ -160,7 +160,6 @@ export const Attendance: React.FC = () => {
       }
     }
   }, [location, employeeLocation]);
-
 
   const myIcon: any = new Icon({
     iconUrl: '/images/my-icon.svg',
@@ -332,7 +331,9 @@ export const Attendance: React.FC = () => {
             <span className="text-slate-400 text-sm">
               Setting &gt; app &gt; HR APP &gt; Perizinan Lokasi
             </span>
-            <Button className='mt-2' size='xs' onClick={handleRefresh}>Refresh</Button>
+            <Button className="mt-2" size="xs" onClick={handleRefresh}>
+              Refresh
+            </Button>
           </section>
         </div>
       ) : (
@@ -411,6 +412,11 @@ export const Attendance: React.FC = () => {
           />
           {/* // End absen card */}
 
+          {/* Card Asensi Pekerja Lepas */}
+
+          <LaborerCardAttendance />
+          {/* End Card absensi pekerja lepas */}
+
           {/* // Tugas card */}
           <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
             <div className="flex justify-between text-xs items-center p-2">
@@ -458,7 +464,7 @@ export const Attendance: React.FC = () => {
                             (_, i) =>
                               activityAlias[0][`cs${i + 1}_name`] != '' && (
                                 <div key={i} className="mb-1 col-span-6 w-full">
-                                  <Text size="xs" fw={700}>
+                                  <Text truncate="end" size="xs" fw={700}>
                                     {activityAlias[0][`cs${i + 1}_name`]}
                                   </Text>
                                   <Text truncate="end" style={{ textAlign: 'left' }} size="xs">

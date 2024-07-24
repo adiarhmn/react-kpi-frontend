@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
 import {
   ActionIcon,
+  Badge,
   Button,
   Indicator,
   Loader,
@@ -39,8 +40,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
   // Fungsi Delete Division
   const deleteEmployee = async (id: number) => {
     mutationDeleteEmployee.mutateAsync(id, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
+      onSuccess: () => {
         const newEmployees = employees.filter((employee) => employee.id !== id);
         setEmployees(newEmployees);
       },
@@ -67,7 +67,6 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
   // UseEffect for access API
   useEffect(() => {
     if (data) {
-      console.log(data);
       setEmployees(data);
     }
   }, [data]);
@@ -107,6 +106,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
           <Table.Tr>
             <Table.Th className="font-bold">No</Table.Th>
             <Table.Th className="font-bold">Nama</Table.Th>
+            <Table.Th className="font-bold">Status</Table.Th>
             <Table.Th className="font-bold">Divisi</Table.Th>
             <Table.Th className="font-bold">Username</Table.Th>
             <Table.Th className="font-bold">Role</Table.Th>
@@ -122,6 +122,11 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
               <Table.Tr key={index}>
                 <Table.Td>{indexOfFirstItem + index + 1}</Table.Td>
                 <Table.Td>{employee?.name}</Table.Td>
+                <Table.Td>
+                  <div className="flex justify-center">
+                    {employee?.status ? <Badge>Aktif</Badge> : <Badge color="red">Nonaktif</Badge>}
+                  </div>
+                </Table.Td>
                 <Table.Td>{employee?.division.division_name}</Table.Td>
                 <Table.Td>{employee?.user.username}</Table.Td>
                 <Table.Td>{employee?.user.role}</Table.Td>

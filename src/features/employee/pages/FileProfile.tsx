@@ -77,6 +77,7 @@ export const FileProfile: React.FC = () => {
             />
             <h2 className="font-semibold ">Kelengkapan berkas</h2>
           </div>
+          
           <span className="font-semibold">
             <Button className="shadow-sm me-1" size="xs" onClick={open}>
               <IconPlus className=" -ms-1" />
@@ -130,7 +131,7 @@ export const FileProfile: React.FC = () => {
                 >
                   {(props) => <Button {...props}>Pilih foto</Button>}
                 </FileButton>
-                <Button  disabled={!form.values.image} color="red" onClick={clearFile}>
+                <Button disabled={!form.values.image} color="red" onClick={clearFile}>
                   Hapus foto
                 </Button>
               </Group>

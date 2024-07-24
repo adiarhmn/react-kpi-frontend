@@ -23,6 +23,7 @@ type EmployeePostType = {
   status: boolean;
   username: string;
   password: string;
+  role: string;
   division_id: number;
   user_id?: number;
   company_id?: number;
@@ -50,12 +51,11 @@ export async function updateUser(user: UserPostType) {
 }
 
 const UpdateEmployee = async (employee: EmployeePostType & UserPostType) => {
-  console.log('EMPLOYE COYYYYYYY', employee);
   const CreateUser = {
     id: employee.user_id,
     username: employee.username,
     password: employee.password,
-    role: 'employee',
+    role: employee.role,
     status: employee.status,
     company_id: employee.company_id,
   };
@@ -63,12 +63,12 @@ const UpdateEmployee = async (employee: EmployeePostType & UserPostType) => {
   const resultUser = await updateUser(CreateUser);
 
   if (!resultUser) throw new Error('Failed to create user');
-  const CreateEmployee = {
+  const UpdateEmployee = {
     ...employee,
     user_id: resultUser.id,
   };
 
-  const res = await axios.put(`${BaseURL}/employee/${employee.id}`, CreateEmployee);
+  const res = await axios.put(`${BaseURL}/employee/${employee.id}`, UpdateEmployee);
   return res.data;
 };
 

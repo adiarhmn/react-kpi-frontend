@@ -26,6 +26,8 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
     }
   }, [DataEmployeeDivision]);
 
+  console.log('Data Employee', employeeDivision);
+
   const [employeeAttendance, setEmployeeAttendance] = useState<
     { employee: EmployeeType; attendance: any }[]
   >([]);
@@ -101,7 +103,10 @@ export const EmployeeDivisionList: React.FC<EmployeeDivisionProps> = ({
                   </div>
                   <div className="col-span-6">
                     <Text size={'xs'} fw={500}>
-                      Keluar : --:--
+                      Keluar :{' '}
+                      {emp?.attendance != undefined
+                        ? formatterDate(new Date(emp?.attendance.check_out), 'HH:mm')
+                        : '--:--'}
                     </Text>
                   </div>
                 </div>

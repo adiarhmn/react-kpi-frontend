@@ -55,7 +55,7 @@ export const History: React.FC = () => {
   return (
     <main className="">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
-{/* 
+      {/* 
       <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 divide-y divide-gray-300 -mt-10">
         <div className="flex items-center font-semibold justify-between text-sm">
           <span className="font-bold text-blue-700">Rekap Absensi </span>
@@ -108,19 +108,19 @@ export const History: React.FC = () => {
           </div>
           <div className="w-full grid grid-cols-3 divide-x divide-gray-300 pb-2 pt-2">
             <Link to="#" className="px-4 flex flex-col items-center justify-center">
-              <div className="p-2 bg-green-500 text-white rounded-xl font-bold w-full h-full text-center shadow">
+              <div className="p-2 bg-transparent text-green-600 text-2xl rounded-xl font-bold w-full h-full text-center ">
                 {attendance.length}
               </div>
               <div className="text-xs mt-1">Hadir</div>
             </Link>
             <Link to="#" className="px-4 flex flex-col items-center justify-center">
-              <div className="p-2 bg-yellow-500 text-white rounded-xl font-bold w-full h-full text-center shadow">
+              <div className="p-2 text-yellow-600 text-2xl  rounded-xl font-bold w-full h-full text-center ">
                 {request.length}
               </div>
               <div className="text-xs mt-1">Izin / Sakit</div>
             </Link>
             <Link to="#" className="px-4 flex flex-col items-center justify-center">
-              <div className="p-2 bg-sky-400 text-white rounded-xl font-bold w-full h-full text-center shadow">
+              <div className="p-2 text-sky-600 text-2xl rounded-xl font-bold w-full h-full text-center ">
                 {attendanceReq.length}
               </div>
               <div className="text-xs mt-1 t">Pengajuan</div>

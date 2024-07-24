@@ -108,12 +108,12 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
 
       <div className="mt-2">
         <MapContainer
-          style={{ height: '33vh', zIndex: 0 }}
+          style={{ height: '50vh', zIndex: 0 }}
           center={[
             DataActivity[0]?.activity_lat ?? -3.7536276323430213,
             DataActivity[0]?.activity_lon ?? 114.7677391547546,
           ]}
-          zoom={15}
+          zoom={10}
           scrollWheelZoom={true}
         >
           <TileLayer

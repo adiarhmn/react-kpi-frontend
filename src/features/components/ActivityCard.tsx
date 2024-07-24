@@ -141,7 +141,7 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee, date }: Activi
     <>
       <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="text-base font-bold text-blue-700">Kegiatan</span>
+          <span className="text-base font-bold text-blue-700">Kegiatan hari ini</span>
           {creds?.role == 'employee' && (
             <Button
               disabled={attendance?.check_in == null || attendance?.check_out != null}
@@ -187,7 +187,7 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee, date }: Activi
                         (_, i) =>
                           activityAlias[0][`cs${i + 1}_name`] != '' && (
                             <div key={i} className="mb-1 col-span-6 w-full">
-                              <Text size="xs" fw={700}>
+                              <Text truncate="end" size="xs" fw={700}>
                                 {activityAlias[0][`cs${i + 1}_name`]}
                               </Text>
                               <Text truncate="end" style={{ textAlign: 'left' }} size="xs">
