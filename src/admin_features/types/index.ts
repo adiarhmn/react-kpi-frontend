@@ -155,3 +155,10 @@ export type SessionType = {
   company_id: number;
   company: CompanyType;
 };
+
+export type WorkersType = {
+  id: number;
+  name: string;
+  nik: string;
+  nip: string;
+};
