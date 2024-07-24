@@ -48,6 +48,7 @@ type SubMenuListType = {
 const MenuBeranda = [
   { maintitle: 'none', title: 'Beranda', href: '/beranda', icon: <IconCalendar size={15} /> },
 ];
+
 const MenuJadwal = [
   { maintitle: 'none', title: 'Jadwal', href: '/schedule', icon: <IconCalendar size={15} /> },
 ];
@@ -80,7 +81,6 @@ const MenuDataMaster = [
 ];
 
 const MenuAbsensi = [
-  // { maintitle: 'Absensi', title: 'Jadwal', href: '/schedule', icon: <IconCalendar size={15} /> },
   {
     maintitle: 'Laporan',
     title: 'Presensi',
@@ -99,6 +99,33 @@ const MenuPengajuan = [
   },
   { maintitle: 'Pengajuan', title: 'Izin', href: '/permission', icon: <IconFileAlert size={15} /> },
   { maintitle: 'Pengajuan', title: 'Lembur', href: '/overtime', icon: <IconAlarmPlus size={15} /> },
+];
+
+const MenuFreelancer = [
+  {
+    maintitle: 'Pekerja Lepas',
+    title: 'Data Pekerja',
+    href: '/freelancer',
+    icon: <IconUsersGroup size={15} />,
+  },
+  {
+    maintitle: 'Pekerja Lepas',
+    title: 'Data Sesi',
+    href: '/session',
+    icon: <IconClockHour1 size={15} />,
+  },
+  {
+    maintitle: 'Pekerja Lepas',
+    title: 'Data Kelompok',
+    href: '/group',
+    icon: <IconBuildingEstate size={15} />,
+  },
+  {
+    maintitle: 'Pekerja Lepas',
+    title: 'Presensi',
+    href: '/attendance_freelancer',
+    icon: <IconClipboardText size={15} />,
+  },
 ];
 
 // ================================================================================
@@ -129,7 +156,6 @@ export const AdminLayout: React.FC = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const ID_COMPANY = localStorage.getItem('id_company');
-  const NAME_COMPANY = localStorage.getItem('name_company');
   const { creds, logout } = useAuth();
 
   // if (!ID_COMPANY && creds?.role !== 'admin') navigate('/beranda');
@@ -199,6 +225,15 @@ export const AdminLayout: React.FC = () => {
       setSubmenu(MenuPengajuan);
       setTitle('Pengajuan');
     }
+
+    if (
+      [`/freelancer`, '/session', '/group', '/attendance_freelancer'].some((path) =>
+        location.pathname.includes(path)
+      )
+    ) {
+      setSubmenu(MenuFreelancer);
+      setTitle('Pekerja Lepas');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [creds, navigate]);
 
@@ -206,6 +241,11 @@ export const AdminLayout: React.FC = () => {
   if (isLoading) return <LoadingScreen />;
   if (isError) return <div>Error</div>;
 
+  // ==================================================================================================================================================>
+  // ==================================================================================================================================================>
+  // ==== RENDER COMPONENT =============================================================================================================================>
+  // ==================================================================================================================================================>
+  // ==================================================================================================================================================>
   return (
     <Suspense fallback={<LoadingScreen />}>
       <AppShell
@@ -227,25 +267,32 @@ export const AdminLayout: React.FC = () => {
               style={{ width: 240 }}
               className="h-full"
             >
-              {NAME_COMPANY ? (
-                <div className="text-dark-500 font-semibold">{NAME_COMPANY}</div>
-              ) : (
-                <>
-                  {company ? (
+              <div className="flex gap-2 items-center">
+                {company ? (
+                  <>
                     <Avatar
+                      className="shadow-lg"
                       src={
                         company?.company_logo
                           ? BaseURL + '/public/company-logo/' + company?.company_logo
                           : '/images/kpi-logo.png'
                       }
-                      alt="it's me"
-                      size={60}
+                      alt="Logo company"
+                      size={40}
                     />
-                  ) : (
+                    <div className="text-sm font-bold uppercase text-slate-700 text-center">
+                      {company?.name}
+                    </div>
+                  </>
+                ) : (
+                  <>
                     <img src="/images/kpi-logo.png" alt="" className="w-20" />
-                  )}
-                </>
-              )}
+                    <div className="text-sm font-bold uppercase text-slate-700 text-center">
+                      KPI
+                    </div>
+                  </>
+                )}
+              </div>
             </Group>
 
             {/* Navigation Untuk Admin */}
@@ -341,6 +388,7 @@ export const AdminLayout: React.FC = () => {
               ))}
             </section>
           )}
+
           <Outlet />
         </AppShell.Main>
       </AppShell>

@@ -29,6 +29,10 @@ export const SegmentControl: React.FC<SegmentControlProps> = ({ title }) => {
       title: 'Laporan',
       href: '/attendance',
     },
+    {
+      title: 'Pekerja Lepas',
+      href: '/freelancer',
+    },
   ];
 
   return (

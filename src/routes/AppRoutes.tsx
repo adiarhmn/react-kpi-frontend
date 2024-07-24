@@ -144,6 +144,36 @@ const { TutorialApplication } = lazyImport(
   'TutorialApplication'
 );
 
+const { Freelancer } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'Freelancer'
+);
+const { CreateFreelancer } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'CreateFreelancer'
+);
+
+const { Session } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'Session'
+);
+
+const { CreateSession } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'CreateSession'
+);
+
+const { AttendanceFreelancer } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'AttendanceFreelancer'
+);
+
+const { Group } = lazyImport(() => import('@/admin_features/freelancer_features/pages'), 'Group');
+const { CreateGroup } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'CreateGroup'
+);
+
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
   const navigate = useNavigate();
@@ -279,6 +309,15 @@ export const AppRoutes: React.FC = () => {
             <Route path="locations/create" element={<CreateLocations />} />
             <Route path="locations/update" element={<UpdateLocations />} />
             {creds?.role == 'superadmin' && <Route path="company" element={<Company />} />}
+
+            {/* Freelence Conditions =============================================================================> */}
+            <Route path="freelancer" element={<Freelancer />} />
+            <Route path="freelancer/create" element={<CreateFreelancer />} />
+            <Route path="session" element={<Session />} />
+            <Route path="session/create" element={<CreateSession />} />
+            <Route path="group" element={<Group />} />
+            <Route path="group/create" element={<CreateGroup />} />
+            <Route path="attendance_freelancer" element={<AttendanceFreelancer />} />
           </Route>
         ) : (
           <Route path="development" element={<Development />} />

@@ -54,7 +54,6 @@ export const TableActivitys: React.FC<TableActivitysProps> = ({ date }) => {
     );
   }
 
-  console.log(DataActivity);
   return (
     <>
       <Table withColumnBorders withTableBorder>
