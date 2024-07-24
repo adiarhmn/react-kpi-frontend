@@ -137,3 +137,28 @@ export type OvertimeType = {
   attendance_id: number;
   attendance: AttendanceType;
 };
+
+// Freelance Type Data =================================================================================================
+
+type CompanyType = {
+  companyUrl: string;
+  company_logo: string;
+  id: number;
+  is_freelanced: number;
+  name: string;
+  shift_active: boolean;
+};
+
+export type SessionType = {
+  id: number;
+  name: string;
+  company_id: number;
+  company: CompanyType;
+};
+
+export type WorkersType = {
+  id: number;
+  name: string;
+  nik: string;
+  nip: string;
+};

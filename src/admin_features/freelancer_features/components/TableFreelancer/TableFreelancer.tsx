@@ -1,7 +1,21 @@
 import { ActionIcon, Table } from '@mantine/core';
 import { IconPencil, IconTrash } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
+
+import { WorkersType } from '@/admin_features/types';
+import { useAuth } from '@/features/auth';
+
+import { useGetWorkers } from '../../api';
 
 export const TableFreelancer: React.FC = () => {
+  const { creds } = useAuth();
+  const navigate = useNavigate();
+  if (!creds) navigate('./login');
+
+  const { data, isLoading, isError } = useGetWorkers(creds?.company_id || 0);
+  if (isLoading) return <div>Loading</div>;
+  if (isError) return <div>Error</div>;
+  console.log(data);
   return (
     <div>
       <Table withColumnBorders withTableBorder>
@@ -11,22 +25,32 @@ export const TableFreelancer: React.FC = () => {
               No
             </Table.Th>
             <Table.Th className="font-bold">Nama Pekerja</Table.Th>
+            <Table.Th className="font-bold">Kode Pekerja</Table.Th>
             <Table.Th className="flex gap-2 items-center justify-center font-bold">Aksi</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          <Table.Tr>
-            <Table.Td style={{ width: 70, textAlign: 'center' }}>1</Table.Td>
-            <Table.Td>Sunjano</Table.Td>
-            <Table.Td className="flex gap-2 items-center justify-center">
-              <ActionIcon color="yellow">
-                <IconPencil size={14} />
-              </ActionIcon>
-              <ActionIcon color="red">
-                <IconTrash size={14} />
-              </ActionIcon>
-            </Table.Td>
-          </Table.Tr>
+          {data?.length < 1 ? (
+            <div></div>
+          ) : (
+            <>
+              {data?.map((worker: WorkersType, index: number) => (
+                <Table.Tr key={index}>
+                  <Table.Td style={{ width: 70, textAlign: 'center' }}>1</Table.Td>
+                  <Table.Td>{worker?.name}</Table.Td>
+                  <Table.Td>{worker?.nik}</Table.Td>
+                  <Table.Td className="flex gap-2 items-center justify-center">
+                    <ActionIcon color="yellow">
+                      <IconPencil size={14} />
+                    </ActionIcon>
+                    <ActionIcon color="red">
+                      <IconTrash size={14} />
+                    </ActionIcon>
+                  </Table.Td>
+                </Table.Tr>
+              ))}
+            </>
+          )}
         </Table.Tbody>
       </Table>
     </div>
