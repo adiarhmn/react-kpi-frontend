@@ -30,6 +30,7 @@ export const useGetGroup = (company_id: number) => {
     queryFn: async () => {
       try {
         const res = await axios.get(`${BaseURL}/group?company=${company_id}`);
+        console.log('Hasil Data', res.data.data);
         return res.data.data;
       } catch (e) {
         return [];

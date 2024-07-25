@@ -20,7 +20,7 @@ export const useGetWorkers = (company_id: number, status: number = 2) => {
 export type WorkerCreateType = {
   name: string;
   status: number;
-  company: number;
+  company_id: number;
   nip: string;
   user_id: number;
   division_id: number;
@@ -29,7 +29,7 @@ export type WorkerCreateType = {
 export const useCreateWorker = () => {
   return useMutation({
     mutationFn: async (data: WorkerCreateType) => {
-      const res = await axios.post(`${BaseURL}/employee`, data);
+      const res = await axios.post(`${BaseURL}/worker`, data);
       return res.data;
     },
   });

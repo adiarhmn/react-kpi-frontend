@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
 
-import { useGetSession, GroupFormType } from '../../api';
+import { useGetSession, GroupFormType, useGetWorkers } from '../../api';
 
 interface FormGroupProps {
   onsubmit: (data: GroupFormType) => void;
@@ -14,10 +14,17 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
   const navigate = useNavigate();
   if (!creds) navigate('/login');
 
+  const {
+    data: workers,
+    isLoading: LoadWorkers,
+    isError: ErWorkers,
+  } = useGetWorkers(creds?.company_id || 0);
+
   // Use Form Group
   const form = useForm({
     initialValues: {
       name: '',
+      details: '',
       session: [],
       worker: [],
     },
@@ -25,13 +32,13 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('Data Form', form.values);
+    console.log('Data Form INI', form.values);
 
     // Maping Data
     const data: GroupFormType = {
       name: form.values.name,
       company_id: creds?.company_id || 0,
-      details: 'Details',
+      details: form.values.details,
       session: form.values.session.map((session: string) => ({ session_id: parseInt(session) })),
       worker: form.values.worker.map((worker: string) => ({ employee_id: parseInt(worker) })),
     };
@@ -40,10 +47,14 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
   };
 
   // Get Data Session
-  const { data: dataSession, isLoading: LoadSession, isError: ErSession } = useGetSession(1);
+  const {
+    data: dataSession,
+    isLoading: LoadSession,
+    isError: ErSession,
+  } = useGetSession(creds?.company_id || 0);
 
-  if (LoadSession) return <div>Loading...</div>;
-  if (ErSession)
+  if (LoadSession || LoadWorkers) return <div>Loading...</div>;
+  if (ErSession || ErWorkers)
     return (
       <div className="h-64 flex justify-center items-center">
         Error...
@@ -56,6 +67,12 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
     label: session.name,
   }));
 
+  const OptionsWorkers = workers?.map((worker: any) => ({
+    value: worker.id.toString(),
+    label: worker.name,
+  }));
+
+  console.log('OptionSession', form.values);
   return (
     <form onSubmit={handleSubmit}>
       <TextInput
@@ -65,27 +82,32 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
         required
         {...form.getInputProps('name')}
       />
+
+      <TextInput
+        className="mb-3"
+        label={`Details`}
+        placeholder="Nama Kelom"
+        required
+        {...form.getInputProps(`details`)}
+      />
+
       <MultiSelect
         label="Pilih Pekerja"
         className="mb-3"
         placeholder="Pilih Pekerja"
-        data={[
-          { value: '1', label: 'Pekerja 1' },
-          { value: '2', label: 'Pekerja 2' },
-          { value: '3', label: 'Pekerja 3' },
-        ]}
+        data={OptionsWorkers}
         required
         {...form.getInputProps('worker')}
       />
 
       <MultiSelect
+        className="mb-5"
         label="Pilih Sesi atau Kegiatan"
         placeholder="Pilih Sesi / Kegiatan"
         data={OptionsSession}
         required
         {...form.getInputProps('session')}
       />
-
       <div className="mt-10">
         <Button type="submit">Simpan</Button>
       </div>

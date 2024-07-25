@@ -18,7 +18,7 @@ export const FormFreelancer: React.FC<FormFreelancerProps> = ({ onsubmit }) => {
     initialValues: {
       name: '',
       status: 2,
-      company: creds?.company_id || 0,
+      company_id: creds?.company_id || 0,
       nip: '',
       user_id: 1,
       division_id: 1,
