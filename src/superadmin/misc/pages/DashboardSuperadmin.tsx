@@ -1,4 +1,4 @@
-import { Avatar, Button, Table } from '@mantine/core';
+import { Avatar, Badge, Button, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconChevronRight, IconPlus } from '@tabler/icons-react';
@@ -43,6 +43,7 @@ export const DashboardSuperadmin: React.FC = () => {
     setCompany(company);
     if (company?.id) {
       localStorage.setItem('id_company', company?.id.toString());
+      localStorage.setItem('COMPANY_DATA', JSON.stringify(company));
       localStorage.setItem('name_company', company?.name);
     }
     window.location.reload();
@@ -107,6 +108,13 @@ export const DashboardSuperadmin: React.FC = () => {
                       <Table.Td>{company?.name}</Table.Td>
                       <Table.Td>{company?.companyUrl}</Table.Td>
                       <Table.Td>{company?.shift_active == true ? 'Aktif' : 'Tidak Aktif'}</Table.Td>
+                      <Table.Td>
+                        {company?.is_freelanced ? (
+                          <Badge color="teal">Freelance</Badge>
+                        ) : (
+                          <Badge color="gray">NonFreelance</Badge>
+                        )}
+                      </Table.Td>
                       <Table.Td>
                         <div className="flex gap-2 items-center justify-center">
                           <Button

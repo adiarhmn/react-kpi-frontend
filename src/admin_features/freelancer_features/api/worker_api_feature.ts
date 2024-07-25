@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL || 'http://localhost:1337';
@@ -13,6 +13,24 @@ export const useGetWorkers = (company_id: number, status: number = 2) => {
       } catch (e) {
         return [];
       }
+    },
+  });
+};
+
+export type WorkerCreateType = {
+  name: string;
+  status: number;
+  company: number;
+  nip: string;
+  user_id: number;
+  division_id: number;
+};
+
+export const useCreateWorker = () => {
+  return useMutation({
+    mutationFn: async (data: WorkerCreateType) => {
+      const res = await axios.post(`${BaseURL}/employee`, data);
+      return res.data;
     },
   });
 };

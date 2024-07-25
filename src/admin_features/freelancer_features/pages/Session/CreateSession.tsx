@@ -1,11 +1,31 @@
 import { ActionIcon } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
+import { SessionCreateType, useCreateSession } from '../../api';
 import { FormSession } from '../../components';
 
 export const CreateSession: React.FC = () => {
   const navigate = useNavigate();
+
+  const createSession = useCreateSession();
+
+  const handleSubmit = (data: SessionCreateType) => {
+    createSession.mutateAsync(data, {
+      onSuccess() {
+        navigate(-1);
+        // Set interval
+        setTimeout(() => {
+          notifications.show({
+            title: 'Berhasil',
+            message: 'Sesi berhasil ditambahkan',
+            color: 'teal',
+          });
+        }, 500);
+      },
+    });
+  };
   return (
     <main>
       <section className="bg-white p-5 rounded-lg">
@@ -21,7 +41,7 @@ export const CreateSession: React.FC = () => {
           </div>
         </div>
         <div className="mt-5">
-          <FormSession />
+          <FormSession onsubmit={handleSubmit} />
         </div>
       </section>
     </main>
