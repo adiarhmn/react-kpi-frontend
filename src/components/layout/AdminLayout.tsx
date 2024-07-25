@@ -136,6 +136,7 @@ export const AdminLayout: React.FC = () => {
   const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api/';
 
   const [company, setCompany] = useState<Companys | undefined>(undefined);
+  const COMPANY_DATA = JSON.parse(localStorage.getItem('COMPANY_DATA') || '{}');
 
   const { data, isLoading, isError } = useGetCompanys();
 
@@ -231,8 +232,12 @@ export const AdminLayout: React.FC = () => {
         location.pathname.includes(path)
       )
     ) {
-      setSubmenu(MenuFreelancer);
-      setTitle('Pekerja Lepas');
+      if (creds?.is_freelanced) {
+        setSubmenu(MenuFreelancer);
+        setTitle('Pekerja Lepas');
+      } else {
+        navigate(-1);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [creds, navigate]);
@@ -268,7 +273,7 @@ export const AdminLayout: React.FC = () => {
               className="h-full"
             >
               <div className="flex gap-2 items-center">
-                {company ? (
+                {company && creds?.role == 'admin' ? (
                   <>
                     <Avatar
                       className="shadow-lg"
@@ -286,9 +291,9 @@ export const AdminLayout: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    <img src="/images/kpi-logo.png" alt="" className="w-20" />
-                    <div className="text-sm font-bold uppercase text-slate-700 text-center">
-                      KPI
+                    <img src="/images/kpi-logo.png" alt="" className="w-10" />
+                    <div className="text-xs font-bold uppercase text-slate-700 text-center">
+                      {COMPANY_DATA?.name ?? 'KPI'}
                     </div>
                   </>
                 )}
