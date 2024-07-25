@@ -11,9 +11,10 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronRight, IconDashboard, IconInfoCircle } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useGetRecap } from '@/admin_features/attendance/api';
 import { useAuth } from '@/features/auth';
 
 import {
@@ -23,11 +24,33 @@ import {
   MaleEmployeeCard,
   RequestCard,
 } from '../components';
+
 export const DashboardAdmin: React.FC = () => {
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure();
   const { creds } = useAuth();
   if (!creds) navigate('/login');
+  // About Date
+  const month = new Date();
+
+  const [scedule, setSchedule] = useState<number>(0);
+
+  // Data Recap
+  const { data: DataRecap, isLoading: LoadingRecap } = useGetRecap(
+    creds?.company_id,
+    month.getMonth() + 1,
+    month.getFullYear()
+  );
+
+  useEffect(() => {
+    if (DataRecap) {
+      DataRecap?.map((item: any) => {
+        if (item?.recap.length > 0) {
+          setSchedule((prev) => prev + 1);
+        }
+      });
+    }
+  }, [DataRecap]);
 
   const [typeRequest, setTypeRequest] = useState<string>('Izin');
 
@@ -39,6 +62,13 @@ export const DashboardAdmin: React.FC = () => {
     { value: 'Absensi', label: 'Absensi' },
   ];
 
+  if (LoadingRecap) return <div>Loading...</div>;
+
+  console.log('Data REKAP', DataRecap);
+
+  const getMinus = (one: number = 0, two: number) => {
+    return one - two;
+  };
   return (
     <main>
       {/* Rekap Absensi Hari ini */}
@@ -129,12 +159,12 @@ export const DashboardAdmin: React.FC = () => {
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 ">
                 <div className="bg-slate-100 text-green-600 px-5 rounded-md shadow text-sm py-1 flex justify-around items-center">
-                  <span className="font-bold">30</span>
+                  <span className="font-bold">{scedule}</span>
                   <span className="text-xs">Karyawan Sudah Memiliki Jadwal</span>
                 </div>
                 <Indicator inline processing color="red" size={12}>
                   <div className="bg-slate-100 px-5 rounded-md shadow text-sm py-1 flex justify-around text-red-400">
-                    <span className="font-bold">10</span>
+                    <span className="font-bold">{getMinus(DataRecap?.length, scedule)}</span>
                     <span className="text-xs">Karyawan Belum Memiliki Jadwal</span>
                   </div>
                 </Indicator>
