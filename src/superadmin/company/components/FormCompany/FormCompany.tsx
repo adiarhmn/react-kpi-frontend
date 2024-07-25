@@ -14,6 +14,7 @@ export const FormCompany: React.FC<FormCompanyProps> = ({ onSubmit, opened, load
     initialValues: {
       name: '',
       shift_active: '1',
+      is_freelanced: '0',
       company_url: '',
       company_logo: null as File | null,
     },
@@ -25,15 +26,11 @@ export const FormCompany: React.FC<FormCompanyProps> = ({ onSubmit, opened, load
     const data = {
       name: form.values.name,
       companyUrl: form.values.company_url,
+      is_freelanced: parseInt(form.values.is_freelanced),
       company_logo: form.values.company_logo,
       shift_active: form.values.shift_active === '1' ? true : false,
     };
-    console.log(data);
-    try {
-      onSubmit(data);
-    } catch (error) {
-      console.error(error);
-    }
+    onSubmit(data);
   };
 
   return (
@@ -71,6 +68,18 @@ export const FormCompany: React.FC<FormCompanyProps> = ({ onSubmit, opened, load
               { value: '0', label: 'Tidak Aktif' },
             ]}
             {...form.getInputProps('shift_active')}
+          />
+          <Select
+            label="Status Fitur Pekerja Lepas"
+            className="mb-3"
+            placeholder="Pilih"
+            required
+            defaultValue={form.values.shift_active}
+            data={[
+              { value: '1', label: 'Aktif' },
+              { value: '0', label: 'Tidak Aktif' },
+            ]}
+            {...form.getInputProps('is_freelanced')}
           />
 
           <FileInput
