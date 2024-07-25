@@ -47,7 +47,7 @@ export const BiodataEdit: React.FC = () => {
       name: values.name,
       email: values.email,
       sex: values.sex,
-      birth_date: values.birth_date,
+      birth_date: formatterDate(new Date(values.birth_date ?? ''), 'yyyy-MM-dd'),
       religion: values.religion,
       first_degree: values.first_degree,
       last_degree: values.last_degree,

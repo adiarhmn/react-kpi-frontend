@@ -1,4 +1,4 @@
-import { Button, Divider, Tabs, Text } from '@mantine/core';
+import { Button, Divider, Tabs, Text, TextInput } from '@mantine/core';
 import { IconUser, IconUsersGroup } from '@tabler/icons-react';
 
 export const ListLaborer: React.FC = () => {
@@ -35,10 +35,11 @@ export const ListLaborer: React.FC = () => {
       <div className="mt-2">
         <Divider size={'lg'} />
       </div>
+
       <div className="grid grid-cols-12 px-2 mb-1 mt-2">
         <div className="col-span-12 py-2">
           <div className="my-auto text-left">
-            <Text lineClamp={1} size={'sm'} fw={700}>
+            <Text lineClamp={1} size={'sm'} fw={800}>
               Budi Selang
             </Text>
           </div>
@@ -89,8 +90,11 @@ export const ListLaborer: React.FC = () => {
                 </section>
               </Tabs>
             </div>
+            <div className="col-span-12">
+              <TextInput label="Keterangan" size="xs" placeholder="keterangan" />
+            </div>
           </div>
-          <div className="mt-8">
+          <div className="mt-4">
             <Divider size={'lg'} />
           </div>
         </div>
@@ -99,7 +103,7 @@ export const ListLaborer: React.FC = () => {
       <div className="grid grid-cols-12 px-2 mb-1">
         <div className="col-span-12 py-2">
           <div className="my-auto text-left">
-            <Text lineClamp={1} size={'sm'} fw={700}>
+            <Text lineClamp={1} size={'sm'} fw={800}>
               Hendrik Sanyo
             </Text>
           </div>
@@ -150,8 +154,11 @@ export const ListLaborer: React.FC = () => {
                 </section>
               </Tabs>
             </div>
+            <div className="col-span-12">
+              <TextInput label="Keterangan" size="xs" placeholder="keterangan" />
+            </div>
           </div>
-          <div className="mt-8">
+          <div className="mt-4">
             <Divider size={'lg'} />
           </div>
         </div>
@@ -160,7 +167,7 @@ export const ListLaborer: React.FC = () => {
       <div className="grid grid-cols-12 px-2 mb-1">
         <div className="col-span-12 py-2">
           <div className="my-auto text-left">
-            <Text lineClamp={1} size={'sm'} fw={700}>
+            <Text lineClamp={1} size={'sm'} fw={800}>
               Asep charger
             </Text>
           </div>
@@ -211,8 +218,11 @@ export const ListLaborer: React.FC = () => {
                 </section>
               </Tabs>
             </div>
+            <div className="col-span-12">
+              <TextInput label="Keterangan" size="xs" placeholder="keterangan" />
+            </div>
           </div>
-          <div className="mt-8">
+          <div className="mt-4">
             <Divider size={'lg'} />
           </div>
         </div>

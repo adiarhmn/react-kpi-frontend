@@ -251,7 +251,7 @@ export const Attendance: React.FC = () => {
   };
   // [End add kegiatan]
   // [END ACTIVITY]
-
+  console.log('creds :', creds);
   const handleRefresh = () => {
     window.location.reload();
   };
@@ -413,8 +413,8 @@ export const Attendance: React.FC = () => {
           {/* // End absen card */}
 
           {/* Card Asensi Pekerja Lepas */}
+          {creds?.is_freelanced == 1 && <LaborerCardAttendance />}
 
-          <LaborerCardAttendance />
           {/* End Card absensi pekerja lepas */}
 
           {/* // Tugas card */}

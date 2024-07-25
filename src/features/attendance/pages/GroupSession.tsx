@@ -1,10 +1,14 @@
 import { Divider, Text } from '@mantine/core';
 import { IconChevronLeft, IconUsersGroup } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ListSession } from '../components';
+import { GroupType } from '../types';
 
 export const GroupSession: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const group = location.state.group as GroupType;
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -40,7 +44,7 @@ export const GroupSession: React.FC = () => {
           <div className="col-span-12 py-2">
             <div className="my-auto text-center">
               <Text lineClamp={1} size={'md'} fw={700}>
-                Kelompok Penerbang Roket
+                {group.name}
               </Text>
             </div>
             <Divider className="w-full mt-2" />
@@ -59,10 +63,11 @@ export const GroupSession: React.FC = () => {
           </div>
         </div>
       </section>
-      <section className='max-w-xs py-3 m-auto mt-2'>
+      <section className="max-w-xs py-3 m-auto mt-2">
         <Divider size={'lg'} className="" />
       </section>
-      <ListSession />
+
+      <ListSession group={group} />
     </main>
   );
 };

@@ -5,6 +5,7 @@ export type Creds = {
   role: string | 'admin' | 'superadmin' | 'employee' | 'supervisor';
   employee_id: number;
   company_id: number;
+  is_freelanced: number | null;
 };
 
 export type User = {

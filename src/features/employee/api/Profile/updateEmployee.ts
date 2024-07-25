@@ -32,7 +32,8 @@ type EmployeDataPost = {
   profile_pic?: File | null;
 };
 
-async function updateEmployee(data: EmployeDataPost) {
+export const updateEmployee = async (data: EmployeDataPost) => {
+  // async function updateEmployee(data: EmployeDataPost) {
   console.log('Data yang dikirim :', data);
 
   const formData = new FormData();
@@ -71,10 +72,14 @@ async function updateEmployee(data: EmployeDataPost) {
     },
   });
   return response.data;
-}
+};
 
 export const useUpdateEmployee = () => {
   return useMutation({
     mutationFn: updateEmployee,
+    onMutate: async (data: EmployeDataPost) => {},
+    onError: (error) => {
+      console.log('Error :', error);
+    },
   });
 };
