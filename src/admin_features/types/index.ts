@@ -1,3 +1,4 @@
+import { em } from '@mantine/core';
 /* eslint-disable linebreak-style */
 export type UserType = {
   id: number;
@@ -213,4 +214,18 @@ export type GroupType = {
   details: string;
   GroupSessions: GroupSessionsType[];
   EmployeeGroups: EmployeeGroupsType[];
+};
+
+export type AttendanceWorkerType = {
+  attendance_status: string;
+  date: string;
+  detail: string;
+  employee_group_id: number;
+  employee: EmployeeType;
+  employee_id: number;
+  employee_input_id: number;
+  group_name: string;
+  group_session_id: number;
+  id: number;
+  session_name: string;
 };
