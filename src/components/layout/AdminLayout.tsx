@@ -154,7 +154,8 @@ export const AdminLayout: React.FC = () => {
   const { title, setTitle } = useTitleContext();
   const navigate = useNavigate();
   const [submenu, setSubmenu] = useState<SubMenuListType[]>(MenuBeranda);
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useMediaQuery('(max-width: 800px)');
+  const isTablet = useMediaQuery('(max-width: 1000px)');
 
   const ID_COMPANY = localStorage.getItem('id_company');
   const { creds, logout } = useAuth();
@@ -251,13 +252,20 @@ export const AdminLayout: React.FC = () => {
   // ==== RENDER COMPONENT =============================================================================================================================>
   // ==================================================================================================================================================>
   // ==================================================================================================================================================>
+  if (isMobile) {
+    return (
+      <div className="bg-blue-600 min-h-screen text-white flex justify-center items-center text-lg text-center p-20">
+        Halaman Admin dan Superadmin hanya bisa diakses Melalui Layar Desktop{' '}
+      </div>
+    );
+  }
   return (
     <Suspense fallback={<LoadingScreen />}>
       <AppShell
         header={{ height: 60 }}
         navbar={{
           width: 0,
-          breakpoint: 'sm',
+          breakpoint: 'xl',
           collapsed: { mobile: !opened },
         }}
         padding="md"
@@ -265,7 +273,7 @@ export const AdminLayout: React.FC = () => {
       >
         <AppShell.Header className="shadow-md">
           <Group w="100%" h="100%" justify="space-between" gap={0} className="px-3">
-            <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+            <Burger opened={opened} onClick={toggle} hiddenFrom="md" size="sm" />
             <Group
               gap={5}
               justify={isMobile ? 'end' : 'center'}
@@ -302,13 +310,13 @@ export const AdminLayout: React.FC = () => {
 
             {/* Navigation Untuk Admin */}
             {creds?.role === 'admin' || ID_COMPANY ? (
-              <SegmentControl title={title} />
+              <>{!isTablet && <SegmentControl title={title} />}</>
             ) : (
               <div className="text-slate-500 font-semibold">Superadmin</div>
             )}
 
             {/* Profile and Name Information */}
-            {!isMobile && (
+            {!isTablet && (
               <Group className="h-full" justify="space-between">
                 <Group gap={5} className="h-full" justify="end">
                   {ID_COMPANY && creds?.role === 'superadmin' ? (
@@ -374,6 +382,9 @@ export const AdminLayout: React.FC = () => {
             )}
           </Group>
         </AppShell.Header>
+        <AppShell.Navbar p="md">
+          <SegmentControl title={title} navbar={true} />
+        </AppShell.Navbar>
         <AppShell.Main>
           {/* SUB MENU LIST */}
           {submenu[0].maintitle != 'none' && (

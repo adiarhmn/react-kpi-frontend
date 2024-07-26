@@ -5,9 +5,10 @@ import { useAuth } from '@/features/auth';
 
 interface SegmentControlProps {
   title: string;
+  navbar?: boolean;
 }
 
-export const SegmentControl: React.FC<SegmentControlProps> = ({ title }) => {
+export const SegmentControl: React.FC<SegmentControlProps> = ({ title, navbar = false }) => {
   const { creds } = useAuth();
   const navigate = useNavigate();
   if (!creds) navigate('/login');
@@ -41,6 +42,38 @@ export const SegmentControl: React.FC<SegmentControlProps> = ({ title }) => {
       href: '/freelancer',
     },
   ];
+
+  if (navbar) {
+    return (
+      <section className="flex flex-col gap-7">
+        {MenuListSimple.map((item, index) => (
+          <UnstyledButton key={index} onClick={() => navigate(item.href)}>
+            <span
+              className={`${
+                title === item.title ? 'text-blue-500' : 'text-slate-400'
+              } font-semibold cursor-pointer text-sm`}
+            >
+              {item.title}
+            </span>
+          </UnstyledButton>
+        ))}
+
+        {creds?.is_freelanced
+          ? MenuFreelanceFeatures.map((item, index) => (
+              <UnstyledButton key={index} onClick={() => navigate(item.href)}>
+                <span
+                  className={`${
+                    title === item.title ? 'text-blue-500' : 'text-slate-400'
+                  } font-semibold cursor-pointer text-sm`}
+                >
+                  {item.title}
+                </span>
+              </UnstyledButton>
+            ))
+          : null}
+      </section>
+    );
+  }
 
   return (
     <section className="flex gap-7">

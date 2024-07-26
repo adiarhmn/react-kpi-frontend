@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Modal, Table, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Button, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconTrash } from '@tabler/icons-react';
