@@ -1,17 +1,7 @@
 /* eslint-disable linebreak-style */
-import {
-  Badge,
-  Button,
-  Divider,
-  Indicator,
-  Modal,
-  Select,
-  Stepper,
-  UnstyledButton,
-} from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { Badge, Button, Divider, Indicator, Select, UnstyledButton } from '@mantine/core';
 import { IconChevronRight, IconDashboard, IconInfoCircle } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetRecap } from '@/admin_features/attendance/api';
@@ -27,13 +17,10 @@ import {
 
 export const DashboardAdmin: React.FC = () => {
   const navigate = useNavigate();
-  const [opened, { open, close }] = useDisclosure();
   const { creds } = useAuth();
   if (!creds) navigate('/login');
   // About Date
   const month = new Date();
-
-  const [scedule, setSchedule] = useState<number>(0);
 
   // Data Recap
   const { data: DataRecap, isLoading: LoadingRecap } = useGetRecap(
@@ -42,15 +29,7 @@ export const DashboardAdmin: React.FC = () => {
     month.getFullYear()
   );
 
-  useEffect(() => {
-    if (DataRecap) {
-      DataRecap?.map((item: any) => {
-        if (item?.recap.length > 0) {
-          setSchedule((prev) => prev + 1);
-        }
-      });
-    }
-  }, [DataRecap]);
+  console.log('Data Recap', DataRecap);
 
   const [typeRequest, setTypeRequest] = useState<string>('Izin');
 
@@ -64,10 +43,19 @@ export const DashboardAdmin: React.FC = () => {
 
   if (LoadingRecap) return <div>Loading...</div>;
 
-  console.log('Data REKAP', DataRecap);
+  const getTotal = (Data: any) => {
+    let total = 0;
+    Data?.forEach((element: any) => {
+      if (element?.recap?.length === 0) {
+        total += 1;
+      }
+    });
 
-  const getMinus = (one: number = 0, two: number) => {
-    return one - two;
+    return total;
+  };
+
+  const getMinus = (total: number, total2: number) => {
+    return total - total2;
   };
   return (
     <main>
@@ -106,7 +94,7 @@ export const DashboardAdmin: React.FC = () => {
               <h2 className="font-bold">Data Master Perusahaan</h2>
               <div className="-mt-1 text-xs text-slate-400 flex gap-2">
                 Panduan terkait Data Master
-                <UnstyledButton onClick={open}>
+                <UnstyledButton onClick={() => navigate('/tutorial')}>
                   <Badge
                     color="yellow"
                     size="sm"
@@ -159,12 +147,14 @@ export const DashboardAdmin: React.FC = () => {
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 ">
                 <div className="bg-slate-100 text-green-600 px-5 rounded-md shadow text-sm py-1 flex justify-around items-center">
-                  <span className="font-bold">{scedule}</span>
+                  <span className="font-bold">
+                    {getMinus(DataRecap?.length ?? 0, getTotal(DataRecap))}
+                  </span>
                   <span className="text-xs">Karyawan Sudah Memiliki Jadwal</span>
                 </div>
                 <Indicator inline processing color="red" size={12}>
                   <div className="bg-slate-100 px-5 rounded-md shadow text-sm py-1 flex justify-around text-red-400">
-                    <span className="font-bold">{getMinus(DataRecap?.length, scedule)}</span>
+                    <span className="font-bold">{getTotal(DataRecap)}</span>
                     <span className="text-xs">Karyawan Belum Memiliki Jadwal</span>
                   </div>
                 </Indicator>
@@ -182,46 +172,6 @@ export const DashboardAdmin: React.FC = () => {
           </section>
         </div>
       </div>
-
-      {/* Modal Panduan Menggunakan Aplikasi */}
-      <Modal
-        opened={opened}
-        onClose={close}
-        title={<div className="font-semibold">Panduan Menggunakan Aplikasi</div>}
-        size="lg"
-        padding="md"
-      >
-        <div>
-          <Stepper active={3} orientation="vertical" allowNextStepsSelect={false}>
-            <Stepper.Step
-              label="1. Mengatur Data Master"
-              description={
-                <div>
-                  <div>seperti data karyawan, divisi, shift, dan lainnya</div>
-                  <div className="mt-1 mb-10">
-                    <UnstyledButton onClick={() => navigate('/division')}>
-                      <Badge size="sm" leftSection={<IconDashboard size={15} />}>
-                        <span className="capitalize">Data Master</span>
-                      </Badge>
-                    </UnstyledButton>
-                  </div>
-                </div>
-              }
-              completedIcon={<IconDashboard size={25} />}
-            />
-            <Stepper.Step
-              label="2. Mengatur Lokasi Kerjad"
-              description="Yaitu Mengatur Lokasi Kerja Karyawan dan Juga Lokasi Perusahaan"
-              completedIcon={<IconDashboard size={25} />}
-            />
-            <Stepper.Step
-              label="Mengatur Data Master"
-              description="seperti data karyawan, divisi, shift, dan lainnya"
-              completedIcon={<IconDashboard size={25} />}
-            />
-          </Stepper>
-        </div>
-      </Modal>
     </main>
   );
 };
