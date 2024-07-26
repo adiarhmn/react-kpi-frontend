@@ -30,50 +30,46 @@ export const TableGroup: React.FC = () => {
 
   return (
     <div>
-      <Table withColumnBorders withTableBorder>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th className="font-bold" style={{ width: 70, textAlign: 'center' }}>
-              No
-            </Table.Th>
-            <Table.Th className="font-bold">Nama Kelompok</Table.Th>
-            <Table.Th className="font-bold">Jumlah Anggota</Table.Th>
-            <Table.Th className="font-bold">Jumlah Sesi</Table.Th>
-            <Table.Th className="flex gap-2 items-center justify-center font-bold">Aksi</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {data?.length < 1 ? (
-            <div className="h-64 flex justify-center items-center">
-              Data Kelompok tidak ditemukan
-            </div>
-          ) : (
-            <>
-              {data?.map((group: GroupType, index: number) => (
-                <Table.Tr key={index}>
-                  <Table.Td style={{ width: 70, textAlign: 'center' }}>{index + 1}</Table.Td>
-                  <Table.Td>{group?.name}</Table.Td>
-                  <Table.Td>{group?.EmployeeGroups.length} Orang</Table.Td>
-                  <Table.Td>{group?.GroupSessions.length} Sesi</Table.Td>
-                  <Table.Td className="flex gap-2 items-center justify-center">
-                    <ActionIcon color="red">
-                      <IconTrash size={14} />
-                    </ActionIcon>
-                    <Button
-                      onClick={() => DetailGroupChange(group)}
-                      size="xs"
-                      color="blue"
-                      leftSection={<IconEye size={14} />}
-                    >
-                      Detail
-                    </Button>
-                  </Table.Td>
-                </Table.Tr>
-              ))}
-            </>
-          )}
-        </Table.Tbody>
-      </Table>
+      {data?.length < 1 ? (
+        <div className="h-64 flex justify-center items-center">Data Kelompok tidak ditemukan</div>
+      ) : (
+        <Table withColumnBorders withTableBorder>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th className="font-bold" style={{ width: 70, textAlign: 'center' }}>
+                No
+              </Table.Th>
+              <Table.Th className="font-bold">Nama Kelompok</Table.Th>
+              <Table.Th className="font-bold">Jumlah Anggota</Table.Th>
+              <Table.Th className="font-bold">Jumlah Sesi</Table.Th>
+              <Table.Th className="flex gap-2 items-center justify-center font-bold">Aksi</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>
+            {data?.map((group: GroupType, index: number) => (
+              <Table.Tr key={index}>
+                <Table.Td style={{ width: 70, textAlign: 'center' }}>{index + 1}</Table.Td>
+                <Table.Td>{group?.name}</Table.Td>
+                <Table.Td>{group?.EmployeeGroups.length} Orang</Table.Td>
+                <Table.Td>{group?.GroupSessions.length} Sesi</Table.Td>
+                <Table.Td className="flex gap-2 items-center justify-center">
+                  <ActionIcon color="red">
+                    <IconTrash size={14} />
+                  </ActionIcon>
+                  <Button
+                    onClick={() => DetailGroupChange(group)}
+                    size="xs"
+                    color="blue"
+                    leftSection={<IconEye size={14} />}
+                  >
+                    Detail
+                  </Button>
+                </Table.Td>
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </Table>
+      )}
 
       {/* Modal Detail Groups */}
       <Modal

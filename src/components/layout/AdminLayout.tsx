@@ -265,7 +265,7 @@ export const AdminLayout: React.FC = () => {
         header={{ height: 60 }}
         navbar={{
           width: 0,
-          breakpoint: 'xl',
+          breakpoint: 'sm',
           collapsed: { mobile: !opened },
         }}
         padding="md"
@@ -382,9 +382,11 @@ export const AdminLayout: React.FC = () => {
             )}
           </Group>
         </AppShell.Header>
-        <AppShell.Navbar p="md">
-          <SegmentControl title={title} navbar={true} />
-        </AppShell.Navbar>
+        {isTablet && (
+          <AppShell.Navbar p="sm">
+            <SegmentControl title={title} navbar={true} />
+          </AppShell.Navbar>
+        )}
         <AppShell.Main>
           {/* SUB MENU LIST */}
           {submenu[0].maintitle != 'none' && (
