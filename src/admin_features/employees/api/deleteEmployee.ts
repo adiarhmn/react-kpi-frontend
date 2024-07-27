@@ -13,8 +13,6 @@ export async function deleteEmployee(id: number) {
 export const useDeleteEmployee = () => {
   return useMutation({
     mutationFn: (id: number) => deleteEmployee(id),
-    onError: (error) => {
-      console.log(error);
-    },
+    onError: () => {},
   });
 };

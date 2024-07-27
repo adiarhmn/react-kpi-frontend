@@ -14,8 +14,5 @@ async function deleteUser(id: number) {
 export const useDeleteUser = () => {
   return useMutation({
     mutationFn: (id: number) => deleteUser(id),
-    onError: (error) => {
-      console.log(error);
-    },
   });
 };

@@ -39,7 +39,6 @@ export const TableDivision: React.FC = () => {
   };
   const openDeleteModal = (division: DivisionType) => {
     setDivisionToDelete(division);
-    console.log(divisionToDelete);
     open();
   };
 
@@ -67,7 +66,6 @@ export const TableDivision: React.FC = () => {
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
-  console.log('Console Log Division', division);
   return (
     <>
       <Table withColumnBorders withTableBorder>

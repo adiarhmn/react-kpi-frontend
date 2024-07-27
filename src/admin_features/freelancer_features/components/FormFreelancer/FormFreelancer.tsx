@@ -28,7 +28,6 @@ export const FormFreelancer: React.FC<FormFreelancerProps> = ({ onsubmit }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log('FOrm Values Worker', form.values);
     onsubmit(form.values);
   };
 

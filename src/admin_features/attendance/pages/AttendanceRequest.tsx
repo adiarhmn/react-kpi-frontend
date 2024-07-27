@@ -28,7 +28,7 @@ export const AttendanceRequest: React.FC = () => {
   const [DataRequest, setDataRequest] = useState<AttendanceReqType>();
 
   const HandleUpdateRequest = async (status: string) => {
-    if (!DataRequest) return console.log('Data Request Not Found');
+    if (!DataRequest) return;
 
     const DataPut = {
       ...DataRequest,
@@ -37,17 +37,12 @@ export const AttendanceRequest: React.FC = () => {
 
     await MutationUpdateRequest.mutateAsync(DataPut, {
       onSuccess: () => {
-        console.log('Success');
         refetch();
       },
-      onError: (error) => {
-        console.log('Error :', error);
-      },
+      onError: () => {},
     });
     close();
   };
-
-  console.log(data);
 
   if (isLoading) return <div>Loading...</div>;
 

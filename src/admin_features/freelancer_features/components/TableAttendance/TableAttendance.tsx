@@ -1,4 +1,4 @@
-import { Badge, Select, Table } from '@mantine/core';
+import { Badge, Button, Select, Table } from '@mantine/core';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,10 +19,18 @@ export const TableAttendance: React.FC = () => {
   } = useGetGroup(creds?.company_id || 0);
   const [groupPicker, setGroupPicker] = useState<string | undefined>(undefined);
 
+  const BaseURL = import.meta.env.VITE_API_URL || 'http://localhost:1337';
+  const handleGetReport = async () => {
+    if (groupPicker && dataGroup?.length > 0) {
+      window.open(`${BaseURL}/generate-worker-report?group=${groupPicker}`);
+    }
+  };
+
   const { data, isLoading, isError } = useGetAttendanceWorker(
     creds?.company_id || 0,
     parseInt(groupPicker ?? '0')
   );
+
   if (isLoading || LoadGroup) return <div>Loading</div>;
   if (isError || ErGroup) return <div>Error</div>;
 
@@ -30,18 +38,28 @@ export const TableAttendance: React.FC = () => {
     value: group.id.toString(),
     label: group.name,
   }));
+
   return (
     <div>
-      <Select
-        className="max-w-sm mb-5"
-        label="Pilih Kelompok"
-        placeholder="Semua Kelompok"
-        data={OptionsGroup}
-        value={groupPicker}
-        onChange={(e) => {
-          if (e) setGroupPicker(e);
-        }}
-      />
+      <div className="flex justify-between items-center mb-2">
+        <Select
+          className="max-w-sm"
+          label="Pilih Kelompok"
+          placeholder="Semua Kelompok"
+          data={OptionsGroup}
+          value={groupPicker}
+          allowDeselect={false}
+          onChange={(e) => {
+            if (e) setGroupPicker(e);
+          }}
+        />
+        <div className="flex flex-col">
+          {!groupPicker && <i className="text-xxs">*Pilih Kelompok Agar tombol aktif</i>}
+          <Button onClick={handleGetReport} disabled={groupPicker == undefined}>
+            Download PDF
+          </Button>
+        </div>
+      </div>
 
       <Table withColumnBorders withTableBorder>
         <Table.Thead>

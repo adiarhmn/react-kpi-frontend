@@ -31,7 +31,6 @@ export const CreateUser: React.FC = () => {
 
     await mutationUser.mutateAsync(userData, {
       onSuccess: (data) => {
-        console.log('Success:', data);
         if (data.status === '400') {
           notifications.show({
             message: data.message,

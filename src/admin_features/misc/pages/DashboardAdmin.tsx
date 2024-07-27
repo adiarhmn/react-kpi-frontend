@@ -29,8 +29,6 @@ export const DashboardAdmin: React.FC = () => {
     month.getFullYear()
   );
 
-  console.log('Data Recap', DataRecap);
-
   const [typeRequest, setTypeRequest] = useState<string>('Izin');
 
   const OptionRequest = [

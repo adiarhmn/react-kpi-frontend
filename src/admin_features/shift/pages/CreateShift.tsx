@@ -18,8 +18,7 @@ export const CreateShift: React.FC = () => {
 
   const handleSubmit = async (data: ShiftType) => {
     await mutationShift.mutateAsync(data, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
+      onSuccess: () => {
         navigate(-1);
       },
     });

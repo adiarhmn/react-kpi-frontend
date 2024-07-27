@@ -21,19 +21,12 @@ export const UpdateUser: React.FC = () => {
 
   // Fungsi Submit form data user
   const handleSubmit = async (dataUser: UserType) => {
-    console.log('Data User:', dataUser);
     await MutationUpdateUser.mutateAsync(dataUser, {
       onSuccess: () => {
         navigate('/users');
       },
     });
   };
-
-  useEffect(() => {
-    if (user) {
-      console.log('User:', user);
-    }
-  }, [user]);
 
   return (
     <main>

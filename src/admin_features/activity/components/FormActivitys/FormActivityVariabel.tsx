@@ -52,7 +52,6 @@ export const FormActivityVariabel: React.FC<FormActivityVariabelProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(form.values);
-    console.log('submit:', form.values);
   };
   return (
     <form onSubmit={handleSubmit}>

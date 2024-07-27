@@ -17,11 +17,5 @@ export const postCreateLocationEmployee = async (data: EmployeeLocation) => {
 export const useCreateLocationEmployee = () => {
   return useMutation({
     mutationFn: postCreateLocationEmployee,
-    onMutate: async (data: EmployeeLocation) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.log('Error :', error);
-    },
   });
 };

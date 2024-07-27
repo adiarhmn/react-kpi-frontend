@@ -14,8 +14,6 @@ export const DetailEmployee: React.FC = () => {
 
   if (LoadEmployee) return <div>Loading...</div>;
 
-  console.log(DataEmployee);
-
   return (
     <>
       <section className="bg-white rounded-lg  shadow-lg p-5">
@@ -24,63 +22,10 @@ export const DetailEmployee: React.FC = () => {
             <IconChevronLeft size={20} />
           </ActionIcon>
           <div>
-            <h2 className="font-bold">Detail Karyawan : Adi Aulia Rahman</h2>
+            <h2 className="font-bold">Detail Karyawan : {DataEmployee?.name}</h2>
             <div className="-mt-1 text-xs text-slate-400">Berikut Detail Data Karyawan</div>
           </div>
         </div>
-      </section>
-
-      {/* Data Karyawan */}
-      <section className="bg-white rounded-lg  shadow-lg p-5 mt-4">
-        <div>
-          <h2 className="font-bold">Data Adi Aulia Rahman</h2>
-          <div className="-mt-1 text-xs text-slate-400">Berikut Detail Data Karyawan</div>
-        </div>
-        <table className="mt-5  text-xs">
-          <tbody>
-            {/* Nama Pegawai */}
-            <tr>
-              <td>Nama</td>
-              <td className="min-w-10 text-center">:</td>
-              <td>Adi Aulia Rahman</td>
-            </tr>
-
-            {/* NIP Pegawai */}
-            <tr>
-              <td>NIP</td>
-              <td className="min-w-10 text-center">:</td>
-              <td>09128128127</td>
-            </tr>
-
-            {/* Pendidikan Terakhir */}
-            <tr>
-              <td>Pendidikan Terakhir</td>
-              <td className="min-w-10 text-center">:</td>
-              <td>S1 Teknik Informatika</td>
-            </tr>
-
-            {/* NO Whatsapp */}
-            <tr>
-              <td>No Whatsapp</td>
-              <td className="min-w-10 text-center">:</td>
-              <td>081234567890</td>
-            </tr>
-
-            {/* Agama */}
-            <tr>
-              <td>Agama</td>
-              <td className="min-w-10 text-center">:</td>
-              <td>Islam</td>
-            </tr>
-
-            {/* Alamat */}
-            <tr>
-              <td>Alamat</td>
-              <td className="min-w-10 text-center">:</td>
-              <td>Jl. Jalan No. 1</td>
-            </tr>
-          </tbody>
-        </table>
       </section>
 
       {/* Data Presensi */}
@@ -92,7 +37,58 @@ export const DetailEmployee: React.FC = () => {
           </div>
           <AttendanceListSection employee_id={parseInt(id ?? '0')} with_activity={false} />
         </div>
-        <div className="bg-white rounded-lg shadow-lg mt-2 p-5 flex-grow">askdjhas</div>
+
+        <section className="bg-white rounded-lg  shadow-lg p-5 mt-2 grow">
+          <div>
+            <h2 className="font-bold">Data {DataEmployee?.name}</h2>
+            <div className="-mt-1 text-xs text-slate-400">Berikut Detail Data Karyawan</div>
+          </div>
+          <table className="mt-5 w-full">
+            <tbody>
+              {/* Nama Pegawai */}
+              <tr>
+                <td>Nama</td>
+                <td className="min-w-10 text-center">:</td>
+                <td>{DataEmployee?.name || '-'}</td>
+              </tr>
+
+              {/* NIP Pegawai */}
+              <tr>
+                <td>NIP</td>
+                <td className="min-w-10 text-center">:</td>
+                <td>{DataEmployee?.nip || '-'}</td>
+              </tr>
+
+              {/* Pendidikan Terakhir */}
+              <tr>
+                <td>Pendidikan Terakhir</td>
+                <td className="min-w-10 text-center">:</td>
+                <td>{DataEmployee?.last_degree || '-'}</td>
+              </tr>
+
+              {/* NO Whatsapp */}
+              <tr>
+                <td>No HP / Whatsapp</td>
+                <td className="min-w-10 text-center">:</td>
+                <td>{DataEmployee?.phone || '-'}</td>
+              </tr>
+
+              {/* Agama */}
+              <tr>
+                <td>Agama</td>
+                <td className="min-w-10 text-center">:</td>
+                <td>{DataEmployee?.religion || '-'}</td>
+              </tr>
+
+              {/* Alamat */}
+              <tr>
+                <td>Alamat</td>
+                <td className="min-w-10 text-center">:</td>
+                <td>{DataEmployee?.address || '-'}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
       </section>
     </>
   );

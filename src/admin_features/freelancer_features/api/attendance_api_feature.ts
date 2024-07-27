@@ -1,6 +1,6 @@
 // API FOR SESSION
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL || 'http://localhost:1337';
@@ -16,6 +16,15 @@ export const useGetAttendanceWorker = (company_id?: number, group_id?: number) =
 
       const res = await axios.get(`${BaseURL}/worker-attendance?company=${company_id}`);
       return res.data.data;
+    },
+  });
+};
+
+export const useGetReport = () => {
+  return useMutation({
+    mutationFn: async (group_id: string) => {
+      const res = await axios.get(`${BaseURL}/generate-worker-report?group=${group_id}`);
+      return res.data;
     },
   });
 };

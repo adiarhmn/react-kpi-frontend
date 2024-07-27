@@ -34,8 +34,6 @@ export const AttendanceCard: React.FC = () => {
     (data?.Sakit ?? 0) +
     (data?.Terlambat ?? 0);
 
-  console.log('Data Recap', data);
-
   return (
     <section className="bg-white shadow-lg p-6 rounded-lg max-h-72">
       <div className="grid lg:grid-cols-2">

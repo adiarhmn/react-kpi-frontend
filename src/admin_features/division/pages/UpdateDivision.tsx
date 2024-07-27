@@ -27,8 +27,7 @@ export const UpdateDivision: React.FC = () => {
     };
 
     await mutation.mutateAsync(dataDivisionUpdate, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
+      onSuccess: () => {
         navigate('/division', { state: { success: 'Data berhasil diupdate' } });
       },
     });

@@ -116,21 +116,17 @@ export const TableGroup: React.FC = () => {
             <table className="w-full text-sm text-center">
               <thead>
                 <tr>
+                  <th className="border border-slate-300 font-semibold">No</th>
                   <th className="border border-slate-300 font-semibold">Nama Pekerja</th>
                   <th className="border border-slate-300 font-semibold">Kode Pekerja</th>
-                  <th className="border border-slate-300 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {detailGroup?.EmployeeGroups.map((employee, index) => (
                   <tr key={index}>
+                    <td className="border border-slate-300 p-1">{index + 1}</td>
                     <td className="border border-slate-300 p-1">{employee.employee.name}</td>
                     <td className="border border-slate-300 p-1">{employee.employee.nip || '-'}</td>
-                    <td className="border border-slate-300 p-1 text-center">
-                      <ActionIcon color="red">
-                        <IconTrash size={14} />
-                      </ActionIcon>
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -141,19 +137,15 @@ export const TableGroup: React.FC = () => {
             <table className="w-full text-sm text-center">
               <thead>
                 <tr>
+                  <th className="border border-slate-300 font-semibold">No</th>
                   <th className="border border-slate-300 font-semibold">Nama Sesi</th>
-                  <th className="border border-slate-300 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {detailGroup?.GroupSessions.map((session, index) => (
                   <tr key={index}>
+                    <td className="border border-slate-300 p-1">{index + 1}</td>
                     <td className="border border-slate-300 p-1">{session.session.name}</td>
-                    <td className="border border-slate-300 p-1 text-center">
-                      <ActionIcon color="red">
-                        <IconTrash size={14} />
-                      </ActionIcon>
-                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -1,7 +1,7 @@
 import { ActionIcon, Button, Loader, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetRequest, usePutRequest } from '@/admin_features/permission/api';
@@ -17,12 +17,8 @@ export const TableLeave = () => {
   const [DataRequest, setDataRequest] = useState<RequestsType>();
   const MutationUpdateRequest = usePutRequest();
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const HandleUpdateRequest = async (status: string) => {
-    if (!DataRequest) return console.log('Data Request Not Found');
+    if (!DataRequest) return;
 
     const DataPut = {
       ...DataRequest,
@@ -31,12 +27,9 @@ export const TableLeave = () => {
 
     await MutationUpdateRequest.mutateAsync(DataPut, {
       onSuccess: () => {
-        console.log('Success');
         refetch();
       },
-      onError: (error) => {
-        console.log('Error :', error);
-      },
+      onError: () => {},
     });
     close();
   };

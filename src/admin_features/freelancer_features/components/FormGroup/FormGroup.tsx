@@ -32,7 +32,6 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('Data Form INI', form.values);
 
     // Maping Data
     const data: GroupFormType = {
@@ -72,10 +71,6 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
     label: worker.name,
   }));
 
-  console.log('WorkersOption', OptionsWorkers);
-  console.log('Workers', workers);
-
-  console.log('OptionSession', form.values);
   return (
     <form onSubmit={handleSubmit}>
       <TextInput

@@ -44,11 +44,8 @@ export const TableUser = () => {
   };
   const confirmDeleteUser = async () => {
     mutationDeleteUser.mutateAsync(UserData?.id, {
-      onSuccess: (data) => {
-        console.log('Success Delete:', data);
-        // const newUsers = users.filter((user) => user.id !== UserData?.id);
+      onSuccess: () => {
         refetch();
-        // setUsers(newUsers);
         close();
 
         notifications.show({

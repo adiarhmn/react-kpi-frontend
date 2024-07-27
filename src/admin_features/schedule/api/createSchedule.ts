@@ -28,23 +28,11 @@ export const ValidateSchedule = async (employee_schedule_id: ScheduleValidatePos
 export const useCreateSchedule = () => {
   return useMutation({
     mutationFn: CreateSchedule,
-    onMutate: async (schedule: SchedulePost[]) => {
-      console.log(schedule);
-    },
-    onError: (error) => {
-      console.log('Error :', error);
-    },
   });
 };
 
 export const useValidateSchedule = () => {
   return useMutation({
     mutationFn: ValidateSchedule,
-    onMutate: async (employee_schedule_id: ScheduleValidatePost[]) => {
-      console.log(employee_schedule_id);
-    },
-    onError: (error) => {
-      console.log('Error :', error);
-    },
   });
 };
