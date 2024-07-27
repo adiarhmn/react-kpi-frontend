@@ -18,7 +18,7 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
     data: workers,
     isLoading: LoadWorkers,
     isError: ErWorkers,
-  } = useGetWorkers(creds?.company_id || 0);
+  } = useGetWorkers(creds?.company_id || 0, 2, true);
 
   // Use Form Group
   const form = useForm({
@@ -71,6 +71,9 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
     value: worker.id.toString(),
     label: worker.name,
   }));
+
+  console.log('WorkersOption', OptionsWorkers);
+  console.log('Workers', workers);
 
   console.log('OptionSession', form.values);
   return (

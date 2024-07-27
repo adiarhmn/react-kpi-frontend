@@ -23,7 +23,6 @@ export const TableGroup: React.FC = () => {
     }, 50);
   };
 
-  console.log('Detail Group', detailGroup);
   const { data, isLoading, isError } = useGetGroup(creds?.company_id || 0);
   if (isLoading) return <div>Loading</div>;
   if (isError) return <div>Error</div>;

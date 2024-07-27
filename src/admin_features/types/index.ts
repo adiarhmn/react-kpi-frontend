@@ -1,4 +1,3 @@
-import { em } from '@mantine/core';
 /* eslint-disable linebreak-style */
 export type UserType = {
   id: number;
