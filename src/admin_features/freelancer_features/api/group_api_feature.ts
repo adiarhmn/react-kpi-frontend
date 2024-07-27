@@ -38,3 +38,12 @@ export const useGetGroup = (company_id: number) => {
     },
   });
 };
+
+export const useDeleteGroup = () => {
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const res = await axios.delete(`${BaseURL}/group/${id}`);
+      return res.data;
+    },
+  });
+};

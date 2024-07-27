@@ -1,5 +1,6 @@
 import { ActionIcon, Button, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
 import { IconEye, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { GroupType } from '@/admin_features/types';
 import { useAuth } from '@/features/auth';
 
-import { useGetGroup } from '../../api';
+import { useDeleteGroup, useGetGroup } from '../../api';
 
 export const TableGroup: React.FC = () => {
   const { creds } = useAuth();
@@ -15,12 +16,31 @@ export const TableGroup: React.FC = () => {
   if (!creds) navigate('./login');
 
   const [opened, { open, close }] = useDisclosure();
+  const [deleteModal, { open: op, close: cl }] = useDisclosure();
   const [detailGroup, setDetailGroup] = useState<GroupType | undefined>(undefined);
+  const [groupPicker, setGroupPicker] = useState<GroupType | undefined>(undefined);
+  const deleteGroup = useDeleteGroup();
   const DetailGroupChange = (group: GroupType) => {
     setDetailGroup(group);
     setTimeout(() => {
       open();
     }, 50);
+  };
+
+  const ConfirmDelete = () => {
+    if (groupPicker) {
+      deleteGroup.mutateAsync(groupPicker.id, {
+        onSuccess: () => {
+          notifications.show({
+            title: 'Berhasil',
+            message: 'Data Kelompok Berhasil Dihapus',
+            color: 'teal',
+          });
+
+          cl();
+        },
+      });
+    }
   };
 
   const { data, isLoading, isError } = useGetGroup(creds?.company_id || 0);
@@ -52,7 +72,15 @@ export const TableGroup: React.FC = () => {
                 <Table.Td>{group?.EmployeeGroups.length} Orang</Table.Td>
                 <Table.Td>{group?.GroupSessions.length} Sesi</Table.Td>
                 <Table.Td className="flex gap-2 items-center justify-center">
-                  <ActionIcon color="red">
+                  <ActionIcon
+                    onClick={() => {
+                      setGroupPicker(group);
+                      setTimeout(() => {
+                        op();
+                      }, 100);
+                    }}
+                    color="red"
+                  >
                     <IconTrash size={14} />
                   </ActionIcon>
                   <Button
@@ -136,6 +164,26 @@ export const TableGroup: React.FC = () => {
         <div className="mt-10 flex justify-end">
           <Button color="gray" onClick={close}>
             Tutup Detail
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Modal Delete */}
+      <Modal
+        opened={deleteModal}
+        onClose={cl}
+        centered
+        title={<span className="font-bold">Konfirmasi Hapus ?</span>}
+      >
+        <div>
+          <span>Yakin hapus pekerja dengan nama </span>
+          <span className="font-semibold text-blue-600"> {groupPicker?.name}</span>
+        </div>
+        <div className="pt-10 flex gap-2 justify-end">
+          <Button onClick={() => ConfirmDelete()}>Yakin</Button>
+
+          <Button color="red" onClick={cl}>
+            Batal
           </Button>
         </div>
       </Modal>
