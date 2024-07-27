@@ -56,7 +56,6 @@ export const useGetAttendanceRecap = (date: string, company_id?: number) => {
 
 export async function getAttendanceRecapByDivision(date: string, division_id?: number) {
   const res = await axios.get(`${BaseURL}/schedule?&division=${division_id}&date=${date}`);
-  console.log('URL GETNYA BANJ : ', `${BaseURL}/schedule?&division=${division_id}&date=${date}`);
 
   let Hadir = 0;
   let BelumHadir = 0;
@@ -66,7 +65,6 @@ export async function getAttendanceRecapByDivision(date: string, division_id?: n
   let Izin = 0;
   const Overall = res.data.data.length;
 
-  console.log('Data Recap -->', res.data.data);
   res.data.data.forEach((item: any) => {
     if (item.Attendance.length < 1) BelumHadir++;
     if (item.Attendance.length != 0) Hadir++;

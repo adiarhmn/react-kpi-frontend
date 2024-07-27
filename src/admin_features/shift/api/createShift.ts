@@ -19,11 +19,5 @@ const CreateShift = async (shift: ShiftPost) => {
 export const useCreateShift = () => {
   return useMutation({
     mutationFn: CreateShift,
-    onMutate: async (shift: ShiftPost) => {
-      console.log(shift);
-    },
-    onError: (error) => {
-      console.log('Error :', error);
-    },
   });
 };

@@ -5,7 +5,6 @@ const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 export async function getLocationEmployees(employee_id?: number) {
   const url = `${BaseURL}/employee-location?employee=${employee_id}`;
 
-  console.log(url);
   const res = await axios.get(url);
   return res.data.data;
 }

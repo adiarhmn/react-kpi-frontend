@@ -50,7 +50,7 @@ export const CreateEmployee: React.FC = () => {
       province: '',
       postal_code: '',
       phone: '',
-      status: true,
+      status: 1,
       username: '',
       password: '',
       role: 'employee',
@@ -94,6 +94,13 @@ export const CreateEmployee: React.FC = () => {
           color: 'teal',
         });
         navigate(-1);
+      },
+      onError: (error) => {
+        notifications.show({
+          title: 'Gagal',
+          message: error.message,
+          color: 'red',
+        });
       },
     });
   };

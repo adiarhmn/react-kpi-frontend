@@ -1,4 +1,5 @@
 import { ActionIcon } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +13,11 @@ export const CreateGroup: React.FC = () => {
   const handleSubmit = async (data: GroupFormType) => {
     await mutate.mutateAsync(data, {
       onSuccess: () => {
-        alert('Data berhasil ditambahkan');
+        notifications.show({
+          message: 'Berhasil Menambahkan Kelompok',
+          color: 'blue',
+        });
+        navigate(-1);
       },
     });
   };

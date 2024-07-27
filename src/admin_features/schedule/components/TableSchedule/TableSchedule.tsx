@@ -131,7 +131,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
 
     await MutationPasteMonth.mutateAsync(DataPasteMonth, {
       onSuccess: () => {
-        console.log('Success Paste');
         refetch();
       },
     });
@@ -188,9 +187,8 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   //  => Handle Confirm Edit Schedule (Save Data)
   const HandleConfirmEditItemSchedule = async () => {
     const data_submit = HandleFormValue();
-    console.log('Data Submit :', data_submit);
     MutationEditItemSchedule.mutateAsync(data_submit, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         modal.close();
         refetch();
         ResetDataEditItemSchedule();
@@ -198,8 +196,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
           message: 'Berhasil Mengubah Jadwal',
           color: 'green',
         });
-
-        console.log('Success :', data);
       },
     });
   };
@@ -209,7 +205,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   const DeleteEmployeeSchedule = (id: number) => {
     MutationDeleteEmployeeSchedule.mutateAsync(id, {
       onError: () => {
-        console.log('Error Delete Schedule Employee:');
         notifications.show({
           message: 'Gagal Menghapus Jadwal ',
           color: 'red',
@@ -255,7 +250,6 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
     }
   };
 
-  console.log('Data Edit FreeDay :', dataSchedule);
   // RENDER COMPONENT ==============================================================================================
 
   return (

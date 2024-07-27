@@ -26,7 +26,6 @@ export const TableLocations: React.FC = () => {
     navigate('/locations/update', { state: location });
   };
 
-  console.log(data);
   return (
     <main>
       <div className="mb-5">

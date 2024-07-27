@@ -14,8 +14,6 @@ export const UpdateLocations: React.FC = () => {
   if (creds === null) navigate('/login');
   if (state === undefined) navigate('/locations');
 
-  console.log('State', state);
-
   const mutation = useUpdateLocations();
   const handleSubmit = async (data: CreateAttendanceLocationType) => {
     await mutation.mutateAsync(data, {

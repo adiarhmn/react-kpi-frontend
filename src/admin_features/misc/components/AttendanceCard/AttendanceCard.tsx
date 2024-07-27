@@ -10,6 +10,7 @@ import { useAuth } from '@/features/auth';
 import { formatDateToString } from '@/utils/format';
 
 export const AttendanceCard: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title, setTitle } = useTitleContext();
   const navigate = useNavigate();
   const { creds } = useAuth();
@@ -33,8 +34,6 @@ export const AttendanceCard: React.FC = () => {
     (data?.Izin ?? 0) +
     (data?.Sakit ?? 0) +
     (data?.Terlambat ?? 0);
-
-  console.log('Data Recap', data);
 
   return (
     <section className="bg-white shadow-lg p-6 rounded-lg max-h-72">

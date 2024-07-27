@@ -28,6 +28,7 @@ export const Company: React.FC = () => {
       name: form.values.name,
       company_logo: null as File | null,
       companyUrl: '',
+      is_freelanced: 0,
       shift_active: form.values.shift_active === '1',
     };
     try {

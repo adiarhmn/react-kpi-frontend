@@ -1,4 +1,5 @@
 import { ActionIcon } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +13,14 @@ export const CreateFreelancer: React.FC = () => {
   const handleSubmit = (data: WorkerCreateType) => {
     createWorker.mutateAsync(data, {
       onSuccess: () => {
-        console.log('success create workder');
+        setTimeout(() => {
+          notifications.show({
+            title: 'Berhasil',
+            message: 'Pekerja berhasil ditambahkan',
+            color: 'teal',
+          });
+        }, 500);
+        navigate(-1);
       },
     });
   };

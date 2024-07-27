@@ -56,6 +56,7 @@ export const FormShift: React.FC<FormShiftProps> = ({
           label="Nama Shift"
           placeholder="Nama Shift"
           required
+          value={form.values.shift_name}
           {...form.getInputProps('shift_name')}
         />
         <TextInput
@@ -63,14 +64,15 @@ export const FormShift: React.FC<FormShiftProps> = ({
           label="Kode Shift"
           placeholder="Kode Shift"
           required
+          value={form.values.shift_code}
           {...form.getInputProps('shift_code')}
         />
         <Select
           label="Status Fitur Shift"
           className="mb-3"
           placeholder="Pilih"
+          value={form.values.is_active}
           required
-          defaultValue="1"
           data={[
             { value: '1', label: 'Aktif' },
             { value: '0', label: 'Tidak Aktif' },
@@ -81,15 +83,23 @@ export const FormShift: React.FC<FormShiftProps> = ({
       {edit ? (
         <>
           <div className="grid grid-cols-2 gap-5">
-            <TimeInput disabled label="Jam Masuk" {...form.getInputProps('start_time')} />
-            <TimeInput disabled label="Jam Keluar" {...form.getInputProps('end_time')} />
+            <TimeInput disabled label="Jam Masuk" />
+            <TimeInput disabled label="Jam Keluar" />
           </div>
           <span className="text-red-600 text-xs italic">Waktu Shift tidak bisa diubah !</span>
         </>
       ) : (
         <div className="grid grid-cols-2 gap-5 mb-3">
-          <TimeInput label="Jam Masuk" {...form.getInputProps('start_time')} />
-          <TimeInput label="Jam Keluar" {...form.getInputProps('end_time')} />
+          <TimeInput
+            value={form.values.start_time || ''}
+            label="Jam Masuk"
+            {...form.getInputProps('start_time')}
+          />
+          <TimeInput
+            value={form.values.end_time || ''}
+            label="Jam Keluar"
+            {...form.getInputProps('end_time')}
+          />
         </div>
       )}
       <div className="flex gap-3">

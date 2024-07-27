@@ -24,11 +24,10 @@ export const DashboardSuperadmin: React.FC = () => {
   const MutationCreate = useCreateCompany();
   const [opened, { open, close }] = useDisclosure(false);
   const handleCreate = async (data: any) => {
-    MutationCreate.mutate(data, {
-      onSuccess(data) {
+    MutationCreate.mutateAsync(data, {
+      onSuccess() {
         close();
         refetch();
-        console.log('Success Create Company', data);
         notifications.show({
           title: 'Berhasil',
           message: 'Company berhasil ditambahkan',

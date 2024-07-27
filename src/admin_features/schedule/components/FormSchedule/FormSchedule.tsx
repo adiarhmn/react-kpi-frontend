@@ -106,7 +106,6 @@ export const FormSchedule: React.FC<FormScheduleProps> = ({ loading, onsubmit })
     const allEmployees = DataEmployees.map((employee: any) => employee.id.toString());
     form.setFieldValue('employees', allEmployees);
   };
-  console.log('Data Divisi:', division);
   return (
     <form onSubmit={handleSubmit} className="mt-4">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

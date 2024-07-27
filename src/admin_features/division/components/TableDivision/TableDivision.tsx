@@ -39,7 +39,6 @@ export const TableDivision: React.FC = () => {
   };
   const openDeleteModal = (division: DivisionType) => {
     setDivisionToDelete(division);
-    console.log(divisionToDelete);
     open();
   };
 
@@ -67,7 +66,6 @@ export const TableDivision: React.FC = () => {
     return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
   }
 
-  console.log('Console Log Division', division);
   return (
     <>
       <Table withColumnBorders withTableBorder>
@@ -93,17 +91,23 @@ export const TableDivision: React.FC = () => {
                   {divisi?.Employees.length ?? 0} Orang
                 </Table.Td>
                 <Table.Td className="flex gap-2 items-center justify-center">
-                  <ActionIcon
-                    onClick={() => {
-                      navigate('/division/update', { state: { division: divisi } });
-                    }}
-                    color="yellow"
-                  >
-                    <IconPencil size={14} />
-                  </ActionIcon>
-                  <ActionIcon onClick={() => openDeleteModal(divisi)} color="red">
-                    <IconTrash size={14} />
-                  </ActionIcon>
+                  {divisi?.division_name === 'Pekerjalepas' ? (
+                    <div className="italic">Fitur Pekerja Lepas Aktif</div>
+                  ) : (
+                    <>
+                      <ActionIcon
+                        onClick={() => {
+                          navigate('/division/update', { state: { division: divisi } });
+                        }}
+                        color="yellow"
+                      >
+                        <IconPencil size={14} />
+                      </ActionIcon>
+                      <ActionIcon onClick={() => openDeleteModal(divisi)} color="red">
+                        <IconTrash size={14} />
+                      </ActionIcon>
+                    </>
+                  )}
                 </Table.Td>
               </Table.Tr>
             );

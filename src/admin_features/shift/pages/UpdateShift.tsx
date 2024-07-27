@@ -18,8 +18,6 @@ export const UpdateShift: React.FC = () => {
   if (creds === null) navigate('/login');
   if (!id) navigate('/shift');
 
-  console.log('State:', state);
-
   if (!state?.shift) {
     navigate('/shift');
   }
@@ -28,10 +26,8 @@ export const UpdateShift: React.FC = () => {
   const mutate = useUpdateShift();
 
   const handleSubmit = async (data: ShiftType) => {
-    console.log('Data SHIFT DI FORM EDIT:', data);
     await mutate.mutateAsync(data, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
+      onSuccess: () => {
         navigate(-1);
       },
     });

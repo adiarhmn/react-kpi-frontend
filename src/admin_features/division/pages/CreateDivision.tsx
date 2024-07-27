@@ -26,8 +26,7 @@ export const CreateDivision: React.FC = () => {
     };
 
     await mutation.mutateAsync(divisionDataPost, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
+      onSuccess: () => {
         navigate('/division', { state: { success: 'Data berhasil ditambahkan' } });
       },
     });

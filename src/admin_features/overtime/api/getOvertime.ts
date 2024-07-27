@@ -7,7 +7,6 @@ const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 export async function getOvertime(company?: number, month?: number, year?: number) {
   const URL = `${BaseURL}/overtime?company=${company}`;
 
-  console.log('URL -->', URL);
   const res = await axios.get(`${URL}`);
   return res.data;
 }
