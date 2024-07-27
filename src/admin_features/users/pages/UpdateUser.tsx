@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
 import { ActionIcon } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons-react';
-import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { UserType } from '@/admin_features/types';

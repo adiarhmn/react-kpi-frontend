@@ -10,6 +10,7 @@ import { useAuth } from '@/features/auth';
 import { formatDateToString } from '@/utils/format';
 
 export const AttendanceCard: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title, setTitle } = useTitleContext();
   const navigate = useNavigate();
   const { creds } = useAuth();

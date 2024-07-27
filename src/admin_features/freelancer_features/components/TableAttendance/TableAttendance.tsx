@@ -53,12 +53,16 @@ export const TableAttendance: React.FC = () => {
             if (e) setGroupPicker(e);
           }}
         />
-        <div className="flex flex-col">
-          {!groupPicker && <i className="text-xxs">*Pilih Kelompok Agar tombol aktif</i>}
-          <Button onClick={handleGetReport} disabled={groupPicker == undefined}>
-            Download PDF
-          </Button>
-        </div>
+        {data?.length < 1 ? (
+          <div className="text-red-500 text-xs">Tidak Ada data yang bisa Diprint</div>
+        ) : (
+          <div className="flex flex-col">
+            {!groupPicker && <i className="text-xxs">*Pilih Kelompok Agar tombol aktif</i>}
+            <Button onClick={handleGetReport} disabled={groupPicker == undefined}>
+              Download PDF
+            </Button>
+          </div>
+        )}
       </div>
 
       <Table withColumnBorders withTableBorder>

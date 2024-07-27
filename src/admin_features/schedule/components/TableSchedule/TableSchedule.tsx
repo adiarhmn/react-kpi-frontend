@@ -188,7 +188,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   const HandleConfirmEditItemSchedule = async () => {
     const data_submit = HandleFormValue();
     MutationEditItemSchedule.mutateAsync(data_submit, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         modal.close();
         refetch();
         ResetDataEditItemSchedule();
