@@ -1,5 +1,6 @@
 export type Creds = {
   id: number | null;
+  is_freelanced: number;
   username: string;
   name: string;
   role: string | 'admin' | 'superadmin' | 'employee' | 'supervisor';
@@ -23,5 +24,6 @@ export type Companys = {
   id?: number;
   name: string;
   shift_active: boolean;
+  is_freelanced: number;
   companyUrl: string;
 };

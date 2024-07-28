@@ -17,10 +17,12 @@ export async function getCreds() {
   // Cek Local Storage id company
   const id_company = localStorage.getItem('id_company');
   const role = localStorage.getItem('role');
-  if (id_company != null) {
+  const Company = JSON.parse(localStorage.getItem('COMPANY_DATA') || '{}');
+  if (id_company != null && Company) {
     res.data.creds = {
       ...res.data.creds,
       company_id: parseInt(id_company),
+      is_freelanced: Company?.is_freelanced || 0,
     };
   }
 

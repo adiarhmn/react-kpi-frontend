@@ -120,8 +120,6 @@ export const FormEmployee: React.FC<Props> = ({ onsubmit, loading = false, initi
     },
   ];
 
-  console.log('form.values', form.values);
-
   return (
     <form onSubmit={handleSubmit}>
       <Divider

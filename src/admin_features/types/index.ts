@@ -138,3 +138,94 @@ export type OvertimeType = {
   attendance_id: number;
   attendance: AttendanceType;
 };
+
+// Freelance Type Data =================================================================================================
+
+type CompanyType = {
+  companyUrl: string;
+  company_logo: string;
+  id: number;
+  is_freelanced: number;
+  name: string;
+  shift_active: boolean;
+};
+
+export type SessionType = {
+  id: number;
+  name: string;
+  company_id: number;
+  company: CompanyType;
+};
+
+export type WorkersType = {
+  id: number;
+  name: string;
+  nik: string;
+  nip: string;
+};
+
+/**
+ * 
+ * 0
+: 
+EmployeeGroups
+: 
+(2) [{…}, {…}]
+GroupSessions
+: 
+(2) [{…}, {…}]
+company
+: 
+{id: 0, name: '', company_logo: '', shift_active: false, companyUrl: '', …}
+company_id
+: 
+2
+id
+: 
+1
+name
+: 
+"Kelompok GG"
+[[Prototype]]
+: 
+Object
+ * 
+ * **/
+
+export type EmployeeGroupsType = {
+  id: number;
+  employee_id: number;
+  employee: EmployeeType;
+  group_id: number;
+};
+
+export type GroupSessionsType = {
+  id: number;
+  details: string;
+  session_id: number;
+  session: SessionType;
+};
+
+export type GroupType = {
+  id: number;
+  name: string;
+  company_id: number;
+  company: CompanyType;
+  details: string;
+  GroupSessions: GroupSessionsType[];
+  EmployeeGroups: EmployeeGroupsType[];
+};
+
+export type AttendanceWorkerType = {
+  attendance_status: string;
+  date: string;
+  detail: string;
+  employee_group_id: number;
+  employee: EmployeeType;
+  employee_id: number;
+  employee_input_id: number;
+  group_name: string;
+  group_session_id: number;
+  id: number;
+  session_name: string;
+};

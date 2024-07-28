@@ -1,11 +1,29 @@
 import { ActionIcon } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
+import { useCreateWorker, WorkerCreateType } from '../../api';
 import { FormFreelancer } from '../../components';
 
 export const CreateFreelancer: React.FC = () => {
   const navigate = useNavigate();
+  const createWorker = useCreateWorker();
+
+  const handleSubmit = (data: WorkerCreateType) => {
+    createWorker.mutateAsync(data, {
+      onSuccess: () => {
+        setTimeout(() => {
+          notifications.show({
+            title: 'Berhasil',
+            message: 'Pekerja berhasil ditambahkan',
+            color: 'teal',
+          });
+        }, 500);
+        navigate(-1);
+      },
+    });
+  };
   return (
     <main>
       <section className="bg-white p-5 rounded-lg">
@@ -23,7 +41,7 @@ export const CreateFreelancer: React.FC = () => {
           </div>
         </div>
         <div className="mt-5">
-          <FormFreelancer />
+          <FormFreelancer onsubmit={handleSubmit} />
         </div>
       </section>
     </main>

@@ -27,11 +27,7 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({ position, setPosition }
   });
 
   return (
-    <Marker
-      position={position}
-      draggable={true}
-      eventHandlers={{ click: () => console.log('Marker clicked') }}
-    >
+    <Marker position={position} draggable={true}>
       <Popup>Lokasi anda</Popup>
       <Tooltip>Tooltip for Marker</Tooltip>
     </Marker>

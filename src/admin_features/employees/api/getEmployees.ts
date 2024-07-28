@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+import { EmployeeType } from '@/admin_features/types';
+
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export async function getEmployees(company_id?: number, division_id?: number, sex?: string) {
@@ -26,7 +28,7 @@ export const useGetEmployees = (company_id?: number, division_id?: number, sex?:
 };
 
 export const useGetEmployee = (id: number) => {
-  return useQuery({
+  return useQuery<EmployeeType>({
     queryKey: ['employee', id],
     queryFn: () => getEmployeeByID(id),
   });

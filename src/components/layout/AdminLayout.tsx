@@ -1,14 +1,4 @@
-import {
-  ActionIcon,
-  AppShell,
-  Avatar,
-  Burger,
-  Group,
-  Menu,
-  UnstyledButton,
-  Indicator,
-  Button,
-} from '@mantine/core';
+import { AppShell, Avatar, Burger, Group, Menu, UnstyledButton, Button } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
   IconCalendar,
@@ -24,7 +14,6 @@ import {
   IconFileAlert,
   IconClockPin,
   IconMap2,
-  IconBell,
   IconDashboard,
   IconAdjustmentsFilled,
 } from '@tabler/icons-react';
@@ -136,6 +125,7 @@ export const AdminLayout: React.FC = () => {
   const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api/';
 
   const [company, setCompany] = useState<Companys | undefined>(undefined);
+  const COMPANY_DATA = JSON.parse(localStorage.getItem('COMPANY_DATA') || '{}');
 
   const { data, isLoading, isError } = useGetCompanys();
 
@@ -153,7 +143,8 @@ export const AdminLayout: React.FC = () => {
   const { title, setTitle } = useTitleContext();
   const navigate = useNavigate();
   const [submenu, setSubmenu] = useState<SubMenuListType[]>(MenuBeranda);
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useMediaQuery('(max-width: 800px)');
+  const isTablet = useMediaQuery('(max-width: 1000px)');
 
   const ID_COMPANY = localStorage.getItem('id_company');
   const { creds, logout } = useAuth();
@@ -231,8 +222,12 @@ export const AdminLayout: React.FC = () => {
         location.pathname.includes(path)
       )
     ) {
-      setSubmenu(MenuFreelancer);
-      setTitle('Pekerja Lepas');
+      if (creds?.is_freelanced) {
+        setSubmenu(MenuFreelancer);
+        setTitle('Pekerja Lepas');
+      } else {
+        navigate(-1);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [creds, navigate]);
@@ -246,6 +241,13 @@ export const AdminLayout: React.FC = () => {
   // ==== RENDER COMPONENT =============================================================================================================================>
   // ==================================================================================================================================================>
   // ==================================================================================================================================================>
+  if (isMobile) {
+    return (
+      <div className="bg-blue-600 min-h-screen text-white flex justify-center items-center text-lg text-center p-20">
+        Halaman Admin dan Superadmin hanya bisa diakses Melalui Layar Desktop{' '}
+      </div>
+    );
+  }
   return (
     <Suspense fallback={<LoadingScreen />}>
       <AppShell
@@ -260,7 +262,7 @@ export const AdminLayout: React.FC = () => {
       >
         <AppShell.Header className="shadow-md">
           <Group w="100%" h="100%" justify="space-between" gap={0} className="px-3">
-            <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+            <Burger opened={opened} onClick={toggle} hiddenFrom="md" size="sm" />
             <Group
               gap={5}
               justify={isMobile ? 'end' : 'center'}
@@ -268,7 +270,7 @@ export const AdminLayout: React.FC = () => {
               className="h-full"
             >
               <div className="flex gap-2 items-center">
-                {company ? (
+                {company && creds?.role == 'admin' ? (
                   <>
                     <Avatar
                       className="shadow-lg"
@@ -286,9 +288,9 @@ export const AdminLayout: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    <img src="/images/kpi-logo.png" alt="" className="w-20" />
-                    <div className="text-sm font-bold uppercase text-slate-700 text-center">
-                      KPI
+                    <img src="/images/kpi-logo.png" alt="" className="w-10" />
+                    <div className="text-xs font-bold uppercase text-slate-700 text-center">
+                      {COMPANY_DATA?.name ?? 'KPI'}
                     </div>
                   </>
                 )}
@@ -297,13 +299,13 @@ export const AdminLayout: React.FC = () => {
 
             {/* Navigation Untuk Admin */}
             {creds?.role === 'admin' || ID_COMPANY ? (
-              <SegmentControl title={title} />
+              <>{!isTablet && <SegmentControl title={title} />}</>
             ) : (
               <div className="text-slate-500 font-semibold">Superadmin</div>
             )}
 
             {/* Profile and Name Information */}
-            {!isMobile && (
+            {!isTablet && (
               <Group className="h-full" justify="space-between">
                 <Group gap={5} className="h-full" justify="end">
                   {ID_COMPANY && creds?.role === 'superadmin' ? (
@@ -317,13 +319,14 @@ export const AdminLayout: React.FC = () => {
                       </Button>
                     </div>
                   ) : (
-                    <div className="border-r border-slate-400 pe-5">
-                      <Indicator inline label="2" size={16} color="red">
-                        <ActionIcon radius={'xl'} color="rgba(219,219,219,1)">
-                          <IconBell className="text-slate-500" size={20} />
-                        </ActionIcon>
-                      </Indicator>
-                    </div>
+                    ''
+                    // <div className="border-r border-slate-400 pe-5">
+                    //   <Indicator inline label="2" size={16} color="red">
+                    //     <ActionIcon radius={'xl'} color="rgba(219,219,219,1)">
+                    //       <IconBell className="text-slate-500" size={20} />
+                    //     </ActionIcon>
+                    //   </Indicator>
+                    // </div>
                   )}
                   <Menu shadow="md" width={200}>
                     <Menu.Target>
@@ -369,6 +372,11 @@ export const AdminLayout: React.FC = () => {
             )}
           </Group>
         </AppShell.Header>
+        {isTablet && (
+          <AppShell.Navbar p="sm">
+            <SegmentControl title={title} navbar={true} />
+          </AppShell.Navbar>
+        )}
         <AppShell.Main>
           {/* SUB MENU LIST */}
           {submenu[0].maintitle != 'none' && (

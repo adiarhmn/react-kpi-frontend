@@ -40,7 +40,7 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
   const { data: DataOvertime, isLoading: loadOvertime } = useGetOvertime(creds?.company_id);
 
   const HandleUpdateRequest = async () => {
-    if (!DataRequest) return console.log('Data Request Not Found');
+    if (!DataRequest) return;
 
     const DataPut = {
       ...DataRequest,
@@ -49,18 +49,13 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
 
     await MutationUpdateRequest.mutateAsync(DataPut, {
       onSuccess: () => {
-        console.log('Success');
         refetch();
-      },
-      onError: (error) => {
-        console.log('Error :', error);
       },
     });
     close();
   };
 
   if (LoadRequest || LoadAttendance || loadOvertime) return <div>Loading...</div>;
-  console.log('DataRequest -->', typeReq);
   return (
     <div>
       <Table withColumnBorders withTableBorder>

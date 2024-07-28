@@ -46,14 +46,10 @@ export async function pasteDataSchedule(request: DataPasteScheduleMonth) {
 
   const DataScheduleNew = responseGet.data.data;
 
-  console.log('New', DataScheduleNew);
-  console.log('Old', request.DataScheduleOld);
-
   const DataUpdate = DataScheduleNew.map((item: SchedulesType) => {
     const ScheduleOLD = request.DataScheduleOld?.find(
       (data) => data.employee_id == item.employee_id
     );
-    console.log('ScheduleOLD', ScheduleOLD);
     return item.Schedules.map((schedule, index) => {
       return {
         schedule_id: schedule.id,
@@ -71,8 +67,5 @@ export async function pasteDataSchedule(request: DataPasteScheduleMonth) {
 export const usePasteMonthSchedule = () => {
   return useMutation({
     mutationFn: pasteDataSchedule,
-    onError: (error) => {
-      console.log('Gagal Insert Data:', error);
-    },
   });
 };

@@ -1,3 +1,5 @@
+import { TableAttendance } from '../../components';
+
 export const AttendanceFreelancer: React.FC = () => {
   return (
     <main>
@@ -9,7 +11,9 @@ export const AttendanceFreelancer: React.FC = () => {
           </div>
         </div>
         <div className="flex gap-2"></div>
-        <div className="mt-7"></div>
+        <div className="mt-1">
+          <TableAttendance />
+        </div>
       </section>
     </main>
   );

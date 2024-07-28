@@ -1,11 +1,26 @@
 import { ActionIcon } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
+import { GroupFormType, usePostGroup } from '../../api';
 import { FormGroup } from '../../components';
 
 export const CreateGroup: React.FC = () => {
   const navigate = useNavigate();
+  const mutate = usePostGroup();
+
+  const handleSubmit = async (data: GroupFormType) => {
+    await mutate.mutateAsync(data, {
+      onSuccess: () => {
+        notifications.show({
+          message: 'Berhasil Menambahkan Kelompok',
+          color: 'blue',
+        });
+        navigate(-1);
+      },
+    });
+  };
   return (
     <main>
       <section className="bg-white p-5 rounded-lg">
@@ -23,7 +38,7 @@ export const CreateGroup: React.FC = () => {
           </div>
         </div>
         <div className="mt-5">
-          <FormGroup />
+          <FormGroup onsubmit={handleSubmit} />
         </div>
       </section>
     </main>

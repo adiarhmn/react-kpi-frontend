@@ -14,7 +14,6 @@ type ShiftPost = {
 };
 
 const updateShift = async (shift: ShiftPost) => {
-  console.log('DATA EDIT SHIFT', shift);
   const response = await axios.put(`${BaseURL}/shift/${shift.id}`, shift);
   return response.data;
 };
@@ -22,11 +21,5 @@ const updateShift = async (shift: ShiftPost) => {
 export const useUpdateShift = () => {
   return useMutation({
     mutationFn: updateShift,
-    onMutate: async (shift: ShiftPost) => {
-      console.log(shift);
-    },
-    onError: (error) => {
-      console.log('Error :', error);
-    },
   });
 };

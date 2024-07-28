@@ -10,8 +10,5 @@ const deleteDivision = async (id: number) => {
 export const useDeleteDivision = () => {
   return useMutation({
     mutationFn: (id: number) => deleteDivision(id),
-    onError: (error) => {
-      console.log(error);
-    },
   });
 };

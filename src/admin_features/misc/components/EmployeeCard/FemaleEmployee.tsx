@@ -24,7 +24,6 @@ export const FemaleEmployeeCard: React.FC = () => {
     );
   }
 
-  console.log('Female', DataFemale.length);
   return (
     <div className={`rounded-lg flex px-5 text-white shadow-md bg-blue-500`}>
       <EmployeeCard

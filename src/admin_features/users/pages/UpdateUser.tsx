@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
 import { ActionIcon } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons-react';
-import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { UserType } from '@/admin_features/types';
@@ -21,19 +20,12 @@ export const UpdateUser: React.FC = () => {
 
   // Fungsi Submit form data user
   const handleSubmit = async (dataUser: UserType) => {
-    console.log('Data User:', dataUser);
     await MutationUpdateUser.mutateAsync(dataUser, {
       onSuccess: () => {
         navigate('/users');
       },
     });
   };
-
-  useEffect(() => {
-    if (user) {
-      console.log('User:', user);
-    }
-  }, [user]);
 
   return (
     <main>

@@ -17,11 +17,5 @@ export const postCreateDivision = async (divisionDataPost: DivisionDataPost) => 
 export const useCreateDivision = () => {
   return useMutation({
     mutationFn: postCreateDivision,
-    onMutate: async (divisionDataPost: DivisionDataPost) => {
-      console.log(divisionDataPost);
-    },
-    onError: (error) => {
-      console.log('Error :', error);
-    },
   });
 };

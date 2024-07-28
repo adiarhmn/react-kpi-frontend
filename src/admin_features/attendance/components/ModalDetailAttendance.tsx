@@ -22,7 +22,6 @@ export const ModalDetailAttendance: React.FC<Props> = ({ opened, close, Attendan
 
   if (isLoading || loadAlias) return <div>Loading...</div>;
 
-  console.log(Attendance);
   return (
     <Modal size={'lg'} opened={opened} onClose={close} title="Detail Presensi">
       {Attendance && Attendance?.Attendance.length > 0 ? (

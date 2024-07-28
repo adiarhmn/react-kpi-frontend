@@ -58,7 +58,6 @@ export const ModalEmployeeLocation: React.FC<ModalEmployeeLocationProps> = (prop
     mutationCreate.mutateAsync(data, {
       onSuccess: () => {
         refetch();
-        console.log('Success');
       },
     });
   };
