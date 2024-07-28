@@ -19,7 +19,7 @@ export const ListSession: React.FC<ListSessionProps> = ({ group }: ListSessionPr
   }, [DataSession]);
   console.log(sessions);
   return (
-    <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 ">
+    <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 mb-8 ">
       <div className="flex justify-between items-center text-blue-700 mb-1 px-2">
         <div className="flex items-center">
           <Text fw={700} c="blue">
@@ -35,27 +35,33 @@ export const ListSession: React.FC<ListSessionProps> = ({ group }: ListSessionPr
         sessions.map((session, index) => (
           <button
             key={index}
-            onClick={() => navigate(`/laborer-group/session/laborer`)}
+            onClick={() =>
+              navigate(`/laborer-group/session/laborer`, {
+                state: { group: group, session: session.session },
+              })
+            }
             className="grid grid-cols-12 px-2 mb-1 bg-white shadow-md mt-2"
           >
             <div className="col-span-12 py-2">
-              <div className="my-auto text-left">
+              <div className="my-auto text-center">
                 <Text lineClamp={1} size={'md'} fw={700}>
+                  {/* {session.session.name} */}
                   {session.session.name}
                 </Text>
               </div>
               <Divider className="w-full mt-2" />
-              <div className="grid grid-cols-12 text-left">
-                <div className="col-span-6">
+              <div className="grid grid-cols-12 text-center">
+                {/* <div className="col-span-6">
                   <Text size={'xs'} fw={500}>
-                    Jumlah pekerja : 6
+                    Jumlah pekerja :
+                    {group && group.EmployeeGroups ? group.EmployeeGroups.length : '0'}
                   </Text>
                 </div>
                 <div className="col-span-6">
                   <Text size={'xs'} fw={500}>
                     Jumlah hadir : 4
                   </Text>
-                </div>
+                </div> */}
               </div>
             </div>
           </button>

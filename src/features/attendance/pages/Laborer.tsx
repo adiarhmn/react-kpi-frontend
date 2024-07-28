@@ -1,10 +1,14 @@
 import { Divider, Text } from '@mantine/core';
 import { IconChevronLeft, IconClockEdit, IconUsersGroup } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ListLaborer } from '../components';
+import { GroupType, SessionGroupType, SessionType } from '../types';
 
 export const Laborer: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const group = location.state.group as GroupType;
+  const session = location.state.session as SessionType;
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -40,19 +44,20 @@ export const Laborer: React.FC = () => {
           <div className="col-span-12 py-2">
             <div className="my-auto text-center">
               <Text lineClamp={1} size={'md'} fw={700}>
-                Kelompok Penerbang Roket
+                {group.name}
               </Text>
             </div>
             <Divider className="w-full mt-2" />
             <div className="grid grid-cols-12 text-center">
               <div className="col-span-6">
                 <Text size={'xs'} fw={500}>
-                  Jumlah pekerja : 6
+                  Jumlah pekerja :{' '}
+                  {group && group.EmployeeGroups ? group.EmployeeGroups.length : '0'}
                 </Text>
               </div>
               <div className="col-span-6">
                 <Text size={'xs'} fw={500}>
-                  Jumlah sesi : 4
+                  Jumlah sesi : {group && group.GroupSessions ? group.GroupSessions.length : '0'}
                 </Text>
               </div>
             </div>
@@ -76,21 +81,22 @@ export const Laborer: React.FC = () => {
           <div className="col-span-12 py-2">
             <div className="my-auto text-center">
               <Text lineClamp={1} size={'md'} fw={700}>
-                Sesi 1 - Pondasi
+                {session.name}
               </Text>
             </div>
             <Divider className="w-full mt-2" />
             <div className="grid grid-cols-12 text-center">
-              <div className="col-span-6">
+              {/* <div className="col-span-6">
                 <Text size={'xs'} fw={500}>
-                  Jumlah pekerja : 6
+                  Jumlah pekerja :
+                  {group && group.EmployeeGroups ? group.EmployeeGroups.length : '0'}
                 </Text>
               </div>
               <div className="col-span-6">
                 <Text size={'xs'} fw={500}>
                   Jumlah hadir : 4
                 </Text>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -1,7 +1,11 @@
 import { Button, Divider, Tabs, Text, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { IconUser, IconUsersGroup } from '@tabler/icons-react';
 
 export const ListLaborer: React.FC = () => {
+  const FormAttendance = useForm({
+    
+  })
   return (
     <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 mb-8">
       <div className="flex justify-between items-center text-blue-700 mb-1 px-2 py-1">

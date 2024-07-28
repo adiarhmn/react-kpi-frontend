@@ -51,12 +51,14 @@ export const GroupSession: React.FC = () => {
             <div className="grid grid-cols-12 text-center">
               <div className="col-span-6">
                 <Text size={'xs'} fw={500}>
-                  Jumlah pekerja : 6
+                  Jumlah pekerja :
+                  {group && group.EmployeeGroups ? group.EmployeeGroups.length : '0'}
                 </Text>
               </div>
               <div className="col-span-6">
                 <Text size={'xs'} fw={500}>
-                  Jumlah sesi : 4
+                  Jumlah sesi :
+                  {group && group.GroupSessions ? group.GroupSessions.length : '0'}
                 </Text>
               </div>
             </div>
