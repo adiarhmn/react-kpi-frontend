@@ -5,6 +5,7 @@ const BaseURL = import.meta.env.VITE_API_URL;
 
 export async function getWorker(group_id: number | undefined) {
   const res = await axios.get(`${BaseURL}/worker?group=${group_id}`);
+  console.log('URL :', `${BaseURL}/worker?group=${group_id}`);
   return res.data.data;
 }
 

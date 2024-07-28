@@ -17,7 +17,7 @@ export const ListSession: React.FC<ListSessionProps> = ({ group }: ListSessionPr
       setSessions(DataSession);
     }
   }, [DataSession]);
-  console.log(sessions);
+  console.log("Data session: ", sessions);
   return (
     <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 mb-8 ">
       <div className="flex justify-between items-center text-blue-700 mb-1 px-2">
@@ -37,7 +37,7 @@ export const ListSession: React.FC<ListSessionProps> = ({ group }: ListSessionPr
             key={index}
             onClick={() =>
               navigate(`/laborer-group/session/laborer`, {
-                state: { group: group, session: session.session },
+                state: { group: group, session: session },
               })
             }
             className="grid grid-cols-12 px-2 mb-1 bg-white shadow-md mt-2"
