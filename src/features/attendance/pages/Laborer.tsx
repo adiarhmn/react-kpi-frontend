@@ -106,7 +106,7 @@ export const Laborer: React.FC = () => {
         <Divider size={'lg'} className="" />
       </section>
 
-      <ListLaborer />
+      <ListLaborer group={group} session={session} />
     </main>
   );
 };
