@@ -1,14 +1,4 @@
-import {
-  ActionIcon,
-  AppShell,
-  Avatar,
-  Burger,
-  Group,
-  Menu,
-  UnstyledButton,
-  Indicator,
-  Button,
-} from '@mantine/core';
+import { AppShell, Avatar, Burger, Group, Menu, UnstyledButton, Button } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
   IconCalendar,
@@ -24,7 +14,6 @@ import {
   IconFileAlert,
   IconClockPin,
   IconMap2,
-  IconBell,
   IconDashboard,
   IconAdjustmentsFilled,
 } from '@tabler/icons-react';
@@ -330,13 +319,14 @@ export const AdminLayout: React.FC = () => {
                       </Button>
                     </div>
                   ) : (
-                    <div className="border-r border-slate-400 pe-5">
-                      <Indicator inline label="2" size={16} color="red">
-                        <ActionIcon radius={'xl'} color="rgba(219,219,219,1)">
-                          <IconBell className="text-slate-500" size={20} />
-                        </ActionIcon>
-                      </Indicator>
-                    </div>
+                    ''
+                    // <div className="border-r border-slate-400 pe-5">
+                    //   <Indicator inline label="2" size={16} color="red">
+                    //     <ActionIcon radius={'xl'} color="rgba(219,219,219,1)">
+                    //       <IconBell className="text-slate-500" size={20} />
+                    //     </ActionIcon>
+                    //   </Indicator>
+                    // </div>
                   )}
                   <Menu shadow="md" width={200}>
                     <Menu.Target>
