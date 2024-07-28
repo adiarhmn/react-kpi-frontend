@@ -17,8 +17,8 @@ export const useGetEmployee = (employee_id?: number | null) => {
 };
 
 export async function getEmployeeByDivision(division_id?: number) {
-  const res = await axios.get(`${BaseURL}/employee?division=${division_id}`);
-  console.log(`${BaseURL}/employee?division=${division_id}`);
+  const res = await axios.get(`${BaseURL}/employee?division-id=${division_id}`);
+  console.log(`${BaseURL}/employee?division-id=${division_id}`);
   console.log(res.data.data);
   return res.data.data;
 }

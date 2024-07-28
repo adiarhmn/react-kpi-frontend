@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable import/order */
 /* eslint-disable linebreak-style */
-import { Button, Drawer, Fieldset, Select } from '@mantine/core';
+import { Button, Drawer, Fieldset, Select, Text } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react';
@@ -17,18 +17,22 @@ import { useAuth } from '@/features/auth';
 export const Schedule: React.FC = () => {
   const location = useLocation();
   const { creds } = useAuth();
-  const [opened, { open, close }] = useDisclosure(false);
-  const [month, setMonth] = useState<Date>(new Date());
-  const [selectShift, setSelectShift] = useState('');
-  const [selectStatus, setSelectStatus] = useState('');
-  const [shifts, setShifts] = useState<ShiftType[]>([]);
-  const { data: DataShift } = useGetShift();
+  // const [opened, { open, close }] = useDisclosure(false);
+  // const [month, setMonth] = useState<Date>(new Date());
+  // const [selectShift, setSelectShift] = useState('');
+  // const [selectStatus, setSelectStatus] = useState('');
+  const employee = location.state.employee;
+  console.log('Data employee', employee)
   let employeeID: number | string | undefined = '';
   if (location.state != null) {
-    employeeID = location.state.employee_id;
+    employeeID = location.state.employee.id;
   } else {
     employeeID = creds?.employee_id;
   }
+
+  const [shifts, setShifts] = useState<ShiftType[]>([]);
+  const { data: DataShift } = useGetShift();
+
   useEffect(() => {
     if (DataShift) {
       setShifts(DataShift);
@@ -49,20 +53,44 @@ export const Schedule: React.FC = () => {
               size={21}
               className="font-bold rounded-md"
             />
-            <h2 className="font-semibold ">Data Jadwal</h2>
+            <h2 className="font-semibold ">Data Jadwal bulanan</h2>
           </div>
-          <span className="font-semibold">
+          {/* <span className="font-semibold">
             <Button className="shadow-sm" size="xs" onClick={open}>
               <IconAdjustmentsHorizontal className="me-2 -ms-1" />
               Filter
             </Button>
-          </span>
+          </span> */}
+        </div>
+      </section>
+
+      <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 ">
+        <div className="flex justify-between items-center text-blue-700">
+          
+          <span className="font-semibold"></span>
+        </div>
+        <div className="grid grid-cols-12 px-2">
+          <div className="col-span-4 px-2 flex items-left">
+            <img className="w-full rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
+          </div>
+          <div className="col-span-8">
+            <div className="mt-2">
+              <Text size="auto" fw={700}>
+                {employee.name}
+              </Text>
+            </div>
+            <div>
+              <Text size="xs" c="grey" fw={700}>
+                {employee.user.role}
+              </Text>
+            </div>
+          </div>
         </div>
       </section>
 
       <ScheduleList />
 
-      <Drawer
+      {/* <Drawer
         position="right"
         offset={3}
         size="80%"
@@ -99,7 +127,7 @@ export const Schedule: React.FC = () => {
             Cari
           </Button>
         </div>
-      </Drawer>
+      </Drawer> */}
     </main>
   );
 };

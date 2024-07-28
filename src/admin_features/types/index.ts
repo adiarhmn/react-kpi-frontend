@@ -48,6 +48,7 @@ export type EmployeeType = {
   status: boolean;
   user_id: number;
   division_id: number;
+  profile_pic: string;
   user: UserType;
   division: DivisionType;
   EmployeeLocation: EmployeeLocation[];

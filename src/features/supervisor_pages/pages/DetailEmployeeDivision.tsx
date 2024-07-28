@@ -159,7 +159,7 @@ export const DetailEmployeeDivision: React.FC = () => {
               <Anchor
                 size="sm"
                 onClick={() =>
-                  navigate(`/employee-division/schedule`, { state: { employee_id: employee.id } })
+                  navigate(`/employee-division/schedule`, { state: { employee: employee } })
                 }
                 target="_blank"
                 underline="always"

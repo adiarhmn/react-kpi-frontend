@@ -19,10 +19,9 @@ export const ScheduleList: React.FC = () => {
     setCurrentMonth(date.getMonth() + 1);
     setCurrentYear(date.getFullYear());
   };
-
   let employeeID: number | undefined = creds?.employee_id;
   if (location.state) {
-    employeeID = location.state.employee_id;
+    employeeID = location.state.employee.id;
   }
 
   // [RED INDICATOR]

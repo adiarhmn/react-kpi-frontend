@@ -85,3 +85,25 @@ export type EmployeeLocationType = {
   attendance_location_id: number;
   attendance_location: AttendanceLocationType;
 };
+
+export type GroupType = {
+  id: number;
+  name: string;
+  company_id: number;
+  EmployeeGroups: EmployeeType[];
+  GroupSessions: SessionGroupType[];
+};
+
+export type SessionType = {
+  id: number;
+  name: string;
+  company_id: number;
+};
+
+export type SessionGroupType = {
+  id: number;
+  session_id: number;
+  session: SessionType;
+  group_id: number;
+  group: GroupType;
+};
