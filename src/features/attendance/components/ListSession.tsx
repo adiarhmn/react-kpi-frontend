@@ -33,8 +33,13 @@ export const ListSession: React.FC<ListSessionProps> = ({ group }: ListSessionPr
         sessions.map(async (session) => {
           try {
             const response = await axios.get(
-              `${BaseURL}/worker-attendance?date=${formatterDate(new Date(), 'yyyy-MM-dd')}&session=${session.id}&group=${group.id}`
+              `${BaseURL}/worker-attendance?date=${formatterDate(new Date(), 'yyyy-MM-dd')}&session=${session.session_id}&group=${group.id}`
             );
+            console.log(
+              'URL GET :',
+              `${BaseURL}/worker-attendance?date=${formatterDate(new Date(), 'yyyy-MM-dd')}&session=${session.session_id}&group=${group.id}`
+            );
+
             return { session, laborerAttendance: response.data.data };
           } catch (error) {
             console.error(`Error fetching attendance for employee ${session.id}:`, error);
