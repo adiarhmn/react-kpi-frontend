@@ -84,6 +84,10 @@ const { FileProfile } = lazyImport(() => import('@/features/employee'), 'FilePro
 const { LaborerGroup } = lazyImport(() => import('@/features/attendance'), 'LaborerGroup');
 const { Laborer } = lazyImport(() => import('@/features/attendance'), 'Laborer');
 const { GroupSession } = lazyImport(() => import('@/features/attendance'), 'GroupSession');
+const { HistoryLaborerAttendance } = lazyImport(
+  () => import('@/features/attendance'),
+  'HistoryLaborerAttendance'
+);
 
 // Admin Role Pages
 const { DinamicDashboard } = lazyImport(() => import('@/components/misc'), 'DinamicDashboard');
@@ -247,6 +251,7 @@ export const AppRoutes: React.FC = () => {
                 <Route index element={<GroupSession />} />
                 <Route path="laborer" element={<Laborer />} />
               </Route>
+              <Route path="history" element={<HistoryLaborerAttendance />} />
             </Route>
 
             {/* Route Menu List */}

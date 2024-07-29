@@ -26,6 +26,7 @@ export type DivisionType = {
 export type EmployeeType = {
   id: number;
   nip: string;
+  EmployeeGroups: any;
   nik: string;
   no_bpjs: string;
   name: string;

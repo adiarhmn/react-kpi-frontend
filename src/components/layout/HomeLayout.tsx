@@ -42,7 +42,7 @@ export const HomeLayout: React.FC = () => {
         <Outlet />
       </Suspense>
 
-      <footer className="fixed max-w-md w-full z-50 bottom-0 shadow-md bg-white border-t border-gray-100 flex items-center justify-around py-2.5">
+      <footer className="fixed max-w-md w-full z-50 bottom-0 shadow-md bg-white border-t border-gray-100 flex items-center justify-around py-2.5 ">
         {navigationsleft.map((navigation) => (
           <NavItem key={navigation.title} {...navigation} currentPath={currentPath} />
         ))}

@@ -3,12 +3,13 @@ import { IconChevronLeft, IconClockEdit, IconUsersGroup } from '@tabler/icons-re
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ListLaborer } from '../components';
 import { GroupType, SessionGroupType, SessionType } from '../types';
+import { GroupSessionsType } from '@/admin_features/types';
 
 export const Laborer: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const group = location.state.group as GroupType;
-  const session = location.state.session as SessionType;
+  const session = location.state.session as GroupSessionsType;
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -81,7 +82,7 @@ export const Laborer: React.FC = () => {
           <div className="col-span-12 py-2">
             <div className="my-auto text-center">
               <Text lineClamp={1} size={'md'} fw={700}>
-                {session.name}
+                {session.session.name}
               </Text>
             </div>
             <Divider className="w-full mt-2" />

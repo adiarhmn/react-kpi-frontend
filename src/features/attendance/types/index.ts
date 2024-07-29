@@ -1,4 +1,4 @@
-import { EmployeeType, ShiftType } from '@/admin_features/types';
+import { EmployeeGroupsType, EmployeeType, ShiftType } from '@/admin_features/types';
 
 export type EmployeeScheduleType = {
   id: number;
@@ -106,4 +106,21 @@ export type SessionGroupType = {
   session: SessionType;
   group_id: number;
   group: GroupType;
+};
+
+export type WorkerAttendanceType = {
+  length: number;
+  id: number;
+  date: Date | string;
+  attendance_status: string;
+  detail: string;
+  group_name: string;
+  session_name: string;
+  employee_input_id: number;
+  employee_id: number;
+  employee: EmployeeType;
+  employee_group_id: number;
+  employee_group: EmployeeGroupsType;
+  group_session_id: number;
+  group_session: SessionGroupType;
 };

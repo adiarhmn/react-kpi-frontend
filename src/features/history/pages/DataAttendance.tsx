@@ -32,7 +32,7 @@ export const DataAttendance: React.FC = () => {
 
   const navigate = useNavigate();
   return (
-    <main>
+    <main className='mb-10'>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
       <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 -mt-10">
         <div className="flex justify-between items-center text-blue-700 mb-1">

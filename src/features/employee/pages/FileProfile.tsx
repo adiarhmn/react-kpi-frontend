@@ -1,4 +1,13 @@
-import { Button, FileButton, FileInput, Group, Modal, Text, TextInput } from '@mantine/core';
+import {
+  Button,
+  FileButton,
+  FileInput,
+  Group,
+  Loader,
+  Modal,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react';
@@ -6,15 +15,30 @@ import { useNavigate } from 'react-router-dom';
 
 import { FileList } from '../components';
 import { useEffect, useRef, useState } from 'react';
-import { useCreateFiles } from '../api';
+import { useCreateFiles, useGetEmployeeFiles } from '../api';
 import { useAuth } from '@/features/auth';
 import Swal from 'sweetalert2';
+import { EmployeeFilesType } from '../types';
 
 export const FileProfile: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 50em)');
+
+  // const [files, setFiles] = useState<EmployeeFilesType[]>([]);
+  // const {
+  //   data: DataFiles,
+  //   error: ErrorFiles,
+  //   isLoading: LoadingFiles,
+  //   refetch,
+  // } = useGetEmployeeFiles(creds?.employee_id);
+
+  // useEffect(() => {
+  //   if (DataFiles) {
+  //     setFiles(DataFiles);
+  //   }
+  // }, [DataFiles]);
 
   const form = useForm({
     validateInputOnChange: true,
@@ -61,6 +85,7 @@ export const FileProfile: React.FC = () => {
     resetRef.current?.();
   };
 
+
   return (
     <main>
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
@@ -77,7 +102,7 @@ export const FileProfile: React.FC = () => {
             />
             <h2 className="font-semibold ">Kelengkapan berkas</h2>
           </div>
-          
+
           <span className="font-semibold">
             <Button className="shadow-sm me-1" size="xs" onClick={open}>
               <IconPlus className=" -ms-1" />
@@ -86,7 +111,7 @@ export const FileProfile: React.FC = () => {
         </div>
       </section>
 
-      <FileList />
+      <FileList  />
 
       <Modal
         opened={opened}

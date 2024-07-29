@@ -4,3 +4,4 @@ export * from './DetailActivity';
 export * from './LaborerGroup';
 export * from './Laborer';
 export * from './GroupSession';
+export * from './HistoryLaborerAttendance';

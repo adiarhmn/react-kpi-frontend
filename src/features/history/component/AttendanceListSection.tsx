@@ -19,7 +19,7 @@ type AttendanceListSectionProps = {
 
 export const AttendanceListSection: React.FC<AttendanceListSectionProps> = ({
   employee_id,
-  with_activity = true,
+  with_activity = false,
 }: AttendanceListSectionProps) => {
   const [dateValue, setDateValue] = useState<Date | null>(new Date());
   const { creds } = useAuth();
