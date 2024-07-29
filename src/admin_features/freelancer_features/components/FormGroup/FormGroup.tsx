@@ -76,7 +76,7 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
       <TextInput
         className="mb-3"
         label="Nama Kelompok"
-        placeholder="Nama Kelom"
+        placeholder="Nama Kelompok"
         required
         {...form.getInputProps('name')}
       />
@@ -84,7 +84,7 @@ export const FormGroup: React.FC<FormGroupProps> = ({ onsubmit }) => {
       <TextInput
         className="mb-3"
         label={`Details`}
-        placeholder="Nama Kelom"
+        placeholder="Detail Kelompok"
         required
         {...form.getInputProps(`details`)}
       />

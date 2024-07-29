@@ -27,6 +27,7 @@ export const TableGroup: React.FC = () => {
     }, 50);
   };
 
+  const { data, isLoading, isError, refetch } = useGetGroup(creds?.company_id || 0);
   const ConfirmDelete = () => {
     if (groupPicker) {
       deleteGroup.mutateAsync(groupPicker.id, {
@@ -36,14 +37,13 @@ export const TableGroup: React.FC = () => {
             message: 'Data Kelompok Berhasil Dihapus',
             color: 'teal',
           });
-
+          refetch();
           cl();
         },
       });
     }
   };
 
-  const { data, isLoading, isError } = useGetGroup(creds?.company_id || 0);
   if (isLoading) return <div>Loading</div>;
   if (isError) return <div>Error</div>;
 

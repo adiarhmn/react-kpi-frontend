@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable import/order */
-import { Button, Drawer, Fieldset, Loader, Select, Tabs } from '@mantine/core';
+import { Button, Drawer, Fieldset, Indicator, Loader, Select, Tabs } from '@mantine/core';
 import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { EmployeeType } from '@/admin_features/types';
 import { useGetEmployee } from '@/features/employee/api/Profile';
 import { AbsenceType, useGetAbsenceByDivision, useGetAbsenceByType } from '@/features/history';
 import { useGetOvertimeByDivision } from '@/features/overtime/api/getOvertime';
+import { useGetAttendanceReqByDivision } from '@/features/late-request/api/getAttendanceRequest';
 
 export const EmployeeRequest: React.FC = () => {
   const { creds } = useAuth();
@@ -53,7 +54,7 @@ export const EmployeeRequest: React.FC = () => {
   const { data: DataSickRequest } = useGetAbsenceByDivision(
     employee?.division_id,
     'sakit',
-    'Belum Disetujui'
+    selectStatus
   );
   useEffect(() => {
     if (DataSickRequest) {
@@ -67,7 +68,7 @@ export const EmployeeRequest: React.FC = () => {
   const { data: DataAbsenceRequest } = useGetAbsenceByDivision(
     employee?.division_id,
     'izin',
-    'Belum Disetujui'
+    selectStatus
   );
   useEffect(() => {
     if (DataAbsenceRequest) {
@@ -81,7 +82,7 @@ export const EmployeeRequest: React.FC = () => {
   const { data: DataPaidLeaveRequest } = useGetAbsenceByDivision(
     employee?.division_id,
     'Cuti',
-    'Belum Disetujui'
+    selectStatus
   );
   useEffect(() => {
     if (DataPaidLeaveRequest) {
@@ -94,7 +95,7 @@ export const EmployeeRequest: React.FC = () => {
   const [overtimeRequest, setOvertimeRequest] = useState<AbsenceType[]>([]);
   const { data: DataOvertimeRequest } = useGetOvertimeByDivision(
     employee?.division_id,
-    'Belum Disetujui'
+    selectStatus
   );
   useEffect(() => {
     if (DataOvertimeRequest) {
@@ -105,9 +106,9 @@ export const EmployeeRequest: React.FC = () => {
 
   // [Data absensi]
   const [lateRequest, setLateRequest] = useState<AbsenceType[]>([]);
-  const { data: DataLateRequest } = useGetOvertimeByDivision(
+  const { data: DataLateRequest } = useGetAttendanceReqByDivision(
     employee?.division_id,
-    'Belum Disetujui'
+    selectStatus
   );
   useEffect(() => {
     if (DataLateRequest) {
@@ -153,42 +154,74 @@ export const EmployeeRequest: React.FC = () => {
           <div className="flex w-max justify-start gap-x-2 px-6">
             <div className="bg-white min-w-[8rem] shadow-md rounded-2xl">
               <Tabs.Tab
-                style={{ width: '100%', borderRadius: '20px' }}
+                style={{ width: '100%', borderRadius: '20px', position: 'relative' }}
                 color="blue"
                 value="sakit"
                 onClick={() => setSelectType('sakit')}
               >
                 Sakit
+                {sickRequest.length > 0 && (
+                  <Indicator
+                    style={{ position: 'absolute', top: '2px', right: '5px' }}
+                    label={<div style={{ paddingTop: 2 }}>{sickRequest.length}</div>}
+                    color="red"
+                    size={16}
+                  ></Indicator>
+                )}
               </Tabs.Tab>
             </div>
             <div className="bg-white min-w-[8rem] shadow-md rounded-2xl">
               <Tabs.Tab
-                style={{ width: '100%', borderRadius: '20px' }}
+                style={{ width: '100%', borderRadius: '20px', position: 'relative' }}
                 color="blue"
                 value="izin"
                 onClick={() => setSelectType('izin')}
               >
                 Izin
+                {absenceRequest.length > 0 && (
+                  <Indicator
+                    style={{ position: 'absolute', top: '2px', right: '5px' }}
+                    label={<div style={{ paddingTop: 2 }}>{absenceRequest.length}</div>}
+                    color="red"
+                    size={16}
+                  ></Indicator>
+                )}
               </Tabs.Tab>
             </div>
             <div className="bg-white min-w-[8rem] shadow-md rounded-2xl">
               <Tabs.Tab
-                style={{ width: '100%', borderRadius: '20px' }}
+                style={{ width: '100%', borderRadius: '20px', position: 'relative' }}
                 color="blue"
                 value="cuti"
                 onClick={() => setSelectType('cuti')}
               >
                 Cuti
+                {paidLeaveRequest.length > 0 && (
+                  <Indicator
+                    style={{ position: 'absolute', top: '2px', right: '5px' }}
+                    label={<div style={{ paddingTop: 2 }}>{paidLeaveRequest.length}</div>}
+                    color="red"
+                    size={16}
+                  ></Indicator>
+                )}
               </Tabs.Tab>
             </div>
             <div className="bg-white min-w-[8rem] shadow-md rounded-2xl">
               <Tabs.Tab
-                style={{ width: '100%', borderRadius: '20px' }}
+                style={{ width: '100%', borderRadius: '20px', position: 'relative' }}
                 color="blue"
                 value="lembur"
                 onClick={() => setSelectType('lembur')}
               >
                 Lembur
+                {overtimeRequest.length > 0 && (
+                  <Indicator
+                    style={{ position: 'absolute', top: '2px', right: '5px' }}
+                    label={<div style={{ paddingTop: 2 }}>{overtimeRequest.length}</div>}
+                    color="red"
+                    size={16}
+                  ></Indicator>
+                )}
               </Tabs.Tab>
             </div>
             <div className="bg-white min-w-[8rem] shadow-md rounded-2xl">
@@ -199,6 +232,14 @@ export const EmployeeRequest: React.FC = () => {
                 onClick={() => setSelectType('absen')}
               >
                 Absen
+                {lateRequest.length > 0 && (
+                  <Indicator
+                    style={{ position: 'absolute', top: '2px', right: '5px' }}
+                    label={<div style={{ paddingTop: 2 }}>{lateRequest.length}</div>}
+                    color="red"
+                    size={16}
+                  ></Indicator>
+                )}
               </Tabs.Tab>
             </div>
           </div>

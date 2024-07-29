@@ -5,6 +5,7 @@ import { IconChevronLeft, IconDeviceFloppy, IconMap2, IconUser } from '@tabler/i
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useUpdateEmployee } from '../api/Profile';
 import { useRef, useState } from 'react';
+import { formatterDate } from '@/features/history';
 
 export const BiodataEdit: React.FC = () => {
   const location = useLocation();
@@ -15,7 +16,7 @@ export const BiodataEdit: React.FC = () => {
     validateInputOnChange: true,
     initialValues: {
       ...employee,
-      birth_date: new Date(employee.birth_date),
+      birth_date: employee.birth_date ? new Date(employee.birth_date) : null,
       image: null as File | null,
     },
     validate: {
@@ -46,7 +47,7 @@ export const BiodataEdit: React.FC = () => {
       name: values.name,
       email: values.email,
       sex: values.sex,
-      birth_date: values.birth_date,
+      birth_date: formatterDate(new Date(values.birth_date ?? ''), 'yyyy-MM-dd'),
       religion: values.religion,
       first_degree: values.first_degree,
       last_degree: values.last_degree,
@@ -119,9 +120,9 @@ export const BiodataEdit: React.FC = () => {
             <IconUser className="opacity-80" size={25} />
           </div>
           <div className="w-full text-center mx-auto p-2 w-80 text-slate-700 px-2">
-            <div className="flex">
+            <div className="flex ms-4">
               <div>
-                <div className="h-28 w-28 bg-slate-500 text-white rounded-full">
+                <div className="h-28 w-28  text-white rounded-full">
                   {formProfile.values.image ? (
                     <img
                       src={URL.createObjectURL(formProfile.values.image)}
@@ -129,7 +130,11 @@ export const BiodataEdit: React.FC = () => {
                       className="h-full w-full object-cover rounded-full"
                     />
                   ) : (
-                    <span>No Image</span>
+                    <img
+                      src="/images/profile-pic.svg"
+                      alt="Preview"
+                      className="h-full w-full object-cover rounded-full"
+                    />
                   )}
                 </div>
               </div>
@@ -213,15 +218,6 @@ export const BiodataEdit: React.FC = () => {
                 style={{ marginTop: '5px' }}
                 data={['Laki - laki', 'Perempuan']}
                 {...formProfile.getInputProps('sex')}
-              />
-              <Select
-                size="xs"
-                label="Golongan darah"
-                name="golDarah"
-                withAsterisk
-                style={{ marginTop: '5px' }}
-                data={['A', 'AB', 'O', 'B']}
-                {...formProfile.getInputProps('golDarah')}
               />
               <DateInput
                 clearable

@@ -77,6 +77,7 @@ export const FileProfile: React.FC = () => {
             />
             <h2 className="font-semibold ">Kelengkapan berkas</h2>
           </div>
+          
           <span className="font-semibold">
             <Button className="shadow-sm me-1" size="xs" onClick={open}>
               <IconPlus className=" -ms-1" />

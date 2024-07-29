@@ -63,6 +63,7 @@ const { EmployeeMonthlyAttendance } = lazyImport(
   () => import('@/features/supervisor_pages'),
   'EmployeeMonthlyAttendance'
 );
+const { Application } = lazyImport(() => import('@/features/application'), 'Application');
 const { PaidLeave } = lazyImport(() => import('@/features/paid-leave'), 'PaidLeave');
 const { AddPaidLeave } = lazyImport(() => import('@/features/paid-leave'), 'AddPaidLeave');
 const { Overtime } = lazyImport(() => import('@/features/overtime'), 'Overtime');
@@ -80,6 +81,9 @@ const { EditEduBackground } = lazyImport(() => import('@/features/employee'), 'E
 const { Biodata } = lazyImport(() => import('@/features/employee'), 'Biodata');
 const { BiodataEdit } = lazyImport(() => import('@/features/employee'), 'BiodataEdit');
 const { FileProfile } = lazyImport(() => import('@/features/employee'), 'FileProfile');
+const { LaborerGroup } = lazyImport(() => import('@/features/attendance'), 'LaborerGroup');
+const { Laborer } = lazyImport(() => import('@/features/attendance'), 'Laborer');
+const { GroupSession } = lazyImport(() => import('@/features/attendance'), 'GroupSession');
 
 // Admin Role Pages
 const { DinamicDashboard } = lazyImport(() => import('@/components/misc'), 'DinamicDashboard');
@@ -189,6 +193,7 @@ export const AppRoutes: React.FC = () => {
             <Route index element={<Home />} />
             <Route path="attendance" element={<Attendance />} />
             <Route path="activity/detail" element={<DetailActivity />} />
+            <Route path="application" element={<Application />} />
             <Route path="info-attendance" element={<AttendanceInfo />} />
             <Route path="history">
               <Route index element={<History />} />
@@ -234,6 +239,13 @@ export const AppRoutes: React.FC = () => {
                 <Route index element={<EduBackground />} />
                 <Route path="add" element={<EduBackgroundAdd />} />
                 <Route path="edit" element={<EditEduBackground />} />
+              </Route>
+            </Route>
+            <Route path="laborer-group">
+              <Route index element={<LaborerGroup />} />
+              <Route path="session">
+                <Route index element={<GroupSession />} />
+                <Route path="laborer" element={<Laborer />} />
               </Route>
             </Route>
 
