@@ -10,8 +10,9 @@ export const Login: React.FC = () => {
   const BASE_URL = window.location.origin;
   const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api/';
   const [company, setCompany] = useState<Companys | undefined>(undefined);
+
   // Get Company
-  const { data, isLoading, isError } = useGetCompanys();
+  const { data } = useGetCompanys();
 
   useEffect(() => {
     if (data) {
@@ -21,9 +22,6 @@ export const Login: React.FC = () => {
       setCompany(company);
     }
   }, [BASE_URL, data]);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error</div>;
 
   // Get Base URL now
   return (
