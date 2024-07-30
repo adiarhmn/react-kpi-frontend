@@ -1,10 +1,15 @@
+import storage from '@/utils/storage';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL;
 
 export async function getOvertime(employee_id?: number, status?: boolean | null | string) {
-  const res = await axios.get(`${BaseURL}/overtime?employee=${employee_id}&status=${status}`);
+  const res = await axios.get(`${BaseURL}/overtime?employee=${employee_id}&status=${status}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
   return res.data.data;
 }
 
@@ -16,7 +21,11 @@ export const useGetOvertime = (employee_id?: number, status?: boolean | null | s
 };
 
 export async function getOvertimeDaily(employee_id?: number, date?: string) {
-  const res = await axios.get(`${BaseURL}/overtime?employee=${employee_id}&date=${date}`);
+  const res = await axios.get(`${BaseURL}/overtime?employee=${employee_id}&date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
   return res.data.data[0] || {};
 }
 
@@ -29,12 +38,18 @@ export const useGetOvertimeDaily = (employee_id?: number, date?: string) => {
 
 export async function getOvertimeByDivision(division_id?: number, status?: string | null) {
   if (status == null) {
-    const res = await axios.get(`${BaseURL}/overtime?division=${division_id}`);
-    console.log(`${BaseURL}/overtime?division=${division_id}`);
+    const res = await axios.get(`${BaseURL}/overtime?division=${division_id}`, {
+      headers: {
+        Authorization: `Bearer ${storage.getToken}`,
+      },
+    });
     return res.data.data;
   } else {
-    const res = await axios.get(`${BaseURL}/overtime?division=${division_id}&status=${status}`);
-    console.log(`${BaseURL}/overtime?division=${division_id}&status=${status}`);
+    const res = await axios.get(`${BaseURL}/overtime?division=${division_id}&status=${status}`, {
+      headers: {
+        Authorization: `Bearer ${storage.getToken}`,
+      },
+    });
     return res.data.data;
   }
 }

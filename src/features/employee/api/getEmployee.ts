@@ -4,13 +4,18 @@ import { axios } from '@/lib/axios';
 import { ExtractFnReturnType, QueryConfig } from '@/lib/react-query';
 
 import { Employee } from '../types';
+import storage from '@/utils/storage';
 
 type EmployeeDTO = {
   id: number | 'me';
 };
 
 export async function getEmployee({ id }: EmployeeDTO) {
-  const res = await axios.get<Employee>(`/employee/${id}`);
+  const res = await axios.get<Employee>(`/employee/${id}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
 
   return res.data;
 }

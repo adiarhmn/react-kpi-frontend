@@ -1,3 +1,4 @@
+import storage from '@/utils/storage';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -5,16 +6,28 @@ const BaseURL = import.meta.env.VITE_API_URL;
 
 export async function getSchedule(employee_id: number, date?: string) {
   if (date) {
-    const res = await axios.get(`${BaseURL}/schedule?employee=` + employee_id + `&date=` + date);
+    const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&date=${date}`, {
+      headers: {
+        Authorization: `Bearer ${storage.getToken}`,
+      },
+    });
     return res.data.data;
   } else {
-    const res = await axios.get(`${BaseURL}/schedule?employee=` + employee_id);
+    const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}`, {
+      headers: {
+        Authorization: `Bearer ${storage.getToken}`,
+      },
+    });
     return res.data.data;
   }
 }
 
 export async function getScheduleByStatus(employee_id: number | null, status: string) {
-  const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&status=${status}`);
+  const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&status=${status}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
   return res.data.data;
 }
 
@@ -34,14 +47,24 @@ export async function getScheduleMonthly(
 ) {
   if (shift == null && status == null) {
     const res = await axios.get(
-      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}`
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}`,
+      {
+        headers: {
+          Authorization: `Bearer ${storage.getToken}`,
+        },
+      }
     );
     return res.data.data;
   }
 
   if (shift != null && status == null) {
     const res = await axios.get(
-      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}$shift=${shift}`
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}$shift=${shift}`,
+      {
+        headers: {
+          Authorization: `Bearer ${storage.getToken}`,
+        },
+      }
     );
 
     return res.data.data;
@@ -49,7 +72,12 @@ export async function getScheduleMonthly(
 
   if (shift == null && status != null) {
     const res = await axios.get(
-      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&status=${status}`
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&status=${status}`,
+      {
+        headers: {
+          Authorization: `Bearer ${storage.getToken}`,
+        },
+      }
     );
 
     return res.data.data;
@@ -57,7 +85,12 @@ export async function getScheduleMonthly(
 
   if (shift != null && status != null) {
     const res = await axios.get(
-      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&shift=${shift}&status=${status}`
+      `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&shift=${shift}&status=${status}`,
+      {
+        headers: {
+          Authorization: `Bearer ${storage.getToken}`,
+        },
+      }
     );
 
     return res.data.data;
@@ -78,7 +111,11 @@ export const useGetScheduleMonthly = (
 };
 
 export async function getScheduleDaily(employee_id?: number | null, date?: string) {
-  const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&date=${date}`);
+  const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
   return res.data.data;
 }
 
@@ -96,7 +133,12 @@ export async function getScheduleAttendance(
   status: string
 ) {
   const res = await axios.get(
-    `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&attendance-status=${status}`
+    `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&attendance-status=${status}`,
+    {
+      headers: {
+        Authorization: `Bearer ${storage.getToken}`,
+      },
+    }
   );
   return res.data.data;
 }
@@ -117,8 +159,11 @@ export async function getScheduleDailyByDivision(
   division_id?: number | null,
   date?: string | null
 ) {
-  const res = await axios.get(`${BaseURL}/schedule?division=${division_id}&date=${date}`);
-  console.log('URLNYA banggg :', `${BaseURL}/schedule?division=${division_id}&date=${date}`);
+  const res = await axios.get(`${BaseURL}/schedule?division=${division_id}&date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
   return res.data.data;
 }
 

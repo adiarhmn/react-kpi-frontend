@@ -152,3 +152,4 @@ export const EduList: React.FC = () => {
     </main>
   );
 };
+

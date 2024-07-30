@@ -1,3 +1,4 @@
+import storage from '@/utils/storage';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { differenceInDays, format } from 'date-fns';
@@ -6,7 +7,11 @@ import { id } from 'date-fns/locale';
 const BaseURL = import.meta.env.VITE_API_URL;
 
 export async function getAbsenceById(id?: number | null | string) {
-  const res = await axios.get(`${BaseURL}/request/${id}`);
+  const res = await axios.get(`${BaseURL}/request/${id}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
   return res.data.data;
 }
 
@@ -15,7 +20,11 @@ export const useGetAbsenceById = (id?: number | null | string) => {
 };
 
 export async function getAbsence(id?: number | null) {
-  const res = await axios.get(`${BaseURL}/request?employee=${id}`);
+  const res = await axios.get(`${BaseURL}/request?employee=${id}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
   return res.data.data;
 }
 
@@ -24,7 +33,11 @@ export const useGetAbsence = (id?: number | null) => {
 };
 
 export async function getAbsenceByType(id?: number | null, type?: string, status?: string) {
-  const res = await axios.get(`${BaseURL}/request?employee=${id}&types=${type}&status=${status}`);
+  const res = await axios.get(`${BaseURL}/request?employee=${id}&types=${type}&status=${status}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
   return res.data.data;
 }
 
@@ -41,11 +54,20 @@ export async function getAbsenceByDivision(
   status?: string | null
 ) {
   if (status == null) {
-    const res = await axios.get(`${BaseURL}/request?division=${division_id}&types=${type}`);
+    const res = await axios.get(`${BaseURL}/request?division=${division_id}&types=${type}`, {
+      headers: {
+        Authorization: `Bearer ${storage.getToken}`,
+      },
+    });
     return res.data.data;
   } else {
     const res = await axios.get(
-      `${BaseURL}/request?division=${division_id}&types=${type}&status=${status}`
+      `${BaseURL}/request?division=${division_id}&types=${type}&status=${status}`,
+      {
+        headers: {
+          Authorization: `Bearer ${storage.getToken}`,
+        },
+      }
     );
 
     return res.data.data;
@@ -72,19 +94,34 @@ export async function getAbsenceMonthly(
 ) {
   if (type != null && status != null) {
     const res = await axios.get(
-      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&types=${type}&status=${status}`
+      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&types=${type}&status=${status}`,
+      {
+        headers: {
+          Authorization: `Bearer ${storage.getToken}`,
+        },
+      }
     );
 
     return res.data.data;
   } else if (type != null && status == null) {
     const res = await axios.get(
-      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&type=${type}`
+      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&type=${type}`,
+      {
+        headers: {
+          Authorization: `Bearer ${storage.getToken}`,
+        },
+      }
     );
 
     return res.data.data;
   } else {
     const res = await axios.get(
-      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}`
+      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}`,
+      {
+        headers: {
+          Authorization: `Bearer ${storage.getToken}`,
+        },
+      }
     );
     return res.data.data;
   }

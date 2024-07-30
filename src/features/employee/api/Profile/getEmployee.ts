@@ -1,10 +1,15 @@
+import storage from '@/utils/storage';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL;
 
 export async function getEmployee(employee_id?: number | null) {
-  const res = await axios.get(`${BaseURL}/employee/${employee_id}`);
+  const res = await axios.get(`${BaseURL}/employee/${employee_id}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
   return res.data.data;
 }
 
@@ -16,7 +21,11 @@ export const useGetEmployee = (employee_id?: number | null) => {
 };
 
 export async function getEmployeeByDivision(division_id?: number) {
-  const res = await axios.get(`${BaseURL}/employee?division-id=${division_id}`);
+  const res = await axios.get(`${BaseURL}/employee?division-id=${division_id}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken}`,
+    },
+  });
   return res.data.data;
 }
 

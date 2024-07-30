@@ -1,3 +1,4 @@
+import storage from '@/utils/storage';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -9,10 +10,14 @@ export async function getWorkerAttendanceByGroup(
   session_id: string | undefined
 ) {
   const res = await axios.get(
-    `${BaseURL}/worker-attendance?date=${date}&session=${session_id}&group=${group_id}`
+    `${BaseURL}/worker-attendance?date=${date}&session=${session_id}&group=${group_id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${storage.getToken}`,
+      },
+    }
   );
 
- 
   return res.data.data;
 }
 
