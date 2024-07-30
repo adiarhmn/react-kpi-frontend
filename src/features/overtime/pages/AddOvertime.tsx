@@ -37,7 +37,6 @@ export const AddOvertime: React.FC = () => {
     }
   }, [DataOvertime]);
 
-  console.log('data overtimeeeeeeeeee : ', overtime);
 
   const form = useForm({
     validateInputOnChange: true,
@@ -194,7 +193,6 @@ export const AddOvertime: React.FC = () => {
 
     await mutationAddOvertime.mutateAsync(overtimeData, {
       onSuccess: (data) => {
-        console.log('Sukses : ', data);
         RefetchOvertime();
         close();
       },
@@ -213,15 +211,13 @@ export const AddOvertime: React.FC = () => {
 
     await mutationEndOvertime.mutateAsync(attendanceCheckOut, {
       onSuccess: (data) => {
-        console.log('Sukses : ', data);
         RefetchOvertime();
       },
     });
   };
 
-  console.log('Data attendance : ', attendance);
   return (
-    <main className="min-h-96 relative">
+    <main className="min-h-96 relative mb-10">
       <section className="w-full h-20 bg-blue-600 rounded-b-3xl"></section>
 
       <section className="bg-white mx-5 p-3 shadow-md rounded-lg flex flex-col gap-2 -mt-10">

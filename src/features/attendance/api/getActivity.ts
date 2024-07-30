@@ -17,7 +17,6 @@ export const useGetActivityAlias = (company_id?: number) => {
 
 export async function getActivityDetail(employee_id: number | undefined | null, date: string) {
   const res = await axios.get(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
-  console.log(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
   return res.data.data;
 }
 
@@ -33,7 +32,6 @@ export async function getActivityDetailByDivision(
   date: string | Date
 ) {
   const res = await axios.get(`${BaseURL}/activity-detail?division=${division_id}&date=${date}`);
-  console.log(`${BaseURL}/activity-detail?division=${division_id}&date=${date}`);
   return res.data.data;
 }
 

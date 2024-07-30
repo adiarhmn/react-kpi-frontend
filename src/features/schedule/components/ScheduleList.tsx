@@ -165,13 +165,6 @@ export const ScheduleList: React.FC = () => {
   }, [paidLeave]);
   // [END GRAPE INDICATOR]
 
-  console.log('Schedule off : ', scheduleOff);
-  // console.log('Dates array : ', datesArray);
-  console.log('Request off: ', requestSick);
-  console.log('Tanggal izin ', leaveDates);
-  console.log(currentMonth);
-  console.log(currentYear);
-  console.log('Date off :', formattedAllDates);
 
   return (
     <>
@@ -206,8 +199,6 @@ export const ScheduleList: React.FC = () => {
               const showIndicatorPaidLeave = paidLeaveDates.some(
                 (d: any) => d.day === day && d.month === month + 1
               );
-
-              // console.log(showIndicatorAbsence);
 
               return (
                 <div>

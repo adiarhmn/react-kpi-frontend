@@ -9,7 +9,6 @@ type WorkerAttendanceDataPost = {
 };
 
 export const postCreateWorkerAttendance = async (attendanceDataPost: WorkerAttendanceDataPost) => {
-  console.log('Data yang dikirim : ', attendanceDataPost);
   const response = await axios.post(`${BaseURL}/worker-attendance`, attendanceDataPost);
   return response.data;
 };
@@ -18,7 +17,6 @@ export const useCreateWorkerAttendance = () => {
   return useMutation({
     mutationFn: postCreateWorkerAttendance,
     onMutate: async (attendanceDataPost: WorkerAttendanceDataPost) => {
-      console.log(attendanceDataPost);
     },
     onError: (error) => {
       console.log('Error :', error);

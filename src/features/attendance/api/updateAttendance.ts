@@ -13,7 +13,6 @@ export const postUpdateAttendance = async (UpdateAttendancePost: UpdateAttendanc
     `${BaseURL}/attendance/out/${UpdateAttendancePost.attendance_id}`,
     UpdateAttendancePost
   );
-  console.log('response :', response);
   return response;
 };
 
@@ -21,7 +20,6 @@ export const useUpdateAttendance = () => {
   return useMutation({
     mutationFn: postUpdateAttendance,
     onMutate: async (UpdateAttendancePost: UpdateAttendancePost) => {
-      console.log(UpdateAttendancePost);
     },
     onError: (error) => {
       console.log('Error :', error);

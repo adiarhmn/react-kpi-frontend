@@ -21,8 +21,6 @@ export const ListSession: React.FC<ListSessionProps> = ({ group }: ListSessionPr
     }
   }, [DataSession]);
 
-  console.log('Data session: ', sessions);
-
   const [laborerAttendances, setLaborerAttendance] = useState<
     { session: SessionGroupType; laborerAttendance: WorkerAttendanceType }[]
   >([]);
@@ -33,10 +31,6 @@ export const ListSession: React.FC<ListSessionProps> = ({ group }: ListSessionPr
         sessions.map(async (session) => {
           try {
             const response = await axios.get(
-              `${BaseURL}/worker-attendance?date=${formatterDate(new Date(), 'yyyy-MM-dd')}&session=${session.session_id}&group=${group.id}`
-            );
-            console.log(
-              'URL GET :',
               `${BaseURL}/worker-attendance?date=${formatterDate(new Date(), 'yyyy-MM-dd')}&session=${session.session_id}&group=${group.id}`
             );
 
@@ -55,7 +49,6 @@ export const ListSession: React.FC<ListSessionProps> = ({ group }: ListSessionPr
     }
   }, [sessions]);
 
-  console.log('DATA SESSION DAN ATTENDANCE :', laborerAttendances);
   return (
     <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 mb-8 ">
       <div className="flex justify-between items-center text-blue-700 mb-1 px-2">

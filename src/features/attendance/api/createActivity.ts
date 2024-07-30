@@ -20,7 +20,6 @@ type ActivityDataPost = {
 };
 
 export const postCreateActivity = async (activityDataPost: ActivityDataPost) => {
-  console.log('Data yang dikirim : ', activityDataPost);
   const response = await axios.post(`${BaseURL}/activity-detail/`, activityDataPost);
   return response.data;
 };
@@ -29,7 +28,6 @@ export const useCreateActivity = () => {
   return useMutation({
     mutationFn: postCreateActivity,
     onMutate: async (activityDataPost: ActivityDataPost) => {
-      console.log(activityDataPost);
     },
     onError: (error) => {
       console.log('Error :', error);

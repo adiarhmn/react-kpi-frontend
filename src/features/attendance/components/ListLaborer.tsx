@@ -59,24 +59,20 @@ export const ListLaborer: React.FC<ListLaborerProps> = ({ group, session }: List
 
   const handleSubmit = async (values: any) => {
     const payload = {
-      employee_input_id: creds?.employee_id, // Assuming this value is static or comes from somewhere else
+      employee_input_id: creds?.employee_id,
       worker: values.workers,
     };
 
     try {
       const response = await mutationAddWorkerAttendance.mutateAsync(payload);
-      console.log('Success:', response);
       localStorage.setItem('hasNotifiedLaborerAttendance', 'no');
       navigate('/laborer-group/session', {
         state: { success: `Absensi sesi ${session.session.name} berhasil dilakukan`, group: group },
       });
     } catch (error) {
       console.error('Error:', error);
-      // Tangani error
     }
   };
-  console.log(workers);
-  console.log('DATA SESSION :', session);
   return (
     <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 mb-8">
       <div className="flex justify-between items-center text-blue-700 mb-1 px-2 py-1">

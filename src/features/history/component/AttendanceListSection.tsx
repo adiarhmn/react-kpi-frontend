@@ -39,7 +39,6 @@ export const AttendanceListSection: React.FC<AttendanceListSectionProps> = ({
       setEmployee(DataEmployee);
     }
   }, [DataEmployee]);
-  console.log('EMPLOYEEEE : ', employee);
   const [schedule, setSchedule] = useState<ScheduleType>();
   const { data: DataSchedule, refetch: RefetchSchedule } = useGetScheduleDaily(
     employeeID,
@@ -107,7 +106,6 @@ export const AttendanceListSection: React.FC<AttendanceListSectionProps> = ({
   });
   // [END Cuti]
 
-  console.log(dateValue);
 
   return (
     <>

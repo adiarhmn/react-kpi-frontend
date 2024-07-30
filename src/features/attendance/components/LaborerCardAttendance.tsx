@@ -26,7 +26,6 @@ export const LaborerCardAttendance: React.FC = () => {
       setWorkers(DataWorker);
     }
   }, [DataWorker]);
-  console.log(workers);
   return (
     <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
       <div className="flex justify-between text-xs items-center p-2">

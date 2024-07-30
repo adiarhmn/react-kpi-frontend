@@ -25,8 +25,6 @@ export const useGetAbsence = (id?: number | null) => {
 
 export async function getAbsenceByType(id?: number | null, type?: string, status?: string) {
   const res = await axios.get(`${BaseURL}/request?employee=${id}&types=${type}&status=${status}`);
-  // console.log('URL : ', `${BaseURL}/request?employee=${id}&type=${type}&status${status}`);
-  // console.log('Data Request : ', res.data.data);
   return res.data.data;
 }
 
@@ -44,16 +42,12 @@ export async function getAbsenceByDivision(
 ) {
   if (status == null) {
     const res = await axios.get(`${BaseURL}/request?division=${division_id}&types=${type}`);
-    console.log('URL : ', `${BaseURL}/request?division=${division_id}&types=${type}`);
     return res.data.data;
   } else {
     const res = await axios.get(
       `${BaseURL}/request?division=${division_id}&types=${type}&status=${status}`
     );
-    console.log(
-      'URL : ',
-      `${BaseURL}/request?division=${division_id}&types=${type}&status=${status}`
-    );
+
     return res.data.data;
   }
 }
@@ -80,25 +74,18 @@ export async function getAbsenceMonthly(
     const res = await axios.get(
       `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&types=${type}&status=${status}`
     );
-    console.log(
-      'URL : ',
-      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&types=${type}&status=${status}`
-    );
+
     return res.data.data;
   } else if (type != null && status == null) {
     const res = await axios.get(
       `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&type=${type}`
     );
-    console.log(
-      'URL : ',
-      `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}&type=${type}`
-    );
+
     return res.data.data;
   } else {
     const res = await axios.get(
       `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}`
     );
-    console.log('URL : ', `${BaseURL}/request?employee=${employee_id}&month=${month}&year=${year}`);
     return res.data.data;
   }
 }

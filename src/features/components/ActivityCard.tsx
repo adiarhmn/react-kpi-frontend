@@ -61,7 +61,6 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee, date }: Activi
     }
   }, [dataActivityAlias, date, params]);
   // [End Activity Alias]
-  console.log('data employee : ', employee);
   // [All about Activity Detail]
   const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
   const { data: dataActivity, refetch: RefetchActivityDetail } = useGetActivityDetail(
@@ -128,7 +127,6 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee, date }: Activi
 
     await mutationAddActivity.mutateAsync(activityData, {
       onSuccess: (data) => {
-        console.log('Success:', data);
         RefetchActivityDetail();
 
         close();

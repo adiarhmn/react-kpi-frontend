@@ -4,7 +4,7 @@ import axios from 'axios';
 const BaseURL = import.meta.env.VITE_API_URL;
 
 export async function getSession(group_id: number | undefined) {
-  const res = await axios.get(`${BaseURL}/worker?status=2&company=${group_id}`);
+  const res = await axios.get(`${BaseURL}/session?group=${group_id}`);
   return res.data.data;
 }
 

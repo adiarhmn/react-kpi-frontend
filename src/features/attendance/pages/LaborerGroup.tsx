@@ -13,7 +13,7 @@ export const LaborerGroup: React.FC = () => {
           <div className="flex items-center">
             <IconChevronLeft
               onClick={() => {
-                navigate(-1);
+                navigate('/attendance');
               }}
               size={21}
               className="font-bold rounded-md"
