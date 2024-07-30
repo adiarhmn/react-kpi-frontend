@@ -13,7 +13,7 @@ type EmployeeDTO = {
 export async function getEmployee({ id }: EmployeeDTO) {
   const res = await axios.get<Employee>(`/employee/${id}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
 

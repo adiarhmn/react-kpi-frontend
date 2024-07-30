@@ -8,7 +8,7 @@ const BaseURL = import.meta.env.VITE_API_URL;
 export async function getActivityAlias(company_id?: number) {
   const res = await axios.get(`${BaseURL}/activity-alias?company=${company_id}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
   return res.data.data;
@@ -24,7 +24,7 @@ export const useGetActivityAlias = (company_id?: number) => {
 export async function getActivityDetail(employee_id: number | undefined | null, date: string) {
   const res = await axios.get(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
   return res.data.data;
@@ -43,7 +43,7 @@ export async function getActivityDetailByDivision(
 ) {
   const res = await axios.get(`${BaseURL}/activity-detail?division=${division_id}&date=${date}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
   return res.data.data;

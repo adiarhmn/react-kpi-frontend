@@ -8,14 +8,14 @@ export async function getSchedule(employee_id: number, date?: string) {
   if (date) {
     const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&date=${date}`, {
       headers: {
-        Authorization: `Bearer ${storage.getToken}`,
+        Authorization: `Bearer ${storage.getToken()}`,
       },
     });
     return res.data.data;
   } else {
     const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}`, {
       headers: {
-        Authorization: `Bearer ${storage.getToken}`,
+        Authorization: `Bearer ${storage.getToken()}`,
       },
     });
     return res.data.data;
@@ -25,7 +25,7 @@ export async function getSchedule(employee_id: number, date?: string) {
 export async function getScheduleByStatus(employee_id: number | null, status: string) {
   const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&status=${status}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
   return res.data.data;
@@ -50,7 +50,7 @@ export async function getScheduleMonthly(
       `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}`,
       {
         headers: {
-          Authorization: `Bearer ${storage.getToken}`,
+          Authorization: `Bearer ${storage.getToken()}`,
         },
       }
     );
@@ -62,7 +62,7 @@ export async function getScheduleMonthly(
       `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}$shift=${shift}`,
       {
         headers: {
-          Authorization: `Bearer ${storage.getToken}`,
+          Authorization: `Bearer ${storage.getToken()}`,
         },
       }
     );
@@ -75,7 +75,7 @@ export async function getScheduleMonthly(
       `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&status=${status}`,
       {
         headers: {
-          Authorization: `Bearer ${storage.getToken}`,
+          Authorization: `Bearer ${storage.getToken()}`,
         },
       }
     );
@@ -88,7 +88,7 @@ export async function getScheduleMonthly(
       `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&shift=${shift}&status=${status}`,
       {
         headers: {
-          Authorization: `Bearer ${storage.getToken}`,
+          Authorization: `Bearer ${storage.getToken()}`,
         },
       }
     );
@@ -113,7 +113,7 @@ export const useGetScheduleMonthly = (
 export async function getScheduleDaily(employee_id?: number | null, date?: string) {
   const res = await axios.get(`${BaseURL}/schedule?employee=${employee_id}&date=${date}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
   return res.data.data;
@@ -136,7 +136,7 @@ export async function getScheduleAttendance(
     `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}&attendance-status=${status}`,
     {
       headers: {
-        Authorization: `Bearer ${storage.getToken}`,
+        Authorization: `Bearer ${storage.getToken()}`,
       },
     }
   );
@@ -161,7 +161,7 @@ export async function getScheduleDailyByDivision(
 ) {
   const res = await axios.get(`${BaseURL}/schedule?division=${division_id}&date=${date}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
   return res.data.data;

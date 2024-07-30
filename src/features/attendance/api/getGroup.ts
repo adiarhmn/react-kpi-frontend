@@ -7,7 +7,7 @@ const BaseURL = import.meta.env.VITE_API_URL;
 export async function getGroup() {
   const res = await axios.get(`${BaseURL}/group`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
   return res.data.data;
@@ -23,7 +23,7 @@ export const useGetGroup = () => {
 export async function getGroupByCompany(company_id: number | undefined) {
   const res = await axios.get(`${BaseURL}/group?company=${company_id}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
   return res.data.data;

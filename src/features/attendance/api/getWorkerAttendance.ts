@@ -13,7 +13,7 @@ export async function getWorkerAttendanceByGroup(
     `${BaseURL}/worker-attendance?date=${date}&session=${session_id}&group=${group_id}`,
     {
       headers: {
-        Authorization: `Bearer ${storage.getToken}`,
+        Authorization: `Bearer ${storage.getToken()}`,
       },
     }
   );
