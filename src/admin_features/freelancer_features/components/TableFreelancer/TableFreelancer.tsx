@@ -67,7 +67,7 @@ export const TableFreelancer: React.FC = () => {
               <>
                 {data?.map((worker: WorkersType, index: number) => (
                   <Table.Tr key={index}>
-                    <Table.Td style={{ width: 70, textAlign: 'center' }}>1</Table.Td>
+                    <Table.Td style={{ width: 70, textAlign: 'center' }}>{index + 1}</Table.Td>
                     <Table.Td>{worker?.name}</Table.Td>
                     <Table.Td>{worker?.nip}</Table.Td>
                     <Table.Td className="flex gap-2 items-center justify-center">

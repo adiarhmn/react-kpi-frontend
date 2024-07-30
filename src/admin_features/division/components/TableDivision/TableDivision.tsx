@@ -14,7 +14,7 @@ import { useDeleteDivision, useGetDivisions } from '../../api';
 export const TableDivision: React.FC = () => {
   const navigate = useNavigate();
   const { creds } = useAuth();
-  if (creds === null) navigate('/login');
+  if (!creds) navigate('/login');
 
   // State Division
   const [division, setDivision] = useState<DivisionType[]>([]);

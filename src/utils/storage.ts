@@ -1,15 +1,14 @@
-const storagePrefix = 't-paz';
+const storagePrefix = 'kpi';
 
 const storage = {
   getToken: () => {
-    return JSON.parse(window.localStorage.getItem(`${storagePrefix}_token`) as string);
+    return window.localStorage.getItem(`${storagePrefix}_token`);
   },
   setToken: (token: string) => {
-    window.localStorage.setItem(`${storagePrefix}_token`, JSON.stringify(token));
+    window.localStorage.setItem(`${storagePrefix}_token`, token);
   },
   clear: () => {
     window.localStorage.removeItem(`${storagePrefix}_token`);
-    window.localStorage.removeItem(`${storagePrefix}_outlet`);
   },
   getOutlet: () => {
     return JSON.parse(window.localStorage.getItem(`${storagePrefix}_outlet`) as string) || null;

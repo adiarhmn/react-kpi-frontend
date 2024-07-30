@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+import storage from '@/utils/storage';
 const BaseURL = import.meta.env.VITE_API_URL || 'http://localhost:1337';
 
 export type GroupFormType = {
@@ -29,7 +30,11 @@ export const useGetGroup = (company_id: number) => {
     queryKey: ['group', company_id],
     queryFn: async () => {
       try {
-        const res = await axios.get(`${BaseURL}/group?company=${company_id}`);
+        const res = await axios.get(`${BaseURL}/group?company=${company_id}`, {
+          headers: {
+            Authorization: `Bearer ${storage.getToken()}`,
+          },
+        });
         return res.data.data;
       } catch (e) {
         return [];

@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { EmployeeType } from '@/admin_features/types';
+import storage from '@/utils/storage';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
@@ -11,12 +12,20 @@ export async function getEmployees(company_id?: number, division_id?: number, se
   if (division_id) url += `&division=${division_id}`;
   if (sex) url += `&sex=${sex}`;
 
-  const res = await axios.get(url);
+  const res = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
   return res.data.data;
 }
 
 async function getEmployeeByID(id: number) {
-  const res = await axios.get(`${BaseURL}/employee/${id}`);
+  const res = await axios.get(`${BaseURL}/employee/${id}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
   return res.data.data;
 }
 

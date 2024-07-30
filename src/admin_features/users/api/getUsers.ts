@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+import storage from '@/utils/storage';
+
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://192.168.1.110:3000/api';
 
 const getUsers = async (id_company?: number, id_user?: number) => {
@@ -8,7 +10,11 @@ const getUsers = async (id_company?: number, id_user?: number) => {
   if (id_company) url += `?company=${id_company}`;
   if (id_user) url += `/${id_user}`;
 
-  const res = await axios.get(url);
+  const res = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
   return res.data;
 };
 

@@ -180,13 +180,6 @@ const { CreateGroup } = lazyImport(
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!creds) {
-      navigate('/login');
-    }
-  }, [creds, navigate]);
 
   return (
     <Routes>
