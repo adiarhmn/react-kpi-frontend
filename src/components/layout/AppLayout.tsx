@@ -11,7 +11,7 @@ export const AppLayout: React.FC = () => {
 
   return (
     <Suspense fallback={<LoadingScreen />}>
-        <Outlet />
+      <Outlet />
     </Suspense>
   );
 };

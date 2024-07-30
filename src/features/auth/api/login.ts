@@ -1,11 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { axios } from '@/lib/axios';
-import { MutationConfig, queryClient } from '@/lib/react-query';
-
+import { MutationConfig } from '@/lib/react-query';
 
 import { Creds } from '../types';
-
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 type LoginDTO = {

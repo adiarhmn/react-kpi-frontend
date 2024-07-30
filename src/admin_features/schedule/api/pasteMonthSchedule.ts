@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
+import storage from '@/utils/storage';
+
 import { SchedulesType } from '../types';
 
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
@@ -41,7 +43,12 @@ export async function pasteDataSchedule(request: DataPasteScheduleMonth) {
   await axios.post(`${BaseURL}/schedule`, dataValidateSchedule);
 
   const responseGet = await axios.get(
-    `${BaseURL}/employee-schedule?month=${request.month}&year=${request.year}`
+    `${BaseURL}/employee-schedule?month=${request.month}&year=${request.year}`,
+    {
+      headers: {
+        Authorization: `Bearer ${storage.getToken()}`,
+      },
+    }
   );
 
   const DataScheduleNew = responseGet.data.data;

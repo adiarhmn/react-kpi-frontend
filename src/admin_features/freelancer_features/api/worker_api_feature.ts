@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+import storage from '@/utils/storage';
 const BaseURL = import.meta.env.VITE_API_URL || 'http://localhost:1337';
 
 export const useGetWorkers = (
@@ -14,12 +15,21 @@ export const useGetWorkers = (
       try {
         if (not_assigned) {
           const res = await axios.get(
-            `${BaseURL}/worker?status=${status}&company=${company_id}&not-assigned=true`
+            `${BaseURL}/worker?status=${status}&company=${company_id}&not-assigned=true`,
+            {
+              headers: {
+                Authorization: `Bearer ${storage.getToken()}`,
+              },
+            }
           );
 
           return res.data.data;
         }
-        const res = await axios.get(`${BaseURL}/worker?status=${status}&company=${company_id}`);
+        const res = await axios.get(`${BaseURL}/worker?status=${status}&company=${company_id}`, {
+          headers: {
+            Authorization: `Bearer ${storage.getToken()}`,
+          },
+        });
         return res.data.data;
       } catch (e) {
         return [];

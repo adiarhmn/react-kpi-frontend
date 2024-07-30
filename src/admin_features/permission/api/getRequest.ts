@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+import storage from '@/utils/storage';
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export async function getRequest(
@@ -19,7 +20,11 @@ export async function getRequest(
   if (type && date && company_id && status)
     URL = `${BaseURL}/request?company=${company_id}&date=${date}&types=${type}&status=${status}`;
 
-  const res = await axios.get(URL);
+  const res = await axios.get(URL, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
   return res.data.data;
 }
 

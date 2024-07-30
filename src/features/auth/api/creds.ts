@@ -12,12 +12,17 @@ type AuthMeType = {
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export async function getCreds() {
-  const res = await axios.get<AuthMeType>(`${BaseURL}/auth/me`);
+  const res = await axios.post<AuthMeType>(`${BaseURL}/auth/me`, {
+    headers: {
+      Authorization: `${storage.getToken()}`,
+    },
+  });
 
   // Cek Local Storage id company
   const id_company = localStorage.getItem('id_company');
   const role = localStorage.getItem('role');
   const Company = JSON.parse(localStorage.getItem('COMPANY_DATA') || '{}');
+
   if (id_company != null && Company) {
     res.data.creds = {
       ...res.data.creds,
@@ -32,6 +37,7 @@ export async function getCreds() {
       role: role,
     };
   }
+
   return res.data.creds;
 }
 
@@ -46,8 +52,8 @@ export function useCreds() {
     queryKey: ['creds'],
     queryFn: loadCreds,
     throwOnError: () => {
-      console.log('Error loading creds');
       storage.clear();
+      localStorage.clear();
       return false;
     },
   });

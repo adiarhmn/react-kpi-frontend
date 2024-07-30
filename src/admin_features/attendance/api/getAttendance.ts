@@ -2,15 +2,25 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+import storage from '@/utils/storage';
+
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export async function getAttendance(date: string, company_id?: number) {
-  const res = await axios.get(`${BaseURL}/schedule?&company=${company_id}&date=${date}`);
+  const res = await axios.get(`${BaseURL}/schedule?&company=${company_id}&date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
   return res.data.data;
 }
 
 export async function getAttendanceRecap(date: string, company_id?: number) {
-  const res = await axios.get(`${BaseURL}/schedule?&company=${company_id}&date=${date}`);
+  const res = await axios.get(`${BaseURL}/schedule?&company=${company_id}&date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
 
   let Hadir = 0;
   let BelumHadir = 0;
@@ -55,7 +65,11 @@ export const useGetAttendanceRecap = (date: string, company_id?: number) => {
 };
 
 export async function getAttendanceRecapByDivision(date: string, division_id?: number) {
-  const res = await axios.get(`${BaseURL}/schedule?&division=${division_id}&date=${date}`);
+  const res = await axios.get(`${BaseURL}/schedule?&division=${division_id}&date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
 
   let Hadir = 0;
   let BelumHadir = 0;
