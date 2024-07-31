@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useGetSessionByGroup } from '../api';
 import axios from 'axios';
 import { formatterDate } from '@/features/history';
+import storage from '@/utils/storage';
 
 type ListSessionProps = {
   group: GroupType;
@@ -31,7 +32,12 @@ export const ListSession: React.FC<ListSessionProps> = ({ group }: ListSessionPr
         sessions.map(async (session) => {
           try {
             const response = await axios.get(
-              `${BaseURL}/worker-attendance?date=${formatterDate(new Date(), 'yyyy-MM-dd')}&session=${session.session_id}&group=${group.id}`
+              `${BaseURL}/worker-attendance?date=${formatterDate(new Date(), 'yyyy-MM-dd')}&session=${session.session_id}&group=${group.id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${storage.getToken()}`,
+                },
+              }
             );
 
             return { session, laborerAttendance: response.data.data };
