@@ -32,9 +32,7 @@ export const DashboardAdmin: React.FC = () => {
   const [typeRequest, setTypeRequest] = useState<string>('Izin');
 
   const OptionRequest = [
-    { value: 'Cuti', label: 'Cuti' },
-    { value: 'Izin', label: 'Izin' },
-    { value: 'Sakit', label: 'Sakit' },
+    { value: 'Izin', label: 'Izin/Cuti/Sakit' },
     { value: 'Lembur', label: 'Lembur' },
     { value: 'Absensi', label: 'Absensi' },
   ];

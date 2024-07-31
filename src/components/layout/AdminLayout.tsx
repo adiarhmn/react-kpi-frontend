@@ -86,7 +86,12 @@ const MenuPengajuan = [
     href: '/request-attendance',
     icon: <IconClockPin size={15} />,
   },
-  { maintitle: 'Pengajuan', title: 'Izin', href: '/permission', icon: <IconFileAlert size={15} /> },
+  {
+    maintitle: 'Pengajuan',
+    title: 'Izin/Sakit/Cuti',
+    href: '/permission',
+    icon: <IconFileAlert size={15} />,
+  },
   { maintitle: 'Pengajuan', title: 'Lembur', href: '/overtime', icon: <IconAlarmPlus size={15} /> },
 ];
 
