@@ -8,7 +8,7 @@ export async function getAttendanceRequest(employee_id?: number, status?: string
   if (status == null) {
     const res = await axios.get(`${BaseURL}/attendance-request?employee=${employee_id}`, {
       headers: {
-        Authorization: `Bearer ${storage.getToken}`,
+        Authorization: `Bearer ${storage.getToken()}`,
       },
     });
     return res.data.data;
@@ -17,7 +17,7 @@ export async function getAttendanceRequest(employee_id?: number, status?: string
       `${BaseURL}/attendance-request?employee=${employee_id}&status=${status}`,
       {
         headers: {
-          Authorization: `Bearer ${storage.getToken}`,
+          Authorization: `Bearer ${storage.getToken()}`,
         },
       }
     );
@@ -36,7 +36,7 @@ export async function getAttendanceReqByDivision(division_id?: number, status?: 
   if (status == null) {
     const res = await axios.get(`${BaseURL}/attendance-request?division=${division_id}`, {
       headers: {
-        Authorization: `Bearer ${storage.getToken}`,
+        Authorization: `Bearer ${storage.getToken()}`,
       },
     });
     return res.data.data;
@@ -45,7 +45,7 @@ export async function getAttendanceReqByDivision(division_id?: number, status?: 
       `${BaseURL}/attendance-request?division=${division_id}&status=${status}`,
       {
         headers: {
-          Authorization: `Bearer ${storage.getToken}`,
+          Authorization: `Bearer ${storage.getToken()}`,
         },
       }
     );

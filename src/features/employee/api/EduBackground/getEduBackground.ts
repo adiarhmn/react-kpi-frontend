@@ -7,7 +7,7 @@ const BaseURL = import.meta.env.VITE_API_URL;
 export async function getEduBackground(employee: number | undefined) {
   const res = await axios.get(`${BaseURL}/employee-education?employee=${employee}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
   return res.data.message;

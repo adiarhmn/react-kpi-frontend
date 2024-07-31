@@ -7,7 +7,7 @@ const BaseURL = import.meta.env.VITE_API_URL;
 export async function getSession(group_id: number | undefined) {
   const res = await axios.get(`${BaseURL}/session?group=${group_id}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
   return res.data.data;
@@ -20,19 +20,18 @@ export const useGetSession = (group_id: number | undefined) => {
   });
 };
 
-
 export async function getSessionByGroup(group_id: number | undefined) {
   const res = await axios.get(`${BaseURL}/group-session?group=${group_id}`, {
     headers: {
-      Authorization: `Bearer ${storage.getToken}`,
+      Authorization: `Bearer ${storage.getToken()}`,
     },
   });
-  return res.data.data
+  return res.data.data;
 }
 
 export const useGetSessionByGroup = (group_id: number | undefined) => {
   return useQuery({
     queryKey: ['group-session', group_id],
-    queryFn: () => getSessionByGroup(group_id)
-  })
-}
+    queryFn: () => getSessionByGroup(group_id),
+  });
+};
