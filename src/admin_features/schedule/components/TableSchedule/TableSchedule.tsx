@@ -48,6 +48,8 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
   const DayinMonth = getDaysInMonths(month.getMonth(), month.getFullYear());
   const { data: dataShift, isLoading: loadingGetShift } = useGetShift(creds?.company_id);
   const location = useLocation();
+  // State Process Paste
+  const [ProcessPaste, setProcessPaste] = useState(false);
 
   // Edit Data
   const [opened, modal] = useDisclosure(false);
@@ -118,6 +120,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
 
   const handlePasteSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setProcessPaste(true);
     const { startOfMonth, endOfMonth } = getStartAndEndOfMonth(monthLocation);
 
     const DataPasteMonth: DataPasteScheduleMonth = {
@@ -131,7 +134,14 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
 
     await MutationPasteMonth.mutateAsync(DataPasteMonth, {
       onSuccess: () => {
-        refetch();
+        setTimeout(() => {
+          refetch();
+          setProcessPaste(false);
+          notifications.show({
+            message: 'Berhasil Menyalin Jadwal',
+            color: 'green',
+          });
+        }, 3000);
       },
     });
   };
@@ -470,7 +480,7 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
         </div>
       )}
 
-      {dataSchedule.length === 0 && (
+      {dataSchedule.length === 0 && !ProcessPaste ? (
         <div className="text-center text-slate-400 my-20">
           <div className="mb-2">
             <span className="font-semibold">Tidak ada jadwal yang tersedia</span> <br />
@@ -488,6 +498,21 @@ export const TableSchedule: React.FC<TableScheduleProps> = ({ month, setMonth, s
                 Paste
               </Button>
             </form>
+          )}
+        </div>
+      ) : (
+        <div>
+          {ProcessPaste && (
+            <div className="flex justify-center items-center w-full h-72">
+              <div>
+                <div className="flex justify-center">
+                  <Loader />
+                </div>
+                <div className="text-center text-sm text-slate-400 mt-2">
+                  Sedang memproses data, mohon tunggu sebentar...
+                </div>
+              </div>
+            </div>
           )}
         </div>
       )}

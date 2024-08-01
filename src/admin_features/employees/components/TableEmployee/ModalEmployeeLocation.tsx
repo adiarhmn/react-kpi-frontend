@@ -1,5 +1,6 @@
 import { Button, Divider, Modal, Select } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,6 +15,7 @@ interface ModalEmployeeLocationProps {
   opened: boolean;
   close: () => void;
   open: () => void;
+  refetch?: () => void;
 }
 export const ModalEmployeeLocation: React.FC<ModalEmployeeLocationProps> = (props) => {
   const navigate = useNavigate();
@@ -58,6 +60,11 @@ export const ModalEmployeeLocation: React.FC<ModalEmployeeLocationProps> = (prop
     mutationCreate.mutateAsync(data, {
       onSuccess: () => {
         refetch();
+        props.refetch?.();
+        notifications.show({
+          message: 'Lokasi berhasil ditambahkan',
+          color: 'teal',
+        });
       },
     });
   };
