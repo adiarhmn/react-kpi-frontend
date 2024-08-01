@@ -8,14 +8,16 @@ import { SessionCreateType } from '../../api';
 
 interface FormSessionProps {
   onsubmit: (data: SessionCreateType) => void;
+  initialValues?: SessionCreateType;
 }
-export const FormSession: React.FC<FormSessionProps> = ({ onsubmit }) => {
+export const FormSession: React.FC<FormSessionProps> = ({ onsubmit, initialValues }) => {
   const { creds } = useAuth();
   const navigate = useNavigate();
   if (!creds) navigate('./login');
 
   const form = useForm({
-    initialValues: {
+    initialValues: initialValues || {
+      id: 0,
       name: '',
       company_id: creds?.company_id || 0,
     },

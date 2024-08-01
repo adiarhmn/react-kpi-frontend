@@ -1,5 +1,5 @@
 import { ActionIcon, Table } from '@mantine/core';
-import { IconTrash } from '@tabler/icons-react';
+import { IconPencil } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { SessionType } from '@/admin_features/types';
@@ -13,6 +13,10 @@ export const TableSession: React.FC = () => {
   if (!creds) navigate('/login');
 
   const { data, isLoading, isError } = useGetSession(creds?.company_id || 0);
+
+  const UpdateSession = (session: SessionType) => {
+    navigate(`/session/update/${session.id}`, { state: { session } });
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
@@ -41,8 +45,8 @@ export const TableSession: React.FC = () => {
                   <Table.Td style={{ width: 70, textAlign: 'center' }}>{index + 1}</Table.Td>
                   <Table.Td>{session?.name}</Table.Td>
                   <Table.Td className="flex gap-2 items-center justify-center">
-                    <ActionIcon color="red">
-                      <IconTrash size={14} />
+                    <ActionIcon onClick={() => UpdateSession(session)} color="yellow">
+                      <IconPencil size={14} />
                     </ActionIcon>
                   </Table.Td>
                 </Table.Tr>
