@@ -101,7 +101,7 @@ export const PaidLeaveList: React.FC<PaidLeaveProps> = ({ status }) => {
           </button>
         ))
       ) : (
-        <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+        <section className="min-h-96 flex flex-col items-center justify-center ">
           <img
             className="w-28 mb-2 bg-slate-200 rounded-full p-2"
             src="/images/blank-canvas.svg"

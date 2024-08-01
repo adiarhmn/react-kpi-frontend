@@ -15,7 +15,6 @@ export const ListLaborerGroup: React.FC = () => {
       setGroups(DataGroups);
     }
   }, [DataGroups]);
-  console.log('Data group : ', groups);
 
   if (LoadingGroups) {
     return (

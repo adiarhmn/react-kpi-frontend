@@ -156,7 +156,7 @@ export const Attendance: React.FC = () => {
           setStatusLocation(false);
         }
       } else {
-        console.log('Error');
+        console.log("Loading...")
       }
     }
   }, [location, employeeLocation]);
@@ -235,7 +235,6 @@ export const Attendance: React.FC = () => {
 
     await mutationAddActivity.mutateAsync(activityData, {
       onSuccess: (data) => {
-        // console.log('Success:', data);
         Swal.fire({
           width: '80%',
           title: 'Berhasil!',
@@ -251,7 +250,6 @@ export const Attendance: React.FC = () => {
   };
   // [End add kegiatan]
   // [END ACTIVITY]
-  console.log('creds :', creds);
   const handleRefresh = () => {
     window.location.reload();
   };

@@ -35,7 +35,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
   const [openedMap, { open: MapOpen, close: MapClose }] = useDisclosure(false);
   const [employeePick, setEmployeePick] = useState<EmployeeType>();
   const mutationDeleteEmployee = useDeleteEmployee();
-  const { data, error, isLoading } = useGetEmployees(creds?.company_id, division_id);
+  const { data, error, isLoading, refetch } = useGetEmployees(creds?.company_id, division_id);
 
   // Fungsi Delete Division
   const deleteEmployee = async (id: number) => {
@@ -230,6 +230,7 @@ export const TableEmployee: React.FC<TableEmployeeProps> = ({ division_id }) => 
         close={MapClose}
         open={MapOpen}
         employee={employeePick}
+        refetch={refetch}
       />
     </div>
   );

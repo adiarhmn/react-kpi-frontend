@@ -1,11 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+import storage from '@/utils/storage';
+
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 async function getAttendance(employee_id: number, month: number, year: number) {
   const res = await axios.get(
-    `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}`
+    `${BaseURL}/schedule?employee=${employee_id}&month=${month}&year=${year}`,
+    {
+      headers: {
+        Authorization: `Bearer ${storage.getToken()}`,
+      },
+    }
   );
 
   if (res.status !== 200) {
@@ -19,7 +26,11 @@ async function getRecap(company_id?: number, month?: number, year?: number, divi
   if (company_id) url += `?company=${company_id}`;
   if (division_id) url += `&division=${division_id}`;
 
-  const res = await axios.get(url);
+  const res = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
 
   if (res.status !== 200) {
     throw new Error('Failed to fetch data');

@@ -1,12 +1,16 @@
+import { Authorization } from '@/features/auth';
+import storage from '@/utils/storage';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL;
 
 export async function getAttendance(employee_id: number | undefined, date: string | Date) {
-  const res = await axios.get(`${BaseURL}/attendance?employee=${employee_id}&date=${date}`);
-  console.log(`${BaseURL}/attendance?employee=${employee_id}&date=${date}`);
-  console.log(res.data.data[0]);
+  const res = await axios.get(`${BaseURL}/attendance?employee=${employee_id}&date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
   return res.data.data[0] || {};
 }
 
@@ -23,7 +27,12 @@ export async function getAttendanceMonthly(
   year: string
 ) {
   const res = await axios.get(
-    `${BaseURL}/attendance?employee=${employee_id}&month=${month}&year=${year}`
+    `${BaseURL}/attendance?employee=${employee_id}&month=${month}&year=${year}`,
+    {
+      headers: {
+        Authorization: `Bearer ${storage.getToken()}`,
+      },
+    }
   );
   return res.data.data;
 }
@@ -41,7 +50,12 @@ export const useGetAttendanceMonthly = (
 
 export async function getAttendanceBySchedule(employee_id?: number, schedule_id?: number) {
   const res = await axios.get(
-    `${BaseURL}/attendance?employee=${employee_id}&schedule=${schedule_id}`
+    `${BaseURL}/attendance?employee=${employee_id}&schedule=${schedule_id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${storage.getToken()}`,
+      },
+    }
   );
   return res.data.data;
 }
@@ -54,9 +68,12 @@ export const useGetAttendanceBySchedule = (employee_id?: number, schedule_id?: n
 };
 
 export async function getAttendanceByDivision(division_id: number | undefined, date: string) {
-  const res = await axios.get(`${BaseURL}/attendance?division=${division_id}&date=${date}`);
-  console.log(`${BaseURL}/attendance?division=${division_id}&date=${date}`);
-  console.log('Respon bang', res.data.data[0]);
+  const res = await axios.get(`${BaseURL}/attendance?division=${division_id}&date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+
+  });
   return res.data.data;
 }
 

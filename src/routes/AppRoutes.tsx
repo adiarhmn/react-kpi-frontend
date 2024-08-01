@@ -84,6 +84,10 @@ const { FileProfile } = lazyImport(() => import('@/features/employee'), 'FilePro
 const { LaborerGroup } = lazyImport(() => import('@/features/attendance'), 'LaborerGroup');
 const { Laborer } = lazyImport(() => import('@/features/attendance'), 'Laborer');
 const { GroupSession } = lazyImport(() => import('@/features/attendance'), 'GroupSession');
+const { HistoryLaborerAttendance } = lazyImport(
+  () => import('@/features/attendance'),
+  'HistoryLaborerAttendance'
+);
 
 // Admin Role Pages
 const { DinamicDashboard } = lazyImport(() => import('@/components/misc'), 'DinamicDashboard');
@@ -163,6 +167,11 @@ const { CreateSession } = lazyImport(
   'CreateSession'
 );
 
+const { UpdateSession } = lazyImport(
+  () => import('@/admin_features/freelancer_features/pages'),
+  'UpdateSession'
+);
+
 const { AttendanceFreelancer } = lazyImport(
   () => import('@/admin_features/freelancer_features/pages'),
   'AttendanceFreelancer'
@@ -176,13 +185,6 @@ const { CreateGroup } = lazyImport(
 
 export const AppRoutes: React.FC = () => {
   const { creds } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!creds) {
-      navigate('/login');
-    }
-  }, [creds, navigate]);
 
   return (
     <Routes>
@@ -247,6 +249,7 @@ export const AppRoutes: React.FC = () => {
                 <Route index element={<GroupSession />} />
                 <Route path="laborer" element={<Laborer />} />
               </Route>
+              <Route path="history" element={<HistoryLaborerAttendance />} />
             </Route>
 
             {/* Route Menu List */}
@@ -315,6 +318,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="freelancer/create" element={<CreateFreelancer />} />
             <Route path="session" element={<Session />} />
             <Route path="session/create" element={<CreateSession />} />
+            <Route path="session/update/:id" element={<UpdateSession />} />
             <Route path="group" element={<Group />} />
             <Route path="group/create" element={<CreateGroup />} />
             <Route path="attendance_freelancer" element={<AttendanceFreelancer />} />

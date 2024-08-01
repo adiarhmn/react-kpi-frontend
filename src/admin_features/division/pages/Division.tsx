@@ -38,9 +38,6 @@ export const Division: React.FC = () => {
             Tambah Divisi
           </Button>
         </div>
-        <div className="flex gap-2">
-          <Input placeholder="Cari..." leftSection={<IconSearch size={14}></IconSearch>}></Input>
-        </div>
         <div className="mt-7">
           <TableDivision />
         </div>

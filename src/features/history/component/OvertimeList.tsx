@@ -100,13 +100,13 @@ export const OvertimeList: React.FC<OvertimeProps> = ({ status, filterState }) =
           </button>
         ))
       ) : (
-        <section className="min-h-96 flex flex-col items-center justify-center">
+        <section className="min-h-96 flex flex-col items-center justify-center ">
           <img
-            className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+            className="w-28 mb-2 bg-slate-200 rounded-full p-2"
             src="/images/blank-canvas.svg"
             alt=""
           />
-          <span className="font-bold text-slate-400 text-xl">Belum ada data lembur</span>
+          <span className="font-bold text-slate-400 text-sm">Belum ada data lembur</span>
         </section>
       )}
     </div>

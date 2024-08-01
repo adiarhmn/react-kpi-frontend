@@ -20,7 +20,6 @@ export const EduList: React.FC = () => {
       setEducations(DataEduBackground);
     }
   }, [DataEduBackground]);
-  console.log('Data education : ', educations);
 
   const [educationToDelete, setEducationToDelete] = useState<EducationBackground>();
   const navigate = useNavigate();
@@ -116,13 +115,13 @@ export const EduList: React.FC = () => {
           </section>
         ))
       ) : (
-        <section className="min-h-96 flex flex-col items-center justify-center mt-10">
+        <section className="min-h-96 flex flex-col items-center justify-center ">
           <img
-            className="w-40 mb-2 bg-slate-200 rounded-full p-2"
+            className="w-28 mb-2 bg-slate-200 rounded-full p-2"
             src="/images/blank-canvas.svg"
             alt=""
           />
-          <span className="font-bold text-slate-400 text-xl">Belum ada data pendidikan</span>
+          <span className="font-bold text-slate-400 text-sm">Belum ada data pendidikan</span>
         </section>
       )}
 
@@ -153,3 +152,4 @@ export const EduList: React.FC = () => {
     </main>
   );
 };
+

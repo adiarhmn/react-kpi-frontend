@@ -1,10 +1,16 @@
+import { Authorization } from '@/features/auth';
+import storage from '@/utils/storage';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const BaseURL = import.meta.env.VITE_API_URL;
 
 export async function getActivityAlias(company_id?: number) {
-  const res = await axios.get(`${BaseURL}/activity-alias?company=${company_id}`);
+  const res = await axios.get(`${BaseURL}/activity-alias?company=${company_id}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
   return res.data.data;
 }
 
@@ -16,8 +22,11 @@ export const useGetActivityAlias = (company_id?: number) => {
 };
 
 export async function getActivityDetail(employee_id: number | undefined | null, date: string) {
-  const res = await axios.get(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
-  console.log(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`);
+  const res = await axios.get(`${BaseURL}/activity-detail?employee=${employee_id}&date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
   return res.data.data;
 }
 
@@ -32,8 +41,11 @@ export async function getActivityDetailByDivision(
   division_id: number | undefined | null,
   date: string | Date
 ) {
-  const res = await axios.get(`${BaseURL}/activity-detail?division=${division_id}&date=${date}`);
-  console.log(`${BaseURL}/activity-detail?division=${division_id}&date=${date}`);
+  const res = await axios.get(`${BaseURL}/activity-detail?division=${division_id}&date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
   return res.data.data;
 }
 

@@ -86,7 +86,6 @@ export const AddLateRequest: React.FC = () => {
   };
   // [END SUBMIT PENGAJUAN]
 
-  console.log(schedule);
 
   return (
     <main className="min-h-96 relative">
@@ -162,7 +161,7 @@ export const AddLateRequest: React.FC = () => {
       {/* End card map */}
 
       {/* Form keterlambatan */}
-      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
+      <section className="bg-white mx-auto max-w-xs w-full mt-2 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-10">
         <div className="flex justify-between text-xs items-center p-2">
           <span className="text-base font-bold text-blue-700">Form pengajuan</span>
         </div>

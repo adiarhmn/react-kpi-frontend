@@ -1,4 +1,4 @@
-import { ActionIcon, Group } from '@mantine/core';
+import { ActionIcon, Group, Loader } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { AxiosError } from 'axios';
@@ -15,6 +15,7 @@ type DataError = {
 };
 export const CreateSchedule: React.FC = () => {
   const navigate = useNavigate();
+  const [processLoading, setProcessLoading] = useState(false);
   const { creds } = useAuth();
   if (creds === null) navigate('/login');
 
@@ -33,6 +34,7 @@ export const CreateSchedule: React.FC = () => {
   };
 
   const handleSubmit = async (dataForm: FormDataSchedules[], shift_id: number) => {
+    setProcessLoading(true);
     mutationSchedule.mutateAsync(dataForm, {
       onSuccess: (data) => {
         if (data.data) {
@@ -43,9 +45,24 @@ export const CreateSchedule: React.FC = () => {
           }));
           mutationValidateSchedule.mutateAsync(dataValidateSchedule, {
             onSuccess: () => {
-              navigate(-1);
+              setTimeout(() => {
+                setProcessLoading(false);
+                navigate(-1);
+                notifications.show({
+                  title: 'Berhasil',
+                  message: 'Jadwal berhasil ditambahkan',
+                  color: 'teal',
+                });
+              }, 2000);
             },
-            onError: () => {},
+            onError: () => {
+              setProcessLoading(false);
+              notifications.show({
+                title: 'Error',
+                message: 'Gagal Menambahkan Jadwal',
+                color: 'red',
+              });
+            },
           });
         }
       },
@@ -83,7 +100,22 @@ export const CreateSchedule: React.FC = () => {
           </div>
         </Group>
 
-        <FormSchedule loading={mutationSchedule.isPending} onsubmit={handleSubmit} />
+        {processLoading ? (
+          <div className="flex justify-center items-center w-full h-72">
+            <div>
+              <div className="flex justify-center">
+                <Loader />
+              </div>
+              <div className="text-center text-sm text-slate-400 mt-2">
+                Sedang memproses data, mohon tunggu sebentar...
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <FormSchedule loading={mutationSchedule.isPending} onsubmit={handleSubmit} />
+          </div>
+        )}
       </section>
     </main>
   );

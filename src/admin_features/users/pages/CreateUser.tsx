@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
-import { ActionIcon, Alert } from '@mantine/core';
+import { ActionIcon } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconChevronLeft, IconInfoCircle } from '@tabler/icons-react';
+import { IconChevronLeft } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 import { UserType } from '@/admin_features/types';
@@ -59,15 +59,6 @@ export const CreateUser: React.FC = () => {
               </div>
             </div>
           </div>
-          <Alert
-            className="mb-3"
-            variant="light"
-            color="blue"
-            title="Pengumuman"
-            icon={<IconInfoCircle size={25} />}
-          >
-            Form User Ini Hanya untuk Menambahkan
-          </Alert>
         </div>
         <div className="mt-5">
           <FormUser loading={mutationUser.isPending} onSubmit={handleSubmit} />

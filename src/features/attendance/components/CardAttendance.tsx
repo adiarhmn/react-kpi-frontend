@@ -60,7 +60,6 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
           icon: 'success',
           confirmButtonText: 'Ok',
         });
-        console.log('Success:', data);
         refetchAttendance();
       },
     });
@@ -85,7 +84,6 @@ export const CardAttendance: React.FC<ScheduleProps> = ({
           icon: 'success',
           confirmButtonText: 'Ok',
         });
-        console.log('Success:', data);
         refetchAttendance();
       },
     });

@@ -119,7 +119,6 @@ export const Home: React.FC = () => {
       setAttendance(DataAttendance);
     }
   }, [DataAttendance]);
-  console.log('Data Attendance : ', attendance);
   if (LoadingDataAttendanceDivision) {
     return (
       <div className="flex justify-center my-20">
@@ -422,7 +421,7 @@ export const Home: React.FC = () => {
               },
               {
                 title: 'Pengajuan',
-                href: '/late-request',
+                href: '/application',
                 icon: IconClipboardText,
                 color: 'bg-blue-600',
               },

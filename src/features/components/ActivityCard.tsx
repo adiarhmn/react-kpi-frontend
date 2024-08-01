@@ -61,7 +61,6 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee, date }: Activi
     }
   }, [dataActivityAlias, date, params]);
   // [End Activity Alias]
-  console.log('data employee : ', employee);
   // [All about Activity Detail]
   const [activityDetail, setActivityDetail] = useState<ActivityDetailType[]>([]);
   const { data: dataActivity, refetch: RefetchActivityDetail } = useGetActivityDetail(
@@ -128,7 +127,6 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee, date }: Activi
 
     await mutationAddActivity.mutateAsync(activityData, {
       onSuccess: (data) => {
-        console.log('Success:', data);
         RefetchActivityDetail();
 
         close();
@@ -141,7 +139,7 @@ export const ActivityCard: React.FC<ActivityProps> = ({ employee, date }: Activi
     <>
       <section className="bg-white mx-auto max-w-xs w-full mt-2 mb-7 shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 ">
         <div className="flex justify-between text-xs items-center p-2">
-          <span className="text-base font-bold text-blue-700">Kegiatan hari ini</span>
+          <span className="text-base font-bold text-blue-700">Kegiatan </span>
           {creds?.role == 'employee' && (
             <Button
               disabled={attendance?.check_in == null || attendance?.check_out != null}

@@ -1,13 +1,32 @@
-import { Divider, Text } from '@mantine/core';
-import { IconChevronLeft, IconUsersGroup } from '@tabler/icons-react';
+import { Button, Divider, Text } from '@mantine/core';
+import { IconCalendarClock, IconChevronLeft, IconUsersGroup } from '@tabler/icons-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ListSession } from '../components';
 import { GroupType } from '../types';
+import { useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 export const GroupSession: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const group = location.state.group as GroupType;
+
+  // [NOTIFICATION 🔔]
+  const { state } = useLocation();
+  useEffect(() => {
+    const hasNotified = localStorage.getItem('hasNotifiedLaborerAttendance');
+    if (state?.success && hasNotified != 'yes') {
+      Swal.fire({
+        width: '80%',
+        title: state.success,
+        timer: 3000,
+        icon: 'success',
+        confirmButtonText: 'Ok',
+      });
+      localStorage.setItem('hasNotifiedLaborerAttendance', 'yes');
+    }
+  }, [state, navigate]);
+  // [END NOTIFICATION 🔔]
 
   return (
     <main>
@@ -17,7 +36,7 @@ export const GroupSession: React.FC = () => {
           <div className="flex items-center">
             <IconChevronLeft
               onClick={() => {
-                navigate(-1);
+                navigate('/laborer-group');
               }}
               size={21}
               className="font-bold rounded-md"
@@ -57,14 +76,25 @@ export const GroupSession: React.FC = () => {
               </div>
               <div className="col-span-6">
                 <Text size={'xs'} fw={500}>
-                  Jumlah sesi :
-                  {group && group.GroupSessions ? group.GroupSessions.length : '0'}
+                  Jumlah sesi :{group && group.GroupSessions ? group.GroupSessions.length : '0'}
                 </Text>
+              </div>
+              <div className="col-span-12 mt-3">
+                <Button
+                  onClick={() => navigate(`/laborer-group/history`, { state: { group: group } })}
+                  fullWidth
+                  size="sm"
+                  type="submit"
+                  rightSection={<IconCalendarClock />}
+                >
+                  Lihat riwayat absensi
+                </Button>
               </div>
             </div>
           </div>
         </div>
       </section>
+
       <section className="max-w-xs py-3 m-auto mt-2">
         <Divider size={'lg'} className="" />
       </section>

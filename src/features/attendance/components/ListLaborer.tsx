@@ -1,17 +1,21 @@
-import { EmployeeType } from '@/admin_features/types';
-import { useGetWorker } from '../api';
+import { EmployeeType, GroupSessionsType } from '@/admin_features/types';
+import { useCreateWorkerAttendance, useGetWorker } from '../api';
 import { Button, Divider, Tabs, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconUser } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { GroupType, SessionType } from '../types';
+import { useAuth } from '@/features/auth';
+import { useNavigate } from 'react-router-dom';
 
 type ListLaborerProps = {
   group: GroupType;
-  session: SessionType;
+  session: GroupSessionsType;
 };
 
 export const ListLaborer: React.FC<ListLaborerProps> = ({ group, session }: ListLaborerProps) => {
+  const { creds } = useAuth();
+  const navigate = useNavigate();
   const [workers, setWorkers] = useState<EmployeeType[]>([]);
   const { data: DataWorker } = useGetWorker(group.id);
 
@@ -30,7 +34,7 @@ export const ListLaborer: React.FC<ListLaborerProps> = ({ group, session }: List
         employee_group_id: group.id,
         group_session_id: session.id,
         group_name: group.name,
-        session_name: session.name,
+        session_name: session.session.name,
       })),
     },
   });
@@ -42,23 +46,33 @@ export const ListLaborer: React.FC<ListLaborerProps> = ({ group, session }: List
           employee_id: worker.id,
           attendance_status: 'H',
           detail: '',
-          employee_group_id: group.id,
+          employee_group_id: worker.EmployeeGroups[0].id,
           group_session_id: session.id,
           group_name: group.name,
-          session_name: session.name,
+          session_name: session.session.name,
         })),
       });
     }
   }, [workers]);
 
-  const handleSubmit = (values: any) => {
+  const mutationAddWorkerAttendance = useCreateWorkerAttendance();
+
+  const handleSubmit = async (values: any) => {
     const payload = {
-      employee_input_id: '', // Assuming this value is static or comes from somewhere else
+      employee_input_id: creds?.employee_id,
       worker: values.workers,
     };
-    console.log('Submitted Data:', payload);
-  };
 
+    try {
+      const response = await mutationAddWorkerAttendance.mutateAsync(payload);
+      localStorage.setItem('hasNotifiedLaborerAttendance', 'no');
+      navigate('/laborer-group/session', {
+        state: { success: `Absensi sesi ${session.session.name} berhasil dilakukan`, group: group },
+      });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
   return (
     <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 mb-8">
       <div className="flex justify-between items-center text-blue-700 mb-1 px-2 py-1">
@@ -100,7 +114,7 @@ export const ListLaborer: React.FC<ListLaborerProps> = ({ group, session }: List
               <div className="col-span-12 py-2">
                 <div className="my-auto text-left">
                   <Text lineClamp={1} size={'sm'} fw={800}>
-                    {worker.employee_id}
+                    {workers.find((w) => w.id === worker.employee_id)?.name || 'Unknown'}
                   </Text>
                 </div>
                 <Divider className="w-full mt-1 mb-1" />
@@ -123,17 +137,29 @@ export const ListLaborer: React.FC<ListLaborerProps> = ({ group, session }: List
                         <Tabs.List className="w-full grid grid-cols-12 text-center">
                           <div className="grid grid-cols-12 text-center gap-x-2">
                             <div className="col-span-4 bg-white shadow-md rounded-sm">
-                              <Tabs.Tab style={{ width: '100%', height: '30px' }} value="H">
+                              <Tabs.Tab
+                                color="green"
+                                style={{ width: '100%', height: '30px' }}
+                                value="H"
+                              >
                                 H
                               </Tabs.Tab>
                             </div>
                             <div className="col-span-4 bg-white shadow-md rounded-sm">
-                              <Tabs.Tab style={{ width: '100%', height: '30px' }} value="A">
+                              <Tabs.Tab
+                                color="red"
+                                style={{ width: '100%', height: '30px' }}
+                                value="A"
+                              >
                                 A
                               </Tabs.Tab>
                             </div>
                             <div className="col-span-4 bg-white shadow-md rounded-sm">
-                              <Tabs.Tab style={{ width: '100%', height: '30px' }} value="I">
+                              <Tabs.Tab
+                                color="yellow"
+                                style={{ width: '100%', height: '30px' }}
+                                value="I"
+                              >
                                 I
                               </Tabs.Tab>
                             </div>
@@ -165,7 +191,9 @@ export const ListLaborer: React.FC<ListLaborerProps> = ({ group, session }: List
                 src="/images/blank-canvas.svg"
                 alt=""
               />
-              <span className="font-bold text-slate-400 text-base">Belum ada data pekerja lepas</span>
+              <span className="font-bold text-slate-400 text-base">
+                Belum ada data pekerja lepas
+              </span>
             </section>
           </div>
         )}

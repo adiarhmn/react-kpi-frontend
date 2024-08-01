@@ -14,14 +14,20 @@ export const FileList: React.FC = () => {
   const BaseURL = import.meta.env.VITE_API_URL;
   const { creds } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
+
   const [files, setFiles] = useState<EmployeeFilesType[]>([]);
-  const { data, error, isLoading, refetch } = useGetEmployeeFiles(creds?.employee_id);
+  const {
+    data: DataFiles,
+    error: ErrorFiles,
+    isLoading: LoadingFiles,
+    refetch,
+  } = useGetEmployeeFiles(creds?.employee_id);
 
   useEffect(() => {
-    if (data) {
-      setFiles(data);
+    if (DataFiles) {
+      setFiles(DataFiles);
     }
-  }, [data]);
+  }, [DataFiles]);
 
   const [fileToDelete, setFileToDelete] = useState<EmployeeFilesType>();
 
@@ -35,7 +41,6 @@ export const FileList: React.FC = () => {
     deleteFilesMutation.mutateAsync(fileToDelete?.id, {
       onSuccess: (data) => {
         console.log('Success Delete:', data);
-        refetch();
         close();
         Swal.fire({
           width: '80%',
@@ -48,22 +53,11 @@ export const FileList: React.FC = () => {
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center my-20">
-        <Loader size="sm" />
-      </div>
-    );
-  }
-  if (error) {
-    return <div className="text-red-600 text-center my-20 font-bold">{error.message}</div>;
-  }
-
   return (
     <>
       {files.length > 0 ? (
         files.map((file, index) => (
-          <section className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2 mt-2">
+          <section key={index} className="mx-auto max-w-xs bg-white  w-full shadow-lg rounded-xl z-50 relative p-2 px-2 text-slate-700 mb-2 mt-2">
             <div className="flex justify-between text-xs items-center p-2 -mt-1 -mb-1">
               <div>
                 <Text fw={700} c="blue">

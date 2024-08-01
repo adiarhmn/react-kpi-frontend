@@ -8,7 +8,7 @@ import { IconAdjustmentsHorizontal, IconChevronLeft } from '@tabler/icons-react'
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { ShiftType } from '@/admin_features/types';
+import { EmployeeType, ShiftType } from '@/admin_features/types';
 
 import { useGetShift } from '../api';
 import { ScheduleList, ScheduleListNew } from '../components';
@@ -21,11 +21,13 @@ export const Schedule: React.FC = () => {
   // const [month, setMonth] = useState<Date>(new Date());
   // const [selectShift, setSelectShift] = useState('');
   // const [selectStatus, setSelectStatus] = useState('');
-  const employee = location.state.employee;
-  console.log('Data employee', employee)
+  // const employee = location.state.employee;
+  // console.log('Data employee', employee)
+  let employee: any = '';
   let employeeID: number | string | undefined = '';
   if (location.state != null) {
     employeeID = location.state.employee.id;
+    employee = location.state.employee;
   } else {
     employeeID = creds?.employee_id;
   }
@@ -63,30 +65,30 @@ export const Schedule: React.FC = () => {
           </span> */}
         </div>
       </section>
-
-      <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 ">
-        <div className="flex justify-between items-center text-blue-700">
-          
-          <span className="font-semibold"></span>
-        </div>
-        <div className="grid grid-cols-12 px-2">
-          <div className="col-span-4 px-2 flex items-left">
-            <img className="w-full rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
+      {location.state != null && (
+        <section className="bg-white mx-auto max-w-xs px-3 py-3 shadow-md rounded-lg flex flex-col mt-2 ">
+          <div className="flex justify-between items-center text-blue-700">
+            <span className="font-semibold"></span>
           </div>
-          <div className="col-span-8">
-            <div className="mt-2">
-              <Text size="auto" fw={700}>
-                {employee.name}
-              </Text>
+          <div className="grid grid-cols-12 px-2">
+            <div className="col-span-4 px-2 flex items-left">
+              <img className="w-full rounded-lg p-2" src="/images/profile-pic.svg" alt="" />
             </div>
-            <div>
-              <Text size="xs" c="grey" fw={700}>
-                {employee.user.role}
-              </Text>
+            <div className="col-span-8">
+              <div className="mt-2">
+                <Text size="auto" fw={700}>
+                  {employee.name}
+                </Text>
+              </div>
+              <div>
+                <Text size="xs" c="grey" fw={700}>
+                  {employee.user.role}
+                </Text>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <ScheduleList />
 

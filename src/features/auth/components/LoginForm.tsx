@@ -66,13 +66,7 @@ export const LoginForm: React.FC = () => {
         />
       </div>
 
-      <div className="mb-6 flex justify-end text-xs">
-        <Anchor size="xs" component={Link} to="/">
-          Forgot Password?
-        </Anchor>
-      </div>
-
-      <Button type="submit" fullWidth loading={loginMutation.isPending}>
+      <Button className="mt-8" type="submit" fullWidth loading={loginMutation.isPending}>
         Login
       </Button>
     </form>

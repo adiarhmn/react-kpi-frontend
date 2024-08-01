@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
+import storage from '@/utils/storage';
+
 const BaseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 type EmployeePostType = {
   id?: number;
@@ -39,7 +41,11 @@ type UserPostType = {
 };
 
 export async function updateUser(user: UserPostType) {
-  const response = await axios.get(`${BaseURL}/user/${user.id}`);
+  const response = await axios.get(`${BaseURL}/user/${user.id}`, {
+    headers: {
+      Authorization: `Bearer ${storage.getToken()}`,
+    },
+  });
 
   if (!response.data) {
     const res = await axios.post(`${BaseURL}/user`, user);

@@ -30,7 +30,7 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
     data: DataRequestList,
     isLoading: LoadRequest,
     refetch,
-  } = useGetRequest(typeReq, date, creds?.company_id);
+  } = useGetRequest(undefined, undefined, creds?.company_id, 'Belum Disetujui');
 
   const { data: AttendanceReq, isLoading: LoadAttendance } = useGetAttendanceReq(
     date,
@@ -70,40 +70,34 @@ export const RequestCard: React.FC<ResquestCardProps> = ({ typeRequest }) => {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {typeReq == 'Cuti' || typeReq == 'Izin' || (typeReq == 'Sakit' && DataRequestList > 0) ? (
-            DataRequestList?.map((request: any, index: number) => (
-              <Table.Tr key={index}>
-                <Table.Td>{request.employee.name}</Table.Td>
-                <Table.Td>{formatDateToString(request.created_at)}</Table.Td>
-                <Table.Td>{typeReq}</Table.Td>
-                <Table.Td>{request.description}</Table.Td>
-                <Table.Td>{request.status}</Table.Td>
-                <Table.Td className="text-center">
-                  <ActionIcon
-                    onClick={() => {
-                      setDataRequest(request);
-                      open();
-                    }}
-                    color="green"
-                    disabled={request.status == 'Belum Disetujui' ? false : true}
-                  >
-                    <IconCheck size={14} />
-                  </ActionIcon>
-                </Table.Td>
-              </Table.Tr>
-            ))
-          ) : (
-            <Table.Tr>
-              <Table.Td colSpan={6} className="text-center">
-                Data Tidak Ditemukan
-              </Table.Td>
-            </Table.Tr>
-          )}
+          {typeReq == 'Cuti' || typeReq == 'Izin' || (typeReq == 'Sakit' && DataRequestList > 0)
+            ? DataRequestList?.map((request: any, index: number) => (
+                <Table.Tr key={index} className="text-xxs">
+                  <Table.Td>{request.employee.name}</Table.Td>
+                  <Table.Td>{formatDateToString(request.created_at)}</Table.Td>
+                  <Table.Td>{typeReq}</Table.Td>
+                  <Table.Td>{request.description}</Table.Td>
+                  <Table.Td>{request.status}</Table.Td>
+                  <Table.Td className="text-center">
+                    <ActionIcon
+                      onClick={() => {
+                        setDataRequest(request);
+                        open();
+                      }}
+                      color="green"
+                      disabled={request.status == 'Belum Disetujui' ? false : true}
+                    >
+                      <IconCheck size={14} />
+                    </ActionIcon>
+                  </Table.Td>
+                </Table.Tr>
+              ))
+            : ''}
 
           {/* APROVAL UNTUK ABSENSI DAN LEMBUR */}
           {typeReq == 'Absensi'
             ? AttendanceReq?.map((request: any, index: number) => (
-                <Table.Tr key={index}>
+                <Table.Tr key={index} className="text-xxs">
                   <Table.Td>{request.employee.name}</Table.Td>
                   <Table.Td>{formatDateToString(request.date)}</Table.Td>
                   <Table.Td>{typeReq}</Table.Td>
