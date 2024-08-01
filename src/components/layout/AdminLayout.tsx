@@ -249,7 +249,12 @@ export const AdminLayout: React.FC = () => {
   if (isMobile) {
     return (
       <div className="bg-blue-600 min-h-screen text-white flex justify-center items-center text-lg text-center p-20">
-        Halaman Admin dan Superadmin hanya bisa diakses Melalui Layar Desktop{' '}
+        <div>
+          <div>Halaman Admin dan Superadmin hanya bisa diakses Melalui Layar Desktop</div>
+          <Button className="mt-3" color="blue" variant="white" onClick={() => logout()}>
+            Kembali Ke Halaman Login
+          </Button>
+        </div>
       </div>
     );
   }
