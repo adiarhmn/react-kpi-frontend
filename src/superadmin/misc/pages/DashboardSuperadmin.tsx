@@ -2,7 +2,13 @@ import { Avatar, Badge, Button, FileInput, Modal, Select, Table, TextInput } fro
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconChevronRight, IconImageInPicture, IconPhotoUp, IconPlus } from '@tabler/icons-react';
+import {
+  IconChevronRight,
+  IconImageInPicture,
+  IconPhotoUp,
+  IconPlus,
+  IconSettings,
+} from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -59,7 +65,6 @@ export const DashboardSuperadmin: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(formEdit.values);
     MutationUpdate.mutateAsync(formEdit.values, {
       onSuccess() {
         closeEdit();
@@ -175,8 +180,8 @@ export const DashboardSuperadmin: React.FC = () => {
                           </Button>
                           <Button
                             onClick={() => editCompany(company)}
-                            color="yellow"
-                            rightSection={<IconChevronRight size={20} />}
+                            color="gray"
+                            leftSection={<IconSettings size={20} />}
                           >
                             Edit
                           </Button>
@@ -223,7 +228,9 @@ export const DashboardSuperadmin: React.FC = () => {
             />
 
             <Select
+              disabled
               label="Status Fitur Shift"
+              description={<span className="text-red-600">Fitur Shift Tidak bisa diperbarui</span>}
               className="mb-3"
               placeholder="Pilih"
               required
@@ -234,7 +241,11 @@ export const DashboardSuperadmin: React.FC = () => {
               {...formEdit.getInputProps('shift_active')}
             />
             <Select
+              disabled
               label="Status Fitur Pekerja Lepas"
+              description={
+                <span className="text-red-600">Fitur Pekerja Lepas Tidak bisa diperbarui</span>
+              }
               className="mb-3"
               placeholder="Pilih"
               required

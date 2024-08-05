@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+import { notifications } from '@mantine/notifications';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -13,9 +14,11 @@ export const updateCompany = async (data: Companys) => {
     if (data.company_logo !== null) {
       formData.append('company_logo', data.company_logo);
     } else {
-      formData.append('company_logo', 'Undefined Image');
+      // mengirim data kosong agar tidak terjadi error
+      formData.append('company_logo', '');
     }
 
+    formData.append('id', data.id.toString());
     formData.append('name', data.name);
     formData.append('is_freelanced', data.is_freelanced.toString());
     formData.append('shift_active', data.shift_active.toString());
@@ -30,15 +33,18 @@ export const updateCompany = async (data: Companys) => {
     return response.data.data;
   }
 
-  return {
-    error: {
-      message: 'Gagal Memperbarui Data',
-    },
-  };
+  return Promise.reject(new Error('Logo perusahaan tidak boleh kosong'));
 };
 
 export const useUpdateCompany = () => {
   return useMutation({
     mutationFn: updateCompany,
+    onError: (error: Error) => {
+      notifications.show({
+        title: 'Error',
+        message: error.message,
+        color: 'red',
+      });
+    },
   });
 };
