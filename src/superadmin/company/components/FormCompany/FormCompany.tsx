@@ -7,16 +7,23 @@ interface FormCompanyProps {
   opened: boolean;
   loading: boolean;
   onClose: () => void;
+  initialValues?: any;
 }
 
-export const FormCompany: React.FC<FormCompanyProps> = ({ onSubmit, opened, loading, onClose }) => {
+export const FormCompany: React.FC<FormCompanyProps> = ({
+  onSubmit,
+  opened,
+  loading,
+  onClose,
+  initialValues,
+}) => {
   const form = useForm({
-    initialValues: {
+    initialValues: initialValues || {
       name: '',
       shift_active: '1',
       is_freelanced: '0',
       company_url: '',
-      company_logo: null as File | null,
+      company_logo: null as File | null | string,
     },
   });
 
@@ -37,7 +44,9 @@ export const FormCompany: React.FC<FormCompanyProps> = ({ onSubmit, opened, load
     <Modal
       opened={opened}
       onClose={onClose}
-      title={<span className="font-semibold">Form Company</span>}
+      title={
+        <span className="font-semibold">Form {initialValues ? 'Edit' : 'Tambah'} Company</span>
+      }
       size={'xl'}
     >
       <section className="grid grid-cols-2 gap-2">

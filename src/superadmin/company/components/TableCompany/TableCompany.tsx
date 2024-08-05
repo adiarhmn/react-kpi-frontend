@@ -1,5 +1,6 @@
 /* eslint-disable linebreak-style */
 import { Loader, Table } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 

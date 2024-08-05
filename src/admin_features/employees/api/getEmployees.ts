@@ -11,6 +11,7 @@ export async function getEmployees(company_id?: number, division_id?: number, se
   if (company_id) url += `?company=${company_id}`;
   if (division_id) url += `&division=${division_id}`;
   if (sex) url += `&sex=${sex}`;
+  url += '&status=1';
 
   const res = await axios.get(url, {
     headers: {

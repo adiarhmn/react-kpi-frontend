@@ -30,10 +30,12 @@ export const Employees: React.FC = () => {
     return <div className="text-red-600 text-center my-20 font-bold">{errorDivisi.message}</div>;
   }
 
-  const optionDataDivision = dataDivisi.map((division: any) => ({
-    value: division.id.toString(),
-    label: division.division_name,
-  }));
+  const optionDataDivision = dataDivisi
+    .filter((division: any) => division.division_name !== 'Pekerjalepas')
+    .map((division: any) => ({
+      value: division.id.toString(),
+      label: division.division_name,
+    }));
 
   // Components
   return (
@@ -56,7 +58,9 @@ export const Employees: React.FC = () => {
             data={[{ value: '0', label: 'Semua Divisi' }, ...optionDataDivision]}
             required
             defaultValue={'0'}
-            onChange={(e) => setDivisionID(parseInt(e ?? ''))}
+            onChange={(e) => {
+              setDivisionID(parseInt(e ?? ''));
+            }}
           />
         </div>
         <TableEmployee division_id={DivisionID} />

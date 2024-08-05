@@ -23,6 +23,8 @@ export const DashboardSuperadmin: React.FC = () => {
   // Create Company
   const MutationCreate = useCreateCompany();
   const [opened, { open, close }] = useDisclosure(false);
+  const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
+
   const handleCreate = async (data: any) => {
     MutationCreate.mutateAsync(data, {
       onSuccess() {
@@ -135,6 +137,13 @@ export const DashboardSuperadmin: React.FC = () => {
       </section>
 
       {/* Form Company */}
+      <FormCompany
+        onSubmit={handleCreate}
+        onClose={close}
+        loading={MutationCreate.isPending}
+        opened={opened}
+      />
+
       <FormCompany
         onSubmit={handleCreate}
         onClose={close}
