@@ -17,6 +17,8 @@ export async function getEmployees(company_id?: number, division_id?: number, se
       Authorization: `Bearer ${storage.getToken()}`,
     },
   });
+
+  console.log(url, res.data.data);
   return res.data.data;
 }
 

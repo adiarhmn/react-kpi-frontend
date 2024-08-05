@@ -16,9 +16,6 @@ export const FormDivision: React.FC<FormDivisionProps> = ({ currentValue, onSubm
   const form = useForm({
     validateInputOnChange: true,
     initialValues: currentValue || { division_name: '' },
-    validate: {
-      division_name: (value) => (value.length < 10 ? 'Name must have at least 10 letters' : null),
-    },
   });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

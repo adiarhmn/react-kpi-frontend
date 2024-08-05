@@ -22,9 +22,8 @@ export const FormUser: React.FC<FormUserProps> = ({ currentUser, loading, onSubm
       ? { ...currentUser, password: '', company_id: creds?.company_id }
       : { id: '', username: '', password: '', role: 'employee', company_id: creds?.company_id },
     validate: {
-      username: (value) => (value.length < 5 ? 'Name must have at least 5 letters' : null),
-      password: (value: string) => (value.length < 8 ? 'Name must have at least 8 letters' : null),
-      role: (value) => (value.length < 2 ? 'Name must have at least 2 letters' : null),
+      password: (value: string) => (value.length < 8 ? 'Password Minimal 8 Karakter' : null),
+      role: (value) => (value.length < 2 ? 'Role atau Hak Akses Wajib diisi' : null),
     },
   });
 
