@@ -25,7 +25,7 @@ export const CreateUser: React.FC = () => {
       username: dataUser.username,
       password: dataUser.password,
       role: dataUser.role,
-      status: true,
+      status: 1,
       company_id: creds?.company_id,
     };
 

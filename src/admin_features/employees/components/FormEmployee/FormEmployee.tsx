@@ -104,7 +104,9 @@ export const FormEmployee: React.FC<Props> = ({ onsubmit, loading = false, initi
     return <div>Loading...</div>;
   }
 
-  const optionDataDivision = DataDivision.map((division: any) => ({
+  const optionDataDivision = DataDivision.filter(
+    (division: any) => division.division_name !== 'Pekerjalepas'
+  ).map((division: any) => ({
     value: division.id.toString(),
     label: division.division_name,
   }));

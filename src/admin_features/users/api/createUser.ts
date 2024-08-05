@@ -7,7 +7,7 @@ type UserPostType = {
   username: string;
   password: string;
   role: string;
-  status: boolean;
+  status: boolean | number;
   company_id?: number;
 };
 

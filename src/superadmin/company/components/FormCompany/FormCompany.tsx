@@ -2,12 +2,14 @@ import { Button, FileInput, Modal, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconImageInPicture, IconPhotoUp } from '@tabler/icons-react';
 
+import { Companys } from '../../../../features/auth/types/index';
+
 interface FormCompanyProps {
   onSubmit: (data: any) => void;
   opened: boolean;
   loading: boolean;
   onClose: () => void;
-  initialValues?: any;
+  initialValuess?: Companys;
 }
 
 export const FormCompany: React.FC<FormCompanyProps> = ({
@@ -15,15 +17,15 @@ export const FormCompany: React.FC<FormCompanyProps> = ({
   opened,
   loading,
   onClose,
-  initialValues,
+  initialValuess,
 }) => {
   const form = useForm({
-    initialValues: initialValues || {
+    initialValues: initialValuess || {
       name: '',
       shift_active: '1',
-      is_freelanced: '0',
-      company_url: '',
-      company_logo: null as File | null | string,
+      is_freelanced: '0' as string,
+      companyUrl: '',
+      company_logo: null as File | null,
     },
   });
 
@@ -32,8 +34,8 @@ export const FormCompany: React.FC<FormCompanyProps> = ({
     event.preventDefault();
     const data = {
       name: form.values.name,
-      companyUrl: form.values.company_url,
-      is_freelanced: parseInt(form.values.is_freelanced),
+      companyUrl: form.values.companyUrl,
+      is_freelanced: String(form.values.is_freelanced),
       company_logo: form.values.company_logo,
       shift_active: form.values.shift_active === '1' ? true : false,
     };
@@ -45,7 +47,7 @@ export const FormCompany: React.FC<FormCompanyProps> = ({
       opened={opened}
       onClose={onClose}
       title={
-        <span className="font-semibold">Form {initialValues ? 'Edit' : 'Tambah'} Company</span>
+        <span className="font-semibold">Form {initialValuess ? 'Edit' : 'Tambah'} Company</span>
       }
       size={'xl'}
     >
@@ -63,7 +65,7 @@ export const FormCompany: React.FC<FormCompanyProps> = ({
             label="URL Company"
             placeholder="URL atau LINK Company"
             required
-            {...form.getInputProps('company_url')}
+            {...form.getInputProps('companyUrl')}
           />
 
           <Select
@@ -71,7 +73,6 @@ export const FormCompany: React.FC<FormCompanyProps> = ({
             className="mb-3"
             placeholder="Pilih"
             required
-            defaultValue={form.values.shift_active}
             data={[
               { value: '1', label: 'Aktif' },
               { value: '0', label: 'Tidak Aktif' },
@@ -83,7 +84,6 @@ export const FormCompany: React.FC<FormCompanyProps> = ({
             className="mb-3"
             placeholder="Pilih"
             required
-            defaultValue={form.values.shift_active}
             data={[
               { value: '1', label: 'Aktif' },
               { value: '0', label: 'Tidak Aktif' },

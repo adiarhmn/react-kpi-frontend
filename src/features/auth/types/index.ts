@@ -19,10 +19,10 @@ export type User = {
 };
 
 export type Companys = {
-  company_logo: File | null | string;
+  company_logo: File | null;
   id?: number;
   name: string;
-  shift_active: boolean;
-  is_freelanced: number;
+  shift_active: boolean | string;
+  is_freelanced: number | string;
   companyUrl: string;
 };

@@ -39,7 +39,7 @@ export const FormUser: React.FC<FormUserProps> = ({ currentUser, loading, onSubm
       username: form.values.username,
       password: form.values.password,
       role: form.values.role,
-      status: true,
+      status: 1,
       company_id: creds?.company_id,
     };
 
@@ -72,14 +72,6 @@ export const FormUser: React.FC<FormUserProps> = ({ currentUser, loading, onSubm
               value: 'admin',
               label: 'Admin',
             },
-            // {
-            //   value: 'employee',
-            //   label: 'Employee',
-            // },
-            // {
-            //   value: 'superadmin',
-            //   label: 'Superadmin',
-            // },
             {
               value: 'supervisor',
               label: 'Supervisor',

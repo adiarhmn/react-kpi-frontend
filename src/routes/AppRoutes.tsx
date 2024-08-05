@@ -143,6 +143,7 @@ const { AttendanceRequest } = lazyImport(
   'AttendanceRequest'
 );
 const { Company } = lazyImport(() => import('@/superadmin/company'), 'Company');
+
 const { TutorialApplication } = lazyImport(
   () => import('@/admin_features/misc'),
   'TutorialApplication'
@@ -311,7 +312,11 @@ export const AppRoutes: React.FC = () => {
             <Route path="locations" element={<Locations />} />
             <Route path="locations/create" element={<CreateLocations />} />
             <Route path="locations/update" element={<UpdateLocations />} />
-            {creds?.role == 'superadmin' && <Route path="company" element={<Company />} />}
+            {creds?.role == 'superadmin' && (
+              <Route path="company">
+                <Route path="" element={<Company />} />
+              </Route>
+            )}
 
             {/* Freelence Conditions =============================================================================> */}
             <Route path="freelancer" element={<Freelancer />} />

@@ -1,12 +1,13 @@
-import { Avatar, Badge, Button, Table } from '@mantine/core';
+import { Avatar, Badge, Button, FileInput, Modal, Select, Table, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconChevronRight, IconPlus } from '@tabler/icons-react';
-import { useState } from 'react';
+import { IconChevronRight, IconImageInPicture, IconPhotoUp, IconPlus } from '@tabler/icons-react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Companys, useAuth } from '@/features/auth';
-import { useCreateCompany, useGetCompanys } from '@/superadmin/company';
+import { useCreateCompany, useGetCompanys, useUpdateCompany } from '@/superadmin/company';
 import { FormCompany } from '@/superadmin/company/components';
 
 export const DashboardSuperadmin: React.FC = () => {
@@ -22,6 +23,7 @@ export const DashboardSuperadmin: React.FC = () => {
 
   // Create Company
   const MutationCreate = useCreateCompany();
+  const MutationUpdate = useUpdateCompany();
   const [opened, { open, close }] = useDisclosure(false);
   const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
 
@@ -38,6 +40,52 @@ export const DashboardSuperadmin: React.FC = () => {
       },
     });
   };
+
+  const formEdit = useForm({
+    initialValues: {
+      id: 0,
+      name: '',
+      shift_active: '1',
+      is_freelanced: '0',
+      companyUrl: '',
+      company_logo: null as File | null,
+    },
+  });
+
+  const editCompany = (company: Companys) => {
+    setCompany(company);
+    openEdit();
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(formEdit.values);
+    MutationUpdate.mutateAsync(formEdit.values, {
+      onSuccess() {
+        closeEdit();
+        refetch();
+        notifications.show({
+          title: 'Berhasil',
+          message: 'Company berhasil diupdate',
+          color: 'teal',
+        });
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (Company) {
+      formEdit.setValues({
+        id: Company.id,
+        name: Company.name,
+        shift_active: Company.shift_active ? '1' : '0',
+        is_freelanced: Company.is_freelanced ? '1' : '0',
+        companyUrl: Company.companyUrl,
+        company_logo: null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [Company]);
 
   // Change Company
   const handleChangeCompany = (company: Companys) => {
@@ -125,6 +173,13 @@ export const DashboardSuperadmin: React.FC = () => {
                           >
                             Masuk Company
                           </Button>
+                          <Button
+                            onClick={() => editCompany(company)}
+                            color="yellow"
+                            rightSection={<IconChevronRight size={20} />}
+                          >
+                            Edit
+                          </Button>
                         </div>
                       </Table.Td>
                     </Table.Tr>
@@ -144,12 +199,105 @@ export const DashboardSuperadmin: React.FC = () => {
         opened={opened}
       />
 
-      <FormCompany
-        onSubmit={handleCreate}
-        onClose={close}
-        loading={MutationCreate.isPending}
-        opened={opened}
-      />
+      <Modal
+        opened={openedEdit}
+        onClose={closeEdit}
+        title={<span className="font-semibold">Form Edit Company</span>}
+        size={'xl'}
+      >
+        <section className="grid grid-cols-2 gap-2">
+          <form onSubmit={handleSubmit}>
+            <TextInput
+              className="mb-3"
+              label="Nama Company"
+              placeholder="Nama Company"
+              required
+              {...formEdit.getInputProps('name')}
+            />
+            <TextInput
+              className="mb-3"
+              label="URL Company"
+              placeholder="URL atau LINK Company"
+              required
+              {...formEdit.getInputProps('companyUrl')}
+            />
+
+            <Select
+              label="Status Fitur Shift"
+              className="mb-3"
+              placeholder="Pilih"
+              required
+              data={[
+                { value: '1', label: 'Aktif' },
+                { value: '0', label: 'Tidak Aktif' },
+              ]}
+              {...formEdit.getInputProps('shift_active')}
+            />
+            <Select
+              label="Status Fitur Pekerja Lepas"
+              className="mb-3"
+              placeholder="Pilih"
+              required
+              data={[
+                { value: '1', label: 'Aktif' },
+                { value: '0', label: 'Tidak Aktif' },
+              ]}
+              {...formEdit.getInputProps('is_freelanced')}
+            />
+
+            <FileInput
+              onChange={(file) => formEdit.setFieldValue('company_logo', file)}
+              accept="image/png,image/jpeg"
+              leftSection={<IconPhotoUp size={18} />}
+              label="Logo Company"
+              placeholder="Pilih Logo Company"
+              leftSectionPointerEvents="none"
+            />
+
+            <div className="flex gap-3">
+              <Button type="submit" color="blue" className="mt-5">
+                Simpan
+              </Button>
+              <Button
+                onClick={() => {
+                  closeEdit();
+                }}
+                type="button"
+                color="gray"
+                className="mt-5"
+              >
+                Batal
+              </Button>
+            </div>
+          </form>
+
+          {formEdit.values.company_logo ? (
+            <div className="bg-slate-100 mt-5 h-44 max-h-44 rounded-md flex items-center overflow-hidden border border-slate-400">
+              <img
+                src={URL.createObjectURL(formEdit.values.company_logo)}
+                alt="Preview"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          ) : (
+            <>
+              {Company?.company_logo ? (
+                <div className="bg-slate-100 mt-5 h-44 max-h-44 rounded-md flex items-center overflow-hidden border border-slate-400">
+                  <img
+                    src={`${BaseURL}/public/company-logo/${Company?.company_logo}`}
+                    alt="Preview"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="bg-slate-100 mt-5 h-44 max-h-44 rounded-lg flex items-center">
+                  <IconImageInPicture className="m-auto" size={20} />
+                </div>
+              )}
+            </>
+          )}
+        </section>
+      </Modal>
     </main>
   );
 };
